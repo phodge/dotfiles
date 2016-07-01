@@ -1,5 +1,5 @@
 from homely.ui import yesnooption
-from homely.general import lineinfile, mkdir, add
+from homely.general import lineinfile, mkdir, add, section
 from homely.install import InstallFromSource
 
 
@@ -11,23 +11,30 @@ full_install = not yesnooption(
 mkdir('~/src')
 mkdir('~/bin')
 
+# TODO: need to ensure ~/bin is in our $PATH
+
 # git ignore
-lineinfile('~/.gitignore', '*.swp')
-lineinfile('~/.gitignore', '*.swo')
+with section('gitconfig'):
+    lineinfile('~/.gitignore', '*.swp')
+    lineinfile('~/.gitignore', '*.swo')
+
 
 # install nudge
-if yesnooption('install_nudge', 'Install nudge?', default=full_install):
+with section('nudge'):
+    if yesnooption('install_nudge', 'Install nudge?', default=full_install):
     nudge = InstallFromSource('https://github.com/toomuchphp/nudge.git',
                               '~/src/nudge.git')
     nudge.select_branch('master')
     nudge.symlink('bin/nudge', '~/bin/nudge')
     add(nudge)
 
+
 # install tmux
-if yesnooption('install_tmux', 'Install tmux?', default=full_install):
+with section('tmux'):
+    if yesnooption('install_tmux', 'Install tmux?', default=full_install):
     if yesnooption('own_tmux', 'Compile tmux from source?'):
-        # FIXME: compiling tmux from source like this requires libevent ... how
-        # do we make sure that that library has been installed?
+            # FIXME: compiling tmux from source like this requires libevent ...
+            # how do we make sure that that library has been installed?
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                  '~/src/tmux.git')
         tmux.select_tag('2.2')
