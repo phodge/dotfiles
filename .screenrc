@@ -1,0 +1,10 @@
+escape ^Bb
+
+# copied from stackoverflow.com/questions/70614/gnu-screen-survival-guide
+# Here comes the pain...
+caption always "%{=b dw}:%{-b dw}:%{=b dk}[ %{-b dw}%{-b dy}$USER%{-b dw}@%{-b dy}%H %{=b dk}] [ %= %?%{-b dy}%-Lw%?%{+b dk}%{+b dr}[ %n %t ]%{+b dk}%?(%u)%?%{-b dw}%?%{-b dy}%+Lw%? %{=b dk}]%{-b dw}:%{+b dw}:"
+
+# always run relative to home dir
+chdir
+
+#hardstatus alwayslastline "%{+b dw}:%{-b dw}:%{+b dk}[%{-b dg} %0C:%s%a %{=b dk}]-[   %{-b dw}Load%{+b dk}:%{-b dg}%l %{+b dk}] [%{-b dg}%2`%{+b dk}] %=[ %{-b dg}%1`%{=b dk} ]%{-b dw}:%{+b dw}:%<"
