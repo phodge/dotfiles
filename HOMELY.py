@@ -1,7 +1,7 @@
 from homely.ui import yesnooption
 from homely.general import lineinfile, mkdir, symlink, run
 from homely.general import section, haveexecutable
-from homely.install import InstallFromSource
+from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 
 
@@ -31,12 +31,15 @@ def pipfavourites():
     versions = [3]
     if haveexecutable('pip2'):
         versions.append(2)
+    pipinstall('pytest', versions, user=True)
     pipinstall('click', versions, user=True)
     pipinstall('simplejson', versions, user=True)
     if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
         pipinstall('ipython', versions, user=True)
     if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
         pipinstall('q', versions, user=True)
+    if full_install or yesnooption('install_flake8', 'PIP Install flake8?'):
+        pipinstall('flake8', versions, user=True)
 
 
 @section
@@ -50,8 +53,6 @@ def vimconfig():
 # install nudge
 @section
 def nudge():
-    # TODO: remove this line
-    return
     if yesnooption('install_nudge', 'Install nudge?', default=full_install):
         nudge = InstallFromSource('https://github.com/toomuchphp/nudge.git',
                                   '~/src/nudge.git')
@@ -63,11 +64,9 @@ def nudge():
 # install tmux
 @section
 def tmux():
-    # TODO: get this working
-    return
     if yesnooption('install_tmux', 'Install tmux?', default=full_install):
         # needed for tmux
-        pipinstall('powerline-status', 3, user=True)
+        pipinstall('powerline-status', [3], user=True)
         if yesnooption('own_tmux', 'Compile tmux from source?'):
             # FIXME: compiling tmux from source like this requires libevent ...
             # how do we make sure that that library has been installed?
@@ -82,6 +81,5 @@ def tmux():
             tmux.symlink('tmux', '~/bin/tmux')
             run(tmux)
         else:
-            from homely.general import installpkg
             # install tmux using brew or apt-get ...
             installpkg('tmux')
