@@ -97,6 +97,8 @@ if yesnooption('install_tmux', 'Install tmux?', default=full_install):
         ]
         if tmux_plugins:
             lines.append('source "%(DOTFILES)s/tmux/plugins.conf"')
+            # FIXME: the only way to determine if TPM installed correctly is to
+            # press `[PREFIX]`, `I` to do a plugin install
         lines = [l % wildcards for l in lines]
         blockinfile('~/.tmux.conf',
                     lines,
