@@ -1,5 +1,9 @@
+import os
+
+from subprocess import check_output
+
 from homely.ui import yesnooption
-from homely.general import lineinfile, mkdir, symlink, run
+from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP
 from homely.general import section, haveexecutable
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
@@ -61,12 +65,47 @@ def nudge():
         run(nudge)
 
 
-# install tmux
-@section
-def tmux():
-    if yesnooption('install_tmux', 'Install tmux?', default=full_install):
+# configure tmux
+if yesnooption('install_tmux', 'Install tmux?', default=full_install):
+    tmux_plugins = yesnooption('install_tmux_plugins', 'Install TPM and use tmux plugins?', default=full_install)
+    @section
+    def configure_tmux():
         # needed for tmux
         pipinstall('powerline-status', [3], user=True)
+
+        if tmux_plugins:
+            mkdir('~/.tmux')
+            mkdir('~/.tmux/plugins')
+            tpm = InstallFromSource('https://github.com/tmux-plugins/tpm',
+                                    '~/.tmux/plugins/tpm')
+            tpm.select_branch('master')
+            run(tpm)
+
+
+        # what to put in tmux config?
+        powerline = check_output(['python3',
+                                  '-c',
+                                  'import powerline; print(powerline.__file__)'])
+        wildcards = {
+            "POWERLINE": os.path.dirname(powerline.strip().decode('utf-8')),
+            "DOTFILES": os.path.dirname(__file__),
+        }
+        lines = [
+            'run-shell "powerline-daemon -q"',
+            'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
+            'source "%(DOTFILES)s/tmux/tmux.conf"'
+        ]
+        if tmux_plugins:
+            lines.append('source "%(DOTFILES)s/tmux/plugins.conf"')
+        lines = [l % wildcards for l in lines]
+        blockinfile('~/.tmux.conf',
+                    lines,
+                    '# start of automated tmux config',
+                    '# end of automated tmux config',
+                    where=WHERE_TOP)
+
+    @section
+    def install_tmux():
         if yesnooption('own_tmux', 'Compile tmux from source?'):
             # FIXME: compiling tmux from source like this requires libevent ...
             # how do we make sure that that library has been installed?
