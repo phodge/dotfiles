@@ -122,5 +122,11 @@ if yesnooption('install_tmux', 'Install tmux?', default=full_install):
             tmux.symlink('tmux', '~/bin/tmux')
             run(tmux)
         else:
-            # install tmux using brew or apt-get ...
-            installpkg('tmux')
+            try:
+                # install tmux using brew or apt-get ...
+                installpkg('tmux')
+            except:
+                print("-" * 50)
+                print("Compiling `tmux` failed - do you need to install automake or gcc?")
+                print("-" * 50)
+                raise
