@@ -38,6 +38,8 @@ def pipfavourites():
     pipinstall('pytest', versions, user=True)
     pipinstall('click', versions, user=True)
     pipinstall('simplejson', versions, user=True)
+    if full_install or yesnooption('install_ptpython', 'PIP Install ptpython?'):
+        pipinstall('ptpython', versions, user=True)
     if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
         pipinstall('ipython', versions, user=True)
     if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
