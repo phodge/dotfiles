@@ -3,7 +3,8 @@ import os
 from subprocess import check_output
 
 from homely.ui import yesnooption
-from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP
+from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP, WHERE_END
+from homely.general import download
 from homely.general import section, haveexecutable
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
@@ -33,12 +34,16 @@ def git():
 
     # put our standard ignore stuff into ~/.gitignore
     with open('%s/git/ignore' % HERE, 'r') as f:
-        lines = list(f.readlines())
-        blockinfile('~/gitignore',
+        lines = [l.rstrip('\r\n') for l in f.readlines()]
+        blockinfile('~/.gitignore',
                     lines,
                     "# exclude items from phodge/dotfiles",
                     "# end of items from phodge/dotfiles",
                     where=WHERE_TOP)
+
+    download('https://github.com/git/git/blob/master/contrib/completion/git-completion.bash',
+             '~/src/git-completion.bash')
+    lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
 
 
 @section
