@@ -9,6 +9,9 @@ from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 
 
+HERE = os.path.dirname(__file__)
+
+
 full_install = not yesnooption(
     'only_config',
     'Minimal install? (Config files only - nothing extra installed)')
@@ -23,11 +26,19 @@ mkdir('~/bin')
 # TODO: need to ensure ~/bin is in our $PATH
 
 
-# git ignore
 @section
-def gitconfig():
-    lineinfile('~/.gitignore', '*.swp')
-    lineinfile('~/.gitignore', '*.swo')
+def git():
+    # include our dotfiles git config from ~/.gitconfig
+    lineinfile('~/.gitconfig', "[include] path = %s/git/config" % HERE, where=WHERE_TOP)
+
+    # put our standard ignore stuff into ~/.gitignore
+    with open('%s/git/ignore' % HERE, 'r') as f:
+        lines = list(f.readlines())
+        blockinfile('~/gitignore',
+                    lines,
+                    "# exclude items from phodge/dotfiles",
+                    "# end of items from phodge/dotfiles",
+                    where=WHERE_TOP)
 
 
 @section
@@ -68,6 +79,7 @@ def nudge():
 # configure tmux
 if yesnooption('install_tmux', 'Install tmux?', default=full_install):
     tmux_plugins = yesnooption('install_tmux_plugins', 'Install TPM and use tmux plugins?', default=full_install)
+
     @section
     def configure_tmux():
         # needed for tmux
@@ -81,14 +93,13 @@ if yesnooption('install_tmux', 'Install tmux?', default=full_install):
             tpm.select_branch('master')
             run(tpm)
 
-
         # what to put in tmux config?
         powerline = check_output(['python3',
                                   '-c',
                                   'import powerline; print(powerline.__file__)'])
         wildcards = {
             "POWERLINE": os.path.dirname(powerline.strip().decode('utf-8')),
-            "DOTFILES": os.path.dirname(__file__),
+            "DOTFILES": HERE,
         }
         lines = [
             'run-shell "powerline-daemon -q"',
