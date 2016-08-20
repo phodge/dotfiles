@@ -27,6 +27,32 @@ mkdir('~/bin')
 # TODO: need to ensure ~/bin is in our $PATH
 
 
+if full_install:
+    @section
+    def sys():
+        import subprocess
+        if not haveexecutable('pip2'):
+            if yesnooption('global_pip2', 'Install pip2 systemwide?'):
+                cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python2'
+                subprocess.check_call(cmd, shell=True)
+
+
+@section
+def pipfavourites():
+    versions = [3]
+    if haveexecutable('pip2'):
+        versions.append(2)
+    pipinstall('pytest', versions, user=True)
+    pipinstall('click', versions, user=True)
+    pipinstall('simplejson', versions, user=True)
+    if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
+        pipinstall('ipython', versions, user=True)
+    if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
+        pipinstall('q', versions, user=True)
+    if full_install or yesnooption('install_flake8', 'PIP Install flake8?'):
+        pipinstall('flake8', versions, user=True)
+
+
 @section
 def git():
     # include our dotfiles git config from ~/.gitconfig
@@ -44,22 +70,6 @@ def git():
     download('https://github.com/git/git/blob/master/contrib/completion/git-completion.bash',
              '~/src/git-completion.bash')
     lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
-
-
-@section
-def pipfavourites():
-    versions = [3]
-    if haveexecutable('pip2'):
-        versions.append(2)
-    pipinstall('pytest', versions, user=True)
-    pipinstall('click', versions, user=True)
-    pipinstall('simplejson', versions, user=True)
-    if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
-        pipinstall('ipython', versions, user=True)
-    if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
-        pipinstall('q', versions, user=True)
-    if full_install or yesnooption('install_flake8', 'PIP Install flake8?'):
-        pipinstall('flake8', versions, user=True)
 
 
 @section
