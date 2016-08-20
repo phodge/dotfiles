@@ -73,6 +73,29 @@ def git():
 
 
 @section
+def hg():
+    versions = []
+    if haveexecutable('pip2'):
+        versions.append(2)
+    if haveexecutable('pip3'):
+        versions.append(3)
+    pipinstall('mercurial_keyring', versions, user=True)
+    # include our hg config from ~/.hgrc
+    lineinfile('~/.hgrc', '%%include %s/hg/hgrc' % HERE, where=WHERE_TOP)
+
+    # make a block in ~/.hgignore using hg/ignore
+    with open('%s/hg/ignore' % HERE, 'r') as f:
+        lines = [l.rstrip('\r\n') for l in f.readlines()]
+        blockinfile('~/.hgignore',
+                    lines,
+                    "# exclude items from phodge/dotfiles",
+                    "# end of items from phodge/dotfiles",
+                    where=WHERE_TOP)
+
+
+
+
+@section
 def vimconfig():
     # needed for vim also
     #pipinstall('powerline-status', 3, user=True)

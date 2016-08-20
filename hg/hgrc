@@ -1,0 +1,26 @@
+[extensions]
+mercurial_keyring =
+color =
+graphlog =
+pager =
+rebase =
+progress =
+shelve =
+largefiles =
+strip =
+histedit =
+purge =
+
+[pager]
+pager = LESS='FSRX' less
+ignore = version, help, update, serve, record
+
+[ui]
+pager = less -niSFX
+ignore = ~/.hgignore
+
+[alias]
+branchstatus = status --rev "branch('$1')"
+bs = branchstatus .
+# TODO: I'm not convinced this thing works :-(
+contains = log -r "$1" -b "$2"
