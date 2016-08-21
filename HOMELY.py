@@ -193,6 +193,18 @@ if usepowerline:
             f.write(dumped)
 
 
+@section
+def projects():
+    mkdir('~/playground-6')
+    # TODO: my nvim clone
+    # TODO: homely?
+    # TODO: nudge?
+    # TODO: any vim plugins I wrote?
+    names = [
+        ('homely', 'ssh://git@github.com/phodge/homely.git'),
+    ]
+
+
 # configure tmux
 if yesnooption('install_tmux', 'Install tmux?', default=full_install):
     tmux_plugins = yesnooption('install_tmux_plugins', 'Install TPM and use tmux plugins?', default=full_install)
