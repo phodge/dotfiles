@@ -63,7 +63,7 @@ bash_wizard_who() {
 }
 bash_wizard_path() {
     echo -ne "$gray"
-    echo -n "${PWD/$HOME/\~} "
+    echo -n "${PWD/$HOME/~} "
     echo -ne $reset
 }
 bash_wizard_hgbranch() {
