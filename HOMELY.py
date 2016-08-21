@@ -38,6 +38,23 @@ if full_install:
                 subprocess.check_call(cmd, shell=True)
 
 
+# my favourite developer tools
+@section
+def tools():
+    if yesnooption('install_ack', 'Install ack?', full_install):
+        installpkg('ack', apt='ack-grep')
+    if yesnooption('install_ag', 'Install ag?', full_install):
+        installpkg('ag',
+                   yum='the_silver_searcher',
+                   apt='the_silver_searcher')
+    if yesnooption('install_with', 'Install `with` utility?', full_install):
+        withutil = InstallFromSource('https://github.com/mchav/with',
+                                     '~/src/with.git')
+        withutil.symlink('with', '~/bin/with')
+        withutil.select_branch('master')
+        run(withutil)
+
+
 @section
 def pipfavourites():
     versions = [3]
@@ -70,7 +87,7 @@ def git():
                     "# end of items from phodge/dotfiles",
                     where=WHERE_TOP)
 
-    download('https://github.com/git/git/blob/master/contrib/completion/git-completion.bash',
+    download('https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash',
              '~/src/git-completion.bash')
     lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
 
@@ -100,6 +117,13 @@ def hg():
 
 @section
 def vimconfig():
+    # install vim-plug into ~/.vim
+    mkdir('~/.vim')
+    mkdir('~/.vim/autoload')
+    download('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+             '~/.vim/autoload/plug.vim')
+
+    # what needs to go in a local .vimrc?
     # needed for vim also
     #pipinstall('powerline-status', 3, user=True)
     # TODO: add this section
