@@ -126,6 +126,11 @@ if filereadable(s:plugpath)
   " turned on though
   Plug 'vim-scripts/php.vim--Hodge'
   let g:php_show_semicolon_error = 0
+  let g:php_alt_construct_parents = 1
+  let g:php_alt_arrays = 2
+  let g:php_highlight_quotes = 1
+  let g:php_alt_properties = 1
+  let g:php_smart_members = 1
 
 
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
