@@ -18,8 +18,11 @@ full_install = not yesnooption(
     'only_config',
     'Minimal install? (Config files only - nothing extra installed)')
 
-# simple symlinks
-symlink('.screenrc')
+
+@section
+def gnuscreen():
+    symlink('.screenrc')
+
 
 # create ~/bin and ~/src if they don't exist yet
 mkdir('~/src')
@@ -141,18 +144,30 @@ def nudge():
         run(nudge)
 
 
-usepowerline = yesnooption('use_powerline', 'Use powerline for tmux/vim?', default=full_install)
-if usepowerline:
+def _wantpowerline():
+    global _wantpowerline
+    result = yesnooption('use_powerline', 'Use powerline for tmux/vim?', default=full_install)
+    _wantpowerline = lambda: result
+    return result
+
+
+def _powerline_path():
+    global _powerline_path
     powerline_file = check_output(['python3',
-                                    '-c',
-                                    'import powerline; print(powerline.__file__)'])
-    powerline_path = os.path.dirname(powerline_file.strip().decode('utf-8'))
-    @section
-    def powerline():
+                                   '-c',
+                                   'import powerline; print(powerline.__file__)'])
+    result = os.path.dirname(powerline_file.strip().decode('utf-8'))
+    _powerline_path = lambda: result
+    return result
+
+
+@section
+def powerline():
+    if _wantpowerline():
         mkdir('~/.config')
         mkdir('~/.config/powerline')
         paths = [
-            "%s/config_files" % powerline_path,
+            "%s/config_files" % _powerline_path(),
             "%s/powerline" % HERE,
             "%s/.config/powerline" % HOME,
         ]
@@ -171,7 +186,7 @@ if usepowerline:
         if not os.path.exists(colourfile):
             if isinteractive() and yesno('Select base colours now?', True):
                 # load available colours from colors.json
-                with open("%s/config_files/colors.json" % powerline_path) as f:
+                with open("%s/config_files/colors.json" % _powerline_path()) as f:
                     import simplejson
                     colors = simplejson.load(f)
                 with open(colourfile, 'w') as f:
@@ -231,15 +246,21 @@ def projects():
     ]
 
 
-# configure tmux
-if yesnooption('install_tmux', 'Install tmux?', default=full_install):
-    tmux_plugins = yesnooption('install_tmux_plugins', 'Install TPM and use tmux plugins?', default=full_install)
+def _wanttmux():
+    global _wanttmux
+    result = yesnooption('install_tmux', 'Install tmux?', default=full_install)
+    _wanttmux = lambda: result
+    return result
 
-    @section
-    def configure_tmux():
+
+@section
+def tmux_config():
+    if _wanttmux():
         # needed for tmux
-        if usepowerline:
+        if _wantpowerline():
             pipinstall('powerline-status', [3], user=True)
+
+        tmux_plugins = yesnooption('install_tmux_plugins', 'Install TPM and use tmux plugins?', default=full_install)
 
         if tmux_plugins:
             mkdir('~/.tmux')
@@ -253,8 +274,8 @@ if yesnooption('install_tmux', 'Install tmux?', default=full_install):
         wildcards = {"DOTFILES": HERE}
         lines = []
         lines.append('source "%(DOTFILES)s/tmux/tmux.conf"')
-        if usepowerline:
-            wildcards["POWERLINE"] = powerline_path
+        if _wantpowerline():
+            wildcards["POWERLINE"] = _powerline_path()
             lines.extend([
                 'run-shell "powerline-daemon -q"',
                 'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
@@ -271,8 +292,11 @@ if yesnooption('install_tmux', 'Install tmux?', default=full_install):
                     '# end of automated tmux config',
                     where=WHERE_TOP)
 
-    @section
-    def install_tmux():
+
+# install or compile tmux
+@section
+def install_tmux():
+    if _wanttmux():
         if yesnooption('own_tmux', 'Compile tmux from source?'):
             # FIXME: compiling tmux from source like this requires libevent ...
             # how do we make sure that that library has been installed?
