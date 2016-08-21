@@ -1,0 +1,17 @@
+vim-powerline-lint:
+
+    if ! exists('s:powerline_root')
+    let s:output = systemlist('python3', "import powerline\nprint(powerline.__file__)\n")
+    if ! v:shell_error
+        let s:path = fnamemodify(s:output[0], ':h')
+        let s:powerline_root = s:path
+        let g:foo = s:path
+    endif
+    endif
+
+    " TODO: use of powerline-lint -p <s:powerline_root>/config_files to test our
+    " config
+    " TODO: have a sensible way to run this thing:
+    "   powerline-lint \
+    "       -p /home/peter/.local/lib/python3.5/site-packages/powerline/config_files \
+    "       -p ~/.config/powerline
