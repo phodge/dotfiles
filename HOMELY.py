@@ -19,6 +19,20 @@ full_install = not yesnooption(
     'Minimal install? (Config files only - nothing extra installed)')
 
 
+def whenmissing(filename, substr):
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            for line in f:
+                if substr in line:
+                    # if the thing is already in the file, we don't need a
+                    # proper decorator
+                    return lambda fn: None
+
+    # since we know the substr isn't in the file, we return a decorator that
+    # will immediately call the decorated function
+    return lambda fn: fn()
+
+
 @section
 def gnuscreen():
     symlink('.screenrc')
@@ -129,15 +143,87 @@ def hg():
 def vimconfig():
     # install vim-plug into ~/.vim
     mkdir('~/.vim')
+    mkdir('~/.nvim')
     mkdir('~/.vim/autoload')
     download('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
              '~/.vim/autoload/plug.vim')
 
-    # what needs to go in a local .vimrc?
-    # needed for vim also
-    #pipinstall('powerline-status', 3, user=True)
-    # TODO: add this section
-    pass
+    # download pathogen to its own special place
+    mkdir('~/.vimpathogen')
+    mkdir('~/.vimpathogen/autoload')
+    download('https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim',
+             '~/.vimpathogen/autoload/pathogen.vim')
+
+    vprefs = HOME + '/.vim/prefs.vim'
+    nprefs = HOME + '/.nvim/prefs.vim'
+
+    # chuck in a reference to our shiny new vimrc.vim (this will end up below the rtp magic block)
+    lineinfile('~/.vimrc', 'source %s/vimrc.vim' % HERE, where=WHERE_TOP)
+
+    # put our magic &rtp block at the top of our vimrc
+    blockinfile('~/.vimrc',
+                [
+                    '  " reset rtp',
+                    '  set runtimepath&',
+                    '  " let other scripts know they\'re allowed to modify &rtp',
+                    '  let g:allow_rtp_modify = 1',
+                    '  " grab local preferences',
+                    '  if exists(%r)' % vprefs,
+                    '    source %s' % vprefs,
+                    '  endif',
+                    '  if has(\'nvim\') && exists(%r)' % nprefs,
+                    '    source %s' % nprefs,
+                    '  endif',
+                ],
+                '" {{{ START OF dotfiles runtimepath magic',
+                '" }}} END OF dotfiles runtimepath magic',
+                where=WHERE_TOP)
+
+    # if the .vimrc.preferences file doesn't exist, create it now
+    if not os.path.exists(vprefs):
+        with open(vprefs, 'w') as f:
+            f.write('let g:vim_peter = 1\n')
+
+    # make sure we've made a choice about clipboard option in vprefs file
+    @whenmissing(vprefs, 'clipboard')
+    def addclipboard():
+        if isinteractive():
+            if yesno('Use system clipboard in vim? (clipboard=unnamed)', None):
+                rem = "Use system clipboard"
+                val = 'unnamed'
+            else:
+                rem = "Don't try and use system clipboard"
+                val = ''
+            with open(vprefs, 'a') as f:
+                f.write('" %s\n' % rem)
+                f.write("set clipboard=%s\n" % val)
+
+    # put a default value about whether we want the hacky mappings for when the
+    # terminal type isn't set correctly
+    @whenmissing(vprefs, 'g:hackymappings')
+    def sethackymappings():
+        with open(vprefs, 'a') as f:
+            f.write('" Use hacky mappings for F-keys and keypad?\n')
+            f.write('let g:hackymappings = 0\n')
+
+    # in most cases we don't want insight_php_tests
+    @whenmissing(vprefs, 'g:insight_php_tests')
+    def setinsightphptests():
+        with open(vprefs, 'a') as f:
+            f.write('" Do we want to use insight to check PHP code?\n')
+            f.write('let g:insight_php_tests = []\n')
+
+    # lock down &runtimepath
+    lineinfile('~/.vimrc', 'let g:allow_rtp_modify = 0', where=WHERE_END)
+
+    # <est> utility
+    hasphp = haveexecutable('php')
+    if yesnooption('install_est_utility', 'Install <vim-est>?', default=hasphp):
+        est = InstallFromSource('https://github.com/phodge/vim-est.git',
+                                '~/src/vim-est.git')
+        est.select_branch('master')
+        est.symlink('bin/est', '~/bin')
+        run(est)
 
 
 # install nudge
