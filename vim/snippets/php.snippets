@@ -1,0 +1,8 @@
+snippet pre
+	echo '<pre>${2:$1} = ', str_replace("\n", "\n\t", var_export(${1:$_POST}, 1)), '</pre>';
+snippet log
+	error_log('${2:$1} = ' . str_replace("\n", "\n\t", var_export(${1:$_POST}, 1)));
+snippet out
+	echo '${2:$1} = ', str_replace("\n", "\n\t", var_export(${1:$_POST}, 1)), "\n";
+snippet txt
+	error_log('${2:$1} = ' . debug_txt(${1:$_POST}));

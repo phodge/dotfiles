@@ -1,0 +1,27 @@
+snippet log
+	FILE *_f1; // TODO: remove this debug
+	_f1 = fopen("/tmp/q", "a"); // TODO: remove this debug
+	fprintf(_f1, "${1}\n"); // TODO: remove this debug
+	fclose(_f1); // TODO: remove this debug
+
+snippet logd
+	// TODO: remove this debug
+	FILE *${2:_f1};
+	$2 = fopen("/tmp/q", "a");
+	fprintf($2, "$1: %d\n", (int)${1:i});
+	fclose($2);
+
+snippet logs
+	// TODO: remove this debug
+	FILE *${2:_f1};
+	$2 = fopen("/tmp/q", "a");
+	fprintf($2, "$1: %s\n", (char *)${1:buffer});
+	fclose($2);
+
+snippet logf
+	// TODO: remove this debug
+	FILE *${2:_f1};
+	$2 = fopen("/tmp/q", "a");
+	fprintf($2, "$1: %f\n", (float)${1:number});
+	fclose($2);
+
