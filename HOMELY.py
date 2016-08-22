@@ -94,6 +94,13 @@ def git():
              '~/src/git-completion.bash')
     lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
 
+    gitwip = InstallFromSource('https://github.com/phodge/git-wip.git',
+                               '~/src/git-wip.git')
+    gitwip.symlink('bin/git-wip', '~/bin/git-wip')
+    gitwip.symlink('bin/git-unwip', '~/bin/git-unwip')
+    gitwip.select_branch('master')
+    run(gitwip)
+
 
 @section
 def hg():
