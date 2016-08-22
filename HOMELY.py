@@ -414,6 +414,16 @@ def install_tmux():
                 raise
 
 
+# zsh
+@section
+def zshconfig():
+    if yesnooption('use_zsh', 'Install zsh config?', default=full_install):
+        antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
+                                    '~/src/antigen.git')
+        antigen.select_branch('master')
+        run(antigen)
+
+
 @section
 def legacypl():
     if yesnooption('install_legacypl', 'Create clone of legacy-pl?', default=full_install):
