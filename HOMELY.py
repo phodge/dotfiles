@@ -415,5 +415,15 @@ def install_tmux():
 
 
 @section
+def legacypl():
+    if yesnooption('install_legacypl', 'Create clone of legacy-pl?', default=full_install):
+        mkdir('~/playground-6')
+        legacy = InstallFromSource('ssh://git@github.com/phodge/legacy-pl.git',
+                                   '~/playground-6/legacy-pl.git')
+        legacy.select_branch('develop')
+        run(legacy)
+
+
+@section
 def ackrc():
     lineinfile('~/.ackrc', '--ignore-file=is:.tags')
