@@ -1,0 +1,2 @@
+#!/bin/bash
+php -d error_reporting=$(php -r 'echo E_ALL|E_STRICT;') -d display_errors=0 -d log_errors=1 -d error_log= -d assert.active=1 -d assert.warning=1 -d assert.bail=1 -d auto_prepend_file=/home/peter/excalibur/php/debug.inc.php "$@"

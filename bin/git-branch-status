@@ -1,0 +1,26 @@
+#!/bin/bash
+
+_branch="$(git branch 2> /dev/null | grep '^\*' | cut -b 3-)"
+if [ x-q = "x$1" ]; then
+	_quiet=1
+fi
+
+_fail() {
+	echo "$1" >&2
+	exit 1
+}
+
+if [ -z "$_branch" ]; then
+	_fail "ERROR: Not a git repository"
+fi
+
+if [ -z "$_quiet" ]; then
+	echo "BRANCH: $_branch"
+fi
+if git diff --quiet master...HEAD; then
+	if [ -z "$_quiet" ]; then
+		echo "(No files changed)"
+	fi
+else
+	git diff --name-status master...HEAD
+fi

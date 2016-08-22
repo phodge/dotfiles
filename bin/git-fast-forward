@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# if there is only one argument, it is the branch name
+_branch="$1"
+shift
+
+if [ -z "$_branch" ]; then
+    echo "USAGE: $0 BRANCH"
+    exit 1
+fi
+
+# if there is a second argument, it is the remote name
+if [ -n "$1" ]; then
+    _remote="$_branch"
+    _branch="$1"
+    shift
+else
+    _remote="$(git remote)"
+fi
+
+git fetch "$_remote" "$_branch:$_branch"

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+_branch="$(git branch 2> /dev/null | grep '^\*' | cut -b 3-)"
+
+_fail() {
+	echo "$1" >&2
+	exit 1
+}
+
+if [ -z "$_branch" ]; then
+	_fail "ERROR: Not a git repository"
+fi
+
+echo "BRANCH: $_branch"
+git diff --name-status $(git merge-base master HEAD) HEAD | cut -b 3- | while read f; do
+	git diff master HEAD -- "$f" | grep ^+ | grep -w TODO | cut -b 2- | while read line; do
+		grep -HnF --regexp="$line" "$f"
+	done
+done
+
