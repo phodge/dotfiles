@@ -412,3 +412,8 @@ def install_tmux():
                 print("Compiling `tmux` failed - do you need to install automake or gcc?")
                 print("-" * 50)
                 raise
+
+
+@section
+def ackrc():
+    lineinfile('~/.ackrc', '--ignore-file=is:.tags')
