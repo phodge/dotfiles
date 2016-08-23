@@ -41,6 +41,10 @@ def gnuscreen():
 # create ~/bin and ~/src if they don't exist yet
 mkdir('~/src')
 mkdir('~/bin')
+mkdir('~/man')
+mkdir('~/man/man1')
+
+# TODO: need to ensure ~/man is in our $MANPATH
 
 # TODO: need to ensure ~/bin is in our $PATH
 
@@ -388,7 +392,7 @@ def tmux_config():
 
 # install or compile tmux
 @section
-def install_tmux():
+def tmux_install():
     if _wanttmux():
         if yesnooption('own_tmux', 'Compile tmux from source?'):
             # FIXME: compiling tmux from source like this requires libevent ...
@@ -402,6 +406,7 @@ def install_tmux():
                 ['make'],
             ])
             tmux.symlink('tmux', '~/bin/tmux')
+            tmux.symlink('tmux.1', '~/man/man1/tmux.1')
             run(tmux)
         else:
             try:
