@@ -61,14 +61,18 @@ if filereadable(s:plugpath)
   Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
   Plug 'msanders/snipmate.vim'
+  Plug 'sjl/Clam.vim'
 
   " {{{
     " just always use Differ now that it's pretty stable
     Plug 'nathan-hoad/differ'
     augroup UseDiffer
     augroup end
-    autocmd! UseDiffer BufWritePost * call Differ()
-    autocmd! UseDiffer BufReadPost * call Differ()
+    autocmd!
+    if has('nvim')
+      autocmd! UseDiffer BufWritePost * call Differ()
+      autocmd! UseDiffer BufReadPost * call Differ()
+    endif
   " }}}
   
   Plug 'phodge/vim-javascript-syntax'
