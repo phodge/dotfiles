@@ -1,3 +1,15 @@
+EditRealPath into a github plugin
+
+homely.lineinfile/blockinfile:
+- make it easier to paste in a block of code from a static file
+- make it easier to paste in a block of code from a template file
+- option to surround text w/ whitespace
+- make both functions smart enough to not to put a WHERE_ANY block at the end
+  of a file when something else has already put a WHERE_END block at the end
+- options to put the text before/after a line matching a regex
+- when multiple WHERE_END things are used, make them append in order
+
+
 vim-powerline-lint:
 
     if ! exists('s:powerline_root')
