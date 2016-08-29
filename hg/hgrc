@@ -22,5 +22,7 @@ ignore = ~/.hgignore
 [alias]
 branchstatus = status --rev "branch('$1')"
 bs = branchstatus .
+# relative 
+st = !hg status $($HG root) $HG_ARGS
 # TODO: I'm not convinced this thing works :-(
 contains = log -r "$1" -b "$2"
