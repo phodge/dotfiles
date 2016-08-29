@@ -55,6 +55,7 @@ if filereadable(s:plugpath)
 
   call plug#begin(s:plugins) " {{{
 
+  Plug 'EinfachToll/DidYouMean'
   Plug 'FooSoft/vim-argwrap'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'ctrlpvim/ctrlp.vim'
@@ -62,6 +63,11 @@ if filereadable(s:plugpath)
   Plug 'hynek/vim-python-pep8-indent'
   Plug 'msanders/snipmate.vim'
   Plug 'sjl/Clam.vim'
+
+  " Didn't work when I tried it:
+  "Plug 'justinmk/tmux-complete.vim'
+  let g:gutentags_tagfile = '.tags'
+  Plug 'justinmk/vim-gutentags'
 
   " {{{
     " just always use Differ now that it's pretty stable
@@ -343,6 +349,8 @@ if g:vim_peter && version >= 700
   set statusline+=%{SyntasticStatuslineFlag()}
   set statusline+=%*
   set statusline+=%=
+  " gutentags
+  set statusline+=%{exists('*gutentags#statusline')?gutentags#statusline('[T]\ '):''}
   " ruler
   set statusline+=Line\ %l\ \ \ %v/%{col('$')-1}\ \ \ 
   " character under cursor
