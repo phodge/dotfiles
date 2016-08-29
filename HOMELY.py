@@ -412,3 +412,46 @@ def install_tmux():
                 print("Compiling `tmux` failed - do you need to install automake or gcc?")
                 print("-" * 50)
                 raise
+
+
+# install a local copy of neovim?
+install_nvim = yesnooption('install_nvim', 'Install neovim?', default=full_install)
+@section
+def nvim_install():
+    if install_nvim:
+        # NOTE: on ubuntu the requirements are:
+        # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+        n = InstallFromSource('https://github.com/neovim/neovim.git',
+                              '~/src/neovim.git')
+        n.select_tag('v0.1.5')
+        # TODO: we want to make and make install, but not if we've already build this tag!
+        # TODO: run nvim --version to find out if we're already running this version
+        #n.compile_cmd([
+            #['make'],
+            #['make', 'install'],
+        #])
+        run(n)
+
+
+@section
+def nvim_devel():
+    if not install_nvim:
+        return
+
+    # my fork of the neovim project
+    origin = 'ssh://git@github.com/phodge/neovim.git'
+    # the main neovim repo - for pulling
+    neovim = 'https://github.com/neovim/neovim.git'
+    # where to put the local clone
+    dest = HOME + '/playground-6/neovim'
+
+    if os.path.exists(dest):
+        return
+
+    if yesnooption('install_nvim_devel', 'Put a dev version of neovim in playground-6?', default=False):
+        mkdir('~/playground-6')
+        # NOTE: using check_call() means the dest directory isn't tracked by
+        # homely ... and this is exactly what I want
+        check_call(['git', 'clone', origin, dest])
+        check_call(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
+        check_call(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
