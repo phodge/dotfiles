@@ -788,3 +788,6 @@ augroup end
 autocmd! EditRealPath BufReadPost * nested if exists('g:edit_real_path') && g:edit_real_path | call EditRealPath() | endif
 
 
+augroup PowerlineCFG
+augroup end
+autocmd! PowerlineCFG BufRead powerline/**/*.json setlocal sts=2 sw=2 ts=2 et
