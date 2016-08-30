@@ -268,7 +268,7 @@ def powerline():
             "%s/powerline" % HERE,
             "%s/.config/powerline" % HOME,
         ]
-        lineinfile('~/.bashrc',
+        lineinfile('~/.shellrc',
                    'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
                    where=WHERE_END)
 
