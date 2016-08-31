@@ -63,6 +63,7 @@ if filereadable(s:plugpath)
   Plug 'hynek/vim-python-pep8-indent'
   Plug 'msanders/snipmate.vim'
   Plug 'sjl/Clam.vim'
+  Plug 'tmux-plugins/vim-tmux'
 
   " Didn't work when I tried it:
   "Plug 'justinmk/tmux-complete.vim'
@@ -100,8 +101,9 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-fugitive', {'tag': '*'}
   Plug 'tpope/vim-obsession'
   Plug 'tpope/vim-repeat'
-  " TODO: learn this one
-  "Plug 'tpope/vim-scriptease'
+
+  let g:dispatch_quickfix_height = 10
+  Plug 'tpope/vim-dispatch'
 
   " FIXME: I should make my own github repos from these
   Plug 'vim-scripts/php.vim--Hodge'
@@ -307,6 +309,7 @@ if version >= 700
 endif
 
 nnoremap <SPACE>a :ArgWrap<CR>
+nnoremap <SPACE>m :<C-R>=(exists(':Make')==2?'Make':'make')<CR><CR>
 
 if version >= 700 && g:vim_peter
   nnoremap gss :call MySchema#GetSchema(expand('<cword>'))<CR>
