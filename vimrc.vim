@@ -14,8 +14,12 @@ endif
 set confirm
 
 " 256-color mode for neovim
-if has('nvim') && &term == 'screen'
-  set term=screen-256color
+if exists('&termguicolors')
+  " NOTE: this needs to be set at startup
+  set termguicolors
+elseif has('nvim') && &term == 'screen'
+  " TODO: what was this for?
+  "set term=screen-256color
 endif
 
 " runtimepath modifications {{{
