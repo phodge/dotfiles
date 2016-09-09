@@ -141,19 +141,31 @@ endif
   let g:tmux_navigator_no_mappings = 1
   if g:vim_peter
     if has('nvim')
+      tnoremap <silent> <M-h> <C-\><C-n>:TmuxNavigateLeft<cr>
+      tnoremap <silent> <M-j> <C-\><C-n>:TmuxNavigateDown<cr>
+      tnoremap <silent> <M-k> <C-\><C-n>:TmuxNavigateUp<cr>
+      tnoremap <silent> <M-l> <C-\><C-n>:TmuxNavigateRight<cr>
       nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
       nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
       nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
       nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
-      nnoremap <silent> <M-w> :TmuxNavigatePrevious<cr>
+      "nnoremap <silent> <M-w> :TmuxNavigatePrevious<cr>
     else
       nnoremap <silent> <ESC>h :TmuxNavigateLeft<cr>
       nnoremap <silent> <ESC>j :TmuxNavigateDown<cr>
       nnoremap <silent> <ESC>k :TmuxNavigateUp<cr>
       nnoremap <silent> <ESC>l :TmuxNavigateRight<cr>
-      nnoremap <silent> <ESC>w :TmuxNavigatePrevious<cr>
+      " these don't seem to work :-(
+      "nnoremap <silent> <ESC>w :TmuxNavigatePrevious<cr>
     endif
   else
+    if has('nvim')
+      tunmap <M-h>
+      tunmap <M-h>
+      tunmap <M-h>
+      tunmap <M-h>
+      tunmap <M-h>
+    endif
     silent! nunmap <ESC>h
     silent! nunmap <ESC>j
     silent! nunmap <ESC>k
