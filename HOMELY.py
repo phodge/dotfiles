@@ -440,7 +440,7 @@ def legacypl():
 
 @section
 def ackrc():
-    lineinfile('~/.ackrc', '--ignore-file=is:.tags')
+    symlink('.ackrc')
 
 
 # install a local copy of neovim?
