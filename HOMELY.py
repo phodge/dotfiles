@@ -368,20 +368,19 @@ def tmux_config():
             run(tpm)
 
         # what to put in tmux config?
-        wildcards = {"DOTFILES": HERE}
+        wildcards = {"DOTFILES": HERE, "HOME": HOME}
         lines = []
-        lines.append('source "%(DOTFILES)s/tmux/tmux.conf"')
         if _wantpowerline():
             wildcards["POWERLINE"] = _powerline_path()
             lines.extend([
                 'run-shell "powerline-daemon -q"',
                 'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
-                'bind-key C-p source-file "%(POWERLINE)s/bindings/tmux/powerline.conf"',
             ])
         if tmux_plugins:
             lines.append('source "%(DOTFILES)s/tmux/plugins.conf"')
             # FIXME: the only way to determine if TPM installed correctly is to
             # press `[PREFIX]`, `I` to do a plugin install
+        lines.append('source "%(DOTFILES)s/tmux/tmux.conf"')
         lines = [l % wildcards for l in lines]
         blockinfile('~/.tmux.conf',
                     lines,
