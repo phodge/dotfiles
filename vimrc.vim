@@ -13,7 +13,7 @@ endif
 
 set confirm
 
-" 256-color mode for neovim
+" 256-color mode for vim8/neovim
 if exists('&termguicolors')
   " NOTE: this needs to be set at startup
   set termguicolors
@@ -206,9 +206,6 @@ endif
 set hlsearch incsearch
 
 " added from the VimTools wiki page
-augroup MyEncoding
-augroup end
-autocmd! MyEncoding VimEnter let s:vim_entered = 1
 if ! exists('s:vim_entered')
   set encoding=utf-8
 endif
@@ -810,3 +807,5 @@ autocmd! EditRealPath BufReadPost * nested if exists('g:edit_real_path') && g:ed
 augroup PowerlineCFG
 augroup end
 autocmd! PowerlineCFG BufRead powerline/**/*.json setlocal sts=2 sw=2 ts=2 et
+
+let s:vim_entered = 1
