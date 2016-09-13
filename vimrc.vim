@@ -222,9 +222,9 @@ set fileformats=unix,dos,mac
 " use \\ as mapleader
 let g:mapleader = '\\'
 
-" use <F5> and <F6> to run ag searches
-nnoremap <F5> :Ag -w <C-R><C-W><CR>
-nnoremap <F6> :Ag -wi <C-R><C-W><CR>
+" use <F5> and <F6> to run ack searches
+nnoremap <F5> :Ack -w <C-R><C-W><CR>
+nnoremap <F6> :Ack -wi <C-R><C-W><CR>
 
 " use F12 for reloading :Shell windows
 let g:shell_command_reload_map = '<F12>'
