@@ -1,0 +1,39 @@
+tmux:
+  # tmux takes ownership of these two prefixes:
+  # ALT-
+  # ALT-SHIFT-
+  prefixed:
+    .: display-message "Sourcing $HOME/.tmux.conf" \; source-file $HOME/.tmux.conf \; display-message "DONE"
+    # mark/unmark the current pane
+    M: select-pane -m
+    S-M: select-pane -M
+    C-B: last-window
+    C-P: previous-window
+    C-N: next-window
+    C-M: command-prompt "move-window -t '%%'"
+  direct:
+    # moving between panes
+    # smart pane switching with awareness of vim splits
+    # https://robots.thoughtbot.com/seamlessly-navigate-vim-and-tmux-splits
+    M-H: if-shell "$is_vim" "send-keys M-h" "select-pane -L"
+    M-J: if-shell "$is_vim" "send-keys M-j" "select-pane -D"
+    M-K: if-shell "$is_vim" "send-keys M-k" "select-pane -U"
+    M-L: if-shell "$is_vim" "send-keys M-l" "select-pane -R"
+    # splitting panes
+    M-S-L: split-window -h
+    M-S-H: split-window -h \; swap-pane -U
+    M-S-J: split-window
+    M-S-K: split-window \; swap-pane -U
+    # move between windows
+    M-P: previous-window
+    M-N: next-window
+    # creating windows/sessions
+    M-C: list-sessions \; command-prompt -p "New Session,New Window" "new-session -n '%2' -s '%1'"
+    M-T: command-prompt -p "New Window" -n "new-window -n '%1'"
+  vi-copy:
+    V: begin-selection
+    Y: { static: tmux_copy_cmd }
+    S-Y: { static: tmux_copy_cmd }
+    CR: { static: tmux_copy_cmd }
+    ESC: cancel
+
