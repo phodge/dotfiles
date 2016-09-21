@@ -1,2 +1,3 @@
 --ignore-file=is:.tags
 --ignore-file=is:Session.vim
+--ignore-file=ext:bak
