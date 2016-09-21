@@ -2,6 +2,18 @@
   "segments": {
     "right": [
       {
+        "function": "jerjerrod.powerline.wsnames",
+        "args": { "category": "WS:CHANGED" }
+      },
+      {
+        "function": "jerjerrod.powerline.wsnames",
+        "args": { "category": "WS:UNTRACKED" }
+      },
+      {
+        "function": "jerjerrod.powerline.wsnames",
+        "args": { "category": "WS:UNPUSHED" }
+      },
+      {
         "function": "homely.powerline.shortstatus",
         "args": {
           "autoupdate": true,

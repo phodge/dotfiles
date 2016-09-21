@@ -1,0 +1,2 @@
+def wsnames(category):
+    return []
