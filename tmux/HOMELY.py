@@ -97,8 +97,8 @@ def tmux_install():
 
 class TmuxCustomMode(object):
     _all = ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-            ',<.>/?:[{]}-_=+!@$%^&*()`~')
-    # TODO: what about #'";
+            ',<.>/?:[{]}-_=+!@%^&*()`')
+    # TODO: what about #'"~;
     _special = ['Enter', 'Left', 'Right', 'Up', 'Down', 'Space']
 
     def __init__(self, table, prompt):

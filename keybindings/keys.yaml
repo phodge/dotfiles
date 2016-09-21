@@ -3,7 +3,7 @@ tmux:
   # ALT-
   # ALT-SHIFT-
   prefixed:
-    .: display-message "Sourcing $HOME/.tmux.conf" \; source-file $HOME/.tmux.conf \; display-message "DONE"
+    .: display-message "Sourcing $HOME/.tmux.conf" \; source-file $HOME/.tmux.conf
     # mark/unmark the current pane
     M: select-pane -m
     S-M: select-pane -M
@@ -29,7 +29,7 @@ tmux:
     M-N: next-window
     # creating windows/sessions
     M-C: list-sessions \; command-prompt -p "New Session,New Window" "new-session -n '%2' -s '%1'"
-    M-T: command-prompt -p "New Window" -n "new-window -n '%1'"
+    M-T: command-prompt -p "New Window" "new-window -n '%1'"
   vi-copy:
     V: begin-selection
     Y: { static: tmux_copy_cmd }
