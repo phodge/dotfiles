@@ -14,6 +14,22 @@ HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
 
 
+# decorator to make a function that caches its result temporarily
+def cachedfunc(func):
+    haveresult = False
+    result = None
+
+    def wrapper(*args, **kwargs):
+        nonlocal haveresult, result
+        if not haveresult:
+            haveresult = True
+            result = func(*args, **kwargs)
+        return result
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    return wrapper
+
+
 full_install = not yesnooption(
     'only_config',
     'Minimal install? (Config files only - nothing extra installed)')
@@ -141,8 +157,6 @@ def hg():
                     where=WHERE_TOP)
 
 
-
-
 @section
 def vimconfig():
     # install vim-plug into ~/.vim
@@ -239,96 +253,6 @@ def nudge():
         nudge.select_branch('master')
         nudge.symlink('bin/nudge', '~/bin/nudge')
         run(nudge)
-
-
-def _wantpowerline():
-    global _wantpowerline
-    result = yesnooption('use_powerline', 'Use powerline for tmux/vim?', default=full_install)
-    _wantpowerline = lambda: result
-    return result
-
-
-def _powerline_path():
-    global _powerline_path
-    powerline_file = check_output(['python3',
-                                   '-c',
-                                   'import powerline; print(powerline.__file__)'])
-    result = os.path.dirname(powerline_file.strip().decode('utf-8'))
-    _powerline_path = lambda: result
-    return result
-
-
-@section
-def powerline():
-    if _wantpowerline():
-        mkdir('~/.config')
-        mkdir('~/.config/powerline')
-        paths = [
-            "%s/config_files" % _powerline_path(),
-            "%s/powerline" % HERE,
-            "%s/.config/powerline" % HOME,
-        ]
-        lineinfile('~/.shellrc',
-                   'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
-                   where=WHERE_END)
-
-        # ask the user what colour prefs they would like ... put it in ~/.config/powerline/colors.sh
-        colourfile = os.path.join(HOME, '.config', 'powerline', 'colours.sh')
-        load = False
-        defaults = dict(
-            bg="gray1",
-            fg1="white",
-            fg2="gray6",
-        )
-        if not os.path.exists(colourfile):
-            if isinteractive() and yesno('Select base colours now?', True):
-                # load available colours from colors.json
-                with open("%s/config_files/colors.json" % _powerline_path()) as f:
-                    import simplejson
-                    colors = simplejson.load(f)
-                with open(colourfile, 'w') as f:
-                    f.write("# primary background colour\n")
-                    f.write("bg=%(bg)s\n" % defaults)
-                    f.write("# foreground colour for highlighted tab\n")
-                    f.write("fg1=%(fg1)s\n" % defaults)
-                    f.write("# foreground colour for other tabs\n")
-                    f.write("fg2=%(fg2)s\n" % defaults)
-                    f.write("# possible colours:\n")
-                    for name in sorted(colors.get("colors", {})):
-                        f.write("#   %s\n" % name)
-                check_call(['vim', colourfile])
-                load = True
-        else:
-            load = True
-            if isinteractive() and yesno('Select base colours now?', False):
-                check_call(['vim', colourfile])
-
-        colourset = defaults
-        if load:
-            with open(colourfile, 'r') as f:
-                for line in [l.rstrip() for l in f]:
-                    if len(line) and not line.startswith('#'):
-                        import pprint
-                        print('line = ' + pprint.pformat(line))  # noqa TODO
-                        name, val = line.split('=')
-                        colourset[name] = val
-        data = {}
-        data["groups"] = {
-            "window:current":       {"bg": colourset["bg"],  "fg": colourset["fg1"], "attrs": []},
-            "window_name":          {"bg": colourset["bg"],  "fg": colourset["fg1"], "attrs": ["bold"]},
-            "session:prefix":       {"bg": colourset["bg"],  "fg": "gray90", "attrs": ["bold"]},
-            "active_window_status": {"fg": colourset["fg2"], "bg": "gray0", "attrs": []},
-            "hostname":             {"bg": colourset["bg"],  "fg": "gray90", "attrs": []},
-        }
-        # write out a colorscheme override for tmux using our powerline colours
-        mkdir('~/.config')
-        mkdir('~/.config/powerline')
-        mkdir('~/.config/powerline/colorschemes')
-        mkdir('~/.config/powerline/colorschemes/tmux')
-        import simplejson
-        dumped = simplejson.dumps(data)
-        with writefile('~/.config/powerline/colorschemes/tmux/default.json') as f:
-            f.write(dumped)
 
 
 @section
@@ -484,3 +408,18 @@ def nvim_devel():
         check_call(['git', 'clone', origin, dest])
         check_call(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
         check_call(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+
+
+@cachedfunc
+def wantpowerline():
+    return yesnooption('use_powerline', 'Use powerline for tmux/vim?', default=full_install)
+
+
+@cachedfunc
+def powerline_path():
+    cmd = ['python3', '-c', 'import powerline; print(powerline.__file__)']
+    powerline_file = system(cmd, stdout=True)[1]
+    return os.path.dirname(powerline_file.strip().decode('utf-8'))
+
+
+include('powerline/HOMELY.py')
