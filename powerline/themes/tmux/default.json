@@ -1,0 +1,33 @@
+{
+  "segments": {
+    "right": [
+      {
+        "function": "homely.powerline.shortstatus",
+        "args": {
+          "autoupdate": true,
+          "reattach_to_user_namespace": true,
+          "colors": {
+            "paused": "HOMELY:PAUSED",
+            "running": "HOMELY:RUNNING",
+            "failed": "HOMELY:FAILED",
+            "noconn": "HOMELY:NOCONN",
+            "dirty": "HOMELY:DIRTY",
+            "never": "HOMELY:NEVER",
+            "ok": "HOMELY:OK"
+          }
+        }
+      },
+      {
+        "function": "powerline.segments.common.time.date",
+        "name": "time",
+        "args": {
+          "format": "%H:%M",
+          "istime": true
+        }
+      },
+      {
+        "function": "powerline.segments.common.net.hostname"
+      }
+    ]
+  }
+}
