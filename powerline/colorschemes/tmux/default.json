@@ -1,0 +1,16 @@
+{
+    "groups": {
+        "WS:CHANGED": {"bg": "black", "fg": "brightestred", "attrs": [] },
+        "WS:UNTRACKED": {"bg": "black", "fg": "mediumorange", "attrs": [] },
+        "WS:UNPUSHED": {"bg": "black", "fg": "yellow", "attrs": [] },
+        "WS:SEPARATOR": {"bg": "black", "fg": "gray6", "attrs": [] },
+
+        "HOMELY:OK": {"bg": "gray3", "fg": "white", "attrs": [] },
+        "HOMELY:PAUSED": {"bg": "steelblue", "fg": "white", "attrs": [] },
+        "HOMELY:RUNNING": {"bg": "darkgreen", "fg": "white", "attrs": [] },
+        "HOMELY:NOCONN": {"bg": "darkorange", "fg": "yellow", "attrs": [] },
+        "HOMELY:DIRTY": {"bg": "darkorange", "fg": "yellow", "attrs": [] },
+        "HOMELY:NEVER": {"bg": "darkred", "fg": "white", "attrs": [] },
+        "HOMELY:FAILED": {"bg": "brightestred", "fg": "white", "attrs": [] }
+    }
+}
