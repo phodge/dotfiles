@@ -1,11 +1,9 @@
 import os
 
-from subprocess import check_output, check_call
-
 from homely.ui import yesno, yesnooption, isinteractive, system
 from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP, WHERE_END
-from homely.general import download, writefile
-from homely.general import section, haveexecutable
+from homely.general import download
+from homely.general import include, section, haveexecutable
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 
@@ -67,7 +65,7 @@ mkdir('~/man/man1')
 
 if full_install:
     @section
-    def sys():
+    def install_pip():
         import subprocess
         if not haveexecutable('pip2'):
             if yesnooption('global_pip2', 'Install pip2 systemwide?'):
@@ -90,6 +88,11 @@ def tools():
         withutil.symlink('with', '~/bin/with')
         withutil.select_branch('master')
         run(withutil)
+
+    # TODO: complete the code that installs markdown
+    #if yesnooption('install_markdown', "Install markdown util?", full_install):
+        #url = 'http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip'
+        # TODO: where do you want to put this thing?
 
 
 @section
@@ -124,8 +127,8 @@ def git():
                     "# end of items from phodge/dotfiles",
                     where=WHERE_TOP)
 
-    download('https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash',
-             '~/src/git-completion.bash')
+    url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash'
+    download(url, '~/src/git-completion.bash')
     lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
 
     gitwip = InstallFromSource('https://github.com/phodge/git-wip.git',
@@ -240,7 +243,7 @@ def vimconfig():
         est = InstallFromSource('https://github.com/phodge/vim-est.git',
                                 '~/src/vim-est.git')
         est.select_branch('master')
-        est.symlink('bin/est', '~/bin')
+        est.symlink('bin/est', '~/bin/est')
         run(est)
 
 
@@ -262,9 +265,9 @@ def projects():
     # TODO: homely?
     # TODO: nudge?
     # TODO: any vim plugins I wrote?
-    names = [
-        ('homely', 'ssh://git@github.com/phodge/homely.git'),
-    ]
+    #names = [
+    #('homely', 'ssh://git@github.com/phodge/homely.git'),
+    #]
 
 
 # zsh
