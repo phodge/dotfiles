@@ -23,7 +23,7 @@ function! <SID>SetGlobalLineLength(new_len)
   if a:new_len > 0
     let g:syntastic_python_flake8_post_args = "--max-line-length=" . a:new_len
   else
-    let g:syntastic_python_flake8_post_args = "--max-line-length="
+    let g:syntastic_python_flake8_post_args = "--max-line-length=99999"
   endif
 endfunction
 
