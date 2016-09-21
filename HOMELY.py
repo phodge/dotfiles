@@ -2,7 +2,7 @@ import os
 
 from subprocess import check_output, check_call
 
-from homely.ui import yesno, yesnooption, isinteractive
+from homely.ui import yesno, yesnooption, isinteractive, system
 from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP, WHERE_END
 from homely.general import download, writefile
 from homely.general import section, haveexecutable
@@ -293,27 +293,28 @@ def ackrc():
 
 
 # install a local copy of neovim?
-install_nvim = yesnooption('install_nvim', 'Install neovim?', default=full_install)
+@cachedfunc
+def _wantnvim():
+    return yesnooption('install_nvim', 'Install neovim?', default=full_install)
+
+
 @section
 def nvim_install():
-    if install_nvim:
+    if _wantnvim():
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
-        n = InstallFromSource('https://github.com/neovim/neovim.git',
-                              '~/src/neovim.git')
+        n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
         n.select_tag('v0.1.5')
-        # TODO: we want to make and make install, but not if we've already build this tag!
-        # TODO: run nvim --version to find out if we're already running this version
-        #n.compile_cmd([
-            #['make'],
-            #['make', 'install'],
-        #])
+        n.compile_cmd([
+            ['make'],
+            ['sudo', 'make', 'install'],
+        ])
         run(n)
 
 
 @section
 def nvim_devel():
-    if not install_nvim:
+    if not _wantnvim():
         return
 
     # my fork of the neovim project
@@ -326,13 +327,16 @@ def nvim_devel():
     if os.path.exists(dest):
         return
 
-    if yesnooption('install_nvim_devel', 'Put a dev version of neovim in playground-6?', default=False):
+    want_devel = yesnooption('install_nvim_devel',
+                             'Put a dev version of neovim in playground-6?',
+                             default=False)
+    if want_devel:
         mkdir('~/playground-6')
-        # NOTE: using check_call() means the dest directory isn't tracked by
-        # homely ... and this is exactly what I want
-        check_call(['git', 'clone', origin, dest])
-        check_call(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
-        check_call(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+        # NOTE: using system() directly means the dest directory isn't tracked by homely ... this
+        # is exactly what I want
+        system(['git', 'clone', origin, dest])
+        system(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
+        system(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
 
 
 @cachedfunc
