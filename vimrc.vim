@@ -69,10 +69,9 @@ if filereadable(s:plugpath)
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
 
-  " Didn't work when I tried it:
-  "Plug 'justinmk/tmux-complete.vim'
+  " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
-  Plug 'justinmk/vim-gutentags'
+  Plug 'justinmk/vim-gutentags', executable('ctags') ? {} : {'on': []}
 
   " {{{
     " just always use Differ now that it's pretty stable
@@ -98,7 +97,7 @@ if filereadable(s:plugpath)
   Plug 'phodge/vim-myschema'
   Plug 'phodge/vim-vcs'
 
-  Plug 'python-rope/ropevim'
+  "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
   Plug 'scrooloose/syntastic'
   Plug 'ternjs/tern_for_vim'
