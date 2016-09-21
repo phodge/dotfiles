@@ -1,9 +1,11 @@
 {
     "groups": {
-        "WS:CHANGED": {"bg": "black", "fg": "brightestred", "attrs": [] },
-        "WS:UNTRACKED": {"bg": "black", "fg": "mediumorange", "attrs": [] },
-        "WS:UNPUSHED": {"bg": "black", "fg": "yellow", "attrs": [] },
-        "WS:SEPARATOR": {"bg": "black", "fg": "gray6", "attrs": [] },
+        "JERJERROD:SCANNING": {"bg": "darkorange", "fg": "white", "attrs": [] },
+        "JERJERROD:CHANGED": {"bg": "black", "fg": "brightestred", "attrs": [] },
+        "JERJERROD:UNTRACKED": {"bg": "black", "fg": "mediumorange", "attrs": [] },
+        "JERJERROD:UNPUSHED": {"bg": "black", "fg": "yellow", "attrs": [] },
+        "JERJERROD:UNKNOWN": {"bg": "black", "fg": "darkcyan", "attrs": [] },
+        "JERJERROD:SEPARATOR": {"bg": "black", "fg": "gray6", "attrs": [] },
 
         "HOMELY:OK": {"bg": "gray3", "fg": "white", "attrs": [] },
         "HOMELY:PAUSED": {"bg": "steelblue", "fg": "white", "attrs": [] },

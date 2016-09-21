@@ -1,7 +1,7 @@
 import os
 from homely.ui import yesno, system, isinteractive
-from homely.general import mkdir, lineinfile, WHERE_END, writefile, section
-from HOMELY import HERE, HOME, wantpowerline, powerline_path
+from homely.general import mkdir, lineinfile, WHERE_END, writefile, section, haveexecutable
+from HOMELY import HERE, HOME, wantpowerline, wantjerjerrod, powerline_path
 
 
 @section
@@ -76,3 +76,56 @@ def powerline():
         dumped = simplejson.dumps(data)
         with writefile('~/.config/powerline/colorschemes/tmux/default.json') as f:
             f.write(dumped)
+
+
+@section
+def powerline_theme():
+    if not wantpowerline():
+        return
+
+    right = []
+
+    if haveexecutable('jerjerrod') and wantjerjerrod():
+        wsnames = "jerjerrod.powerline.wsnames"
+        right += [
+            {"function": "jerjerrod.powerline.wsscancount"},
+            {"function": wsnames, "args": {"category": "JERJERROD:CHANGED"}},
+            {"function": wsnames, "args": {"category": "JERJERROD:UNTRACKED"}},
+            {"function": wsnames, "args": {"category": "JERJERROD:UNPUSHED"}},
+            {"function": wsnames, "args": {"category": "JERJERROD:UNKNOWN"}},
+        ]
+
+    right.append({
+        "function": "homely.powerline.shortstatus",
+        "args": {
+            "autoupdate": True,
+            "reattach_to_user_namespace": True,
+            "colors": {
+                "paused": "HOMELY:PAUSED",
+                "running": "HOMELY:RUNNING",
+                "failed": "HOMELY:FAILED",
+                "noconn": "HOMELY:NOCONN",
+                "dirty": "HOMELY:DIRTY",
+                "never": "HOMELY:NEVER",
+                "ok": "HOMELY:OK",
+            }
+        },
+    })
+    right.append({
+        "function": "powerline.segments.common.time.date",
+        "name": "time",
+        "args": {
+            "format": "%H:%M",
+            "istime": True,
+        },
+    })
+    right.append({"function": "powerline.segments.common.net.hostname"})
+
+    import simplejson
+    dumped = simplejson.dumps({"segments": {"right": right}})
+    mkdir('~/.config')
+    mkdir('~/.config/powerline')
+    mkdir('~/.config/powerline/themes')
+    mkdir('~/.config/powerline/themes/tmux')
+    with writefile('~/.config/powerline/themes/tmux/default.json') as f:
+        f.write(dumped)

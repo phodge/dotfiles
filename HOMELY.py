@@ -33,6 +33,13 @@ full_install = not yesnooption(
     'Minimal install? (Config files only - nothing extra installed)')
 
 
+@cachedfunc
+def wantjerjerrod():
+    return yesnooption('want_jerjerrod',
+                       'Use jerjerrod for project monitoring?',
+                       default=full_install)
+
+
 def whenmissing(filename, substr):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
@@ -262,18 +269,6 @@ def nudge():
         run(nudge)
 
 
-@section
-def projects():
-    mkdir('~/playground-6')
-    # TODO: my nvim clone
-    # TODO: homely?
-    # TODO: nudge?
-    # TODO: any vim plugins I wrote?
-    #names = [
-    #('homely', 'ssh://git@github.com/phodge/homely.git'),
-    #]
-
-
 # zsh
 @section
 def zshconfig():
@@ -362,5 +357,7 @@ def powerline_path():
     return os.path.dirname(powerline_file.strip().decode('utf-8'))
 
 
+# note that these need to be carried out in order of dependency
+include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
 include('tmux/HOMELY.py')
