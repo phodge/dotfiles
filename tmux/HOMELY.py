@@ -45,12 +45,14 @@ def tmux_config():
         # what to put in tmux config?
         wildcards = {"DOTFILES": HERE, "HOME": HOME}
         lines = []
+        # add our dotfiles python folder to PYTHONPATH before restarting the powerline daemon
+        #lines.append("set-environment PYTHONPATH '%(DOTFILES)s/python'")
         if wantpowerline():
             wildcards["POWERLINE"] = powerline_path()
             lines.extend([
                 # always replace the daemon on startup, so that re-sourcing the
                 # tmux conf always loads updated python modules
-                'run-shell "powerline-daemon --replace -q"',
+                'run-shell "PYTHONPATH=%(DOTFILES)s/python powerline-daemon --replace -q"',
                 'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
             ])
         if tmux_plugins:
