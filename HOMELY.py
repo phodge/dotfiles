@@ -103,6 +103,7 @@ def pipfavourites():
     pipinstall('pytest', versions, user=True)
     pipinstall('click', versions, user=True)
     pipinstall('simplejson', versions, user=True)
+    pipinstall('jedi', versions, user=True)
     if full_install or yesnooption('install_ptpython', 'PIP Install ptpython?'):
         pipinstall('ptpython', versions, user=True)
     if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
@@ -165,6 +166,9 @@ def vimconfig():
     # install vim-plug into ~/.vim
     mkdir('~/.vim')
     mkdir('~/.nvim')
+    mkdir('~/.config')
+    mkdir('~/.config/nvim')
+    symlink('~/.vimrc', '~/.config/nvim/init.vim')
     mkdir('~/.vim/autoload')
     download('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
              '~/.vim/autoload/plug.vim')
@@ -303,6 +307,10 @@ def _wantnvim():
 
 @section
 def nvim_install():
+    versions = [3]
+    if haveexecutable('pip2'):
+        versions.append(2)
+    pipinstall('neovim', versions, user=True)
     if _wantnvim():
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
