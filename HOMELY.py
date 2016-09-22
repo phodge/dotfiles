@@ -218,12 +218,11 @@ def powerline_path():
 
 @section
 def pypirc():
-    from homely.general import writefile
     rc = HOME + '/.pypirc'
     if not yesnooption('write_pypirc', 'Write a .pypirc file?', default=full_install):
         return
     if not os.path.exists(rc):
-        with writefile(rc) as f:
+        with open(rc, 'w') as f:
             f.write('[distutils]\n')
             f.write('index-servers=pypi\n')
             f.write('\n')
@@ -233,10 +232,9 @@ def pypirc():
             f.write('username = USERNAME\n')
             f.write('# TODO: put your real password here\n')
             f.write('password = PASSWORD\n')
-    else:
-        with open(rc) as f:
-            if 'TODO' in f.read() and isinteractive() and yesno("Edit %s now?" % rc, True):
-                system(['vim', rc], stdout="TTY")
+    with open(rc) as f:
+        if 'TODO' in f.read() and isinteractive() and yesno("Edit %s now?" % rc, True):
+            system(['vim', rc], stdout="TTY")
     system(['chmod', '600', rc])
 
 
