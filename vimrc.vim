@@ -824,9 +824,9 @@ endfunction
 
 fun! <SID>JerjerrodClearCache()
   if has('*jobstart')
-    call jobstart(['jerjerrod', 'clearcache', expand('%')])
+    call jobstart(['jerjerrod', 'clearcache', '--local', expand('%')])
   else
-    silent exe '!jerjerrod clearcache '.shellescape(expand('%'))
+    silent exe '!jerjerrod clearcache --local '.shellescape(expand('%'))
     redraw!
   endif
 endfunction
