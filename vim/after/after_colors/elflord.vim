@@ -1,4 +1,7 @@
 " fix colors I don't like:
+if has('nvim')
+  hi! Normal guibg=#1A1A1A
+endif
 hi NonText ctermfg=White ctermbg=blue cterm=None guifg=#888888 guibg=#1A1A1A
 
 hi! SpecialChar	ctermfg=Red cterm=None
