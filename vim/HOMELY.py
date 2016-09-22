@@ -1,3 +1,4 @@
+from homely.ui import isinteractive, yesno, yesnooption
 from homely.general import section
 from HOMELY import HOME, HERE, whenmissing, cachedfunc, full_install
 
@@ -16,7 +17,6 @@ def vim_config():
         mkdir, symlink, download, lineinfile, blockinfile, WHERE_TOP, WHERE_END,
         haveexecutable, run)
     from homely.install import InstallFromSource
-    from homely.ui import isinteractive, yesno, yesnooption
 
     # install vim-plug into ~/.vim
     mkdir('~/.vim')
@@ -107,6 +107,55 @@ def vim_config():
 
 
 @section
+def vim_install():
+    import os
+    from homely.ui import system
+    from homely.general import run, mkdir
+    from homely.install import InstallFromSource
+    if not yesnooption('compile_vim', 'Compile vim from source?', full_install):
+        return
+
+    local = HOME + '/src/vim.git'
+
+    mkdir('~/.config')
+    flagsfile = HOME + '/.config/vim-configure-flags'
+    if not os.path.exists(flagsfile):
+        # pull down git source code right now so that we can see what the configure flags are
+        if not os.path.exists(local):
+            system(['git', 'clone', 'https://github.com/vim/vim.git', local])
+        out = system([local + '/configure', '--help'], stdout=True, cwd=local)[1]
+        with open(flagsfile, 'w') as f:
+            f.write('# put configure flags here\n')
+            f.write('--with-features=huge\n')
+            f.write('--enable-pythoninterp=yes\n')
+            f.write('--enable-python3interp=yes\n')
+            f.write('\n')
+            f.write('\n')
+            for line in out.decode('utf-8').split('\n'):
+                f.write('# ')
+                f.write(line)
+                f.write('\n')
+    if isinteractive() and yesno('Edit %s now?' % flagsfile, True):
+        system(['vim', flagsfile], stdout="TTY")
+
+    # NOTE: on ubuntu the requirements are:
+    # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+    inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
+    inst.select_tag('v8.0.0007')
+    configure = ['./configure']
+    with open(flagsfile) as f:
+        for line in f:
+            if not line.startswith('#'):
+                configure.append(line.rstrip())
+    inst.compile_cmd([
+        configure,
+        ['make'],
+        ['sudo', 'make', 'install'],
+    ])
+    run(inst)
+
+
+@section
 def nvim_install():
     from homely.general import haveexecutable, run
     from homely.pipinstall import pipinstall
@@ -130,8 +179,8 @@ def nvim_install():
 @section
 def nvim_devel():
     import os
-    from homely.ui import yesnooption
-    from homely.general import system, mkdir
+    from homely.ui import yesnooption, system
+    from homely.general import mkdir
     if not _wantnvim():
         return
 
