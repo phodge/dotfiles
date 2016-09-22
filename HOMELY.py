@@ -357,6 +357,30 @@ def powerline_path():
     return os.path.dirname(powerline_file.strip().decode('utf-8'))
 
 
+@section
+def pypirc():
+    from homely.general import writefile
+    rc = HOME + '/.pypirc'
+    if not yesnooption('write_pypirc', 'Write a .pypirc file?', default=full_install):
+        return
+    if not os.path.exists(rc):
+        with writefile(rc) as f:
+            f.write('[distutils]\n')
+            f.write('index-servers=pypi\n')
+            f.write('\n')
+            f.write('[pypi]\n')
+            f.write('repository = https://upload.pypi.org/legacy/\n')
+            f.write('# TODO: put your real username here\n')
+            f.write('username = USERNAME\n')
+            f.write('# TODO: put your real password here\n')
+            f.write('password = PASSWORD\n')
+    else:
+        with open(rc) as f:
+            if 'TODO' in f.read() and isinteractive() and yesno("Edit %s now?" % rc, True):
+                system(['vim', rc], stdout="TTY")
+    system(['chmod', '600', rc])
+
+
 # note that these need to be carried out in order of dependency
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
