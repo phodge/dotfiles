@@ -17,6 +17,15 @@ set confirm
 if exists('&termguicolors')
   " NOTE: this needs to be set at startup
   set termguicolors
+
+  " NOTE: I had to manually set these options to get truecolor to work in vim8
+  " in iTerm2/tmux, but I think I actually prefer sticking with 256-color mode
+  " in regular vim because it helps me figure out which one I'm using ...
+  if ! has('nvim')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  endif
+
 elseif has('nvim') && &term == 'screen'
   " TODO: what was this for?
   "set term=screen-256color
