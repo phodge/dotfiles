@@ -807,4 +807,28 @@ augroup PowerlineCFG
 augroup end
 autocmd! PowerlineCFG BufRead powerline/**/*.json setlocal sts=2 sw=2 ts=2 et
 
+
+" TODO: move this into a plugin once I have a good system for doing so
+augroup Jerjerrod
+augroup end
+au! Jerjerrod BufWritePost * call <SID>JerjerrodInit()
+
+fun! <SID>JerjerrodInit()
+  " replace or remove the autocommand
+  au! Jerjerrod
+  if executable('jerjerrod')
+    au! Jerjerrod BufWritePost * call <SID>JerjerrodClearCache()
+    call <SID>JerjerrodClearCache()
+  endif
+endfunction
+
+fun! <SID>JerjerrodClearCache()
+  if has('*jobstart')
+    call jobstart(['jerjerrod', 'clearcache', expand('%')])
+  else
+    silent exe '!jerjerrod clearcache '.shellescape(expand('%'))
+    redraw!
+  endif
+endfunction
+
 let s:vim_entered = 1
