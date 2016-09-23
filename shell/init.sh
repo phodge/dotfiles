@@ -1,21 +1,23 @@
-if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
-    __wantclear=
-    jerjerrod_clearcache() {
-        jerjerrod_clearcache_now
-        expanded="$3"
-        if echo "$expanded" | grep '^\(git\|hg\) ' &> /dev/null; then
-            __wantclear=1
-        fi
-    }
-    add-zsh-hook preexec jerjerrod_clearcache
-
-    jerjerrod_clearcache_now() {
-        if [ -n "$__wantclear" ]; then
-            jerjerrod clearcache --local "$PWD"
-            echo "CLEARING"
-            __wantclear=
-        fi
-    }
-
-    export PS1='`jerjerrod_clearcache_now`'"$PS1"
+# set up our dotfiles repo
+if [ -n "$BASHPID" ]; then
+    DOTFILES_PATH="$(dirname $(dirname ${BASH_SOURCE[0]}))"
+else
+    DOTFILES_PATH="$(dirname $(dirname ${(%):-%N}))"
 fi
+
+# PATH modifications
+PATH="$DOTFILES_PATH/bin:$PATH"
+PATH="$HOME/bin:$PATH"
+
+# add our locally compiled man files
+MANPATH=$HOME/man:$MANPATH
+
+if [ -n "$ZSH_NAME" ]; then
+    source $DOTFILES_PATH/shell/zsh.sh
+else
+    shopt -s histappend
+
+    source $DOTFILES_PATH/shell/bash_prompt_wizard.sh
+fi
+
+export EDITOR=vim
