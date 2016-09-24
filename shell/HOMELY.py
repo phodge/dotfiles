@@ -1,11 +1,57 @@
-from homely.general import section
+import os
+from homely.general import section, lineinfile, WHERE_TOP
 
 from HOMELY import full_install, HOME, wantjerjerrod
 
 
+bash_profile = os.environ['HOME'] + '/.bash_profile'
+bashrc = os.environ['HOME'] + '/.bashrc'
+zshrc = os.environ['HOME'] + '/.zshrc'
+
+lineinfile('~/.shellrc',
+           'source $HOME/dotfiles/shell/init.sh',
+           where=WHERE_TOP)
+
+
+@section
+def bash_config():
+    from homely.ui import note, warn, isinteractive, system
+
+    def _bashprofile():
+        if os.path.islink(bash_profile):
+            return
+        if not isinteractive():
+            warn("%s needs manual review" % bash_profile)
+            return
+        msg = ('Move the contents of ~/.bash_profile into other files, and'
+               ' then delete the file when you are done')
+        cmd = ['vim',
+               bash_profile,
+               '+top new',
+               '+normal! I{}'.format(msg),
+               '+normal! gql',
+               ]
+        system(cmd, stdout="TTY")
+        if os.path.exists(bash_profile):
+            if os.stat(bash_profile).st_size > 1:
+                warn("{} still contains data".format(bash_profile))
+                return
+            os.unlink(bash_profile)
+        with note("Creating symlink {} -> {}".format(bash_profile, bashrc)):
+            os.symlink(bashrc, bash_profile)
+
+    def _bashrc():
+        lineinfile('~/.bashrc', 'source $HOME/.shellrc', where=WHERE_TOP)
+
+    with note("Turn {} into a symlink".format(bash_profile)):
+        _bashprofile()
+
+    with note("Set up {}".format(bashrc)):
+        _bashrc()
+
+
 @section
 def install_fast_hg_status():
-    import os
     from homely.ui import yesnooption, allowpull, note, warn, system
     from homely.general import mkdir, symlink, lineinfile, WHERE_END
 
