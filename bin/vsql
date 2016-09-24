@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+target="$1"
+cleanup=
+if [ -z "$target" ]; then
+    cleanup=1
+    target=/tmp/$USER.$RANDOM.sql
+fi
+
+# if the file is empty, we want to put a "SHOW TABLES;" query in there by default
+if [ -s "$target" ]; then
+    vim "$target" "+SQLWindow"
+else
+    vim "$target" '+SQLWindow' '+normal! ISHOW TABLES;' '+normal! 0'
+fi
+
+return_value="$?"
+if [ -n "$cleanup" -a -e "$target" ]; then
+    rm -i "$target"
+fi
+
+exit $return_value
