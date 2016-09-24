@@ -127,18 +127,14 @@ if filereadable(s:plugpath)
   " to all the time
   Plug 'vim-scripts/Align', {'frozen': 0}
   
-  " vim-only plugins {{{
-
+  " makes the cursor change shape when in insert mode
+  if has('nvim')
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+  else
     " NOTE: normally you're not supposed to do this, but I have different
     " plugin paths for vim/nvim so this works for me
-    if ! has('nvim')
-
-      " makes the cursor change shape when in insert mode
-      Plug 'sjl/vitality.vim'
-
-    endif
-
-  " }}}
+    Plug 'sjl/vitality.vim'
+  endif
 
   call plug#end() " }}}
 endif
