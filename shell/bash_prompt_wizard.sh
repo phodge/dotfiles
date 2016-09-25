@@ -2,7 +2,9 @@
 prompt_wizard_plugins_line1="bash_wizard_who bash_wizard_path"
 if which git &>/dev/null; then
     prompt_wizard_plugins_line1="$prompt_wizard_plugins_line1 bash_wizard_gitbranch"
-    :
+fi
+if which fast-hg-status &> /dev/null; then
+    prompt_wizard_plugins_line1="$prompt_wizard_plugins_line1 bash_wizard_hgbranch"
 fi
 prompt_wizard_plugins_line2="bash_wizard_jobcount bash_wizard_exitcode bash_wizard_prompt"
 prompt_wizard_plugins_line2="bash_wizard_prompt"
@@ -63,6 +65,12 @@ bash_wizard_path() {
     echo -ne "$gray"
     echo -n "${PWD/$HOME/\~} "
     echo -ne $reset
+}
+bash_wizard_hgbranch() {
+    state="$(hg_fast_state)"
+    if [ -n "$state" ]; then
+        echo -ne "$palegreen[$(hg_fast_state)]$reset "
+    fi
 }
 bash_wizard_gitbranch() {
     local branch=$(git branch --no-color 2>/dev/null | grep '^\*' | cut -b 3-)
