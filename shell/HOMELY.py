@@ -51,6 +51,11 @@ def bash_config():
 
 
 @section
+def zsh_config():
+    lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
+
+
+@section
 def install_fast_hg_status():
     from homely.ui import yesnooption, allowpull, note, warn, system
     from homely.general import mkdir, symlink, lineinfile, WHERE_END
