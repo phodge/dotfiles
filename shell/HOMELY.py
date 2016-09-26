@@ -50,18 +50,19 @@ def bash_config():
     def _bashprofile():
         if os.path.islink(bash_profile):
             return
-        if not isinteractive():
-            warn("%s needs manual review" % bash_profile)
-            return
-        msg = ('Move the contents of ~/.bash_profile into other files, and'
-               ' then delete the file when you are done')
-        cmd = ['vim',
-               bash_profile,
-               '+top new',
-               '+normal! I{}'.format(msg),
-               '+normal! gql',
-               ]
-        system(cmd, stdout="TTY")
+        if os.path.exists(bash_profile):
+            if not isinteractive():
+                warn("%s needs manual review" % bash_profile)
+                return
+            msg = ('Move the contents of ~/.bash_profile into other files, and'
+                   ' then delete the file when you are done')
+            cmd = ['vim',
+                   bash_profile,
+                   '+top new',
+                   '+normal! I{}'.format(msg),
+                   '+normal! gql',
+                   ]
+            system(cmd, stdout="TTY")
         if os.path.exists(bash_profile):
             if os.stat(bash_profile).st_size > 1:
                 warn("{} still contains data".format(bash_profile))
