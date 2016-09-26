@@ -17,6 +17,7 @@ lineinfile('~/.shellrc',
 def shell_path():
     import re
     from homely.ui import system
+    from homely.general import haveexecutable
     import simplejson
     pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
 
