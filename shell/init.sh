@@ -7,7 +7,6 @@ fi
 
 # PATH modifications
 PATH="$DOTFILES_PATH/bin:$PATH"
-PATH="$HOME/bin:$PATH"
 
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH

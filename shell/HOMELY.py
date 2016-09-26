@@ -1,5 +1,5 @@
 import os
-from homely.general import section, lineinfile, WHERE_TOP
+from homely.general import section, lineinfile, blockinfile, WHERE_TOP
 
 from HOMELY import full_install, HOME, wantjerjerrod
 
@@ -21,7 +21,9 @@ def shell_path():
     import simplejson
     pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
 
-    def _addpath(pycmd):
+    lines = []
+
+    def _findpybin(pycmd):
         code = 'import sys, simplejson; print(simplejson.dumps(sys.path))'
         raw = system([pycmd, '-c', code], stdout=True)[1].decode('utf-8')
         paths = simplejson.loads(raw)
@@ -36,12 +38,19 @@ def shell_path():
             binpath = path[0:-len(suffix)] + '/bin'
             if not os.path.exists(binpath):
                 continue
-            lineinfile('~/.shellrc', 'PATH="$PATH:{}"'.format(binpath))
+            yield 'PATH="{}:$PATH"'.format(binpath)
 
     if haveexecutable('python2'):
-        _addpath('python2')
+        lines += list(_findpybin('python2'))
     if haveexecutable('python3'):
-        _addpath('python3')
+        lines += list(_findpybin('python3'))
+
+    lines.append('PATH="$HOME/bin:$PATH"')
+
+    blockinfile('~/.shellrc',
+                lines,
+                '# start of PATH modifications',
+                '# end of PATH modifications')
 
 
 @section
