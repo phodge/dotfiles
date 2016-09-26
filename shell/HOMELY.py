@@ -14,6 +14,36 @@ lineinfile('~/.shellrc',
 
 
 @section
+def shell_path():
+    import re
+    from homely.ui import system
+    import simplejson
+    pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
+
+    def _addpath(pycmd):
+        code = 'import sys, simplejson; print(simplejson.dumps(sys.path))'
+        raw = system([pycmd, '-c', code], stdout=True)[1].decode('utf-8')
+        paths = simplejson.loads(raw)
+        for path in paths:
+            if not path.startswith(os.environ['HOME']):
+                continue
+            if not pathregex.search(path):
+                continue
+            suffix = '/lib/python/site-packages'
+            if not path.endswith(suffix):
+                continue
+            binpath = path[0:-len(suffix)] + '/bin'
+            if not os.path.exists(binpath):
+                continue
+            lineinfile('~/.shellrc', 'PATH="$PATH:{}"'.format(binpath))
+
+    if haveexecutable('python2'):
+        _addpath('python2')
+    if haveexecutable('python3'):
+        _addpath('python3')
+
+
+@section
 def bash_config():
     from homely.ui import note, warn, isinteractive, system
 
