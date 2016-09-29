@@ -567,6 +567,8 @@ set sidescrolloff=20
   nnoremap \p :set paste! paste?<CR>
   nnoremap \w :set wrap! wrap?<CR>
   nnoremap \q :call ExcaliburQuitWindow()<CR>
+  " essentially :tabclose but also works when there is only one tab
+  nnoremap \t :windo quit<CR>
 
   " this is about the only mapping that's safe for others
   nnoremap gt :execute 'tj' expand('<cword>')<CR>zv
