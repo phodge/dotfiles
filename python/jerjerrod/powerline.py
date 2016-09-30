@@ -1,2 +1,0 @@
-def wsnames(category):
-    return []
