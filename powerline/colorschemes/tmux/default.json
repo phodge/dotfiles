@@ -13,6 +13,11 @@
         "HOMELY:NOCONN": {"bg": "darkorange", "fg": "yellow", "attrs": [] },
         "HOMELY:DIRTY": {"bg": "darkorange", "fg": "yellow", "attrs": [] },
         "HOMELY:NEVER": {"bg": "darkred", "fg": "white", "attrs": [] },
-        "HOMELY:FAILED": {"bg": "brightestred", "fg": "white", "attrs": [] }
+        "HOMELY:FAILED": {"bg": "brightestred", "fg": "white", "attrs": [] },
+
+        "TODONEXT:HEAD": {"bg": "darkblue", "fg": "black", "attrs": [] },
+        "TODONEXT:HEAD2": {"bg": "black", "fg": "darkblue", "attrs": [] },
+        "TODONEXT:ITEM": {"bg": "black", "fg": "darkblue", "attrs": [] },
+        "TODONEXT:DIVIDER": {"bg": "black", "fg": "darkblue", "attrs": [] }
     }
 }
