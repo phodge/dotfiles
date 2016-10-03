@@ -180,7 +180,7 @@ def nvim_install():
 def nvim_devel():
     import os
     from homely.ui import yesnooption, system
-    from homely.general import mkdir
+    from homely.general import mkdir, symlink
     if not _wantnvim():
         return
 
@@ -190,6 +190,9 @@ def nvim_devel():
     neovim = 'https://github.com/neovim/neovim.git'
     # where to put the local clone
     dest = HOME + '/playground-6/neovim'
+
+    # create the symlink for the neovim project
+    symlink(HERE + '/vimproject/neovim', dest + '/.vimproject')
 
     if os.path.exists(dest):
         return
