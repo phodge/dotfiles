@@ -96,6 +96,9 @@ def tools():
         withutil.select_branch('master')
         run(withutil)
 
+    if yesnooption('install_ctags', 'Install `ctags`?', full_install):
+        installpkg('ctags')
+
     # TODO: complete the code that installs markdown
     #if yesnooption('install_markdown', "Install markdown util?", full_install):
         #url = 'http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip'
