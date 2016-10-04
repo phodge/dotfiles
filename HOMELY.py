@@ -104,21 +104,17 @@ def tools():
 
 @section
 def pipfavourites():
-    versions = [3]
-    if haveexecutable('pip2'):
-        versions.append(2)
-    pipinstall('pytest', versions, user=True)
-    pipinstall('click', versions, user=True)
-    pipinstall('simplejson', versions, user=True)
-    pipinstall('jedi', versions, user=True)
+    packages = ['pytest', 'click', 'simplejson', 'jedi']
     if full_install or yesnooption('install_ptpython', 'PIP Install ptpython?'):
-        pipinstall('ptpython', versions, user=True)
+        packages.append('ptpython')
     if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
-        pipinstall('ipython', versions, user=True)
+        packages.append('ipython')
     if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
-        pipinstall('q', versions, user=True)
+        packages.append('q')
     if full_install or yesnooption('install_flake8', 'PIP Install flake8?'):
-        pipinstall('flake8', versions, user=True)
+        packages.append('flake8')
+    for package in packages:
+        pipinstall(package, trypips=['pip2', 'pip3'])
 
 
 @section
@@ -149,12 +145,7 @@ def git():
 
 @section
 def hg():
-    versions = []
-    if haveexecutable('pip2'):
-        versions.append(2)
-    if haveexecutable('pip3'):
-        versions.append(3)
-    pipinstall('mercurial_keyring', versions, user=True)
+    pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
     # include our hg config from ~/.hgrc
     lineinfile('~/.hgrc', '%%include %s/hg/hgrc' % HERE, where=WHERE_TOP)
 

@@ -157,13 +157,10 @@ def vim_install():
 
 @section
 def nvim_install():
-    from homely.general import haveexecutable, run
+    from homely.general import run
     from homely.pipinstall import pipinstall
     from homely.install import InstallFromSource
-    versions = [3]
-    if haveexecutable('pip2'):
-        versions.append(2)
-    pipinstall('neovim', versions, user=True)
+    pipinstall('neovim', trypips=['pip2', 'pip3'])
     if _wantnvim():
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip

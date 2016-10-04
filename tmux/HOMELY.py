@@ -28,7 +28,7 @@ def tmux_config():
     if _wanttmux():
         # needed for tmux
         if wantpowerline():
-            pipinstall('powerline-status', [3], user=True)
+            pipinstall('powerline-status', ['pip3'])
 
         tmux_plugins = yesnooption('install_tmux_plugins',
                                    'Install TPM and use tmux plugins?',
@@ -77,7 +77,7 @@ def tmux_install():
             # how do we make sure that that library has been installed?
             tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                      '~/src/tmux.git')
-            tmux.select_tag('2.2')
+            tmux.select_tag('2.3')
             tmux.compile_cmd([
                 ['sh', 'autogen.sh'],
                 ['./configure'],
@@ -161,7 +161,7 @@ def tmux_keys():
     lines = []
 
     # needs to be installed for the current version of python
-    pipinstall('pyyaml', [sys.version_info.major], user=True)
+    pipinstall('pyyaml', ['pip%d' % sys.version_info.major])
     import yaml
 
     with open(HERE + '/keybindings/keys.yaml') as f:
