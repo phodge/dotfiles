@@ -36,18 +36,18 @@ def firstitem(pl, todofile=None):
     if len(ret):
         ret.insert(0, {
             'contents': ' ',
-            'highlight_groups': ["TODONEXT:HEAD2"],
+            'highlight_groups': ["TODONEXT:ITEM"],
             'draw_hard_divider': False,
         })
         ret.insert(0, {
-            'contents': ' TODONEXT',
+            'contents': ' NEXT',
             'highlight_groups': ["TODONEXT:HEAD"],
             'draw_hard_divider': False,
         })
         # something to try and get rid of the left-divider
         ret.insert(0, {
-            'contents': ' ',
-            'highlight_groups': ["TODONEXT:HEAD2"],
+            'contents': '',
+            'highlight_groups': ["background"],
             'draw_hard_divider': False,
         })
     return ret
