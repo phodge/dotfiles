@@ -53,7 +53,7 @@ __generate_bash_prompt() {
     for func in $prompt_wizard_plugins_line2; do
         $func
     done
-	echo -ne "$reset"
+    echo -ne "$reset"
 }
 
 bash_wizard_who() {
@@ -112,7 +112,8 @@ bash_wizard_jobcount() {
 }
 bash_wizard_exitcode() {
     if [ 0 != $LAST_EXIT ]; then
-        echo -en "$red$LAST_EXIT! "
+        echo -en "${red}"
+        echo -en "${LAST_EXIT}! "
     fi
 }
 bash_wizard_prompt() {
