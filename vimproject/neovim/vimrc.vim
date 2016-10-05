@@ -20,5 +20,7 @@ function! SyntaxCheckers_c_clint_GetLocList() dict
 endfunction
 
 
-nnoremap <F5> :Shell ag -ws <C-R><C-W>
-nnoremap <F6> :Shell ag -s <C-R><C-W>
+nnoremap <F5> :Shell ag -ws <C-R><C-W><CR>
+nnoremap <F6> :Shell ag -wis <C-R><C-W><CR>
+
+setglobal path=.
