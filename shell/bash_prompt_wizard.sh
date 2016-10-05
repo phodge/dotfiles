@@ -7,7 +7,6 @@ if which fast-hg-status &> /dev/null; then
     prompt_wizard_plugins_line1="$prompt_wizard_plugins_line1 bash_wizard_hgbranch"
 fi
 prompt_wizard_plugins_line2="bash_wizard_jobcount bash_wizard_exitcode bash_wizard_prompt"
-prompt_wizard_plugins_line2="bash_wizard_prompt"
 
 wizard_prompt_color_primary=
 wizard_prompt_color_secondary=
@@ -15,45 +14,46 @@ wizard_prompt_color_secondary=
 PS1='`LAST_EXIT=$?;__generate_bash_prompt`'
 
 __generate_bash_prompt() {
-    local  reset='\e[0m'
+    local  reset='\001\e[0m\002'
 
-    local   bold='\e[1m'
-    local    dim='\e[2m'
-    local  under='\e[4m'
-    local  blink='\e[5m'
-    local invert='\e[6m'
-    local   hide='\e[7m'
+    local   bold='\001\e[1m\002'
+    local    dim='\001\e[2m\002'
+    local  under='\001\e[4m\002'
+    local  blink='\001\e[5m\002'
+    local invert='\001\e[6m\002'
+    local   hide='\001\e[7m\002'
 
-    local    black='\e[30m'
-    local      red='\e[31m'
-    local    green='\e[32m'
-    local   yellow='\e[33m'
-    local     blue='\e[34m'
-    local     pink='\e[35m'
-    local     cyan='\e[36m'
-    local palegray='\e[37m'
+    local    black='\001\e[30m\002'
+    local      red='\001\e[31m\002'
+    local    green='\001\e[32m\002'
+    local   yellow='\001\e[33m\002'
+    local     blue='\001\e[34m\002'
+    local     pink='\001\e[35m\002'
+    local     cyan='\001\e[36m\002'
+    local palegray='\001\e[37m\002'
 
-    local       gray='\e[90m'
-    local    palered='\e[91m'
-    local  palegreen='\e[92m'
-    local paleyellow='\e[93m'
-    local   paleblue='\e[94m'
-    local   palepink='\e[95m'
-    local   palecyan='\e[96m'
-    local      white='\e[97m'
+    local       gray='\001\e[90m\002'
+    local    palered='\001\e[91m\002'
+    local  palegreen='\001\e[92m\002'
+    local paleyellow='\001\e[93m\002'
+    local   paleblue='\001\e[94m\002'
+    local   palepink='\001\e[95m\002'
+    local   palecyan='\001\e[96m\002'
+    local      white='\001\e[97m\002'
 
-    local    warning='\e[41m\e[97m'
+    local    warning='\001\e[41m\e[97m\002'
 
     prompt_color_primary=${!wizard_prompt_color_primary-$white}
     prompt_color_secondary=${!wizard_prompt_color_secondary-$reset}
 
     for func in $prompt_wizard_plugins_line1; do
-        echo -n "$($func)"
+        $func
     done
     echo
     for func in $prompt_wizard_plugins_line2; do
-        echo -n "$($func)"
+        $func
     done
+	echo -ne "$reset"
 }
 
 bash_wizard_who() {
@@ -107,14 +107,14 @@ bash_wizard_jobcount() {
     # need an extra "echo" inside to trim the whitespace off the zero
     local count=$(echo $(jobs | wc -l))
     if [ -n "$count" -a 0 != "$count" ]; then
-        echo -ne "$blue{$count}$reset "
+        echo -ne "$blue{$count} "
     fi
 }
 bash_wizard_exitcode() {
     if [ 0 != $LAST_EXIT ]; then
-        echo -en "$red$LAST_EXIT!$reset "
+        echo -en "$red$LAST_EXIT! "
     fi
 }
 bash_wizard_prompt() {
-    echo -en "$prompt_color_primary\$$reset "
+    echo -ne "$prompt_color_primary\$ "
 }
