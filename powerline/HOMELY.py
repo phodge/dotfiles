@@ -110,7 +110,7 @@ def powerline_theme():
         "function": "homely.powerline.shortstatus",
         "args": {
             "autoupdate": True,
-            "reattach_to_user_namespace": True,
+            "reattach_to_user_namespace": haveexecutable('reattach-to-user-namespace'),
             "colors": {
                 "paused": "HOMELY:PAUSED",
                 "running": "HOMELY:RUNNING",
