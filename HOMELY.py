@@ -148,7 +148,10 @@ def git():
 
 @section
 def hg():
-    pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
+    if yesnooption('mercurial_keyring', 'Install mercurial keyring?', True):
+        # TODO: this things needs python-devel and openssl-devel - should we
+        # provide a suggestion to install those on non-OSX OS's?
+        pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
     # include our hg config from ~/.hgrc
     lineinfile('~/.hgrc', '%%include %s/hg/hgrc' % HERE, where=WHERE_TOP)
 
