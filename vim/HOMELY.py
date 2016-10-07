@@ -112,6 +112,10 @@ def vim_install():
     from homely.ui import system
     from homely.general import run, mkdir
     from homely.install import InstallFromSource
+
+    # TODO: prompt to install a better version of vim?
+    # - yum install vim-enhanced
+
     if not yesnooption('compile_vim', 'Compile vim from source?', full_install):
         return
 
@@ -162,6 +166,10 @@ def nvim_install():
     from homely.install import InstallFromSource
     pipinstall('neovim', trypips=['pip2', 'pip3'])
     if _wantnvim():
+        # TODO: we suggest yum installing
+        # - cmake
+        # - gcc-c++
+        # - unzip (seriously ... the error on this one is aweful)
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
         n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
@@ -181,6 +189,13 @@ def nvim_devel():
     if not _wantnvim():
         return
 
+    want_devel = yesnooption('install_nvim_devel',
+                             'Put a dev version of neovim in playground-6?',
+                             default=False)
+
+    if not want_devel:
+        return
+
     # my fork of the neovim project
     origin = 'ssh://git@github.com/phodge/neovim.git'
     # the main neovim repo - for pulling
@@ -189,18 +204,14 @@ def nvim_devel():
     dest = HOME + '/playground-6/neovim'
 
     # create the symlink for the neovim project
+    mkdir('~/playground-6')
     symlink(HERE + '/vimproject/neovim', dest + '/.vimproject')
 
     if os.path.exists(dest):
         return
 
-    want_devel = yesnooption('install_nvim_devel',
-                             'Put a dev version of neovim in playground-6?',
-                             default=False)
-    if want_devel:
-        mkdir('~/playground-6')
-        # NOTE: using system() directly means the dest directory isn't tracked by homely ... this
-        # is exactly what I want
-        system(['git', 'clone', origin, dest])
-        system(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
-        system(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+    # NOTE: using system() directly means the dest directory isn't tracked by
+    # homely ... this is exactly what I want
+    system(['git', 'clone', origin, dest])
+    system(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
+    system(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
