@@ -77,6 +77,7 @@ if filereadable(s:plugpath)
   Plug 'msanders/snipmate.vim'
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
+  Plug 'easymotion/vim-easymotion'
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
@@ -84,13 +85,13 @@ if filereadable(s:plugpath)
 
   " {{{
     " just always use Differ now that it's pretty stable
-    Plug 'nathan-hoad/differ'
+    "Plug 'nathan-hoad/differ'
     augroup UseDiffer
     augroup end
     autocmd!
     if has('nvim')
-      autocmd! UseDiffer BufWritePost * call Differ()
-      autocmd! UseDiffer BufReadPost * call Differ()
+      "autocmd! UseDiffer BufWritePost * call Differ()
+      "autocmd! UseDiffer BufReadPost * call Differ()
     endif
   " }}}
   
