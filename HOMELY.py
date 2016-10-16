@@ -31,7 +31,7 @@ def cachedfunc(func):
 @cachedfunc
 def wantfull():
     return not yesno('only_config',
-                     'Minimal install? (Config files only - nothing extra installed)'
+                     'Minimal install? (Config files only - nothing extra installed)',
                      None)
 
 
