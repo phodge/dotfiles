@@ -1,13 +1,12 @@
-from homely.ui import isinteractive, yesno, yesnooption
+from homely.ui import allowinteractive, yesno
 from homely.general import section
-from HOMELY import HOME, HERE, whenmissing, cachedfunc, full_install
+from HOMELY import HOME, HERE, whenmissing, cachedfunc, wantfull
 
 
 # install a local copy of neovim?
 @cachedfunc
 def _wantnvim():
-    from homely.ui import yesnooption
-    return yesnooption('install_nvim', 'Install neovim?', default=full_install)
+    return yesno('install_nvim', 'Install neovim?', wantfull())
 
 
 @section
@@ -67,8 +66,8 @@ def vim_config():
     # make sure we've made a choice about clipboard option in vprefs file
     @whenmissing(vprefs, 'clipboard')
     def addclipboard():
-        if isinteractive():
-            if yesno('Use system clipboard in vim? (clipboard=unnamed)', None):
+        if allowinteractive():
+            if yesno(None, 'Use system clipboard in vim? (clipboard=unnamed)', None):
                 rem = "Use system clipboard"
                 val = 'unnamed'
             else:
@@ -98,7 +97,7 @@ def vim_config():
 
     # <est> utility
     hasphp = haveexecutable('php')
-    if yesnooption('install_est_utility', 'Install <vim-est>?', default=hasphp):
+    if yesno('install_est_utility', 'Install <vim-est>?', hasphp):
         est = InstallFromSource('https://github.com/phodge/vim-est.git',
                                 '~/src/vim-est.git')
         est.select_branch('master')
@@ -116,14 +115,16 @@ def vim_install():
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
 
-    if not yesnooption('compile_vim', 'Compile vim from source?', full_install):
+    if not yesno('compile_vim', 'Compile vim from source?', wantfull()):
         return
 
     local = HOME + '/src/vim.git'
 
     mkdir('~/.config')
     flagsfile = HOME + '/.config/vim-configure-flags'
+    written = False
     if not os.path.exists(flagsfile):
+        written = True
         # pull down git source code right now so that we can see what the configure flags are
         if not os.path.exists(local):
             system(['git', 'clone', 'https://github.com/vim/vim.git', local])
@@ -139,7 +140,7 @@ def vim_install():
                 f.write('# ')
                 f.write(line)
                 f.write('\n')
-    if isinteractive() and yesno('Edit %s now?' % flagsfile, True):
+    if yesno(None, 'Edit %s now?' % flagsfile, written, noprompt=False):
         system(['vim', flagsfile], stdout="TTY")
 
     # NOTE: on ubuntu the requirements are:
@@ -184,16 +185,12 @@ def nvim_install():
 @section
 def nvim_devel():
     import os
-    from homely.ui import yesnooption, system
+    from homely.ui import system
     from homely.general import mkdir, symlink
     if not _wantnvim():
         return
 
-    want_devel = yesnooption('install_nvim_devel',
-                             'Put a dev version of neovim in playground-6?',
-                             default=False)
-
-    if not want_devel:
+    if not yesno('install_nvim_devel', 'Put a dev version of neovim in playground-6?', False):
         return
 
     # my fork of the neovim project

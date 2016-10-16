@@ -1,7 +1,7 @@
 import os
 from homely.general import section, lineinfile, blockinfile, WHERE_TOP
 
-from HOMELY import full_install, HOME, wantjerjerrod
+from HOMELY import wantfull, HOME, wantjerjerrod
 
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
@@ -55,13 +55,13 @@ def shell_path():
 
 @section
 def bash_config():
-    from homely.ui import note, warn, isinteractive, system
+    from homely.ui import note, warn, allowinteractive, system
 
     def _bashprofile():
         if os.path.islink(bash_profile):
             return
         if os.path.exists(bash_profile):
-            if not isinteractive():
+            if not allowinteractive():
                 warn("%s needs manual review" % bash_profile)
                 return
             msg = ('Move the contents of ~/.bash_profile into other files, and'
@@ -98,12 +98,10 @@ def zsh_config():
 
 @section
 def install_fast_hg_status():
-    from homely.ui import yesnooption, allowpull, note, warn, system
+    from homely.ui import yesno, allowpull, note, warn, system
     from homely.general import mkdir, symlink, lineinfile, WHERE_END
 
-    wanted = yesnooption('install_fast_hg_status',
-                         'Install fast-hg-status?',
-                         default=full_install)
+    wanted = yesno('install_fast_hg_status', 'Install fast-hg-status?', wantfull())
     if not wanted:
         return
 

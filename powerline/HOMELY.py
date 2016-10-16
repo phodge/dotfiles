@@ -1,5 +1,5 @@
 import os
-from homely.ui import yesno, system, isinteractive
+from homely.ui import yesno, system
 from homely.general import mkdir, lineinfile, WHERE_END, writefile, section, haveexecutable
 from HOMELY import HERE, HOME, wantpowerline, wantjerjerrod, powerline_path
 
@@ -28,12 +28,15 @@ def powerline():
             fg2="gray6",
         )
         if not os.path.exists(colourfile):
-            if isinteractive() and yesno('Select base colours now?', True):
+            if yesno(None, 'Select base colours now?', True, noprompt=False):
                 # load available colours from colors.json
                 with open("%s/config_files/colors.json" % powerline_path()) as f:
                     import simplejson
                     colors = simplejson.load(f)
                 with open(colourfile, 'w') as f:
+                    f.write("# Set the 3 variables using colour names from below.\n")
+                    f.write("# WARNING! If you misspell a colour your powerline may not work!\n")
+                    f.write("#\n")
                     f.write("# primary background colour\n")
                     f.write("bg=%(bg)s\n" % defaults)
                     f.write("# foreground colour for highlighted tab\n")
@@ -47,7 +50,7 @@ def powerline():
                 load = True
         else:
             load = True
-            if isinteractive() and yesno('Select base colours now?', False):
+            if yesno(None, 'Select base colours now?', False, noprompt=False):
                 system(['vim', colourfile], stdout="TTY")
 
         colourset = defaults

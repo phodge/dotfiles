@@ -1,6 +1,6 @@
 import os
 
-from homely.ui import yesno, yesnooption, isinteractive, system
+from homely.ui import yesno, system
 from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP, WHERE_END
 from homely.general import download
 from homely.general import include, section, haveexecutable
@@ -28,16 +28,18 @@ def cachedfunc(func):
     return wrapper
 
 
-full_install = not yesnooption(
-    'only_config',
-    'Minimal install? (Config files only - nothing extra installed)')
+@cachedfunc
+def wantfull():
+    return not yesno('only_config',
+                     'Minimal install? (Config files only - nothing extra installed)'
+                     None)
 
 
 @cachedfunc
 def wantjerjerrod():
-    return yesnooption('want_jerjerrod',
-                       'Use jerjerrod for project monitoring?',
-                       default=full_install)
+    if not wantfull():
+        return False
+    return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
 def whenmissing(filename, substr):
@@ -70,37 +72,40 @@ mkdir('~/man/man1')
 # TODO: need to ensure ~/bin is in our $PATH
 
 
-if full_install:
-    @section
-    def install_pip():
-        import subprocess
-        if not haveexecutable('pip2'):
-            if yesnooption('global_pip2', 'Install pip2 systemwide?'):
-                cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python2'
-                subprocess.check_call(cmd, shell=True)
+@section
+def install_pip():
+    if not wantfull():
+        return
+    import subprocess
+    if not haveexecutable('pip2'):
+        if yesno('global_pip2', 'Install pip2 systemwide?', None):
+            cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python2'
+            subprocess.check_call(cmd, shell=True)
 
 
 # my favourite developer tools
 @section
 def tools():
-    if yesnooption('install_ack', 'Install ack?', full_install):
+    if yesno('install_ack', 'Install ack?', wantfull()):
         installpkg('ack', apt='ack-grep')
-    if yesnooption('install_ag', 'Install ag?', full_install):
+    if yesno('install_ag', 'Install ag?', wantfull()):
         installpkg('ag',
                    yum='the_silver_searcher',
                    apt='the_silver_searcher')
-    if yesnooption('install_with', 'Install `with` utility?', full_install):
+    if yesno('install_with', 'Install `with` utility?', wantfull()):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
         withutil.symlink('with', '~/bin/with')
         withutil.select_branch('master')
         run(withutil)
 
-    if yesnooption('install_ctags', 'Install `ctags`?', full_install):
+    if yesno('install_ctags', 'Install `ctags`?', wantfull()):
         installpkg('ctags')
+    if yesno('install_patch', 'Install patch?', wantfull()):
+        installpkg('patch')
 
     # TODO: complete the code that installs markdown
-    #if yesnooption('install_markdown', "Install markdown util?", full_install):
+    #if yesno('install_markdown', "Install markdown util?", wantfull()):
         #url = 'http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip'
         # TODO: where do you want to put this thing?
 
@@ -108,13 +113,13 @@ def tools():
 @section
 def pipfavourites():
     packages = ['pytest', 'click', 'simplejson', 'jedi']
-    if full_install or yesnooption('install_ptpython', 'PIP Install ptpython?'):
+    if wantfull() or yesno('install_ptpython', 'PIP Install ptpython?', True):
         packages.append('ptpython')
-    if full_install or yesnooption('install_ipython', 'PIP Install iPython?'):
+    if wantfull() or yesno('install_ipython', 'PIP Install iPython?', True):
         packages.append('ipython')
-    if full_install or yesnooption('install_python_q', 'PIP Install `q`?'):
+    if wantfull() or yesno('install_python_q', 'PIP Install `q`?', True):
         packages.append('q')
-    if full_install or yesnooption('install_flake8', 'PIP Install flake8?'):
+    if full_install or yesno('install_flake8', 'PIP Install flake8?', True):
         packages.append('flake8')
     for package in packages:
         pipinstall(package, trypips=['pip2', 'pip3'])
@@ -148,7 +153,7 @@ def git():
 
 @section
 def hg():
-    if yesnooption('mercurial_keyring', 'Install mercurial keyring?', True):
+    if yesno('mercurial_keyring', 'Install mercurial keyring?'):
         # TODO: this things needs python-devel and openssl-devel - should we
         # provide a suggestion to install those on non-OSX OS's?
         pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
@@ -168,7 +173,7 @@ def hg():
 # install nudge
 @section
 def nudge():
-    if yesnooption('install_nudge', 'Install nudge?', default=full_install):
+    if yesno('install_nudge', 'Install nudge?', wantfull()):
         nudge = InstallFromSource('https://github.com/toomuchphp/nudge.git',
                                   '~/src/nudge.git')
         nudge.select_branch('master')
@@ -179,7 +184,7 @@ def nudge():
 # zsh
 @section
 def zshconfig():
-    if yesnooption('use_zsh', 'Install zsh config?', default=full_install):
+    if yesno('use_zsh', 'Install zsh config?', wantfull()):
         antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
                                     '~/src/antigen.git')
         antigen.select_branch('master')
@@ -188,7 +193,7 @@ def zshconfig():
 
 @section
 def legacypl():
-    if yesnooption('install_legacypl', 'Create clone of legacy-pl?', default=full_install):
+    if yesno('install_legacypl', 'Create clone of legacy-pl?', wantfull()):
         mkdir('~/playground-6')
         legacy = InstallFromSource('ssh://git@github.com/phodge/legacy-pl.git',
                                    '~/playground-6/legacy-pl.git')
@@ -203,7 +208,7 @@ def ackrc():
 
 @cachedfunc
 def wantpowerline():
-    return yesnooption('use_powerline', 'Use powerline for tmux/vim?', default=full_install)
+    return yesno('use_powerline', 'Use powerline for tmux/vim?', wantfull())
 
 
 @cachedfunc
@@ -216,7 +221,7 @@ def powerline_path():
 @section
 def pypirc():
     rc = HOME + '/.pypirc'
-    if not yesnooption('write_pypirc', 'Write a .pypirc file?', default=full_install):
+    if not yesno('write_pypirc', 'Write a .pypirc file?', wantfull()):
         return
     if not os.path.exists(rc):
         with open(rc, 'w') as f:
@@ -230,8 +235,8 @@ def pypirc():
             f.write('# TODO: put your real password here\n')
             f.write('password = PASSWORD\n')
     with open(rc) as f:
-        if 'TODO' in f.read() and isinteractive() and yesno("Edit %s now?" % rc, True):
-            system(['vim', rc], stdout="TTY")
+        if 'TODO' in f.read() and yesno(None, "Edit %s now?" % rc, True, noprompt=False):
+                system(['vim', rc], stdout="TTY")
     system(['chmod', '600', rc])
 
 

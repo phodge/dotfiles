@@ -10,17 +10,17 @@ from homely.general import (
 )
 from homely.pipinstall import pipinstall
 from homely.install import InstallFromSource, installpkg
-from homely.ui import warn, yesnooption
+from homely.ui import warn, yesno
 
 from HOMELY import (
-    cachedfunc, HERE, HOME, full_install, wantpowerline,
+    cachedfunc, HERE, HOME, wantfull, wantpowerline,
     powerline_path,
 )
 
 
 @cachedfunc
 def _wanttmux():
-    return yesnooption('install_tmux', 'Install tmux?', default=full_install)
+    return yesno('install_tmux', 'Install tmux?', wantfull())
 
 
 @section
@@ -30,9 +30,9 @@ def tmux_config():
         if wantpowerline():
             pipinstall('powerline-status', ['pip3'])
 
-        tmux_plugins = yesnooption('install_tmux_plugins',
-                                   'Install TPM and use tmux plugins?',
-                                   default=full_install)
+        tmux_plugins = yesno('install_tmux_plugins',
+                             'Install TPM and use tmux plugins?',
+                             wantfull())
 
         if tmux_plugins:
             mkdir('~/.tmux')
@@ -72,7 +72,7 @@ def tmux_config():
 @section
 def tmux_install():
     if _wanttmux():
-        if yesnooption('own_tmux', 'Compile tmux from source?'):
+        if yesno('own_tmux', 'Compile tmux from source?', None):
             # FIXME: compiling tmux from source like this requires libevent ...
             # how do we make sure that that library has been installed?
             tmux = InstallFromSource('https://github.com/tmux/tmux.git',
