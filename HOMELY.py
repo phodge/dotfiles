@@ -119,10 +119,15 @@ def pipfavourites():
         packages.append('ipython')
     if wantfull() or yesno('install_python_q', 'PIP Install `q`?', True):
         packages.append('q')
-    if full_install or yesno('install_flake8', 'PIP Install flake8?', True):
-        packages.append('flake8')
     for package in packages:
         pipinstall(package, trypips=['pip2', 'pip3'])
+    if wantfull() or yesno('install_flake8', 'PIP Install flake8?', True):
+        # ask if we want to install flake8 using pip2, because some OS's use the same bin path and
+        # python2's flake8 will overwrite python3's flake8
+        pipinstall('flake8', ['pip3'])
+        if yesno('install_flake8_python2', 'Install flake8 for python2?'):
+            packages.append('flake8')
+    # TODO: set up PYTHONPATH with our ~/dotfiles/python in it so we get todonext in our powerline
 
 
 @section
