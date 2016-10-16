@@ -119,10 +119,20 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-dispatch'
 
   " FIXME: I should make my own github repos from these
-  Plug 'vim-scripts/php.vim--Hodge'
   Plug 'vim-scripts/StringComplete'
   Plug 'vim-scripts/InsertChar'
   Plug 'vim-scripts/AfterColors.vim'
+
+  " custom PHP syntax - causes problems when g:php_show_semicolon_error is
+  " turned on though
+  Plug 'vim-scripts/php.vim--Hodge'
+  let g:php_show_semicolon_error = 0
+  let g:php_alt_construct_parents = 1
+  let g:php_alt_arrays = 2
+  let g:php_highlight_quotes = 1
+  let g:php_alt_properties = 1
+  let g:php_smart_members = 1
+
 
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
   " to all the time
