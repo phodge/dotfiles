@@ -5,7 +5,10 @@ def firstitem(pl, todofile=None):
     if todofile is None:
         todofile = os.path.join(os.environ['HOME'], 'TODO.txt')
 
+    heading = None
+
     ret = []
+    firstnonblank = True
     if os.path.exists(todofile):
         previndent = -1
         with open(todofile) as f:
@@ -13,6 +16,12 @@ def firstitem(pl, todofile=None):
                 trimmed = line.lstrip()
                 if not len(trimmed):
                     continue
+                if firstnonblank:
+                    firstnonblank = False
+                    if line == trimmed and line.isupper():
+                        heading = line
+                        continue
+
                 indent = len(line) - len(trimmed)
                 if indent <= previndent:
                     break
@@ -40,7 +49,7 @@ def firstitem(pl, todofile=None):
             'draw_hard_divider': False,
         })
         ret.insert(0, {
-            'contents': ' NEXT',
+            'contents': ' {}'.format(heading or 'NEXT'),
             'highlight_groups': ["TODONEXT:HEAD"],
             'draw_hard_divider': False,
         })
