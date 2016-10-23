@@ -12,12 +12,12 @@ function! <SID>FindVimProject()
     let l:projectrtp = l:where . '/.vimproject'
     let l:vimrc = l:projectrtp . '/vimrc.vim'
     if filereadable(l:vimrc)
-      if get(s:sourced, l:vimrc)
-        return
+      let b:project = l:projectrtp
+      if ! get(s:sourced, l:vimrc)
+        exe 'source' l:vimrc
+        let s:sourced[l:vimrc] = 1
       endif
-      let s:sourced[l:vimrc] = 1
       call <SID>SetupAutocmds(l:projectrtp)
-      exe 'source' l:vimrc
       call <SID>LocalFTPlugin(l:projectrtp)
       return
     endif
