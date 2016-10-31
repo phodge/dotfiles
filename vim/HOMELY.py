@@ -174,7 +174,7 @@ def nvim_install():
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
         n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
-        n.select_tag('v0.1.5')
+        n.select_tag('v0.1.6')
         n.compile_cmd([
             ['make'],
             ['sudo', 'make', 'install'],
