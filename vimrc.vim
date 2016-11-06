@@ -106,6 +106,7 @@ if filereadable(s:plugpath)
   Plug 'phodge/vim-vimui'
   Plug 'phodge/vim-myschema'
   Plug 'phodge/vim-vcs'
+  Plug 'phodge/vim-hiword'
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
@@ -848,5 +849,35 @@ fun! <SID>JerjerrodClearCache()
     redraw!
   endif
 endfunction
+
+
+au! VimEnter * if exists(':Hiword') | call <SID>Hiwords() | endif
+fun! <SID>Hiwords()
+  syntax off
+  Hiword Conditional if
+  Hiword Conditional else
+  Hiword Conditional elseif
+  Hiword Conditional elif
+  Hiword Conditional for
+  Hiword Conditional while
+  Hiword Conditional do
+  Hiword Conditional foreach
+  Hiword Operator in
+  Hiword Operator not
+  Hiword Operator and
+  Hiword Operator or
+  Hiword Macro import
+  Hiword Macro from
+  Hiword Macro def
+  Hiword Typedef self
+  Hiword Statement yield
+  Hiword Statement return
+  Hiword Statement break
+  Hiword Statement continue
+  Hiword IncSearch TODO
+  Hiword IncSearch test
+  Hiword IncSearch FIXME
+endfun
+
 
 let s:vim_entered = 1
