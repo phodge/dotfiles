@@ -586,7 +586,7 @@ set sidescrolloff=20
   nnoremap gst :execute 'stj' expand('<cword>')<CR>zv
 
   " fugitive
-  nnoremap \g :Gstatus<CR>
+  nnoremap \g :Gstatus<CR><C-w>T
   nnoremap \i :Shell git diff --cached<CR>
 
   if g:vim_peter
