@@ -1,7 +1,7 @@
 if ! &l:diff
   setlocal foldmethod=indent foldcolumn=1
 endif
-setlocal formatoptions=croql
+setlocal formatoptions=croqlj
 setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 
 " these two options are now set using the SetLineLength() function below
