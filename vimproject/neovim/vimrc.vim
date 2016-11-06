@@ -10,7 +10,7 @@ fun! <SID>TheSetup()
   call g:SyntasticRegistry.CreateAndRegisterChecker({
         \ 'filetype': 'c',
         \ 'name': 'clint',
-        \ 'exec': '~/playground-6/neovim/src/clint.py' })
+        \ 'exec': './src/clint.py' })
 endfun
 
 " this clint.vim thing I grabbed from the internets
