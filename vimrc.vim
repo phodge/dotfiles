@@ -853,8 +853,10 @@ fun! <SID>JerjerrodClearCache()
 endfunction
 
 
-au! VimEnter * if exists(':Hiword') | call <SID>Hiwords() | endif
 fun! <SID>Hiwords()
+  if ! exists(':Hiword')
+    return
+  endif
   syntax off
   Hiword Conditional if
   Hiword Conditional else
@@ -880,6 +882,8 @@ fun! <SID>Hiwords()
   Hiword IncSearch test
   Hiword IncSearch FIXME
 endfun
+call <SID>Hiwords()
+au! VimEnter * call <SID>Hiwords()
 
 
 let s:vim_entered = 1
