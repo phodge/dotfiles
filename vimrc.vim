@@ -66,7 +66,7 @@ if filereadable(s:plugpath)
   " use different path depending on vim/nvim
   let s:plugins = has('nvim') ? '~/.nvim/plugged' : '~/.vim/plugged'
 
-  call plug#begin(s:plugins) " {{{
+  call plugmaster#begin('~/src/plugedit', '~/src', s:plugins) " {{{
 
   Plug 'EinfachToll/DidYouMean'
   Plug 'FooSoft/vim-argwrap'
@@ -97,18 +97,18 @@ if filereadable(s:plugpath)
     endif
   " }}}
   
-  Plug 'phodge/vim-javascript-syntax'
-  Plug 'phodge/vim-python-syntax'
-  Plug 'phodge/vim-jsx'
-  Plug 'phodge/MicroRefactor'
-  Plug 'phodge/vim-shell-command'
-  Plug 'phodge/vim-syn-info'
-  Plug 'phodge/vim-split-search'
-  Plug 'phodge/vim-auto-spell'
-  Plug 'phodge/vim-vimui'
-  Plug 'phodge/vim-myschema'
-  Plug 'phodge/vim-vcs'
-  Plug 'phodge/vim-hiword'
+  PlugMaster 'phodge/vim-javascript-syntax'
+  PlugMaster 'phodge/vim-python-syntax'
+  PlugMaster 'phodge/vim-jsx'
+  PlugMaster 'phodge/MicroRefactor'
+  PlugMaster 'phodge/vim-shell-command'
+  PlugMaster 'phodge/vim-syn-info'
+  PlugMaster 'phodge/vim-split-search'
+  PlugMaster 'phodge/vim-auto-spell'
+  PlugMaster 'phodge/vim-vimui'
+  PlugMaster 'phodge/vim-myschema'
+  PlugMaster 'phodge/vim-vcs'
+  PlugMaster 'phodge/vim-hiword'
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
