@@ -79,6 +79,8 @@ if filereadable(s:plugpath)
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
 
+  Plug 'justinmk/vim-sneak'
+
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
   Plug 'justinmk/vim-gutentags', executable('ctags') ? {} : {'on': []}
