@@ -336,6 +336,10 @@ endfunction " }}}
 nnoremap <F8> :syn sync fromstart<CR>:exe 'setlocal foldmethod=' . &l:foldmethod<CR>
 nnoremap <F9> :nohls<CR>
 
+if exists('&inccommand')
+  set inccommand=split
+endif
+
 if version >= 700
   " StringComplete plugin
   inoremap <C-J> <C-O>:set completefunc=StringComplete#GetList<CR><C-X><C-U>
