@@ -234,3 +234,4 @@ zsh_prompt_lprompt_segments=( zsh_prompt_jobcount zsh_prompt_laststatus )
 
 
 prompt_adam2_setup
+zle -N zle-line-init
