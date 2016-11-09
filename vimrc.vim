@@ -882,8 +882,7 @@ fun! <SID>Hiwords()
   Hiword IncSearch test
   Hiword IncSearch FIXME
 endfun
-call <SID>Hiwords()
-au! VimEnter * call <SID>Hiwords()
+com! -nargs=0 Hiwords call <SID>Hiwords()
 
 
 let s:vim_entered = 1
