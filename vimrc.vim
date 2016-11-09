@@ -79,6 +79,8 @@ if filereadable(s:plugpath)
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
 
+  Plug 'vim-scripts/sudo.vim'
+
   Plug 'justinmk/vim-sneak'
 
   " skip gutentags when there is no ctags executable installed
