@@ -85,7 +85,7 @@ if filereadable(s:plugpath)
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
-  Plug 'justinmk/vim-gutentags', executable('ctags') ? {} : {'on': []}
+  Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
 
   " {{{
     " just always use Differ now that it's pretty stable
