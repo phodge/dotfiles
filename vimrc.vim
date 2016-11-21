@@ -83,6 +83,9 @@ if filereadable(s:plugpath)
 
   Plug 'justinmk/vim-sneak'
 
+  " for ansible
+  Plug 'pearofducks/ansible-vim'
+
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
@@ -424,6 +427,12 @@ set sidescrolloff=20
 
 
 " ninja mappings {{{
+
+    " fix for :! not being interactive in neovim
+    if has('nvim')
+      "set shell=tmux\ split-window\ -h
+      "cnoremap <expr> ! strlen(getcmdline())?'!':('!tmux split-window -c '.getcwd().' ')
+    endif
 
     " n for next search always searches downwards.
     if g:vim_peter
