@@ -245,6 +245,13 @@ def pypirc():
     system(['chmod', '600', rc])
 
 
+@section
+def osx():
+    if haveexecutable('defaults'):
+        system(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '20'])
+        system(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-int', '1'])
+
+
 # note that these need to be carried out in order of dependency
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
