@@ -1,5 +1,5 @@
 import os
-from homely.general import section, lineinfile, blockinfile, WHERE_TOP
+from homely.general import section, lineinfile, blockinfile, WHERE_TOP, WHERE_END
 
 from HOMELY import wantfull, HOME, wantjerjerrod
 
@@ -10,7 +10,7 @@ zshrc = os.environ['HOME'] + '/.zshrc'
 
 lineinfile('~/.shellrc',
            'source $HOME/dotfiles/shell/init.sh',
-           where=WHERE_TOP)
+           where=WHERE_END)
 
 
 @section
