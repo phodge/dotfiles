@@ -248,8 +248,8 @@ def pypirc():
 @section
 def osx():
     if haveexecutable('defaults'):
-        system(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '20'])
-        system(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-int', '1'])
+        system(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
+        system(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '0.8'])
 
 
 # note that these need to be carried out in order of dependency
