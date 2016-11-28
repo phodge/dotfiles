@@ -3,6 +3,10 @@ from homely.general import section
 from HOMELY import HOME, HERE, whenmissing, cachedfunc, wantfull
 
 
+VIM_TAG = 'v8.0.0007'
+NVIM_TAG = 'v0.1.7'
+
+
 # install a local copy of neovim?
 @cachedfunc
 def _wantnvim():
@@ -146,7 +150,7 @@ def vim_install():
     # NOTE: on ubuntu the requirements are:
     # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
-    inst.select_tag('v8.0.0007')
+    inst.select_tag(VIM_TAG)
     configure = ['./configure']
     with open(flagsfile) as f:
         for line in f:
@@ -174,7 +178,7 @@ def nvim_install():
         # NOTE: on ubuntu the requirements are:
         # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
         n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
-        n.select_tag('v0.1.6')
+        n.select_tag(NVIM_TAG)
         n.compile_cmd([
             ['make'],
             ['sudo', 'make', 'install'],
