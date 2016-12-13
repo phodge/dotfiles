@@ -1,7 +1,6 @@
-from homely.ui import allowinteractive, yesno
+from HOMELY import HERE, HOME, cachedfunc, wantfull, wantjerjerrod, whenmissing
 from homely.general import section
-from HOMELY import HOME, HERE, whenmissing, cachedfunc, wantfull, wantjerjerrod
-
+from homely.ui import allowinteractive, yesno
 
 VIM_TAG = 'v8.0.0007'
 NVIM_TAG = 'v0.1.7'

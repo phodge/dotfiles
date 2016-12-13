@@ -1,8 +1,8 @@
 import os
-from homely.general import section, lineinfile, blockinfile, WHERE_TOP, WHERE_END
 
-from HOMELY import wantfull, HOME, wantjerjerrod
-
+from HOMELY import HOME, wantfull, wantjerjerrod
+from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
+                            section)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'

@@ -1,12 +1,11 @@
 import os
 
-from homely.ui import yesno, system
-from homely.general import lineinfile, blockinfile, mkdir, symlink, run, WHERE_TOP, WHERE_END
-from homely.general import download
-from homely.general import include, section, haveexecutable
+from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
+                            haveexecutable, include, lineinfile, mkdir, run,
+                            section, symlink)
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
-
+from homely.ui import system, yesno
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)

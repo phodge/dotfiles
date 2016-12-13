@@ -1,6 +1,6 @@
-from homely.general import lineinfile, mkdir, section, run
+from HOMELY import HERE, wantjerjerrod
+from homely.general import lineinfile, mkdir, run, section
 from homely.install import InstallFromSource
-from HOMELY import wantjerjerrod, HERE
 
 
 @section
