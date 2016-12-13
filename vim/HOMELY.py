@@ -1,6 +1,6 @@
 from homely.ui import allowinteractive, yesno
 from homely.general import section
-from HOMELY import HOME, HERE, whenmissing, cachedfunc, wantfull
+from HOMELY import HOME, HERE, whenmissing, cachedfunc, wantfull, wantjerjerrod
 
 
 VIM_TAG = 'v8.0.0007'
@@ -99,6 +99,12 @@ def vim_config():
     # lock down &runtimepath
     lineinfile('~/.vimrc', 'let g:allow_rtp_modify = 0', where=WHERE_END)
 
+    # if we have jerjerrod installed, add an ALWAYSFLAG entry for git repos in ~/src/plugedit
+    if False and wantjerjerrod():
+        mkdir('~/.config')
+        mkdir('~/.config/jerjerrod')
+        lineinfile('~/.config/jerjerrod/jerjerrod.conf', 'PROJECT ~/src/plugedit/*.git ALWAYSFLAG')
+
     # <est> utility
     hasphp = haveexecutable('php')
     if yesno('install_est_utility', 'Install <vim-est>?', hasphp):
@@ -118,7 +124,6 @@ def vim_install():
 
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
-
     if not yesno('compile_vim', 'Compile vim from source?', wantfull()):
         return
 
