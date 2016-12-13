@@ -8,6 +8,22 @@ setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 "setlocal tw=79 " just for comments
 "setlocal colorcolumn=+2
 
+" use :Isort to fix imports in the current buffer
+" Note that vim plugin 'fisadev/vim-isort' is supposed to do this, but when I
+" use that plugin it doesn't respect the config in my ~/.isort.cfg file
+com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
+fun! <SID>DoSort(line1, line2)
+  let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
+  try
+    exe printf('%s,%s!isort -', a:line1, a:line2)
+  finally
+    call setpos('.', l:pos)
+  endtry
+endfun
+nnoremap <buffer> <space>i :Isort<CR>
+augroup IsortAuto
+augroup end
+au! IsortAuto InsertLeave <buffer> if getline('.') =~ '^\%(from\|import\)\s\+' | exe 'Isort' | exe 'undojoin' | endif
 
 " set up \\c mapping to toggle the line length
 nnoremap <buffer> \c :call <SID>ToggleLineLength()<CR>
