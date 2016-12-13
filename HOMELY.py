@@ -112,6 +112,8 @@ def tools():
 
 @section
 def pipfavourites():
+    # it doesn't matter which pip installs `isort`
+    pipinstall('isort')
     packages = ['pytest', 'click', 'simplejson', 'jedi']
     if wantfull() or yesno('install_ptpython', 'PIP Install ptpython?', True):
         packages.append('ptpython')
