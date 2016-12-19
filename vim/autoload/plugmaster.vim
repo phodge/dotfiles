@@ -46,10 +46,11 @@ fun! <SID>PlugEdit(fullname)
   if ! isdirectory(s:localdir)
     silent exe '!mkdir -p '.s:localdir
   endif
-  
+
   " if the plugin doesn't exist in the storage area, ask if the user wants to
   " clone it
   let [l:user, l:repo] = split(a:fullname, '/')
+  let l:gitpath = printf('git@github.com:%s/%s.git', l:user, l:repo)
   let l:store = s:storagedir . '/' . l:repo . '.git'
   if ! isdirectory(l:store) && confirm('Git clone '.l:repo.'?')
     " create the clone now
