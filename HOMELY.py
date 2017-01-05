@@ -108,6 +108,8 @@ def tools():
         installpkg('ctags')
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
+    if yesno('install_fzf', 'Install fzf?', wantfull()):
+        installpkg('fzf')
 
     # TODO: complete the code that installs markdown
     #if yesno('install_markdown', "Install markdown util?", wantfull()):
