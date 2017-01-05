@@ -78,6 +78,7 @@ if filereadable(s:plugpath)
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
+  Plug 'brooth/far.vim'
 
   Plug 'vim-scripts/sudo.vim'
 
@@ -85,6 +86,31 @@ if filereadable(s:plugpath)
 
   " for ansible
   Plug 'pearofducks/ansible-vim'
+
+  " additional motions/targets:
+  " "quote": '"`
+  " "separator": , . ; : + - = ~ _ * # / | \ & $
+  " "pair": one of the following: b() B{} [] <> t <quote> <separator>
+  "         If you use n<pair>, cursor will seek forward to the next pair,
+  "         l<pair> seeks to the last pair. Otherwise, cursor searches for a
+  "         pair on the current line.
+  "         The quote pairs try to be smarter than vim's.
+  " "in pair": i<pair>
+  "            select everything inside the pair:
+  " "Inside pair": I<pair>
+  "                like "in pair" but excludes whitespace
+  " "a pair": a<pair>
+  "           Select everything including the pair. Noteably, the quote pairs
+  "           don't include surrounding whitespace by default any more.
+  " "Around pair": A<pair>
+  "                like "a pair" but also selects either trailing/leading
+  "                whitespace.
+  " "arguments":
+  "   ia    select a func argument without the comma
+  "   Ia    select a func argument without the comma or whitespace
+  "   aa    select a func argument and its comma
+  "   Aa    select a func argument and delimiters on both ends?
+  Plug 'welle/targets.vim'
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
@@ -122,6 +148,7 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-fugitive', {'tag': '*'}
   Plug 'tpope/vim-obsession'
   Plug 'tpope/vim-repeat'
+  Plug 'AndrewRadev/linediff.vim'
 
   let g:dispatch_quickfix_height = 10
   Plug 'tpope/vim-dispatch'
