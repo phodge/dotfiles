@@ -165,9 +165,7 @@ def vim_install():
 @section
 def nvim_install():
     from homely.general import run
-    from homely.pipinstall import pipinstall
     from homely.install import InstallFromSource
-    pipinstall('neovim', trypips=['pip2', 'pip3'])
     if wantnvim():
         # TODO: we suggest yum installing
         # - cmake

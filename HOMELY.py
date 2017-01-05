@@ -115,25 +115,51 @@ def tools():
         # TODO: where do you want to put this thing?
 
 
-@section
-def pipfavourites():
-    # it doesn't matter which pip installs `isort`
-    pipinstall('isort')
-    packages = ['pytest', 'click', 'simplejson', 'jedi']
-    if wantfull() or yesno('install_ptpython', 'PIP Install ptpython?', True):
+def mypips(venv_pip=None):
+    # use the virtualenv's pip to install isort, or just any pip if not a
+    # virtualenv
+    if venv_pip:
+        system([venv_pip, 'install', 'isort'])
+    else:
+        pipinstall('isort')
+
+    theworks = wantfull() or venv_pip
+
+    # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
+    # present
+    packages = ['simplejson', 'jedi']
+    if wantnvim():
+        # if we want nvim then we always want the neovim python package
+        packages.append('neovim')
+    if theworks or yesno('install_pytest', 'PIP Install pytest in $HOME?', True):
+        packages.append('pytest')
+    if theworks or yesno('install_ptpython', 'PIP Install ptpython?', True):
         packages.append('ptpython')
-    if wantfull() or yesno('install_ipython', 'PIP Install iPython?', True):
+    if theworks or yesno('install_ipython', 'PIP Install iPython?', True):
         packages.append('ipython')
-    if wantfull() or yesno('install_python_q', 'PIP Install `q`?', True):
+    if theworks or yesno('install_python_q', 'PIP Install `q`?', True):
         packages.append('q')
     for package in packages:
-        pipinstall(package, trypips=['pip2', 'pip3'])
-    if wantfull() or yesno('install_flake8', 'PIP Install flake8?', True):
-        # ask if we want to install flake8 using pip2, because some OS's use the same bin path and
-        # python2's flake8 will overwrite python3's flake8
+        if venv_pip:
+            system([venv_pip, 'install', package])
+        else:
+            pipinstall(package, trypips=['pip2', 'pip3'])
+
+    # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
+    # they want to install both
+    if venv_pip:
+        system([venv_pip, 'install', 'flake8'])
+    elif yesno('install_flake8_python2', 'Install flake8 for python2?'):
+        pipinstall('flake8', ['pip2'])
+    else:
         pipinstall('flake8', ['pip3'])
-        if yesno('install_flake8_python2', 'Install flake8 for python2?'):
-            packages.append('flake8')
+
+
+@section
+def pipfavourites():
+    # install my favourite pip modules with --user
+    mypips()
+
     # TODO: set up PYTHONPATH with our ~/dotfiles/python in it so we get todonext in our powerline
 
 
