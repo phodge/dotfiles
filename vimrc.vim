@@ -140,6 +140,7 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
   PlugMaster 'phodge/vim-hiword'
+  PlugMaster 'phodge/nvim-unison'
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
@@ -414,6 +415,9 @@ if g:vim_peter && version >= 700
   set statusline=
   set statusline+=%n\ \ %f
   set statusline+=\ %{(&l:ff=='dos')?':dos:\ ':''}%m%<%r%h%w
+  " unison errors
+  set statusline+=%#Error#
+  set statusline+=som
   " syntastic errors
   set statusline+=%#Error#
   set statusline+=%{SyntasticStatuslineFlag()}
@@ -426,6 +430,8 @@ if g:vim_peter && version >= 700
   " character under cursor
   set statusline+=0x%B
   set statusline+=\ %p%%
+  " PID
+  set statusline+=\ %#IncSearch#%{getpid()}
 endif
 
 " favourite options
@@ -631,7 +637,7 @@ set sidescrolloff=20
   nnoremap gst :execute 'stj' expand('<cword>')<CR>zv
 
   " fugitive
-  nnoremap \g :Gstatus<CR><C-w>T
+  nnoremap \g :exe (exists(':Gstatus') =~ '[12]' ? 'Gstatus' : 'Shell hg st')<CR><C-w>T
   nnoremap \i :Shell git diff --cached<CR>
 
   if g:vim_peter
