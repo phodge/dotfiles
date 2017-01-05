@@ -1,15 +1,9 @@
-from HOMELY import HERE, HOME, cachedfunc, wantfull, wantjerjerrod, whenmissing
+from HOMELY import HERE, HOME, wantfull, wantjerjerrod, wantnvim, whenmissing
 from homely.general import section
 from homely.ui import allowinteractive, yesno
 
 VIM_TAG = 'v8.0.0007'
 NVIM_TAG = 'v0.1.7'
-
-
-# install a local copy of neovim?
-@cachedfunc
-def _wantnvim():
-    return yesno('install_nvim', 'Install neovim?', wantfull())
 
 
 @section
@@ -174,7 +168,7 @@ def nvim_install():
     from homely.pipinstall import pipinstall
     from homely.install import InstallFromSource
     pipinstall('neovim', trypips=['pip2', 'pip3'])
-    if _wantnvim():
+    if wantnvim():
         # TODO: we suggest yum installing
         # - cmake
         # - gcc-c++
@@ -195,7 +189,7 @@ def nvim_devel():
     import os
     from homely.ui import system
     from homely.general import mkdir, symlink
-    if not _wantnvim():
+    if not wantnvim():
         return
 
     if not yesno('install_nvim_devel', 'Put a dev version of neovim in playground-6?', False):

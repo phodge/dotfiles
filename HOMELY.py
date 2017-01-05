@@ -41,6 +41,12 @@ def wantjerjerrod():
     return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
+# install a local copy of neovim?
+@cachedfunc
+def wantnvim():
+    return yesno('install_nvim', 'Install neovim?', wantfull())
+
+
 def whenmissing(filename, substr):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
