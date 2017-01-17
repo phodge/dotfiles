@@ -140,7 +140,9 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
   PlugMaster 'phodge/vim-hiword'
-  PlugMaster 'phodge/nvim-unison'
+  if exists('g:want_unison') && g:want_unison
+    PlugMaster 'phodge/nvim-unison'
+  endif
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
