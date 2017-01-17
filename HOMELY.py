@@ -118,6 +118,13 @@ def tools():
 
 
 def mypips(venv_pip=None):
+    # do we need to out a pip config such that py2/py3 binaries don't clobber each other?
+    question = 'Force pip to install into separate py2/py3 bin dirs?'
+    if False and (not venv_pip) and yesno('force_pip_bin_paths', question, None):
+        # TODO: pass this flag to pip2/pip3:
+        # --install-options=--install-scripts=$HOME/.local/python3.4-bin
+        pass
+
     # use the virtualenv's pip to install isort, or just any pip if not a
     # virtualenv
     if venv_pip:
