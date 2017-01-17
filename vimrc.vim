@@ -110,7 +110,7 @@ if filereadable(s:plugpath)
   "   Ia    select a func argument without the comma or whitespace
   "   aa    select a func argument and its comma
   "   Aa    select a func argument and delimiters on both ends?
-  Plug 'welle/targets.vim'
+  Plug 'wellle/targets.vim'
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_tagfile = '.tags'
