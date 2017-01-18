@@ -36,4 +36,4 @@ def homely_dev():
 
     mypips(venv_pip)
 
-    system([venv_pip, 'install', 'sphinx-autobuild', 'pytest'])
+    system([venv_pip, 'install', 'sphinx-autobuild', 'pytest', 'twine'])
