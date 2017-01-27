@@ -2,3 +2,4 @@ syntax: glob
 *.swp
 *.swo
 .tags
+.vimproject
