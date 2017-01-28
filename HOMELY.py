@@ -106,7 +106,14 @@ def tools():
         withutil.select_branch('master')
         run(withutil)
 
-    if yesno('install_ctags', 'Install `ctags`?', wantfull()):
+    if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
+        if haveexecutable('brew'):
+            # install with homebrew
+            system(['brew', 'tap', 'universal-ctags/universal-ctags'])
+            system(['brew', 'install', '--HEAD', 'universal-ctags'])
+        else:
+            raise Exception("TODO: install ctags!")  # noqa
+    elif yesno('install_ctags', 'Install `ctags`?', wantfull()):
         installpkg('ctags')
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
