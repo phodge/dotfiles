@@ -107,12 +107,22 @@ def tools():
         run(withutil)
 
     if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
+        mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew
             system(['brew', 'tap', 'universal-ctags/universal-ctags'])
             system(['brew', 'install', '--HEAD', 'universal-ctags'])
         else:
-            raise Exception("TODO: install ctags!")  # noqa
+            uc = InstallFromSource('https://github.com/universal-ctags/ctags',
+                                   '~/src/universal-ctags.git')
+            uc.select_branch('master')
+            uc.compile_cmd([
+                ['./autogen.sh'],
+                ['./configure'],
+                ['make'],
+            ])
+            uc.symlink('ctags', '~/bin/ctags')
+            run(uc)
     elif yesno('install_ctags', 'Install `ctags`?', wantfull()):
         installpkg('ctags')
     if yesno('install_patch', 'Install patch?', wantfull()):
