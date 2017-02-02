@@ -4,18 +4,78 @@ endif
 setlocal formatoptions=croqlj
 setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 
+" tell multipython where to find out python2/python3 binaries
+call multipython#setpy3paths(get(g:, 'my_py3_paths', []))
+call multipython#setpy2paths(get(g:, 'my_py2_paths', []))
+
 " these two options are now set using the SetLineLength() function below
-"setlocal tw=79 " just for comments
+"setlocal textwidth=79 " just for comments
 "setlocal colorcolumn=+2
+
+nnoremap <buffer> \2 :call multipython#togglepy2()<CR>
+nnoremap <buffer> \3 :call multipython#togglepy3()<CR>
+nnoremap <buffer> <space>2 :call multipython#printversions()<CR>
+nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
+
+fun! <SID>PyVersionChanged()
+  let l:flakes = []
+
+
+  " grab whichever version of yapf is available
+  if multipython#wantpy3()
+    call add(l:flakes, 3)
+  endif
+
+  if multipython#wantpy2()
+    call add(l:flakes, 2)
+  endif
+
+  " tell syntastic not to use flake8/multiflake8 for the current buffer
+  let b:syntastic_checkers = ['flake8']
+  let b:syntastic_flake8_exec = 'multiflake8'
+
+  " desired line length?
+  let l:maxlen = &l:textwidth
+  if l:maxlen <= 0
+    let l:maxlen = 99999
+  endif
+ 
+  " copy across the post-args for flake8
+  let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=".l:maxlen
+
+  for l:major in l:flakes
+    " Tell multiflake8 exactly where to find the flake8 for this python version.
+    let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1)
+    let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
+  endfor
+endfun!
+
+" tell multipython to call our callback whenever the python version changes in
+" the current buffer
+call multipython#addcallback(function("<SID>PyVersionChanged"))
+
+" if detect current python versions if it hasn't been done yet
+if ! multipython#versionsdetected()
+  " HOMELY.py scripts always get python3 and nothing else
+  if expand('%:t') == 'HOMELY.py'
+    call multipython#setpy3(1, "HOMELY.py is always py3")
+  elseif ! multipython#detectversions()
+    " if automatic detection doesn't work, fall back to 3.4/2.7 combo
+    call multipython#setpy3("3.4", "phodge's default", 0)
+    call multipython#setpy2("2.7", "phodge's default")
+  endif
+endif
 
 " use :Isort to fix imports in the current buffer
 " Note that vim plugin 'fisadev/vim-isort' is supposed to do this, but when I
 " use that plugin it doesn't respect the config in my ~/.isort.cfg file
 com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
 fun! <SID>DoSort(line1, line2)
+  " ask multipython where to find isort for the current python version
+  let l:isort = multipython#getpythoncmd(0, 'isort', 1)
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
   try
-    exe printf('%s,%s!isort -', a:line1, a:line2)
+    exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
   finally
     call setpos('.', l:pos)
   endtry
@@ -37,10 +97,12 @@ endif
 
 function! <SID>SetGlobalLineLength(new_len)
   if a:new_len > 0
-    let g:syntastic_python_flake8_post_args = "--max-line-length=" . a:new_len
+    let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=" . a:new_len
   else
-    let g:syntastic_python_flake8_post_args = "--max-line-length=99999"
+    let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=99999"
   endif
+  " have to call this so that flake8 gets the new arguments
+  call <SID>PyVersionChanged()
 endfunction
 
 function! <SID>SetLineLength(new_length)
@@ -70,7 +132,7 @@ function! <SID>SetLineLength(new_length)
   let s:lengths[l:bufnr] = l:new_length
   let &l:textwidth = l:new_length
   let &l:colorcolumn = l:new_length ? '+2' : ''
-  call <SID>SetGlobalLineLength(s:lengths[l:bufnr])
+  call <SID>PyVersionChanged()
 endfunction
 
 function! <SID>ToggleLineLength()
@@ -85,12 +147,6 @@ function! <SID>ToggleLineLength()
   endif
 endfunction
 
-
-" Because syntastic is dumb and uses a global variable for its settings, we
-" must use an autocmd to set the line length for each individual buffer
-augroup PySyntasticLineLength
-autocmd! WinEnter <buffer> call <SID>SetGlobalLineLength(get(s:lengths, bufnr(''), 0))
-augroup end
 
 " set the line length accordingly
 call <SID>SetLineLength(get(s:lengths, bufnr(''), '__AUTO__'))
