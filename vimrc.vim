@@ -40,10 +40,12 @@ endif
       let &runtimepath = '~/.vim,' . &runtimepath . ',~/.vim/after'
     endif
 
-    " add our own vim/ folder to runtimepath
+    " add our own vim/ and vim-multi-python/ folders to runtimepath
     let s:local = expand('<sfile>:h').'/vim'
-    let &runtimepath = printf('%s,%s,%s/after', s:local, &runtimepath, s:local)
+    let s:multipython = expand('<sfile>:h').'/vim-multi-python'
+    let &runtimepath = printf('%s,%s,%s,%s/after', s:multipython, s:local, &runtimepath, s:local)
     unlet s:local
+    unlet s:multipython
 
     " add the <vim-est> thing if it is present
     if isdirectory(expand('~/src/vim-est.git'))
