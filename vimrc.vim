@@ -76,7 +76,7 @@ if filereadable(s:plugpath)
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
-  Plug 'msanders/snipmate.vim'
+  Plug 'SirVer/ultisnips'
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
