@@ -144,6 +144,10 @@ def mypips(venv_pip=None):
         # --install-options=--install-scripts=$HOME/.local/python3.4-bin
         pass
 
+    # of course we probably want virtualenv!
+    if venv_pip is None:
+        pipinstall('virtualenv')
+
     # use the virtualenv's pip to install isort, or just any pip if not a
     # virtualenv
     if venv_pip:
