@@ -1,9 +1,11 @@
 from os import environ
 from os.path import exists, join
 
-from HOMELY import mypips, wantfull
-from homely.general import mkdir, section
+from homely.files import symlink
+from homely.general import haveexecutable, mkdir, section
 from homely.ui import system, yesno
+
+from HOMELY import jerjerrod_addline, mypips, wantfull, wantjerjerrod
 
 
 @section
@@ -30,10 +32,25 @@ def homely_dev():
         system(['git', 'clone', 'git@github.com:phodge/homely.git', checkout],
                stdout="TTY")
 
-    # need to install editable version of homely.git
+    # create a python2 virtualenv as well
+    py2venv = join(venv, 'py2venv')
+    if not exists(join(py2venv, 'bin')):
+        system(['virtualenv', '--python=python2.7', py2venv], stdout="TTY")
+    # create a symlink to the git repo
+    symlink(checkout, join(py2venv, 'homely.git'))
+
+    # need to install editable version of homely.git in both virtualenvs
     venv_pip = venv + '/bin/pip'
-    system([venv_pip, 'install', '--editable', checkout])
+    py2venv_pip = py2venv + '/bin/pip'
 
-    mypips(venv_pip)
+    for pip in [venv_pip, py2venv_pip]:
+        system([pip, 'install', '--editable', checkout])
+        mypips(pip)
+        system([pip, 'install', 'pytest'])
 
-    system([venv_pip, 'install', 'sphinx-autobuild', 'pytest', 'twine'])
+    # install build/packaging tools just in the python3 version
+    system([venv_pip, 'install', 'sphinx-autobuild', 'twine'])
+
+    if wantjerjerrod():
+        # register the playground with jerjerrod
+        jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
