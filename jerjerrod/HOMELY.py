@@ -1,6 +1,7 @@
-from HOMELY import HERE, wantjerjerrod
-from homely.general import lineinfile, mkdir, run, section
+from homely.general import run, section
 from homely.install import InstallFromSource
+
+from HOMELY import HERE, jerjerrod_addline, wantjerjerrod
 
 
 @section
@@ -18,14 +19,6 @@ def jerjerrod_install():
     ])
     run(inst)
 
-    # track projects in ~/src
-    mkdir('~/.config')
-    mkdir('~/.config/jerjerrod')
-    # some sensible defaults for how I like to do things
-    lines = [
-        'PROJECT ~/src/*.git',
-        'PROJECT ~/src/*.hg',
-        'PROJECT {}'.format(HERE),
-    ]
-    for line in lines:
-        lineinfile('~/.config/jerjerrod/jerjerrod.conf', line)
+    jerjerrod_addline('PROJECT', '~/src/*.git')
+    jerjerrod_addline('PROJECT', '~/src/*.hg')
+    jerjerrod_addline('PROJECT', HERE)

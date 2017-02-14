@@ -41,6 +41,18 @@ def wantjerjerrod():
     return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
+def jerjerrod_addline(command, path, ignore=[]):
+    # track projects in ~/src
+    mkdir('~/.config')
+    mkdir('~/.config/jerjerrod')
+    # some sensible defaults for how I like to do things
+    assert command in ("PROJECT", "WORKSPACE", "FORGET")
+    flags = []
+    flags += ["IGNORE={}".format(p) for p in ignore]
+    lineinfile('~/.config/jerjerrod/jerjerrod.conf',
+               "{} {} {}".format(command, path, " ".join(flags)).rstrip())
+
+
 # install a local copy of neovim?
 @cachedfunc
 def wantnvim():
