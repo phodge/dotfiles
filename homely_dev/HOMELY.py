@@ -54,3 +54,10 @@ def homely_dev():
     if wantjerjerrod():
         # register the playground with jerjerrod
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
+
+    system([venv_pip, 'install', 'sphinx-autobuild', 'pytest', 'twine'])
+
+    # we may want to install pandoc to make the slides, but
+    if yesno('homley_want_pandoc', 'Install pandoc to create slides?'):
+        from homely.install import installpkg
+        installpkg('pandoc')
