@@ -109,6 +109,13 @@ def vim_config():
         mkdir('~/.config/jerjerrod')
         lineinfile('~/.config/jerjerrod/jerjerrod.conf', 'PROJECT ~/src/plugedit/*.git ALWAYSFLAG')
 
+    # icinga syntax/filetype
+    if yesno('want_vim_icinga_stuff', 'Install vim icinga2 syntax/ftplugin?', default=False):
+        files = ['syntax/icinga2.vim', 'ftdetect/icinga2.vim']
+        for name in files:
+            url = 'https://raw.githubusercontent.com/Icinga/icinga2/master/tools/syntax/vim/{}'
+            _static(url.format(name), name)
+
     # <est> utility
     hasphp = haveexecutable('php')
     if yesno('install_est_utility', 'Install <vim-est>?', hasphp):
