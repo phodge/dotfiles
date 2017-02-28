@@ -120,10 +120,10 @@ def install_fast_hg_status():
             warn("Cloning of {} not allowed".format(url))
             return
         with note("Cloning {}".format(url)):
-            system(['hg', 'clone', url, local])
+            system(['hg', 'clone', '--insecure', url, local])
     elif allowpull():
         with note("Pulling changes for {}".format(url)):
-            system(['hg', 'pull', '-u'], cwd=local)
+            system(['hg', 'pull', '-u', '--insecure'], cwd=local)
 
     # compile it now
     system(['make'], cwd=local)
