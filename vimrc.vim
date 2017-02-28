@@ -292,6 +292,7 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#popup_on_dot = 0
 
 " syntastic config
+let g:syntastic_aggregate_errors = 1
 if ! exists('g:syntastic_python_checkers')
   let g:syntastic_python_checkers = ['flake8']
 endif
