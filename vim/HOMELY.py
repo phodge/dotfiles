@@ -24,11 +24,22 @@ def vim_config():
     download('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
              '~/.vim/autoload/plug.vim')
 
-    # download pathogen to its own special place
-    mkdir('~/.vimpathogen')
-    mkdir('~/.vimpathogen/autoload')
-    download('https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim',
-             '~/.vimpathogen/autoload/pathogen.vim')
+    def mkdir_r(path):
+        assert len(path)
+        if os.path.isdir(path):
+            return
+
+        if os.path.exists(path) or os.path.islink(path):
+            raise Exception("Cannot mkdir_r(%r): path already exists" % path)
+
+        # create the parent then our target path
+        mkdir_r(os.path.dirname(path))
+        mkdir(path)
+
+    def _static(url, dest):
+        dest = HOME + '/.vimstatic/' + dest
+        mkdir_r(os.path.dirname(dest))
+        download(url, dest)
 
     vprefs = HOME + '/.vim/prefs.vim'
     nprefs = HOME + '/.nvim/prefs.vim'

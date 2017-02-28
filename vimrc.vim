@@ -52,11 +52,8 @@ endif
       let &runtimepath = &runtimepath . ','.expand('~/src/vim-est.git')
     endif
 
-    let &runtimepath = '~/.vimpathogen,' . &runtimepath . ',~/.vim/pathogen/after'
-
-    " use pathogen to find things still hanging around in vimplug
-    execute pathogen#infect(expand('<sfile>:h').'/vimplug/{}')
-
+    " vimstatic area for things we may download manually
+    let &runtimepath = '~/.vimstatic,' . &runtimepath
   endif
 
 " }}}
