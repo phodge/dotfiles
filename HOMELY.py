@@ -239,17 +239,18 @@ def hg():
         # TODO: this things needs python-devel and openssl-devel - should we
         # provide a suggestion to install those on non-OSX OS's?
         pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
+
     # include our hg config from ~/.hgrc
     lineinfile('~/.hgrc', '%%include %s/hg/hgrc' % HERE, where=WHERE_TOP)
 
-    # make a block in ~/.hgignore using hg/ignore
-    with open('%s/hg/ignore' % HERE, 'r') as f:
-        lines = [l.rstrip('\r\n') for l in f.readlines()]
-        blockinfile('~/.hgignore',
-                    lines,
-                    "# exclude items from phodge/dotfiles",
-                    "# end of items from phodge/dotfiles",
-                    where=WHERE_TOP)
+    # because we can't put the absolute path to our dotfiles hg/ignore file in
+    # our hg/hgrc file, we have to put the config entry into the main ~/.hgrc
+    # using a blockinfile()
+    lines = [
+        '[ui]',
+        'ignore.dotfiles = {}/hg/ignore'.format(HERE),
+    ]
+    blockinfile('~/.hgrc', lines, WHERE_END)
 
     # grab a copy of crecord and put it in ~/src
     if haveexecutable('hg'):
