@@ -20,6 +20,10 @@ nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
 fun! <SID>PyVersionChanged()
   let l:flakes = []
 
+  " grab the yapf for the current python version
+  " TODO: we need to use 'formatexpr' here because 'formatprg' is a global
+  " option :-(
+  "let &l:formatprg = multipython#getpythoncmd(0, 'yapf', 0)
 
   " grab whichever version of yapf is available
   if multipython#wantpy3()
