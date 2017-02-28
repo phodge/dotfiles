@@ -287,7 +287,7 @@ nnoremap <F12> :ShellRerun<CR>
 
 " options for JEDI-vim
 let g:jedi#use_splits_not_buffers = "winwidth"
-let g:jedi#show_call_signatures = 1
+let g:jedi#show_call_signatures = 2
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#popup_on_dot = 0
 
