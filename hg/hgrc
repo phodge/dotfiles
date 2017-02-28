@@ -10,6 +10,7 @@ largefiles =
 strip =
 histedit =
 purge =
+crecord = ~/src/crecord/crecord
 
 [pager]
 pager = LESS='FSRX' less
