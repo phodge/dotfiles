@@ -21,3 +21,4 @@
 
 [core]
     excludesFile = ~/.gitignore
+    pager = less -niSFX
