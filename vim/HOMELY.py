@@ -26,14 +26,17 @@ def vim_config():
 
     def mkdir_r(path):
         assert len(path)
-        if os.path.isdir(path):
-            return
+        if os.path.islink(path):
+            raise Exception("Cannot mkdir_r(%r): path already exists but is a symlink" % path)
 
-        if os.path.exists(path) or os.path.islink(path):
-            raise Exception("Cannot mkdir_r(%r): path already exists" % path)
+        # if the thing already exists but isn't a dir, then we can't create it
+        if os.path.exists(path) and not os.path.isdir(path):
+            raise Exception("Cannot mkdir_r(%r): path already exists but is not a dir" % path)
 
         # create the parent then our target path
-        mkdir_r(os.path.dirname(path))
+        parent = os.path.dirname(path)
+        if len(parent) > 5:
+            mkdir_r(parent)
         mkdir(path)
 
     def _static(url, dest):
