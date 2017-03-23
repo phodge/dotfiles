@@ -294,7 +294,9 @@ nnoremap <F12> :ShellRerun<CR>
 
 " options for JEDI-vim
 let g:jedi#use_splits_not_buffers = "winwidth"
-let g:jedi#show_call_signatures = 2
+" NOTE: I'm disabling call signatures because A) it doesn't seem to work and
+" B() vim isfreezing and I don't know why
+let g:jedi#show_call_signatures = 0
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#popup_on_dot = 0
 
