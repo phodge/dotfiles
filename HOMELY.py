@@ -14,12 +14,11 @@ HERE = os.path.dirname(__file__)
 # decorator to make a function that caches its result temporarily
 def cachedfunc(func):
     def wrapper(*args, **kwargs):
-	try:
-	    return wrapper._result
-	except AttributeError as err:
-	    pass
-        wrapper._result = func(*args, **kwargs)
-	return wrapper._result
+        try:
+            return func._result
+        except AttributeError as err:
+            func._result = func(*args, **kwargs)
+        return func._result
     wrapper.__name__ = func.__name__
     wrapper.__doc__ = func.__doc__
     wrapper._result = None
