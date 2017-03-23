@@ -11,6 +11,8 @@ PATH="$DOTFILES_PATH/bin:$PATH"
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH
 
+# add our SSH key to ssh agent
+test -z "$TMUX" && ssh-add -K ~/.ssh/id_rsa 2>/dev/null || :
 
 # function to quickly get hg branch name and status - used in zsh prompt and bash prompt
 hg_fast_state() {
