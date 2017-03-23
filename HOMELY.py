@@ -13,17 +13,16 @@ HERE = os.path.dirname(__file__)
 
 # decorator to make a function that caches its result temporarily
 def cachedfunc(func):
-    haveresult = False
-    result = None
-
     def wrapper(*args, **kwargs):
-        nonlocal haveresult, result
-        if not haveresult:
-            haveresult = True
-            result = func(*args, **kwargs)
-        return result
+	try:
+	    return wrapper._result
+	except AttributeError as err:
+	    pass
+        wrapper._result = func(*args, **kwargs)
+	return wrapper._result
     wrapper.__name__ = func.__name__
     wrapper.__doc__ = func.__doc__
+    wrapper._result = None
     return wrapper
 
 
@@ -194,7 +193,8 @@ def mypips(venv_pip=None):
     if venv_pip:
         system([venv_pip, 'install', 'flake8'])
     else:
-        if yesno('install_flake8_python3', 'Install flake8 for python3?'):
+        have_pip3 = haveexecutable('pip3')
+        if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
             pipinstall('flake8', ['pip3'])
         if yesno('install_flake8_python2', 'Install flake8 for python2?'):
             pipinstall('flake8', ['pip2'])
