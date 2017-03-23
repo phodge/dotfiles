@@ -42,7 +42,7 @@ def shell_path():
 
     if haveexecutable('python2'):
         lines += list(_findpybin('python2'))
-    if haveexecutable('python3'):
+    if haveexecutable('python3') and haveexecutable('pip3'):
         lines += list(_findpybin('python3'))
 
     lines.append('PATH="$HOME/bin:$PATH"')
