@@ -193,10 +193,11 @@ def mypips(venv_pip=None):
     # they want to install both
     if venv_pip:
         system([venv_pip, 'install', 'flake8'])
-    elif yesno('install_flake8_python2', 'Install flake8 for python2?'):
-        pipinstall('flake8', ['pip2'])
     else:
-        pipinstall('flake8', ['pip3'])
+        if yesno('install_flake8_python3', 'Install flake8 for python3?'):
+            pipinstall('flake8', ['pip3'])
+        if yesno('install_flake8_python2', 'Install flake8 for python2?'):
+            pipinstall('flake8', ['pip2'])
 
 
 @section
