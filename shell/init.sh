@@ -38,7 +38,9 @@ else
     source $DOTFILES_PATH/shell/bash_prompt_wizard.sh
 fi
 
-export EDITOR=vim
+EDITOR=vim
+which nvim &> /dev/null && EDITOR=nvim
+export EDITOR
 
 # custom aliases
 alias l='ls -lah --color=always'
