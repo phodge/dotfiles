@@ -463,6 +463,11 @@ set nolist
 set listchars=tab:\|_,trail:@
 set showbreak=...
 
+" don't add an EOL if one wasn't present
+if exists("&fixeol")
+  set nofixeol
+endif
+
 set scrolloff=2
 set sidescroll=20
 set sidescrolloff=20
