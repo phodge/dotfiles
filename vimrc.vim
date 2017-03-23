@@ -73,7 +73,14 @@ if filereadable(s:plugpath)
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
-  Plug 'SirVer/ultisnips'
+  if 0
+    " going back to SnipMate because UltiSnips is making neovim freeze
+    Plug 'MarcWeber/vim-addon-mw-utils'
+    Plug 'tomtom/tlib_vim'
+    Plug 'garbas/vim-snipmate'
+  else
+    Plug 'SirVer/ultisnips'
+  endif
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
