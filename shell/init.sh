@@ -42,6 +42,42 @@ EDITOR=vim
 which nvim &> /dev/null && EDITOR=nvim
 export EDITOR
 
+in_git_repo() {
+    here="$(realpath "$PWD")"
+    while [ -n "$here" -a / != "$here" ]; do
+        if [ -e "$here/.git" ]; then
+            return 0
+        fi
+        here="$(dirname "$here")"
+    done
+    return 1
+}
+
+show_status() {
+    if in_git_repo; then
+        git status
+    else
+        hg status
+    fi
+}
+
+show_status_long() {
+    if in_git_repo; then
+        git diff --cached
+    else
+        echo "Git staging area not available" >&2
+        return 1
+    fi
+}
+
+edit_status() {
+    if in_git_repo; then
+        $EDITOR +"au VimEnter * nested Gstatus | bw 1"
+    else
+        $EDITOR +"Shell hg status" +"bw 1"
+    fi
+}
+
 # custom aliases
 alias l='ls -lah --color=always'
 alias ll='ls -lah --color=always'
@@ -51,3 +87,6 @@ alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
 alias j=jerjerrod
+alias s=show_status
+alias ss=show_status_long
+alias g=edit_status
