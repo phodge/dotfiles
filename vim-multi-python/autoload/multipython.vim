@@ -203,6 +203,8 @@ fun! multipython#resetversions() " {{{
   endfor
 endfun " }}}
 
+let s:version_cache = {}
+
 fun! <SID>GetVenvInfo()
   " TODO: we could cache this to make it faster
   let l:try = expand('%:p')
@@ -217,6 +219,22 @@ fun! <SID>GetVenvInfo()
         let l:exact = strpart(l:basename, 6)
         return [l:major, l:exact, l:try.'/bin']
       endif
+
+      " we'll actually need to run the python executable to find out what it
+      " is ... try looking in the cache first
+      let l:ret = get(s:version_cache, l:pyexe, 0)
+      if type(l:ret) == type([])
+        return l:ret
+      endif
+
+      " run the executable to find out what it is
+      let l:code = 'import sys; print("%d.%d" % sys.version_info[:2])'
+      let l:cmd = printf("%s -c %s", l:pyexe, shellescape(l:code))
+      let l:output = systemlist(l:cmd)[0]
+      let l:major = str2nr(strpart(l:output, 0, 1))
+      let l:info = [l:major, l:output, l:try.'/bin']
+      let s:version_cache[l:pyexe] = l:info
+      return l:info
     endif
   endwhile
 
