@@ -49,13 +49,13 @@ def homely_dev():
         system([pip, 'install', 'pytest'])
 
     # install build/packaging tools just in the python3 version
-    system([venv_pip, 'install', 'sphinx-autobuild', 'twine'])
+    system([venv_pip, 'install', 'Sphinx', 'sphinx-autobuild', 'twine'])
 
     if wantjerjerrod():
         # register the playground with jerjerrod
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
 
-    system([venv_pip, 'install', 'sphinx-autobuild', 'pytest', 'twine'])
+    system([venv_pip, 'install', 'Sphinx', 'sphinx-autobuild', 'pytest', 'twine'])
 
     # we may want to install pandoc to make the slides, but
     if yesno('homley_want_pandoc', 'Install pandoc to create slides?'):
