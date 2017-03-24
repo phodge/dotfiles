@@ -108,7 +108,7 @@ def tools():
                    yum='the_silver_searcher',
                    apt='the_silver_searcher')
     if yesno('install_ripgrep', 'Install ripgrep?', wantfull()):
-        installpkg('ripgrep')
+        installpkg('ripgrep', apt=False)
     if yesno('install_with', 'Install `with` utility?', wantfull()):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
