@@ -1,0 +1,9 @@
+snippet out
+	print(string.format('${2:$1} = %s', ${1:somevar}))
+snippet outd
+	local __expr = ${1:somevar}
+	print('${2:$1} = {')
+	for __k, __v in pairs(__expr) do
+	  print(string.format('  "%s"=%s', __k, __v))
+	end
+	print('}')
