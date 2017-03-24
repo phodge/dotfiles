@@ -65,8 +65,8 @@ if ! multipython#versionsdetected()
     call multipython#setpy3(1, "HOMELY.py is always py3")
   elseif ! multipython#detectversions()
     " if automatic detection doesn't work, fall back to 3.4/2.7 combo
-    call multipython#setpy3("3.4", "phodge's default", 0)
-    call multipython#setpy2("2.7", "phodge's default")
+    call multipython#setpy3(1, "phodge's default", 0)
+    call multipython#setpy2(1, "phodge's default")
   endif
 endif
 
