@@ -207,7 +207,11 @@ let s:version_cache = {}
 
 fun! <SID>GetVenvInfo()
   " TODO: we could cache this to make it faster
-  let l:try = expand('%:p')
+  if expand('%') =~ '^\w\+://'
+    let l:try = getcwd()
+  else
+    let l:try = expand('%:p')
+  endif
   while strlen(l:try) > 2
     let l:try = fnamemodify(l:try, ':h')
 
