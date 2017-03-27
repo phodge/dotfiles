@@ -274,10 +274,10 @@ fun! multipython#detectversions() " {{{
   endif
 endfun
 
-fun! multipython#getpythoncmd(major, cmd, mustexist) " {{{
+fun! multipython#getpythoncmd(major, cmd, mustexist, allowvenv) " {{{
   " if we're in a virtualenv, always try and use that version of the command
   " first
-  let l:venv = <SID>GetVenvInfo()
+  let l:venv = a:allowvenv ? <SID>GetVenvInfo() : []
   if len(l:venv) && (a:major == 0 || a:major == l:venv[0])
     " if there is a virtualenv and it has the same major version (or we don't
     " care what majoy python version we use) then look for the cmd in the
