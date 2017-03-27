@@ -49,10 +49,10 @@ fun! <SID>PyVersionChanged()
 
   for l:major in l:flakes
     " Tell multiflake8 exactly where to find the flake8 for this python version.
-    let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1)
+    let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1, 1)
     let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
   endfor
-endfun!
+endfun
 
 " tell multipython to call our callback whenever the python version changes in
 " the current buffer
@@ -76,7 +76,7 @@ endif
 com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
 fun! <SID>DoSort(line1, line2)
   " ask multipython where to find isort for the current python version
-  let l:isort = multipython#getpythoncmd(0, 'isort', 1)
+  let l:isort = multipython#getpythoncmd(0, 'isort', 1, 0)
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
   try
     exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
