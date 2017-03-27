@@ -16,14 +16,10 @@ nnoremap <buffer> \2 :call multipython#togglepy2()<CR>
 nnoremap <buffer> \3 :call multipython#togglepy3()<CR>
 nnoremap <buffer> <space>2 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
+nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 
 fun! <SID>PyVersionChanged()
   let l:flakes = []
-
-  " grab the yapf for the current python version
-  " TODO: we need to use 'formatexpr' here because 'formatprg' is a global
-  " option :-(
-  "let &l:formatprg = multipython#getpythoncmd(0, 'yapf', 0)
 
   " grab whichever version of yapf is available
   if multipython#wantpy3()
@@ -53,6 +49,17 @@ fun! <SID>PyVersionChanged()
     let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
   endfor
 endfun
+
+fun! <SID>FormatFile()
+  let l:oldpos = getpos('.')
+  let l:prog = multipython#getpythoncmd(0, 'yapf', 1, 0)
+  try
+    exe printf("1,$!%s --style=/Users/phodge7/.style.yapf", l:prog)
+  finally
+    call setpos('.', l:oldpos)
+  endtry
+endfun
+
 
 " tell multipython to call our callback whenever the python version changes in
 " the current buffer
