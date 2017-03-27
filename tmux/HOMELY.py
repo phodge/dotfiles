@@ -1,9 +1,9 @@
 import sys
 
-from HOMELY import (HERE, HOME, cachedfunc, powerline_path, wantfull,
-                    wantpowerline)
+from HOMELY import (HERE, HOME, cachedfunc, lineinfile, powerline_path,
+                    wantfull, wantpowerline)
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, haveexecutable,
-                            mkdir, run, section)
+                            mkdir, run, section, writefile)
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 from homely.ui import warn, yesno
@@ -225,8 +225,9 @@ def tmux_keys():
     pm.bindkey('L', 'resize-pane -R 2')
     lines.extend(pm.getlines())
 
-    blockinfile('~/.tmux.conf',
-                lines,
-                '# start of automated tmux keybindings',
-                '# end of automated tmux keybindings',
-                where=WHERE_END)
+    with writefile('~/.tmux/keybindings.conf') as f:
+        for line in lines:
+            f.write(line)
+            f.write("\n")
+
+    lineinfile('~/.tmux.conf', 'source "~/.tmux/keybindings.conf"', where=WHERE_TOP)
