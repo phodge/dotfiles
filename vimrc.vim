@@ -119,7 +119,7 @@ if filereadable(s:plugpath)
   Plug 'wellle/targets.vim'
 
   " skip gutentags when there is no ctags executable installed
-  let g:gutentags_tagfile = '.tags'
+  let g:gutentags_ctags_tagfile = '.tags'
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
 
   " {{{
