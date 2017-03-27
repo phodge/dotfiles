@@ -210,7 +210,9 @@ def tmux_keys():
                 lines.append(line)
 
     # we also want to make our special PANE mode
-    pm = TmuxCustomMode('panemode', "PANEMODE: Move between panes using h, j, k, l. Resize panes using H, J, K, L")
+    pm = TmuxCustomMode(
+        'panemode',
+        "PANEMODE: Move between panes using h, j, k, l. Resize panes using H, J, K, L")
     pm.prefixkeybind('p')
     pm.prefixkeybind('C-p')
     pm.bindkey('h', 'select-pane -L')
