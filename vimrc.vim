@@ -90,6 +90,11 @@ if filereadable(s:plugpath)
 
   Plug 'justinmk/vim-sneak'
 
+  if has('nvim')
+    " TODO: figure out how to replace flake8 with neomake + something else
+    Plug 'neomake/neomake'
+  endif
+
   " for ansible
   Plug 'pearofducks/ansible-vim'
 
