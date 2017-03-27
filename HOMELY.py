@@ -299,6 +299,11 @@ def ackrc():
     symlink('.ackrc')
 
 
+@section
+def yapf():
+    symlink('.style.yapf')
+
+
 @cachedfunc
 def wantpowerline():
     return yesno('use_powerline', 'Use powerline for tmux/vim?', wantfull())
