@@ -222,3 +222,21 @@ def nvim_devel():
     system(['git', 'clone', origin, dest])
     system(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
     system(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+
+
+@section
+def vim_plugin_update():
+    if allowinteractive():
+        system(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
+        if wantnvim():
+            system(['nvim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
+        return
+
+    # install the self-updating plugins now
+    if True:
+        template = '#!/usr/bin/env bash\nvim-update-then-run {} "$@"\n'
+        for what in ('vim', 'nvim'):
+            exec = HOME + '/bin/' + what
+            with writefile(exec) as f:
+                f.write(template.format(what))
+            os.chmod(exec, 0o755)
