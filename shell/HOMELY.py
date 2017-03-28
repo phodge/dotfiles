@@ -8,9 +8,12 @@ bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
 zshrc = os.environ['HOME'] + '/.zshrc'
 
-lineinfile('~/.shellrc',
-           'source $HOME/dotfiles/shell/init.sh',
-           where=WHERE_END)
+
+@section
+def shellrc():
+    lineinfile('~/.shellrc',
+               'source $HOME/dotfiles/shell/init.sh',
+               where=WHERE_END)
 
 
 @section
