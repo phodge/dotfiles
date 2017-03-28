@@ -2,7 +2,7 @@ from HOMELY import HERE, HOME, wantfull, wantjerjerrod, wantnvim, whenmissing
 from homely.general import section
 from homely.ui import allowinteractive, yesno
 
-VIM_TAG = 'v8.0.0007'
+VIM_TAG = 'v8.0.0503'
 NVIM_TAG = 'v0.1.7'
 
 
