@@ -25,8 +25,8 @@ tmux:
     M-S-J: split-window
     M-S-K: split-window \; swap-pane -U
     # move between windows
-    M-N: previous-window
-    M-P: next-window
+    M-P: previous-window
+    M-N: next-window
     # creating a new window
     M-S-N: command-prompt -p "New Window" "new-window -n '%1'"
     # create a new session; move between sessions
