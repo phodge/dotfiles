@@ -19,14 +19,17 @@ nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 
 fun! <SID>PyVersionChanged()
+  let l:want2 = multipython#wantpy2()
+  let l:want3 = multipython#wantpy3()
+
   let l:flakes = []
 
   " grab whichever version of yapf is available
-  if multipython#wantpy3()
+  if l:want3
     call add(l:flakes, 3)
   endif
 
-  if multipython#wantpy2()
+  if l:want2
     call add(l:flakes, 2)
   endif
 
@@ -48,6 +51,12 @@ fun! <SID>PyVersionChanged()
     let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1, 1)
     let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
   endfor
+
+  " toggle python2/3 syntax compatibility
+  let b:python_py2_compat = l:want2 ? 1 : 0
+  let b:python_py3_compat = l:want3 ? 1 : 0
+  syn clear
+  set syntax=python
 endfun
 
 fun! <SID>FormatFile()
