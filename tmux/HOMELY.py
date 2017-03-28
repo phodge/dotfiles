@@ -230,4 +230,4 @@ def tmux_keys():
             f.write(line)
             f.write("\n")
 
-    lineinfile('~/.tmux.conf', 'source "~/.tmux/keybindings.conf"', where=WHERE_TOP)
+    lineinfile('~/.tmux.conf', 'source ~/.tmux/keybindings.conf', where=WHERE_TOP)
