@@ -1,6 +1,11 @@
+import os
+
 from HOMELY import HERE, HOME, wantfull, wantjerjerrod, wantnvim, whenmissing
-from homely.general import section
-from homely.ui import allowinteractive, yesno
+from homely.general import (
+    WHERE_END, WHERE_TOP, blockinfile, download, haveexecutable, lineinfile,
+    mkdir, run, section, symlink, writefile)
+from homely.install import InstallFromSource
+from homely.ui import allowinteractive, system, yesno
 
 VIM_TAG = 'v8.0.0503'
 NVIM_TAG = 'v0.1.7'
@@ -8,12 +13,6 @@ NVIM_TAG = 'v0.1.7'
 
 @section
 def vim_config():
-    import os
-    from homely.general import (
-        mkdir, symlink, download, lineinfile, blockinfile, WHERE_TOP, WHERE_END,
-        haveexecutable, run)
-    from homely.install import InstallFromSource
-
     # install vim-plug into ~/.vim
     mkdir('~/.vim')
     mkdir('~/.nvim')
@@ -131,11 +130,6 @@ def vim_config():
 
 @section
 def vim_install():
-    import os
-    from homely.ui import system
-    from homely.general import run, mkdir
-    from homely.install import InstallFromSource
-
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
     if not yesno('compile_vim', 'Compile vim from source?', wantfull()):
@@ -185,8 +179,6 @@ def vim_install():
 
 @section
 def nvim_install():
-    from homely.general import run
-    from homely.install import InstallFromSource
     if wantnvim():
         # TODO: we suggest yum installing
         # - cmake
@@ -205,9 +197,6 @@ def nvim_install():
 
 @section
 def nvim_devel():
-    import os
-    from homely.ui import system
-    from homely.general import mkdir, symlink
     if not wantnvim():
         return
 
