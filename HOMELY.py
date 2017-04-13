@@ -158,18 +158,11 @@ def mypips(venv_pip=None):
     if venv_pip is None:
         pipinstall('virtualenv')
 
-    # use the virtualenv's pip to install isort, or just any pip if not a
-    # virtualenv
-    if venv_pip:
-        system([venv_pip, 'install', 'isort'])
-    else:
-        pipinstall('isort')
-
     theworks = wantfull() or venv_pip
 
     # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
     # present
-    packages = ['simplejson', 'jedi', 'yapf']
+    packages = ['simplejson', 'jedi', 'yapf', 'isort']
     if wantnvim():
         # if we want nvim then we always want the neovim python package
         packages.append('neovim')
