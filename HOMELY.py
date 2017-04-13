@@ -1,4 +1,6 @@
 import os
+import platform
+import re
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             haveexecutable, include, lineinfile, mkdir, run,
@@ -146,13 +148,39 @@ def tools():
         # TODO: where do you want to put this thing?
 
 
-def mypips(venv_pip=None):
+def getpippaths():
+    if platform.system() == "Darwin":
+        return {}
+
     # do we need to out a pip config such that py2/py3 binaries don't clobber each other?
     question = 'Force pip to install into separate py2/py3 bin dirs?'
-    if False and (not venv_pip) and yesno('force_pip_bin_paths', question, None):
-        # TODO: pass this flag to pip2/pip3:
-        # --install-options=--install-scripts=$HOME/.local/python3.4-bin
-        pass
+    if not yesno('force_pip_bin_paths', question, None)):
+        return {}
+
+    for version in (2, 3):
+        # TODO: we probably should drop into vim somewhere and make sure g:my_pyX_paths is
+        # defined in prefs.vim or else our stuff is gonna be broken
+        # TODO: we also want these in our $PATH ... or not?
+        pip = "pip%d" % version
+        var = "g:my_py%d_paths" % version
+
+        if not haveexecutable(pip):
+            continue
+
+        stdout = system([exe, '--version'], stdout=True)[1].decode('utf-8').rstrip()
+        assert re.search(r' \(python \d+\.\d+\)$', stdout)
+        version = stdout.rsplit(' ', 1)[1][:-1]
+        path = '%s/.local/python-%s-bin' % (HOME, version)
+
+        scripts[pip] = path
+        lineinfile('~/.vimrc', "let %s = ['%s']" % (var, path), where=WHERE_END)
+
+    return scripts
+
+
+def mypips(venv_pip=None):
+    if not venv_pip:
+        scripts = getpippaths()
 
     # of course we probably want virtualenv!
     if venv_pip is None:
@@ -178,7 +206,7 @@ def mypips(venv_pip=None):
         if venv_pip:
             system([venv_pip, 'install', package])
         else:
-            pipinstall(package, trypips=['pip2', 'pip3'])
+            pipinstall(package, trypips=['pip2', 'pip3'], scripts=scripts)
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
@@ -187,9 +215,9 @@ def mypips(venv_pip=None):
     else:
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
-            pipinstall('flake8', ['pip3'])
+            pipinstall('flake8', ['pip3'], scripts=scripts)
         if yesno('install_flake8_python2', 'Install flake8 for python2?'):
-            pipinstall('flake8', ['pip2'])
+            pipinstall('flake8', ['pip2'], scripts=scripts)
 
 
 @section
