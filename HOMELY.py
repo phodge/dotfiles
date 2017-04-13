@@ -154,8 +154,10 @@ def getpippaths():
 
     # do we need to out a pip config such that py2/py3 binaries don't clobber each other?
     question = 'Force pip to install into separate py2/py3 bin dirs?'
-    if not yesno('force_pip_bin_paths', question, None)):
+    if not yesno('force_pip_bin_paths', question, None):
         return {}
+
+    scripts = {}
 
     for version in (2, 3):
         # TODO: we probably should drop into vim somewhere and make sure g:my_pyX_paths is
@@ -167,7 +169,7 @@ def getpippaths():
         if not haveexecutable(pip):
             continue
 
-        stdout = system([exe, '--version'], stdout=True)[1].decode('utf-8').rstrip()
+        stdout = system([pip, '--version'], stdout=True)[1].decode('utf-8').rstrip()
         assert re.search(r' \(python \d+\.\d+\)$', stdout)
         version = stdout.rsplit(' ', 1)[1][:-1]
         path = '%s/.local/python-%s-bin' % (HOME, version)
