@@ -1,12 +1,13 @@
 import sys
 
-from HOMELY import (HERE, HOME, cachedfunc, lineinfile, powerline_path,
-                    wantfull, wantpowerline)
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, haveexecutable,
                             mkdir, run, section, writefile)
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 from homely.ui import warn, yesno
+
+from HOMELY import (HERE, HOME, cachedfunc, lineinfile, powerline_path,
+                    wantfull, wantpowerline)
 
 
 @cachedfunc

@@ -1,9 +1,10 @@
 import os
 
-from HOMELY import HERE, HOME, powerline_path, wantjerjerrod, wantpowerline
 from homely.general import (WHERE_END, haveexecutable, lineinfile, mkdir,
                             section, writefile)
 from homely.ui import system, yesno
+
+from HOMELY import HERE, HOME, powerline_path, wantjerjerrod, wantpowerline
 
 
 @section
