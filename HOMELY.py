@@ -148,6 +148,7 @@ def tools():
         # TODO: where do you want to put this thing?
 
 
+@cachedfunc
 def getpippaths():
     if platform.system() == "Darwin":
         return {}
@@ -180,10 +181,11 @@ def getpippaths():
     return scripts
 
 
-def mypips(venv_pip=None):
-    if not venv_pip:
-        scripts = getpippaths()
+def mypipinstall(*args, **kwargs):
+    return pipinstall(*args, **kwargs, scripts=getpippaths())
 
+
+def mypips(venv_pip=None):
     # of course we probably want virtualenv!
     if venv_pip is None:
         pipinstall('virtualenv')
@@ -208,7 +210,7 @@ def mypips(venv_pip=None):
         if venv_pip:
             system([venv_pip, 'install', package])
         else:
-            pipinstall(package, trypips=['pip2', 'pip3'], scripts=scripts)
+            mypipinstall(package, trypips=['pip2', 'pip3'])
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
@@ -217,9 +219,9 @@ def mypips(venv_pip=None):
     else:
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
-            pipinstall('flake8', ['pip3'], scripts=scripts)
+            mypipinstall('flake8', ['pip3'])
         if yesno('install_flake8_python2', 'Install flake8 for python2?'):
-            pipinstall('flake8', ['pip2'], scripts=scripts)
+            mypipinstall('flake8', ['pip2'])
 
 
 @section
