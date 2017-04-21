@@ -3,7 +3,7 @@ import os
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
                             section)
 
-from HOMELY import HOME, wantfull, wantjerjerrod
+from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -48,6 +48,12 @@ def shell_path():
         lines += list(_findpybin('python2'))
     if haveexecutable('python3') and haveexecutable('pip3'):
         lines += list(_findpybin('python3'))
+
+    # if we are installing pip modules into separate bin paths, add them to our $PATH now
+    pippaths = getpippaths()
+    for path in [pippaths.get("pip2"), pippaths.get("pip3")]:
+        if path:
+            lines.append('PATH="%s:$PATH"' % path)
 
     lines.append('PATH="$HOME/bin:$PATH"')
 
