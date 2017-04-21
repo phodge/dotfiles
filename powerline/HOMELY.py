@@ -4,13 +4,16 @@ from homely.general import (WHERE_END, haveexecutable, lineinfile, mkdir,
                             section, writefile)
 from homely.ui import system, yesno
 
-from HOMELY import HERE, HOME, powerline_path, wantjerjerrod, wantpowerline
+from HOMELY import (HERE, HOME, mypipinstall, powerline_path, wantjerjerrod,
+                    wantpowerline)
 
 
 @section
 def powerline():
     if not wantpowerline():
         return
+
+    mypipinstall('powerline-status', ['pip3'])
 
     mkdir('~/.config')
     mkdir('~/.config/powerline')
