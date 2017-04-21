@@ -3,11 +3,10 @@ import sys
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, haveexecutable,
                             mkdir, run, section, writefile)
 from homely.install import InstallFromSource, installpkg
-from homely.pipinstall import pipinstall
 from homely.ui import warn, yesno
 
-from HOMELY import (HERE, HOME, cachedfunc, lineinfile, powerline_path,
-                    wantfull, wantpowerline)
+from HOMELY import (HERE, HOME, cachedfunc, lineinfile, mypipinstall,
+                    powerline_path, wantfull, wantpowerline)
 
 
 @cachedfunc
@@ -19,10 +18,6 @@ def _wanttmux():
 def tmux_config():
     if not _wanttmux():
         return
-
-    # needed for tmux
-    if wantpowerline():
-        pipinstall('powerline-status', ['pip3'])
 
     tmux_plugins = yesno('install_tmux_plugins',
                             'Install TPM and use tmux plugins?',
@@ -157,7 +152,7 @@ def tmux_keys():
     lines = []
 
     # needs to be installed for the current version of python
-    pipinstall('pyyaml', ['pip%d' % sys.version_info.major])
+    mypipinstall('pyyaml', ['pip%d' % sys.version_info.major])
     import yaml
 
     with open(HERE + '/keybindings/keys.yaml') as f:
