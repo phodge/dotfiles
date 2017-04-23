@@ -182,7 +182,7 @@ def getpippaths():
 
 
 def mypipinstall(*args, **kwargs):
-    return pipinstall(*args, **kwargs, scripts=getpippaths())
+    return pipinstall(*args, scripts=getpippaths(), **kwargs)
 
 
 def mypips(venv_pip=None):
