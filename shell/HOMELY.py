@@ -1,13 +1,17 @@
 import os
 
+from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
                             section)
-
-from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
 zshrc = os.environ['HOME'] + '/.zshrc'
+
+
+def install_completions(rcfile):
+    if wantjerjerrod():
+        lineinfile(rcfile, 'want_click_completion jerjerrod')
 
 
 @section
@@ -93,6 +97,8 @@ def bash_config():
 
     def _bashrc():
         lineinfile('~/.bashrc', 'source $HOME/.shellrc', where=WHERE_TOP)
+        install_completions('~/.bashrc')
+        lineinfile('~/.bashrc', 'shell_init_done  # this line must be last', where=WHERE_END)
 
     with note("Turn {} into a symlink".format(bash_profile)):
         _bashprofile()
@@ -104,6 +110,8 @@ def bash_config():
 @section
 def zsh_config():
     lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
+    install_completions('~/.zshrc')
+    lineinfile('~/.zshrc', 'shell_init_done  # this line must be last', where=WHERE_END)
 
 
 @section

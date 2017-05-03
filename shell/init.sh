@@ -90,3 +90,36 @@ alias j=jerjerrod
 alias s=show_status
 alias ss=show_status_long
 alias g=edit_status
+
+
+# register a python/click based script for completion generation
+__click_completion="homely"
+want_click_completion() {
+    __click_completion="$__click_completion $*"
+}
+
+# this function should be the last thing in your .bashrc/.zshrc
+shell_init_done() {
+    completions="$HOME/.completions.sh"
+
+    # is the file is present and less than 4 hours old, use it
+    if find "$completions" -ctime -4h &> /dev/null; then
+        source "$completions"
+        return
+    fi
+
+    # empty the completions file
+    : > "$completions"
+
+    for cmd in $(echo $__click_completion); do
+        echo "Generating completions for $cmd ..."
+        if which $cmd &> /dev/null; then
+            echo "# Completions for $cmd ..." >> "$completions"
+            upper=$(echo $cmd | tr '[:lower:]' '[:upper:]')
+            eval "_${upper}_COMPLETE=source $cmd" >> "$completions"
+            echo >> "$completions"
+        fi
+    done
+
+    source "$completions"
+}
