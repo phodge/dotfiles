@@ -8,7 +8,7 @@ from homely.install import InstallFromSource
 from homely.ui import allowinteractive, system, yesno
 
 VIM_TAG = 'v8.0.0503'
-NVIM_TAG = 'v0.1.7'
+NVIM_TAG = 'v0.2.0'
 
 
 @section
