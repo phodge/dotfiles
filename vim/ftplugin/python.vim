@@ -100,10 +100,32 @@ fun! <SID>DoSort(line1, line2)
     call setpos('.', l:pos)
   endtry
 endfun
-nnoremap <buffer> <space>i :Isort<CR>
 augroup IsortAuto
 augroup end
 au! IsortAuto InsertLeave <buffer> if getline('.') =~ '^\%(from\|import\)\s\+' | exe 'Isort' | exe 'undojoin' | endif
+
+
+nnoremap <buffer> <space>i :Isort<CR>
+nnoremap <buffer> <space>i :call <SID>SmartIsortTrigger()<CR>
+fun! <SID>SmartIsortTrigger() " {{{
+  " if the character under the cursor is alphanumeric, work out what the word is
+  " if the current line is an import statement, 
+  let l:line = getline('.')
+  if l:line =~ '^\s*\%(from\|import\)'
+    Isort
+    return
+  endif
+
+  let l:char = strpart(l:line, col('.'), 1)
+  let g:foo = [l:line, col('.'), l:char]
+  if l:char !~ '\w'
+    Isort
+    return
+  endif
+
+  call <SID>SmartImportUI()
+endfun " }}}
+
 
 " set up \\c mapping to toggle the line length
 nnoremap <buffer> \c :call <SID>ToggleLineLength()<CR>
@@ -288,3 +310,98 @@ else
   silent! nunmap <buffer> J
 endif
 " }}}
+
+
+vnoremap <space>i <ESC>:call <SID>SmartImportUI()<CR>
+
+fun! <SID>SmartImportUI() " {{{
+  let l:word = expand('<cword>')
+
+  " these words instantly trigger adding an import for a top-level module
+  let l:always_modules = split(
+        \ 'os sys re collections click simplejson homely enum pprint itertools functools'
+        \ .'tempfile operator glob shutil io argparse subprocess requests'
+        \ )
+
+  if index(l:always_modules, l:word) > -1
+    call <SID>AddImportLineNow('import '.l:word)
+    return
+  end
+
+  " make a list of imports already in the module
+  let l:modules = <SID>GetCurrentImports()
+
+  if len(l:modules)
+    " ask the user if they'd like to import it from one of the existing modules?
+    let l:options = []
+    for l:module in sort(keys(l:modules))
+      call add(l:options, printf('from %s import %s', l:module, l:word))
+      echohl Question
+      echon len(l:options).'. '
+      echohl pyImport
+      echon 'from '
+      echohl None
+      echon l:module
+      echohl pyImport
+      echon ' import '
+      echohl None
+      echon l:word
+      echo ''
+    endfor
+    let g:bar = l:options
+    let l:choice = input("Enter the number of the import you would like to add, or press ESC to abort\n")
+    let g:foo = [l:choice]
+    redraw
+    if l:choice =~ '^\_s*$'
+      " user cancelled
+      return
+    elseif l:choice =~ '^\d\+$'
+      let l:line = get(l:options, l:choice - 1)
+      call add(g:foo, l:line)
+      if ! (type(l:line) == type(0) && l:line == 0)
+        call <SID>AddImportLineNow(l:line)
+        return
+      endif
+    endif
+
+    echohl Error
+    echo 'Invalid choice'
+    echohl None
+    return
+  endif
+
+  echohl Error
+  echo "Couldn't add import for ".l:word
+  echohl None
+endfun " }}}
+
+fun! <SID>AddImportLineNow(line) " {{{
+  let l:where = 1
+
+  while l:where < line('$')
+    if getline(l:where) =~ '^#'
+      let l:where += 1
+      continue
+    endif
+    " add a mark we can jump back to
+    normal! mi
+    call append(l:where, a:line)
+    Isort
+    normal! `i
+    return
+  endwhile
+endfun " }}}
+
+fun! <SID>GetCurrentImports() " {{{
+  let l:imports = {}
+  for l:nr in range(1, line('$'))
+    let l:match = matchlist(getline(l:nr), '^\s*\(from\|import\)\s\+\([a-zA-Z0-9_.]\+\)')
+    if len(l:match)
+      let l:imports[l:match[2]] = l:match[1]
+    elseif getline(l:nr) =~ '^\%(def\|class\)\s'
+      " stop searching as soon as we hit a function or class that isn't indented
+      break
+    endif
+  endfor
+  return l:imports
+endfun " }}}
