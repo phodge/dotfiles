@@ -117,7 +117,6 @@ fun! <SID>SmartIsortTrigger() " {{{
   endif
 
   let l:char = strpart(l:line, col('.'), 1)
-  let g:foo = [l:line, col('.'), l:char]
   if l:char !~ '\w'
     Isort
     return
@@ -348,16 +347,13 @@ fun! <SID>SmartImportUI() " {{{
       echon l:word
       echo ''
     endfor
-    let g:bar = l:options
     let l:choice = input("Enter the number of the import you would like to add, or press ESC to abort\n")
-    let g:foo = [l:choice]
     redraw
     if l:choice =~ '^\_s*$'
       " user cancelled
       return
     elseif l:choice =~ '^\d\+$'
       let l:line = get(l:options, l:choice - 1)
-      call add(g:foo, l:line)
       if ! (type(l:line) == type(0) && l:line == 0)
         call <SID>AddImportLineNow(l:line)
         return
