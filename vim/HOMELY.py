@@ -1,11 +1,12 @@
 import os
 
 from HOMELY import HERE, HOME, wantfull, wantjerjerrod, wantnvim, whenmissing
-from homely.general import (
-    WHERE_END, WHERE_TOP, blockinfile, download, haveexecutable, lineinfile,
-    mkdir, run, section, symlink, writefile)
+from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
+                            lineinfile, mkdir, run, section, symlink,
+                            writefile)
 from homely.install import InstallFromSource
-from homely.ui import allowinteractive, system, yesno
+from homely.system import execute, haveexecutable
+from homely.ui import allowinteractive, yesno
 
 VIM_TAG = 'v8.0.0503'
 NVIM_TAG = 'v0.2.0'
@@ -144,8 +145,8 @@ def vim_install():
         written = True
         # pull down git source code right now so that we can see what the configure flags are
         if not os.path.exists(local):
-            system(['git', 'clone', 'https://github.com/vim/vim.git', local])
-        out = system([local + '/configure', '--help'], stdout=True, cwd=local)[1]
+            execute(['git', 'clone', 'https://github.com/vim/vim.git', local])
+        out = execute([local + '/configure', '--help'], stdout=True, cwd=local)[1]
         with open(flagsfile, 'w') as f:
             f.write('# put configure flags here\n')
             f.write('--with-features=huge\n')
@@ -158,7 +159,7 @@ def vim_install():
                 f.write(line)
                 f.write('\n')
     if yesno(None, 'Edit %s now?' % flagsfile, written, noprompt=False):
-        system(['vim', flagsfile], stdout="TTY")
+        execute(['vim', flagsfile], stdout="TTY")
 
     # NOTE: on ubuntu the requirements are:
     # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
@@ -217,19 +218,19 @@ def nvim_devel():
     if os.path.exists(dest):
         return
 
-    # NOTE: using system() directly means the dest directory isn't tracked by
+    # NOTE: using execute() directly means the dest directory isn't tracked by
     # homely ... this is exactly what I want
-    system(['git', 'clone', origin, dest])
-    system(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
-    system(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+    execute(['git', 'clone', origin, dest])
+    execute(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
+    execute(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
 
 
 @section
 def vim_plugin_update():
     if allowinteractive():
-        system(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
+        execute(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
         if wantnvim():
-            system(['nvim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
+            execute(['nvim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
         return
 
     # install the self-updating plugins now

@@ -1,12 +1,12 @@
 import sys
 
-from homely.general import (WHERE_END, WHERE_TOP, blockinfile, haveexecutable,
-                            mkdir, run, section, writefile)
-from homely.install import InstallFromSource, installpkg
-from homely.ui import warn, yesno
-
 from HOMELY import (HERE, HOME, cachedfunc, lineinfile, mypipinstall,
                     powerline_path, wantfull, wantpowerline)
+from homely.general import (WHERE_TOP, blockinfile, mkdir, run, section,
+                            writefile)
+from homely.install import InstallFromSource, installpkg
+from homely.system import haveexecutable
+from homely.ui import warn, yesno
 
 
 @cachedfunc
@@ -20,8 +20,8 @@ def tmux_config():
         return
 
     tmux_plugins = yesno('install_tmux_plugins',
-                            'Install TPM and use tmux plugins?',
-                            wantfull())
+                         'Install TPM and use tmux plugins?',
+                         wantfull())
 
     if tmux_plugins:
         mkdir('~/.tmux')
@@ -67,7 +67,7 @@ def tmux_install():
         # FIXME: compiling tmux from source like this requires libevent ...
         # how do we make sure that that library has been installed?
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
-                                    '~/src/tmux.git')
+                                 '~/src/tmux.git')
         tmux.select_tag('2.3')
         tmux.compile_cmd([
             ['sh', 'autogen.sh'],

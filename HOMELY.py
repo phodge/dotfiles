@@ -7,7 +7,8 @@ from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             section, symlink)
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
-from homely.ui import system, yesno
+from homely.system import execute
+from homely.ui import yesno
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
@@ -122,8 +123,8 @@ def tools():
         mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew
-            system(['brew', 'tap', 'universal-ctags/universal-ctags'])
-            system(['brew', 'install', '--HEAD', 'universal-ctags'])
+            execute(['brew', 'tap', 'universal-ctags/universal-ctags'])
+            execute(['brew', 'install', '--HEAD', 'universal-ctags'])
         else:
             uc = InstallFromSource('https://github.com/universal-ctags/ctags',
                                    '~/src/universal-ctags.git')
@@ -170,7 +171,7 @@ def getpippaths():
         if not haveexecutable(pip):
             continue
 
-        stdout = system([pip, '--version'], stdout=True)[1].decode('utf-8').rstrip()
+        stdout = execute([pip, '--version'], stdout=True)[1].decode('utf-8').rstrip()
         assert re.search(r' \(python \d+\.\d+\)$', stdout)
         version = stdout.rsplit(' ', 1)[1][:-1]
         path = '%s/.local/python-%s-bin' % (HOME, version)
@@ -208,14 +209,14 @@ def mypips(venv_pip=None):
         packages.append('q')
     for package in packages:
         if venv_pip:
-            system([venv_pip, 'install', package])
+            execute([venv_pip, 'install', package])
         else:
             mypipinstall(package, trypips=['pip2', 'pip3'])
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
     if venv_pip:
-        system([venv_pip, 'install', 'flake8'])
+        execute([venv_pip, 'install', 'flake8'])
     else:
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
@@ -282,10 +283,10 @@ def hg():
         mkdir('~/src')
         localpath = HOME + '/src/crecord'
         if os.path.exists(localpath):
-            system(['hg', 'pull', '--insecure'], cwd=localpath)
+            execute(['hg', 'pull', '--insecure'], cwd=localpath)
         else:
             url = 'https://bitbucket.org/edgimar/crecord'
-            system(['hg', 'clone', '--insecure', url, localpath])
+            execute(['hg', 'clone', '--insecure', url, localpath])
 
 
 # install nudge
@@ -337,7 +338,7 @@ def wantpowerline():
 @cachedfunc
 def powerline_path():
     cmd = ['python3', '-c', 'import powerline; print(powerline.__file__)']
-    powerline_file = system(cmd, stdout=True)[1]
+    powerline_file = execute(cmd, stdout=True)[1]
     return os.path.dirname(powerline_file.strip().decode('utf-8'))
 
 
@@ -359,16 +360,16 @@ def pypirc():
             f.write('password = PASSWORD\n')
     with open(rc) as f:
         if 'TODO' in f.read() and yesno(None, "Edit %s now?" % rc, True, noprompt=False):
-                system(['vim', rc], stdout="TTY")
-    system(['chmod', '600', rc])
+                execute(['vim', rc], stdout="TTY")
+    execute(['chmod', '600', rc])
 
 
 @section
 def osx():
     if haveexecutable('defaults'):
-        system(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
+        execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
         # KeyRepeat < 1.0 doesn't work :-(
-        system(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
+        execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
 
 
 # TODO: https://github.com/clvv/fasd

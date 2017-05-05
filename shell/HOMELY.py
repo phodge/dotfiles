@@ -1,8 +1,13 @@
 import os
+import re
+
+import simplejson
 
 from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
-                            section)
+                            mkdir, section, symlink)
+from homely.system import execute, haveexecutable
+from homely.ui import allowinteractive, allowpull, note, warn, yesno
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -23,17 +28,13 @@ def shellrc():
 
 @section
 def shell_path():
-    import re
-    from homely.ui import system
-    from homely.general import haveexecutable
-    import simplejson
     pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
 
     lines = []
 
     def _findpybin(pycmd):
         code = 'import sys, simplejson; print(simplejson.dumps(sys.path))'
-        raw = system([pycmd, '-c', code], stdout=True)[1].decode('utf-8')
+        raw = execute([pycmd, '-c', code], stdout=True)[1].decode('utf-8')
         paths = simplejson.loads(raw)
         for path in paths:
             if not path.startswith(os.environ['HOME']):
@@ -69,7 +70,6 @@ def shell_path():
 
 @section
 def bash_config():
-    from homely.ui import note, warn, allowinteractive, system
 
     def _bashprofile():
         if os.path.islink(bash_profile):
@@ -86,7 +86,7 @@ def bash_config():
                    '+normal! I{}'.format(msg),
                    '+normal! gql',
                    ]
-            system(cmd, stdout="TTY")
+            execute(cmd, stdout="TTY")
         if os.path.exists(bash_profile):
             if os.stat(bash_profile).st_size > 1:
                 warn("{} still contains data".format(bash_profile))
@@ -116,8 +116,6 @@ def zsh_config():
 
 @section
 def install_fast_hg_status():
-    from homely.ui import yesno, allowpull, note, warn, system
-    from homely.general import mkdir, symlink, lineinfile, WHERE_END
 
     wanted = yesno('install_fast_hg_status', 'Install fast-hg-status?', wantfull())
     if not wanted:
@@ -138,13 +136,13 @@ def install_fast_hg_status():
             warn("Cloning of {} not allowed".format(url))
             return
         with note("Cloning {}".format(url)):
-            system(['hg', 'clone', '--insecure', url, local])
+            execute(['hg', 'clone', '--insecure', url, local])
     elif allowpull():
         with note("Pulling changes for {}".format(url)):
-            system(['hg', 'pull', '-u', '--insecure'], cwd=local)
+            execute(['hg', 'pull', '-u', '--insecure'], cwd=local)
 
     # compile it now
-    system(['make'], cwd=local)
+    execute(['make'], cwd=local)
 
     # put symlinks to things in
     symlink("{}/fast-hg-status".format(local), '~/bin/fast-hg-status')

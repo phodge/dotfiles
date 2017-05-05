@@ -1,11 +1,10 @@
 import os
 
-from homely.general import (WHERE_END, haveexecutable, lineinfile, mkdir,
-                            section, writefile)
-from homely.ui import system, yesno
-
 from HOMELY import (HERE, HOME, mypipinstall, powerline_path, wantjerjerrod,
                     wantpowerline)
+from homely.general import WHERE_END, lineinfile, mkdir, section, writefile
+from homely.system import execute, haveexecutable
+from homely.ui import yesno
 
 
 @section
@@ -23,8 +22,8 @@ def powerline():
         "%s/.config/powerline" % HOME,
     ]
     lineinfile('~/.shellrc',
-                'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
-                where=WHERE_END)
+               'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
+               where=WHERE_END)
 
     # ask the user what colour prefs they would like and put it in
     # ~/.config/powerline/colors.sh
@@ -54,12 +53,12 @@ def powerline():
                 f.write("# possible colours:\n")
                 for name in sorted(colors.get("colors", {})):
                     f.write("#   %s\n" % name)
-            system(['vim', colourfile], stdout="TTY")
+            execute(['vim', colourfile], stdout="TTY")
             load = True
     else:
         load = True
         if yesno(None, 'Select base colours now?', False, noprompt=False):
-            system(['vim', colourfile], stdout="TTY")
+            execute(['vim', colourfile], stdout="TTY")
 
     colourset = defaults
     if load:
