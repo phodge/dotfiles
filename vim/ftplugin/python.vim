@@ -329,6 +329,22 @@ fun! <SID>SmartImportUI() " {{{
         \ .'tempfile operator glob shutil io argparse subprocess requests'
         \ )
 
+  " these names are always imported from these modules
+  let l:vocabulary = {
+        \ "partial": "functools",
+        \ "ArgumentParser": "argparse",
+        \ "check_call": "subprocess",
+        \ "check_output": "subprocess",
+        \ "Popen": "subprocess",
+        \ "Enum": "enum",
+        \ }
+
+  let l:module = get(l:vocabulary, l:word, "")
+  if strlen(l:module)
+    call <SID>AddImportLineNow('from '.l:module.' import '.l:word)
+    return
+  endif
+
   if index(l:always_modules, l:word) > -1
     call <SID>AddImportLineNow('import '.l:word)
     return
