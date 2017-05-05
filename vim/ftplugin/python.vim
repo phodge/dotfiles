@@ -91,11 +91,18 @@ endif
 " use that plugin it doesn't respect the config in my ~/.isort.cfg file
 com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
 fun! <SID>DoSort(line1, line2)
+  if exists('b:isort_disabled') && b:isort_disabled
+    return
+  endif
   " ask multipython where to find isort for the current python version
-  let l:isort = multipython#getpythoncmd(0, 'isort', 1, 0)
+  let l:isort = multipython#getpythoncmd(0, 'isort', 1, 1)
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
   try
     exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
+    if v:shell_error != 0
+      echoerr 'Isort failed - setting b:isort_disabled'
+      let b:isort_disabled = 1
+    endif
   finally
     call setpos('.', l:pos)
   endtry
