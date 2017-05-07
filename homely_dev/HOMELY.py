@@ -58,6 +58,6 @@ def homely_dev():
     execute([venv_pip, 'install', 'Sphinx', 'sphinx-autobuild', 'pytest', 'twine'])
 
     # we may want to install pandoc to make the slides, but
-    if yesno('homley_want_pandoc', 'Install pandoc to create slides?'):
+    if yesno('homley_want_pandoc', 'Install pandoc to create slides?', recommended=True):
         from homely.install import installpkg
         installpkg('pandoc')
