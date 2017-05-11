@@ -103,7 +103,7 @@ shell_init_done() {
     completions="$HOME/.completions.sh"
 
     # is the file is present and less than 4 hours old, use it
-    if find "$completions" -ctime -4h &> /dev/null; then
+    if find "$completions" -cmin -240 &> /dev/null; then
         source "$completions"
         return
     fi
