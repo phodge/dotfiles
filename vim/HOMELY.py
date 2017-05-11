@@ -190,6 +190,7 @@ def nvim_install():
         n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
         n.select_tag(NVIM_TAG)
         n.compile_cmd([
+            ['make', 'distclean'],
             ['make'],
             ['sudo', 'make', 'install'],
         ])
