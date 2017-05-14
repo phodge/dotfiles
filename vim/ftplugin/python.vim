@@ -123,7 +123,7 @@ fun! <SID>SmartIsortTrigger() " {{{
     return
   endif
 
-  let l:char = strpart(l:line, col('.'), 1)
+  let l:char = strpart(l:line, col('.') - 1, 1)
   if l:char !~ '\w'
     Isort
     return
