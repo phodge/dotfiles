@@ -1,12 +1,14 @@
 import os
 
-from HOMELY import HERE, HOME, wantfull, wantjerjerrod, wantnvim, whenmissing
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section, symlink,
                             writefile)
 from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
+
+from HOMELY import (HERE, HOME, jerjerrod_addline, mypips, wantfull,
+                    wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.0.0503'
 NVIM_TAG = 'v0.2.0'
@@ -224,6 +226,61 @@ def nvim_devel():
     execute(['git', 'clone', origin, dest])
     execute(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
     execute(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+
+
+@section
+def neovim_python_devel():
+    if not wantnvim():
+        return
+
+    playground = 'playground-neovim-python'
+    venv = HOME + '/' + playground
+
+    msg = 'Put a dev version of neovim-python in %s?' % playground
+    if not yesno('install_neovim_python', msg, False):
+        return
+
+    # my fork of the neovim project
+    origin = 'ssh://git@github.com/phodge/python-client.git'
+    # the main neovim repo - for pulling
+    neovim = 'https://github.com/neovim/python-client.git'
+    # where to put the local clone
+    checkout = venv + '/python-client.git'
+
+    # create the symlink for the neovim project
+    mkdir(venv)
+
+    if not os.path.exists(checkout):
+        # NOTE: using execute() directly means the checkout directory isn't tracked by homely ...
+        # this is exactly what I want
+        execute(['git', 'clone', origin, checkout])
+        execute(['git', 'remote', 'add', 'neovim', neovim], cwd=checkout)
+        execute(['git', 'fetch', 'neovim', '--prune'], cwd=checkout)
+
+    if not os.path.exists(os.path.join(venv, 'bin')):
+        execute(['virtualenv', '--python=python3', venv], stdout="TTY")
+
+    if not os.path.exists(os.path.join(venv, 'bin')):
+        execute(['virtualenv', '--python=python3', venv], stdout="TTY")
+
+    # create a python2 virtualenv as well
+    py2venv = os.path.join(venv, 'py2venv')
+    if not os.path.exists(os.path.join(py2venv, 'bin')):
+        execute(['virtualenv', '--python=python2.7', py2venv], stdout="TTY")
+
+    # create a symlink to the git repo
+    symlink(checkout, os.path.join(py2venv, 'python-client.git'))
+
+    for path in [venv, py2venv]:
+        pip = os.path.join(path, 'bin', 'pip')
+        execute([pip, 'install', '--editable', 'python-client.git'], cwd=path)
+        mypips(pip)
+        # we will definitely need tests
+        execute([pip, 'install', 'nose'])
+
+    if wantjerjerrod():
+        # register the playground with jerjerrod
+        jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
 
 
 @section
