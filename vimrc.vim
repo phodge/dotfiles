@@ -31,6 +31,13 @@ elseif has('nvim') && &term == 'screen'
   "set term=screen-256color
 endif
 
+" we need to work out what tmux session we're running under
+if executable('tmux')
+  let g:tmux_session = systemlist('tmux display-message -p "#S"')[0]
+else
+  let g:tmux_session = ''
+endif
+
 " runtimepath modifications {{{
 
   if g:allow_rtp_modify
@@ -42,6 +49,9 @@ endif
 
     " add our own vim/ and vim-multi-python/ folders to runtimepath
     let s:specials = ['vim', 'vim-multi-python']
+    if g:tmux_session == 'SPACETEA'
+      call add(s:specials, 'vim-space-tea')
+    endif
     for s:name in s:specials
       let s:local = expand('<sfile>:h').'/'.s:name
       let &runtimepath = printf('%s,%s,%s/after', s:local, &runtimepath, s:local)
