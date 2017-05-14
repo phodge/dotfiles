@@ -41,11 +41,14 @@ endif
     endif
 
     " add our own vim/ and vim-multi-python/ folders to runtimepath
-    let s:local = expand('<sfile>:h').'/vim'
-    let s:multipython = expand('<sfile>:h').'/vim-multi-python'
-    let &runtimepath = printf('%s,%s,%s,%s/after', s:multipython, s:local, &runtimepath, s:local)
+    let s:specials = ['vim', 'vim-multi-python']
+    for s:name in s:specials
+      let s:local = expand('<sfile>:h').'/'.s:name
+      let &runtimepath = printf('%s,%s,%s/after', s:local, &runtimepath, s:local)
+    endfor
+    unlet s:specials
+    unlet s:name
     unlet s:local
-    unlet s:multipython
 
     " add the <vim-est> thing if it is present
     if isdirectory(expand('~/src/vim-est.git'))
