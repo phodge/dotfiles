@@ -32,10 +32,14 @@ elseif has('nvim') && &term == 'screen'
 endif
 
 " we need to work out what tmux session we're running under
+let g:tmux_session = ''
 if executable('tmux')
-  let g:tmux_session = systemlist('tmux display-message -p "#S"')[0]
-else
-  let g:tmux_session = ''
+  " NOTE: I experienced a bug where vim 8.0.007's systemlist() would return an
+  " empty list, but only during startup
+  let s:result = systemlist('tmux display-message -p "#S"')
+  if type(s:result) == type([]) && len(s:result)
+    let g:tmux_session = s:result[0]
+  endif
 endif
 
 " runtimepath modifications {{{
