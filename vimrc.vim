@@ -6,6 +6,13 @@ if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
 
+if ! exists('g:want_syntastic')
+  let g:want_syntastic = 0
+  " this is needed because we still have syntastic installed (although not in
+  " &runtimepath)
+  let g:ale_emit_conflict_warnings = 0
+endif
+
 if ! exists('g:want_unison')
   let g:want_unison = 0
 endif
@@ -178,7 +185,8 @@ if filereadable(s:plugpath)
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
-  Plug 'scrooloose/syntastic'
+  Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
+  Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
   Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive', {'tag': '*'}
   Plug 'tpope/vim-obsession'
@@ -447,6 +455,19 @@ endif
 
 " }}}
 
+aug StatusLineHelpers
+aug end
+au! StatusLineHelpers User ALELint call <SID>UpdateAleStatus()
+fun! <SID>UpdateAleStatus()
+  let l:counts = ale#statusline#Count(bufnr(''))
+
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_warnings = l:counts.total - l:all_errors
+
+  let b:__ale_error_flag = l:all_errors ? ('E'.l:all_errors) : ''
+  let b:__ale_warning_flag = l:all_warnings ? ('W'.l:all_warnings) : ''
+endfun
+
 " nicer statusline
 if g:vim_peter && version >= 700
   set statusline=
@@ -458,8 +479,16 @@ if g:vim_peter && version >= 700
   endif
 
   " syntastic errors
-  set statusline+=%#Error#
-  set statusline+=%{SyntasticStatuslineFlag()}
+  if g:want_syntastic
+    set statusline+=%#Error#
+    set statusline+=%{SyntasticStatuslineFlag()}
+  elseif exists('*get')
+    set statusline+=%#Error#
+    set statusline+=%{get(b:,'__ale_error_flag','')}
+    set statusline+=%#Search#
+    set statusline+=%{get(b:,'__ale_warning_flag','')}
+  endif
+
   set statusline+=%*
   set statusline+=%=
   " gutentags
