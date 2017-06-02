@@ -100,8 +100,8 @@ fun! <SID>DoSort(line1, line2)
   try
     exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
     if v:shell_error != 0
-      echoerr 'Isort failed - setting b:isort_disabled'
       let b:isort_disabled = 1
+      echoerr 'Isort failed - setting b:isort_disabled'
     endif
   finally
     call setpos('.', l:pos)
@@ -109,7 +109,22 @@ fun! <SID>DoSort(line1, line2)
 endfun
 augroup IsortAuto
 augroup end
-au! IsortAuto InsertLeave <buffer> if getline('.') =~ '^\%(from\|import\)\s\+' | exe 'Isort' | exe 'undojoin' | endif
+au! IsortAuto InsertLeave <buffer> call <SID>AutoIsort()
+
+fun! <SID>AutoIsort()
+  if exists('g:isort_automatic') && !g:isort_automatic
+    return
+  endif
+
+  if exists('b:isort_disabled') && b:isort_disabled
+    return
+  endif
+
+  if getline('.') =~ '^\%(from\|import\)\s\+'
+    Isort
+    undojoin
+  endif
+endfun
 
 
 nnoremap <buffer> <space>i :Isort<CR>
