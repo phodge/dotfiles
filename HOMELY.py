@@ -186,6 +186,17 @@ def mypipinstall(*args, **kwargs):
     return pipinstall(*args, scripts=getpippaths(), **kwargs)
 
 
+def venv_exec(venv_pip, cmd, **kwargs):
+    import shlex
+    env = kwargs.pop('env', None)
+    if env is None:
+        env = os.environ
+    env.pop('__PYVENV_LAUNCHER__', None)
+    activate = os.path.dirname(venv_pip) + '/activate'
+    cmd = ['sh', '-c', 'source {} && {}'.format(activate, " ".join(map(shlex.quote, cmd)))]
+    return execute(cmd, env=env, **kwargs)
+
+
 def mypips(venv_pip=None):
     # of course we probably want virtualenv!
     if venv_pip is None:
@@ -209,14 +220,14 @@ def mypips(venv_pip=None):
         packages.append('q')
     for package in packages:
         if venv_pip:
-            execute([venv_pip, 'install', package])
+            venv_exec(venv_pip, ['pip', 'install', package])
         else:
             mypipinstall(package, trypips=['pip2', 'pip3'])
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
     if venv_pip:
-        execute([venv_pip, 'install', 'flake8'])
+        venv_exec(venv_pip, ['pip', 'install', 'flake8'])
     else:
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
