@@ -33,9 +33,12 @@ fun! <SID>PyVersionChanged()
     call add(l:flakes, 2)
   endif
 
-  " tell syntastic not to use flake8/multiflake8 for the current buffer
+  " tell syntastic to use our multiflake8 for the current buffer
   let b:syntastic_checkers = ['flake8']
   let b:syntastic_flake8_exec = 'multiflake8'
+  " configure Ale the same way
+  let b:ale_linters = {"python": ['flake8']}
+  let b:ale_python_flake8_executable = 'multiflake8'
 
   " desired line length?
   let l:maxlen = &l:textwidth
@@ -45,11 +48,13 @@ fun! <SID>PyVersionChanged()
  
   " copy across the post-args for flake8
   let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=".l:maxlen
+  let b:ale_python_flake8_options = "'--filename=*' --max-line-length=".l:maxlen
 
   for l:major in l:flakes
     " Tell multiflake8 exactly where to find the flake8 for this python version.
     let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1, 1)
     let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
+    let b:ale_python_flake8_options .= printf(" '--use-this-checker=%s'", l:flake)
   endfor
 
   " toggle python2/3 syntax compatibility
@@ -161,8 +166,10 @@ endif
 function! <SID>SetGlobalLineLength(new_len)
   if a:new_len > 0
     let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=" . a:new_len
+    let b:ale_python_flake8_options = "'--filename=*' --max-line-length=" . a:new_len
   else
     let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=99999"
+    let b:ale_python_flake8_options = "'--filename=*' --max-line-length=99999"
   endif
   " have to call this so that flake8 gets the new arguments
   call <SID>PyVersionChanged()
