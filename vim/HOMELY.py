@@ -173,6 +173,7 @@ def vim_install():
             if not line.startswith('#'):
                 configure.append(line.rstrip())
     inst.compile_cmd([
+        ['make', 'distclean'],
         configure,
         ['make'],
         ['sudo', 'make', 'install'],
