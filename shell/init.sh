@@ -6,7 +6,7 @@ else
 fi
 
 # PATH modifications
-PATH="$DOTFILES_PATH/bin:$PATH"
+PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
 
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH
@@ -101,6 +101,12 @@ want_click_completion() {
 # this function should be the last thing in your .bashrc/.zshrc
 shell_init_done() {
     completions="$HOME/.completions.sh"
+
+    # modify PATH now if it hasn't been done yet
+    if [ -z "$PATH_MODIFIED" ]; then
+        export PATH_MODIFIED=1
+        PATH="$PATH_HIGH""$PATH"
+    fi
 
     # is the file is present and less than 4 hours old, use it
     if find "$completions" -cmin -240 &> /dev/null; then

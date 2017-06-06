@@ -47,7 +47,7 @@ def shell_path():
             binpath = path[0:-len(suffix)] + '/bin'
             if not os.path.exists(binpath):
                 continue
-            yield 'PATH="{}:$PATH"'.format(binpath)
+            yield 'PATH_HIGH="{}:$PATH_HIGH"'.format(binpath)
 
     if haveexecutable('python2'):
         lines += list(_findpybin('python2'))
@@ -58,9 +58,9 @@ def shell_path():
     pippaths = getpippaths()
     for path in [pippaths.get("pip2"), pippaths.get("pip3")]:
         if path:
-            lines.append('PATH="%s:$PATH"' % path)
+            lines.append('PATH_HIGH="%s:$PATH_HIGH"' % path)
 
-    lines.append('PATH="$HOME/bin:$PATH"')
+    lines.append('PATH_HIGH="$HOME/bin:$PATH_HIGH"')
 
     blockinfile('~/.shellrc',
                 lines,
