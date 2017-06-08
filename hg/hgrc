@@ -1,5 +1,4 @@
 [extensions]
-mercurial_keyring =
 color =
 graphlog =
 pager =
@@ -7,7 +6,6 @@ rebase =
 progress =
 shelve =
 largefiles =
-strip =
 histedit =
 purge =
 crecord = ~/src/crecord/crecord

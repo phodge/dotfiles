@@ -272,10 +272,16 @@ def git():
 
 @section
 def hg():
+    ext = []
+
     if yesno('mercurial_keyring', 'Install mercurial keyring?'):
         # TODO: this things needs python-devel and openssl-devel - should we
         # provide a suggestion to install those on non-OSX OS's?
         pipinstall('mercurial_keyring', trypips=['pip2', 'pip3', 'pip'])
+        ext.append('mercurial_keyring')
+
+    if yesno('hg_strip_ext', 'Enable hg strip extension?'):
+        ext.append('strip')
 
     # include our hg config from ~/.hgrc
     lineinfile('~/.hgrc', '%%include %s/hg/hgrc' % HERE, where=WHERE_TOP)
@@ -287,6 +293,10 @@ def hg():
         '[ui]',
         'ignore.dotfiles = {}/hg/ignore'.format(HERE),
     ]
+    if ext:
+        lines.append('[extensions]')
+    for name in ext:
+        lines.append('%s = ' % name)
     blockinfile('~/.hgrc', lines, WHERE_END)
 
     # grab a copy of crecord and put it in ~/src
