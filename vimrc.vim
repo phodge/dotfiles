@@ -316,8 +316,15 @@ set fileformats=unix,dos,mac
 let g:mapleader = '\\'
 
 " use <F5> and <F6> to run ack searches
-nnoremap <F5> :Ack -w <C-R><C-W><CR>
-nnoremap <F6> :Ack -wi <C-R><C-W><CR>
+if 0 && executable('rg')
+  " NOTE: I'm not defaulting to rg yet because it doesn't include line numbers
+  " in the output
+  nnoremap <F5> :Shell rg -wl <C-R><C-W><CR>
+  nnoremap <F6> :Shell rg -wli <C-R><C-W><CR>
+else
+  nnoremap <F5> :Shell ag -ws <C-R><C-W><CR>
+  nnoremap <F6> :Shell ag -wsi <C-R><C-W><CR>
+endif
 
 " use F12 for reloading :Shell windows
 let g:shell_command_reload_map = '<F12>'
