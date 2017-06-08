@@ -1,23 +1,24 @@
 [user]
-	name = Peter Hodge
+    name = Peter Hodge
 
 [alias]
-	st = status
-	b = branch -va
-	l  = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn'
-	ls = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' --all --simplify-by-decoration
-	la = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' --all
-	t = "!for t in $(git tag | sort -r); do git log $t -1 --format=\"%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn\"; done"
-	branch-log = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' master..
-	branch-status = !git-branch-status
-	branch-todo = !git-branch-todo
-	branch-diff = diff master...HEAD --
-	ff = !git-fast-forward
+    st = status
+    b = branch -va
+    l  = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn'
+    ls = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' --all --simplify-by-decoration
+    la = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' --all
+    t = "!for t in $(git tag | sort -r); do git log $t -1 --format=\"%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn\"; done"
+    branch-log = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' master..
+    branch-status = !git-branch-status
+    branch-todo = !git-branch-todo
+    branch-diff = diff master...HEAD --
+    ff = !git-fast-forward
+    outtomaster = log --reverse -p origin/master..
 
 [color]
-	ui = true
+    ui = true
 [push]
-	default = simple
+    default = simple
 
 [core]
     excludesFile = ~/.gitignore
