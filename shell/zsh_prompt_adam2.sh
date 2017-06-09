@@ -75,13 +75,6 @@ zsh_prompt_shortpath() {
     echo '%~'
 }
 
-zsh_prompt_virtualenv() {
-    color="blue"
-    if [ -n "$VIRTUAL_ENV" ]; then
-        echo "%B%F{green}$VIRTUAL_ENV"
-    fi
-}
-
 zsh_prompt_userathost() {
     echo "%B%F{$prompt_adam2_color3}%n%b%F{$prompt_adam2_color2}@%B%F{$prompt_adam2_color3}%m"
 }
@@ -178,7 +171,9 @@ prompt_adam2_setup () {
         tr="%B%F{246}[$tr%B%F{246}]"
     fi
 
-    prompt_line_1a="$prompt_gfx_tbox$prompt_l_paren$tl$prompt_r_paren%b%F{$prompt_adam2_color1}"
+    ve="%B%F{green}\`test -n \"\$VIRTUAL_ENV\" && echo \$VIRTUAL_ENV'%B%F{245}|'\`"
+
+    prompt_line_1a="$prompt_gfx_tbox$prompt_l_paren$ve$tl$prompt_r_paren%b%F{$prompt_adam2_color1}"
     prompt_line_1b="$tr%b%F{$prompt_adam2_color1}${phyph}"
 
     prompt_char="%(!.#.>)"
@@ -234,7 +229,7 @@ prompt_adam2_choose_prompt () {
 }
 
 # default segments for each section
-zsh_prompt_topleft_segments=( zsh_prompt_virtualenv zsh_prompt_userathost zsh_prompt_shortpath )
+zsh_prompt_topleft_segments=( zsh_prompt_userathost zsh_prompt_shortpath )
 zsh_prompt_topright_segments=( zsh_prompt_clock )
 zsh_prompt_rprompt_segments=( zsh_prompt_gitinfo zsh_prompt_hginfo )
 zsh_prompt_lprompt_segments=( zsh_prompt_jobcount zsh_prompt_laststatus )
