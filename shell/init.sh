@@ -90,6 +90,8 @@ alias j=jerjerrod
 alias s=show_status
 alias ss=show_status_long
 alias g=edit_status
+alias i2=ipython2
+alias i3=ipython3
 
 
 # register a python/click based script for completion generation
