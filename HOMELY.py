@@ -193,7 +193,7 @@ def venv_exec(venv_pip, cmd, **kwargs):
         env = os.environ
     env.pop('__PYVENV_LAUNCHER__', None)
     activate = os.path.dirname(venv_pip) + '/activate'
-    cmd = ['sh', '-c', 'source {} && {}'.format(activate, " ".join(map(shlex.quote, cmd)))]
+    cmd = ['bash', '-c', 'source {} && {}'.format(activate, " ".join(map(shlex.quote, cmd)))]
     return execute(cmd, env=env, **kwargs)
 
 
