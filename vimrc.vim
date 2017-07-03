@@ -193,6 +193,13 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " cool rust stuff
+  Plug 'rust-lang/rust.vim'
+  " let rust automatically reformat my code on save
+  let g:rustfmt_autosave = 1
+  " we also need this for the Cargo.toml files
+  Plug 'cespare/vim-toml'
+
   let g:dispatch_quickfix_height = 10
   Plug 'tpope/vim-dispatch'
 
