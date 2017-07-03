@@ -93,7 +93,11 @@ alias g=edit_status
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=0'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=0'
 
-
+dex() {
+    local search="$1"
+    shift
+    docker exec -ti $(docker ps -qf name="$search") "$@"
+}
 
 # register a python/click based script for completion generation
 __click_completion="homely"
