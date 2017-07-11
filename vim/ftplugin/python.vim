@@ -348,7 +348,7 @@ fun! <SID>SmartImportUI() " {{{
   " these words instantly trigger adding an import for a top-level module
   let l:always_modules = split(
         \ 'os sys re collections click simplejson homely enum pprint itertools functools'
-        \ .'tempfile operator glob shutil io argparse subprocess requests'
+        \ .'tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
         \ )
 
   " these names are always imported from these modules
@@ -359,6 +359,13 @@ fun! <SID>SmartImportUI() " {{{
         \ "check_output": "subprocess",
         \ "Popen": "subprocess",
         \ "Enum": "enum",
+        \ }
+
+  let l:typical = {
+        \ "Path": "pathlib",
+        \ "b64encode": "base64",
+        \ "b64decode": "base64",
+        \ "Href": "werkzeug",
         \ }
 
   let l:module = get(l:vocabulary, l:word, "")
@@ -372,12 +379,19 @@ fun! <SID>SmartImportUI() " {{{
     return
   end
 
+  " start compiling a list of suggestions
+  let l:modules = {}
+  let l:module = get(l:typical, l:word, "")
+  if strlen(l:module)
+    let l:modules[l:module] = ""
+  endif
+
   " make a list of imports already in the module
-  let l:modules = <SID>GetCurrentImports()
+  call extend(l:modules, <SID>GetCurrentImports())
 
   if len(l:modules)
-    " ask the user if they'd like to import it from one of the existing modules?
     let l:options = []
+    " ask the user if they'd like to import it from one of the existing modules?
     for l:module in sort(keys(l:modules))
       call add(l:options, printf('from %s import %s', l:module, l:word))
       echohl Question
