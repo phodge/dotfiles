@@ -98,7 +98,6 @@ if filereadable(s:plugpath)
   Plug 'EinfachToll/DidYouMean'
   Plug 'FooSoft/vim-argwrap'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
   if 0
@@ -113,6 +112,13 @@ if filereadable(s:plugpath)
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
   Plug 'brooth/far.vim'
+
+  if has('nvim') && get(g:, 'want_fzf', 0)
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'}
+    nnoremap <C-P> :FZF<CR>
+  else
+    Plug 'ctrlpvim/ctrlp.vim'
+  endif
 
   Plug 'vim-scripts/sudo.vim'
 
