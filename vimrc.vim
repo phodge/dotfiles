@@ -122,7 +122,7 @@ if filereadable(s:plugpath)
 
   Plug 'vim-scripts/sudo.vim'
 
-  Plug 'justinmk/vim-sneak'
+  "Plug 'justinmk/vim-sneak'
 
   if has('nvim')
     " TODO: figure out how to replace flake8 with neomake + something else
