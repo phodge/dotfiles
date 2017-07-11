@@ -93,6 +93,17 @@ alias g=edit_status
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=0'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=0'
 
+# fuzzy-finder settings
+export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse"
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
+# make sure we include fuzzy-finder completion for these commands as well
+if [ -n "$BASHPID" ]; then
+    complete -F _fzf_path_completion -o default -o bashdefault n
+    complete -F _fzf_path_completion -o default -o bashdefault v
+    complete -F _fzf_path_completion -o default -o bashdefault j
+fi
+
 dex() {
     local search="$1"
     shift
