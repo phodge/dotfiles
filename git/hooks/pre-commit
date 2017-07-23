@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+if [ -z "$(git config user.email)" ]; then
+    echo "ERROR: git config user.email is empty!" >&2
+    exit 1
+fi

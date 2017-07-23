@@ -246,8 +246,13 @@ def pipfavourites():
 
 @section
 def git():
-    # include our dotfiles git config from ~/.gitconfig
-    lineinfile('~/.gitconfig', "[include] path = %s/git/config" % HERE, where=WHERE_TOP)
+    lines = [
+        # include our dotfiles git config from ~/.gitconfig
+        "[include] path = %s/git/config" % HERE,
+        # because git config files don't support ENV vars, we need to tell it where to find our hooks
+        "[core] hooksPath = %s/git/hooks" % HERE,
+    ]
+    blockinfile('~/.gitconfig', lines, WHERE_TOP)
 
     # put our standard ignore stuff into ~/.gitignore
     with open('%s/git/ignore' % HERE, 'r') as f:
