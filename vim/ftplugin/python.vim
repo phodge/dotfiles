@@ -48,7 +48,9 @@ fun! <SID>PyVersionChanged()
  
   " copy across the post-args for flake8
   let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=".l:maxlen
-  let b:ale_python_flake8_options = "'--filename=*' --max-line-length=".l:maxlen
+  " always ignore E275 (no space between '#' and comment text) since this is
+  " how I comment out code
+  let b:ale_python_flake8_options = "--ignore=E265 '--filename=*' --max-line-length=".l:maxlen
 
   for l:major in l:flakes
     " Tell multiflake8 exactly where to find the flake8 for this python version.
