@@ -320,7 +320,10 @@ set fileencoding=utf-8
 
 " ESC key times out much quicker to prevent accidentally sending escape
 " sequences manually
-set timeoutlen=40
+set ttimeoutlen=40
+
+set timeoutlen=500 " give me time to enter multi-key mappings
+
 
 set fileformats=unix,dos,mac
 
