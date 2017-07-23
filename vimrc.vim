@@ -120,6 +120,9 @@ if filereadable(s:plugpath)
     Plug 'ctrlpvim/ctrlp.vim'
   endif
 
+  " Cython
+  Plug 'lambdalisue/vim-cython-syntax'
+
   Plug 'vim-scripts/sudo.vim'
 
   "Plug 'justinmk/vim-sneak'
