@@ -116,6 +116,13 @@ if filereadable(s:plugpath)
   if has('nvim') && get(g:, 'want_fzf', 0)
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'}
     nnoremap <C-P> :FZF<CR>
+    let g:fzf_action = {
+                \ 'ctrl-t': 'tab split',
+                \ 'ctrl-x': 'split',
+                \ 'ctrl-v': 'vsplit',
+                \ }
+    " I just want to be able to hit enter to open a file in a new split
+    let g:fzf_action['enter'] = 'split'
   else
     Plug 'ctrlpvim/ctrlp.vim'
   endif
