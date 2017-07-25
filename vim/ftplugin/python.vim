@@ -101,8 +101,16 @@ fun! <SID>DoSort(line1, line2)
   if exists('b:isort_disabled') && b:isort_disabled
     return
   endif
+
   " ask multipython where to find isort for the current python version
   let l:isort = multipython#getpythoncmd(0, 'isort', 1, 1)
+
+  " do we have any options CLI options for isort?
+  let l:options = get(b:, 'isort_flags')
+  for [l:name, l:value] in items(l:options)
+    let l:isort .= printf(' --%s %s', shellescape(l:name), shellescape(l:value))
+  endfor
+
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
   try
     exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
