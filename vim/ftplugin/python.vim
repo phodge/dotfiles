@@ -18,6 +18,13 @@ nnoremap <buffer> <space>2 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 
+" This is the default flake8 ignore list. See
+let s:flake8_default_ignore = split('E121 E123 E126 E226 E24 E704')
+
+" Always ignore E265 (no space between '#' and comment text) since this is
+" how I comment out code
+let b:flake8_ignore = ['E265']
+
 fun! <SID>PyVersionChanged()
   let l:want2 = multipython#wantpy2()
   let l:want3 = multipython#wantpy3()
@@ -45,19 +52,23 @@ fun! <SID>PyVersionChanged()
   if l:maxlen <= 0
     let l:maxlen = 99999
   endif
- 
-  " copy across the post-args for flake8
-  let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=".l:maxlen
-  " always ignore E275 (no space between '#' and comment text) since this is
-  " how I comment out code
-  let b:ale_python_flake8_options = "--ignore=E265 '--filename=*' --max-line-length=".l:maxlen
+
+  " work out the arguments needed for multiflake8
+  let l:args = ['--filename=*', '--max-line-length='.l:maxlen]
+
+  " combine the default ignore list with this buffer's ignore list
+  let l:ignore = get(b:, 'flake8_ignore', []) + s:flake8_default_ignore
+  call add(l:args, '--ignore='.join(l:ignore, ','))
 
   for l:major in l:flakes
     " Tell multiflake8 exactly where to find the flake8 for this python version.
     let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1, 1)
-    let b:syntastic_python_flake8_post_args .= printf(" '--use-this-checker=%s'", l:flake)
-    let b:ale_python_flake8_options .= printf(" '--use-this-checker=%s'", l:flake)
+    call add(l:args, '--use-this-checker='.l:flake)
   endfor
+
+  " put the finalised args where ale/syntastic will find them
+  let b:ale_python_flake8_options = join(map(l:args, 'shellescape(v:val)'), ' ')
+  let b:syntastic_python_flake8_post_args = b:ale_python_flake8_options
 
   " toggle python2/3 syntax compatibility
   let b:python_py2_compat = l:want2 ? 1 : 0
@@ -177,9 +188,11 @@ endif
 
 function! <SID>SetGlobalLineLength(new_len)
   if a:new_len > 0
+    let b:flake8_line_length = a:newlen
     let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=" . a:new_len
     let b:ale_python_flake8_options = "'--filename=*' --max-line-length=" . a:new_len
   else
+    let b:flake8_line_length = 0
     let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=99999"
     let b:ale_python_flake8_options = "'--filename=*' --max-line-length=99999"
   endif
