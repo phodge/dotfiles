@@ -87,23 +87,6 @@ fun! <SID>FormatFile()
   endtry
 endfun
 
-
-" tell multipython to call our callback whenever the python version changes in
-" the current buffer
-call multipython#addcallback(function("<SID>PyVersionChanged"))
-
-" if detect current python versions if it hasn't been done yet
-if ! multipython#versionsdetected()
-  " HOMELY.py scripts always get python3 and nothing else
-  if expand('%:t') == 'HOMELY.py'
-    call multipython#setpy3(1, "HOMELY.py is always py3")
-  elseif ! multipython#detectversions()
-    " if automatic detection doesn't work, fall back to 3.4/2.7 combo
-    call multipython#setpy3(1, "phodge's default", 0)
-    call multipython#setpy2(1, "phodge's default")
-  endif
-endif
-
 " use :Isort to fix imports in the current buffer
 " Note that vim plugin 'fisadev/vim-isort' is supposed to do this, but when I
 " use that plugin it doesn't respect the config in my ~/.isort.cfg file
@@ -229,8 +212,24 @@ function! <SID>ToggleLineLength()
 endfunction
 
 
-" set the line length accordingly
+" set the line length automatically for the current buffer
 call <SID>SetLineLength(get(s:lengths, bufnr(''), '__AUTO__'))
+
+" tell multipython to call our callback whenever the python version changes in
+" the current buffer
+call multipython#addcallback(function("<SID>PyVersionChanged"))
+
+" if detect current python versions if it hasn't been done yet
+if ! multipython#versionsdetected()
+  " HOMELY.py scripts always get python3 and nothing else
+  if expand('%:t') == 'HOMELY.py'
+    call multipython#setpy3(1, "HOMELY.py is always py3")
+  elseif ! multipython#detectversions()
+    " if automatic detection doesn't work, fall back to 3.4/2.7 combo
+    call multipython#setpy3(1, "phodge's default", 0)
+    call multipython#setpy2(1, "phodge's default")
+  endif
+endif
 
 " add a TODO exception quickly
 if exists('g:vim_peter')
