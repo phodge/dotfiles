@@ -120,6 +120,8 @@ fun! <SID>DoSort(line1, line2)
     endif
   finally
     call setpos('.', l:pos)
+    " modifying the buffer like this usually screws up the diff
+    diffup
   endtry
 endfun
 augroup IsortAuto
