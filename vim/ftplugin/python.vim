@@ -25,6 +25,11 @@ let s:flake8_default_ignore = split('E121 E123 E126 E226 E24 E704')
 " how I comment out code
 let b:flake8_ignore = ['E265']
 
+" create the dict for adding isort flags
+if !exists('b:isort_flags')
+  let b:isort_flags = {}
+endif
+
 fun! <SID>PyVersionChanged()
   let l:want2 = multipython#wantpy2()
   let l:want3 = multipython#wantpy3()
@@ -100,7 +105,7 @@ fun! <SID>DoSort(line1, line2)
   let l:isort = multipython#getpythoncmd(0, 'isort', 1, 1)
 
   " do we have any options CLI options for isort?
-  let l:options = get(b:, 'isort_flags')
+  let l:options = get(b:, 'isort_flags', {})
   for [l:name, l:value] in items(l:options)
     let l:isort .= printf(' --%s %s', shellescape(l:name), shellescape(l:value))
   endfor
