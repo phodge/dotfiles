@@ -186,20 +186,6 @@ if ! exists('s:length_options')
   let s:length_options = [79, 99]
 endif
 
-function! <SID>SetGlobalLineLength(new_len)
-  if a:new_len > 0
-    let b:flake8_line_length = a:newlen
-    let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=" . a:new_len
-    let b:ale_python_flake8_options = "'--filename=*' --max-line-length=" . a:new_len
-  else
-    let b:flake8_line_length = 0
-    let b:syntastic_python_flake8_post_args = "'--filename=*' --max-line-length=99999"
-    let b:ale_python_flake8_options = "'--filename=*' --max-line-length=99999"
-  endif
-  " have to call this so that flake8 gets the new arguments
-  call <SID>PyVersionChanged()
-endfunction
-
 function! <SID>SetLineLength(new_length)
   let l:bufnr = bufnr('')
   if type(a:new_length) == type('') && a:new_length == '__AUTO__'
