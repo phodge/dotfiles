@@ -48,7 +48,7 @@ fun! <SID>PyVersionChanged()
   let b:ale_python_flake8_executable = 'multiflake8'
 
   " desired line length?
-  let l:maxlen = &l:textwidth
+  let l:maxlen = get(s:lengths, bufnr(''), 0)
   if l:maxlen <= 0
     let l:maxlen = 99999
   endif
