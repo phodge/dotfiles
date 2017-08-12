@@ -1,3 +1,4 @@
+import glob
 import os
 import platform
 import re
@@ -88,6 +89,30 @@ mkdir('~/man/man1')
 # TODO: need to ensure ~/man is in our $MANPATH
 
 # TODO: need to ensure ~/bin is in our $PATH
+
+
+@section
+def pythonpath():
+    """
+    Add ~/dotfiles/python/ to our ~/.local/python[2/3]/site-packages dirs
+    """
+    pypath = "%s/python" % HERE
+
+    # places to look for site-packages
+    globs = [
+        # centos / ubuntu
+        '~/.local/lib/python*/site-packages',
+        # OS X
+        '~/Library/Python/*/lib/python/site-packages',
+    ]
+    # try each of the glob patterns and see if we find any matches
+    matches = []
+    for pattern in globs:
+        matches.extend(glob.glob(os.path.expanduser(pattern)))
+    for m in matches:
+        lineinfile(os.path.join(m, 'phodge-dotfiles.pth'), pypath)
+    if not len(matches):
+        raise Exception("Didn't add %s anywhere" % pypath)
 
 
 @section
@@ -240,8 +265,6 @@ def mypips(venv_pip=None):
 def pipfavourites():
     # install my favourite pip modules with --user
     mypips()
-
-    # TODO: set up PYTHONPATH with our ~/dotfiles/python in it so we get todonext in our powerline
 
 
 @section
