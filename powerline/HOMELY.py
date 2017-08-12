@@ -1,10 +1,11 @@
 import os
 
-from HOMELY import (HERE, HOME, mypipinstall, powerline_path, wantjerjerrod,
-                    wantpowerline)
 from homely.general import WHERE_END, lineinfile, mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
+
+from HOMELY import (HERE, HOME, mypipinstall, powerline_path, wantjerjerrod,
+                    wantpowerline)
 
 
 @section
