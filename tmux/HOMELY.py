@@ -41,7 +41,7 @@ def tmux_config():
         lines.extend([
             # always replace the daemon on startup, so that re-sourcing the
             # tmux conf always loads updated python modules
-            'run-shell "PYTHONPATH=%(DOTFILES)s/python powerline-daemon --replace -q"',
+            'run-shell "powerline-daemon --replace -q"',
             'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
         ])
     if tmux_plugins:
