@@ -99,9 +99,11 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 # make sure we include fuzzy-finder completion for these commands as well
 if [ -n "$BASHPID" ]; then
-    complete -F _fzf_path_completion -o default -o bashdefault n
-    complete -F _fzf_path_completion -o default -o bashdefault v
-    complete -F _fzf_path_completion -o default -o bashdefault j
+	if which fzf &> /dev/null; then
+		complete -F _fzf_path_completion -o default -o bashdefault n
+		complete -F _fzf_path_completion -o default -o bashdefault v
+		complete -F _fzf_path_completion -o default -o bashdefault j
+	fi
 fi
 
 dex() {
