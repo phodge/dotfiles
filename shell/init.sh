@@ -96,7 +96,7 @@ alias recon='git rebase --continue'
 alias f='find *'
 
 # fuzzy-finder settings
-export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse"
+export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse --bind=change:top"
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 # make sure we include fuzzy-finder completion for these commands as well
