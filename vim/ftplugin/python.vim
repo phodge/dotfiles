@@ -21,9 +21,10 @@ nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 " This is the default flake8 ignore list. See
 let s:flake8_default_ignore = split('E121 E123 E126 E226 E24 E704')
 
-" Always ignore E265 (no space between '#' and comment text) since this is
-" how I comment out code
-let b:flake8_ignore = ['E265']
+" Always ignore E265 (no space between '#' and comment text) and E116
+" (unexpected indent (comment)) since my comment-adding mappings always
+" produce these errors
+let b:flake8_ignore = ['E265', 'E116']
 
 " create the dict for adding isort flags
 if !exists('b:isort_flags')
@@ -107,7 +108,11 @@ fun! <SID>DoSort(line1, line2)
   " do we have any options CLI options for isort?
   let l:options = get(b:, 'isort_flags', {})
   for [l:name, l:value] in items(l:options)
-    let l:isort .= printf(' --%s %s', shellescape(l:name), shellescape(l:value))
+    if l:value == v:true && type(l:value) == type(v:true)
+      let l:isort .= printf(' --%s', shellescape(l:name))
+    else
+      let l:isort .= printf(' --%s %s', shellescape(l:name), shellescape(l:value))
+    endif
   endfor
 
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
@@ -363,12 +368,14 @@ fun! <SID>SmartImportUI() " {{{
   " these words instantly trigger adding an import for a top-level module
   let l:always_modules = split(
         \ 'os sys re collections click simplejson homely enum pprint itertools functools'
-        \ .'tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
+        \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
+        \ .' contextlib'
         \ )
 
   " these names are always imported from these modules
   let l:vocabulary = {
         \ "partial": "functools",
+        \ "contextmanager": "contextlib",
         \ "ArgumentParser": "argparse",
         \ "check_call": "subprocess",
         \ "check_output": "subprocess",
