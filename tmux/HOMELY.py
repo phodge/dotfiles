@@ -162,16 +162,19 @@ def tmux_keys():
         static = {}
         dynamic = {}
         if haveexecutable("reattach-to-user-namespace"):
-            static['tmux_copy_cmd'] = 'copy-pipe "reattach-to-user-namespace pbcopy"'
+            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"'
         elif haveexecutable("pbcopy"):
-            static['tmux_copy_cmd'] = 'copy-pipe "pbcopy"'
+            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "pbcopy"'
         else:
             static['tmux_copy_cmd'] = 'copy-selection'
-        sections = []
-        sections.append(('direct', 'bind-key -n'))
-        sections.append(('prefixed', 'bind-key'))
-        sections.append(('vi-copy', 'bind-key -t vi-copy'))
-        for sectionname, command in sections:
+
+        sections = [
+            ('direct', 'bind-key -n {key} {binding}'),
+            ('prefixed', 'bind-key {key} {binding}'),
+            ('copy-mode-vi', 'bind-key -T copy-mode-vi {key} send-keys -X {binding}'),
+        ]
+
+        for sectionname, template in sections:
             for keycombo, binding in document["tmux"].get(sectionname, {}).items():
                 if hasattr(binding, 'keys'):
                     if 'static' in binding:
@@ -194,20 +197,16 @@ def tmux_keys():
                 else:
                     assert not key.islower(), "Lowercase keycombo %r is not allowed" % keycombo
                     key = key.lower()
-                line = command
-                line += ' '
+                modifiers = ''
                 if ctrl:
-                    line += 'C-'
+                    modifiers += 'C-'
                 assert not opt, "O- prefix not allowed for tmux keybinding %r" % keycombo
                 if meta:
-                    line += 'M-'
+                    modifiers += 'M-'
                 if shift:
                     assert key.islower(), "Invalid keycombo %r" % keycombo
                     key = key.upper()
-                line += key
-                line += ' '
-                line += binding
-                lines.append(line)
+                lines.append(template.format(key=modifiers + key, binding=binding))
 
     # we also want to make our special PANE mode
     pm = TmuxCustomMode(
