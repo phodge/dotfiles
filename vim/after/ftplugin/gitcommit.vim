@@ -33,22 +33,32 @@ def FTPluginGitCommitInsertPrefix():
   longest = os.path.commonprefix(files)
 
   cmd = ['git', 'rev-parse', '--show-toplevel']
-  root = subprocess.check_output(cmd).decode('utf-8')
+  root = subprocess.check_output(cmd).decode('utf-8').strip()
 
   lookfor = ('setup.py', 'Dockerfile', 'setup.cfg')
   maxexamine = 3
 
   # start at the deepest level looking for one of our special files
-  parts = os.path.split(longest)
+  parts = longest.split('/')
+
+  def _insertprefix(prefix):
+    buf[0] = prefix + ': '
+    vim.command('setlocal modified')
+
+  def _tryprefix(prefix):
+    for special in lookfor:
+      what = os.path.join(root, prefix, special)
+      if os.path.exists(what):
+        _insertprefix(prefix)
+        return True
+    return False
 
   for examine in range(3, 0, -1):
     prefix = os.path.join(*parts[:examine])
-    for special in lookfor:
-      if os.path.exists(os.path.join(root, prefix, special)):
-        break
-
-  buf[0] = prefix + ': '
-  vim.command('setlocal modified')
+    if _tryprefix(prefix):
+      break
+  else:
+    _insertprefix(longest)
 
 ENDOFPYTHON
 
