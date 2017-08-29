@@ -33,7 +33,7 @@ tmux:
     M-1: switch-client -n
     # NOTE: meta-[ is not a thing you can bind, because term codes
     M-2: command-prompt -p "New Session,New Window" "new-session -n '%2' -s '%1'"
-  vi-copy:
+  copy-mode-vi:
     V: begin-selection
     Y: { static: tmux_copy_cmd }
     S-Y: { static: tmux_copy_cmd }
