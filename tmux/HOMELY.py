@@ -177,7 +177,7 @@ def tmux_keys():
 
         for sectionname, template in sections:
             for keycombo, binding in document["tmux"].get(sectionname, {}).items():
-                if hasattr(binding, 'keys'):
+                if hasattr(binding, 'keys'):  # is it a dict?
                     if 'static' in binding:
                         binding = static[binding['static']]
                     elif 'dynamic' in binding:
