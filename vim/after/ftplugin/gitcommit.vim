@@ -30,7 +30,7 @@ def FTPluginGitCommitInsertPrefix():
       continue
     filename = line[3:]
     files.append(filename)
-  longest = os.path.commonprefix(files)
+  longest = os.path.commonprefix(files).rstrip('/')
 
   cmd = ['git', 'rev-parse', '--show-toplevel']
   root = subprocess.check_output(cmd).decode('utf-8').strip()
