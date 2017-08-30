@@ -94,18 +94,9 @@ def powerline_theme():
     if not wantpowerline():
         return
 
-    right = []
-
-    # can we import the todonext module?
-    try:
-        import todonext
-    except ImportError:
-        todonext = None
-
-    if todonext:
-        right.append({
-            "function": "todonext.powerline.firstitem",
-        })
+    right = [
+        {"function": "todonext.powerline.firstitem"},
+    ]
 
     if haveexecutable('jerjerrod') and wantjerjerrod():
         wsnames = "jerjerrod.powerline.wsnames"
