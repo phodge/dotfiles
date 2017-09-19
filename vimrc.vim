@@ -979,6 +979,8 @@ augroup EditRealPath
 augroup end
 autocmd! EditRealPath BufReadPost * nested if exists('g:edit_real_path') && g:edit_real_path | call EditRealPath() | endif
 
+" open python wheels like zip files
+au BufReadCmd *.whl call zip#Browse(expand("<amatch>"))
 
 augroup PowerlineCFG
 augroup end
