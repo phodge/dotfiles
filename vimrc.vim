@@ -195,7 +195,7 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-vimui'
   PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
-  PlugMaster 'phodge/vim-hiword'
+  PlugMaster 'phodge/vim-hiword', {'on': []}
   if g:want_unison
     PlugMaster 'phodge/nvim-unison'
   endif
