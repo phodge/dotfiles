@@ -169,6 +169,7 @@ if filereadable(s:plugpath)
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_ctags_tagfile = '.tags'
+  let g:gutentags_ctags_exclude = ['.mypy_cache']
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
 
   " {{{
