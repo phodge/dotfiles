@@ -6,3 +6,4 @@
 .vimproject
 .cache
 .gutctags
+.mypy_cache
