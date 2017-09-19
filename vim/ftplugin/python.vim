@@ -50,7 +50,7 @@ fun! <SID>PyVersionChanged()
   let b:syntastic_checkers = ['flake8']
   let b:syntastic_flake8_exec = 'multiflake8'
   " configure Ale the same way
-  let b:ale_linters = {"python": ['flake8']}
+  let b:ale_linters = {"python": ['flake8', 'mypy']}
   let b:ale_python_flake8_executable = 'multiflake8'
 
   " desired line length?
