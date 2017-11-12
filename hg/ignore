@@ -3,3 +3,4 @@ syntax: glob
 *.swo
 .tags
 .vimproject
+.mypy_cache
