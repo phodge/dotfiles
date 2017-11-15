@@ -210,6 +210,12 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " show vertical lines to indicate indent level
+  Plug 'Yggdroot/indentLine'
+  let g:indentLine_fileTypeExclude = ['help']
+
+  " TODO: also try 'nathanaelkane/vim-indent-guides'
+
   " cool rust stuff
   Plug 'rust-lang/rust.vim'
   " let rust automatically reformat my code on save
