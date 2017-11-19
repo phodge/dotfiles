@@ -421,6 +421,15 @@ def osx():
         execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
 
 
+@section
+def docker_utils():
+    """Install google's container-diff for docker."""
+    url = 'https://storage.googleapis.com/container-diff/latest/container-diff-darwin-amd64'
+    dest = os.path.expanduser('~/bin/container-diff')
+    download(url, dest)
+    execute(['chmod', '755', dest])
+
+
 # TODO: https://github.com/clvv/fasd
 
 
