@@ -206,6 +206,19 @@ function! <SID>SetLineLength(new_length)
   let s:lengths[l:bufnr] = l:new_length
   let &l:textwidth = l:new_length
   let &l:colorcolumn = l:new_length ? '+2' : ''
+
+  if exists('+winhighlight')
+    let l:parts = split(&l:winhighlight, ',', 0)
+    if l:new_length == s:length_options[1]
+      " map highlight to highlight #2
+      call add(l:parts, 'ColorColumn:ColorColumn2')
+    else
+      " remove custom highlight
+      let l:parts = filter(l:parts, 'v:val !~ "^ColorColumn:"')
+    endif
+    let &l:winhighlight = join(l:parts, ',')
+  endif
+
   call <SID>PyVersionChanged()
 endfunction
 

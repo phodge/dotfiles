@@ -59,6 +59,7 @@ hi DiffDelete	guibg=#000022 guifg=#333377
 
 " for the 'colorcolumn' option
 hi ColorColumn ctermbg=Blue cterm=none guibg=#440044
+hi ColorColumn2 ctermbg=Red cterm=none guibg=#880000
 
 " my own custom colors ...
 hi link Urgent Error
