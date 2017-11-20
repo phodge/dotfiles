@@ -186,7 +186,7 @@ function! <SID>SetLineLength(new_length)
     let l:choice = s:length_options[l:idx]
     " use 79 unless there is a longer line
     for l:linenr in range(1, line('$'))
-      while col([l:linenr, '$']) >= l:choice
+      while col([l:linenr, '$']) > (l:choice + 1)
         let l:idx += 1
         if l:idx >= len(s:length_options)
           let l:choice = -1
