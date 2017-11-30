@@ -52,6 +52,9 @@ fun! <SID>PyVersionChanged()
   " configure Ale the same way
   let b:ale_linters = {"python": ['flake8', 'mypy']}
   let b:ale_python_flake8_executable = 'multiflake8'
+  " tell ALE that we always want to use the 'multiflake8' executable - even
+  " inside virtualenvs
+  let b:ale_python_flake8_use_global = 1
 
   " desired line length?
   let l:maxlen = get(s:lengths, bufnr(''), 0)
