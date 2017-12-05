@@ -94,6 +94,9 @@ fun! <SID>FormatFile()
   finally
     call setpos('.', l:oldpos)
   endtry
+  if &l:diff
+    diffup
+  endif
 endfun
 
 " use :Isort to fix imports in the current buffer
