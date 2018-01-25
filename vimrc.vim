@@ -199,6 +199,9 @@ if filereadable(s:plugpath)
       "autocmd! UseDiffer BufReadPost * call Differ()
     endif
   " }}}
+
+  Plug 'majutsushi/tagbar'
+  nnoremap <space>n :TagbarToggle<CR>
   
   PlugMaster 'phodge/vim-javascript-syntax'
   PlugMaster 'phodge/vim-python-syntax'
