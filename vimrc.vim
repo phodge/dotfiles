@@ -127,6 +127,22 @@ if filereadable(s:plugpath)
     Plug 'ctrlpvim/ctrlp.vim'
   endif
 
+  " git-gutter
+  if has('signs')
+    Plug 'airblade/vim-gitgutter'
+
+    " make it disabled by default, by toggle-able by space-g
+    let g:gitgutter_enabled = 0
+    nnoremap <space>g :GitGutterToggle<CR>
+
+    " NOTE: you can also use ]c and [c to move to next/previous hunks
+
+    " reduce CursorHold time from 4s to .25s for faster gutter response
+    set updatetime=250
+  else
+    nnoremap <space>g :echoerr 'vim-gitgutter is not installed'<CR>
+  endif
+
   " Cython
   Plug 'lambdalisue/vim-cython-syntax'
 
