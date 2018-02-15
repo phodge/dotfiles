@@ -188,18 +188,6 @@ if filereadable(s:plugpath)
   let g:gutentags_ctags_exclude = ['.mypy_cache']
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
 
-  " {{{
-    " just always use Differ now that it's pretty stable
-    "Plug 'nathan-hoad/differ'
-    augroup UseDiffer
-    augroup end
-    autocmd!
-    if has('nvim')
-      "autocmd! UseDiffer BufWritePost * call Differ()
-      "autocmd! UseDiffer BufReadPost * call Differ()
-    endif
-  " }}}
-
   Plug 'majutsushi/tagbar'
   nnoremap <space>n :TagbarToggle<CR>
   
