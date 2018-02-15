@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+SOURCE=$1
+shift
+BRANCHNAME=$1
+shift
+REMOTE=$1
+shift
+
+branchexists() {
+    git rev-parse $BRANCHNAME &> /dev/null
+}
+
+ismore() {
+    test 0 -lt $(git log $BRANCHNAME..$SOURCE | wc -l);
+}
+
+is_rebased() {
+    git branch --contains $SOURCE | grep "^..$BRANCHNAME" &> /dev/null && return 1
+    return 0
+}
+
+if [ -n "$REMOTE" ]; then
+    git fetch "$REMOTE" || exit 1
+fi
+
+if ! branchexists; then
+    echo "Creating branch $BRANCHNAME from $SOURCE"
+    git checkout -b $BRANCHNAME $SOURCE
+    needtest=1
+elif is_rebased; then
+    echo "$SOURCE has been rebased"
+    git checkout $(git rev-parse $SOURCE)
+    git branch -D $BRANCHNAME
+    git checkout -b $BRANCHNAME
+    needtest=1
+elif ismore; then
+    echo "Fast-forward required"
+    needtest=1
+    git checkout $BRANCHNAME
+    git merge $SOURCE --ff-only
+else
+    needtest=
+fi
+
+test -n "$needtest"
