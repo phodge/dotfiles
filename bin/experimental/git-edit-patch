@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+import click
+
+
+@click.command()
+def main():
+    """
+    This abomination allows you to modify the changes included in commit COMMIT
+    by supplying an entirely new patch (diff).
+
+    EXAMPLES
+
+    Replace whatever nonsense was in the latest commit a some random patch
+    that's obviously way better:
+
+        git-replace-patch HEAD < rando.patch
+
+    Do the same thing, but to a commit that wasn't the last one:
+
+        git-replace-patch abcd1234 < rando.patch
+
+    How do you get a "better" patch to use as a replacement? The simplest way
+    is to save the diff of a particular revision and then edit it:
+
+        git show abcd1234 > abcd1234.patch
+        vim abcd1234.patch  # <- make it better here
+        git-replace-patch abcd1234 < abcd1234.patch
+
+    BRANCH CONFIRMATION
+
+    By replacing the diff of a commit you are editing commit history, and this
+    potentially affects any local or remote branches that pointed to those
+    commits. If *only* the current working branch is affected,
+    git-replace-patch will do its work without any fuss, but if the history
+    editing is going to affect other branches, you will get a warning about
+    each one and be forced to confirm that you're also happy to rebase or
+    force-push every affected branch.
+
+    If you want to use git-replace-patch in a non-interactive context, you will
+    need to use --rewritebranches=... to tell it which branches it's allowed to
+    rebase safely (other than the current branch, which is assumed). To do this
+    in a programmatic way, you can use --affectedbranches to get a list of
+    branches that are affected, and then perhaps prompt the user yourself:
+
+        git-replace-patch abcd1234 --affectedbranches < abcd1234.patch
+        # prints:
+        #   mycurrentbranch
+        #   origin/mycurrentbranch
+        #   master
+        #   origin/master
+        # you can now ask the user which branches are safe to rebase (or figure
+        # it out automatically) and when you have your list of safe branches,
+        # pass them along to git-replace-patch like so:
+        SAFEBRANCHES=origin/mycurrentbranch,master,origin/master
+        git-replace-patch abcd1234 \
+            --rewritebranches=$SAFEBRANCHES < abcd1234.patch
+    """
+
+
+if __name__ == '__main__':
+    main()
