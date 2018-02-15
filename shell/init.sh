@@ -153,3 +153,12 @@ shell_init_done() {
 
     source "$completions"
 }
+
+nudge-watch() {
+    socket="$1"
+    shift
+    echo "WAITING FOR $socket"
+    nudge -l "$socket" || return 1
+    clear
+    date
+}
