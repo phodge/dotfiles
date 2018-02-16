@@ -13,10 +13,6 @@ if ! exists('g:want_syntastic')
   let g:ale_emit_conflict_warnings = 0
 endif
 
-if ! exists('g:want_unison')
-  let g:want_unison = 0
-endif
-
 " sensible defaults to start with
 if &compatible
 	setglobal nocompatible
@@ -203,9 +199,6 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
   PlugMaster 'phodge/vim-hiword', {'on': []}
-  if g:want_unison
-    PlugMaster 'phodge/nvim-unison'
-  endif
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
@@ -520,10 +513,6 @@ if g:vim_peter && version >= 700
   set statusline=
   set statusline+=%n\ \ %f
   set statusline+=\ %{(&l:ff=='dos')?':dos:\ ':''}%m%<%r%h%w
-  " unison errors
-  if g:want_unison
-    set statusline+=%#Search#%{strlen(get(b:,'unison_status',''))?'[U:'.b:unison_status.']':''}
-  endif
 
   " syntastic errors
   if g:want_syntastic
@@ -545,10 +534,6 @@ if g:vim_peter && version >= 700
   " character under cursor
   set statusline+=0x%B
   set statusline+=\ %p%%
-  if g:want_unison
-    " PID
-    set statusline+=\ %#IncSearch#%{getpid()}
-  endif
 endif
 
 " favourite options
