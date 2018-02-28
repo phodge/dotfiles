@@ -10,7 +10,8 @@ snippet l
 snippet ls
 	${1:a}, ${2:b} = sys.stdin.readline().strip().split(' ')
 snippet err
-	print >>sys.stderr, '{$2:$1} = ' + repr(${1:locals()})  # noqa TODO
+	import pprint, sys
+	sys.stderr.write('${2:$1} = {}\n'.format(pprint.pformat(${1:locals()})))  # noqa TODO
 snippet out
 	import pprint
 	print('${2:$1} = ' + pprint.pformat(${1:locals()}))  # noqa TODO
@@ -66,6 +67,19 @@ snippet dir
 		else:
 			print('  .%s = %r' % (_, getattr(__expr, _)))
 	print('}')
+	del __expr  # TODO: remove this debug
+snippet errdir
+	import sys
+	__expr = ${1:locals()}  # TODO: remove this debug
+	print('${2:$1} = %s:' % type(__expr), file=sys.stderr)
+	for _ in dir(__expr):
+		if not hasattr(__expr, _):
+			print('  .%s = <not set>' % _, file=sys.stderr)
+		elif callable(getattr(__expr, _)):
+			print('  .%s()' % _, file=sys.stderr)
+		else:
+			print('  .%s = %r' % (_, getattr(__expr, _)), file=sys.stderr)
+	print('}', file=sys.stderr)
 	del __expr  # TODO: remove this debug
 snippet logdir
 	with open('/tmp/q', 'a') as _f:  # TODO
