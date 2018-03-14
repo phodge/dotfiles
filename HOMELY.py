@@ -235,7 +235,7 @@ def mypips(venv_pip=None):
     if wantnvim():
         # if we want nvim then we always want the neovim python package
         packages.append('neovim')
-    if theworks or yesno('install_pytest', 'PIP Install pytest in $HOME?', True):
+    if yesno('install_pytest', 'PIP Install pytest in $HOME?', True):
         packages.append('pytest')
     if theworks or yesno('install_ptpython', 'PIP Install ptpython?', True):
         packages.append('ptpython')
