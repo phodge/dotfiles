@@ -1,11 +1,16 @@
 " whenever we open a gitcommit, pull up the staged changes
-if !&previewwindow
+if !&previewwindow && gitmagic#loaded
   try
-    let s:pos = getcurpos()
+    let s:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
     call gitmagic#ShowIndex()
   finally
     call setpos('.', s:pos)
   endtry
+endif
+
+if v:version < 800
+  " NOTE: older versions of vim don't support the `python3 << MARKER` syntax
+  finish
 endif
 
 python3 << ENDOFPYTHON
