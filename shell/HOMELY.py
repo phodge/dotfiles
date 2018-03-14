@@ -15,6 +15,7 @@ zshrc = os.environ['HOME'] + '/.zshrc'
 
 
 def install_completions(rcfile):
+    lineinfile(rcfile, 'want_click_completion homely')
     if wantjerjerrod():
         lineinfile(rcfile, 'want_click_completion jerjerrod')
 
