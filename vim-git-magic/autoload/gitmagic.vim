@@ -2,6 +2,19 @@
 augroup gitmagic
 augroup end
 
+" Abort loading if we don't have necessary features.
+" You can test if gitmagic is in a working state by wrapping your code in:
+"
+"   if gitmagic#loaded
+"     ...
+"   endif
+"
+let gitmagic#loaded = 0
+if !exists('*win_getid')
+  finish
+endif
+let gitmagic#loaded = 1
+
 fun! gitmagic#ShowIndex()
   return <SID>ShowGitLog('git diff --cached')
 endfun
