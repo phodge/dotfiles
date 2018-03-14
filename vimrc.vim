@@ -40,7 +40,7 @@ endif
 
 " we need to work out what tmux session we're running under
 let g:tmux_session = ''
-if executable('tmux')
+if executable('tmux') && exists('*systemlist')
   " NOTE: I experienced a bug where vim 8.0.007's systemlist() would return an
   " empty list, but only during startup
   let s:result = systemlist('tmux display-message -p "#S"')
