@@ -68,7 +68,7 @@ def tmux_install():
         # how do we make sure that that library has been installed?
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                  '~/src/tmux.git')
-        tmux.select_tag('2.6')
+        tmux.select_tag('2.7')
         tmux.compile_cmd([
             ['make', 'distclean'],
             ['sh', 'autogen.sh'],
