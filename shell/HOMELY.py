@@ -3,7 +3,8 @@ import re
 
 import simplejson
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
-                            mkdir, section, symlink)
+                            mkdir, run, section, symlink)
+from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, allowpull, note, warn, yesno
 
@@ -113,6 +114,10 @@ def zsh_config():
     lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
     install_completions('~/.zshrc')
     lineinfile('~/.zshrc', 'shell_init_done  # this line must be last', where=WHERE_END)
+    antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
+                                '~/src/antigen.git')
+    antigen.select_tag('v2.2.3')
+    run(antigen)
 
 
 @section
