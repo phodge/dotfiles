@@ -2,12 +2,12 @@ import os
 import re
 
 import simplejson
-
-from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
                             mkdir, section, symlink)
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, allowpull, note, warn, yesno
+
+from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
