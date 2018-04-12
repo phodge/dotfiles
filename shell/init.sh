@@ -128,7 +128,7 @@ shell_init_done() {
 
     # modify PATH now if it hasn't been done yet
     if [ -z "$PATH_MODIFIED" ]; then
-        PATH_MODIFIED=1
+        export PATH_MODIFIED=1
         PATH="$PATH_HIGH""$PATH"
     fi
 
