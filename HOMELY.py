@@ -37,6 +37,26 @@ def wantfull():
 
 
 @cachedfunc
+def install_fedora_copr():
+    if not wantfull():
+        return False
+
+    if not haveexecutable('yum'):
+        return False
+
+    copr_url = 'https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo'
+    if not yesno('allow_fedora_copr',
+                 'Add fedora COPR repo on this host?',
+                 None):
+        return False
+
+    # enable the repo
+    installpkg('yum-utils')
+    execute(['sudo', 'yum-config-manager', '--add-repo=' + copr_url], stdout="TTY")
+    return True
+
+
+@cachedfunc
 def wantjerjerrod():
     if not wantfull():
         return False
@@ -141,7 +161,10 @@ def tools():
                    yum='the_silver_searcher',
                    apt='the_silver_searcher')
     if yesno('install_ripgrep', 'Install ripgrep?', wantfull()):
-        installpkg('ripgrep', apt=False)
+        yum = None
+        if haveexecutable('yum') and install_fedora_copr():
+            yum = 'ripgrep'
+        installpkg('ripgrep', yum=yum, apt=False)
     if yesno('install_with', 'Install `with` utility?', wantfull()):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
