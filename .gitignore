@@ -1,2 +1,4 @@
 syntax: glob
 __pycache__
+
+*.zwc
