@@ -193,13 +193,39 @@ def tools():
         installpkg('ctags')
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
-    if yesno('install_fzf', 'Install fzf?', wantfull()):
-        installpkg('fzf')
 
     # TODO: complete the code that installs markdown
     #if yesno('install_markdown', "Install markdown util?", wantfull()):
         #url = 'http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip'
         # TODO: where do you want to put this thing?
+
+
+@section
+def fzf_install():
+    if not yesno('install_fzf', 'Install fzf?', wantfull()):
+        return
+
+    if haveexecutable('brew'):
+        installpkg('fzf')
+        return
+
+    # do it the long way
+    import os.path
+    fzf_repo = os.path.expanduser('~/src/fzf.git')
+    fzf_install = InstallFromSource('https://github.com/junegunn/fzf.git',
+                                    fzf_repo)
+    fzf_install.select_tag('0.17.3')
+    fzf_install.compile_cmd([
+        ['./install', '--bin'],
+    ])
+    fzf_install.symlink('bin/fzf', '~/bin/fzf')
+    run(fzf_install)
+    execute(['./install', '--bin'], cwd=fzf_repo, stdout='TTY')
+    lineinfile('~/.bashrc', 'source {}/shell/completion.bash'.format(fzf_repo))
+    lineinfile('~/.bashrc', 'source {}/shell/key-bindings.bash'.format(fzf_repo))
+    if wantzsh():
+        lineinfile('~/.zshrc', 'source {}/shell/completion.zsh'.format(fzf_repo))
+        lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_repo))
 
 
 @cachedfunc
