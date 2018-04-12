@@ -61,6 +61,11 @@ def wantnvim():
     return yesno('install_nvim', 'Install neovim?', wantfull())
 
 
+@cachedfunc
+def wantzsh():
+    return yesno('use_zsh', 'Install zsh config?', wantfull())
+
+
 def whenmissing(filename, substr):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
@@ -351,8 +356,8 @@ def nudge():
 
 # zsh
 @section
-def zshconfig():
-    if yesno('use_zsh', 'Install zsh config?', wantfull()):
+def zsh_config():
+    if wantzsh():
         antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
                                     '~/src/antigen.git')
         antigen.select_branch('master')
