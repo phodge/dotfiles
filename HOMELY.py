@@ -322,6 +322,13 @@ def pipfavourites():
 
 
 @section
+def envup_install():
+    pipinstall('libtmux', ['pip3'])
+    symlink('bin/envup', '~/bin/envup')
+    mkdir('~/.envup')
+
+
+@section
 def git():
     lines = [
         # include our dotfiles git config from ~/.gitconfig

@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+import os.path
+import sys
+from pathlib import Path
+
+import click
+import libtmux
+import simplejson
+
+CONFIG_DIR = Path(os.path.expanduser('~/.envup'))
+END_ZONE_START = 20
+
+
+def pick_a_session(server, session_name):
+    sess = server.find_where({'session_name': session_name})
+    fresh = False
+    if not sess:
+        # create the session now
+        sess = server.new_session(session_name)
+        fresh = True
+    return sess, fresh
+
+
+def make_window(session, name, *, panes=[], split_horizontal=False):
+    existing = session.find_where({'window_name': name})
+
+    assert len(panes) > 0, 'Must have at least 1 pane per window'
+
+    if existing:
+        existing.rename_window(name + ' (OLD)')
+
+    # what starting directory?
+    start_dir = panes[0][0]
+
+    # make a new window
+    win = session.new_window(name,
+                             start_directory=os.path.expanduser(start_dir))
+    first = True
+    for pane_cwd, pane_pretype in panes:
+        if first:
+            pane = win.panes[0]
+            first = False
+        else:
+            # we need to make a new pane
+            pane_cwd = os.path.expanduser(pane_cwd) if pane_cwd else None
+            pane = win.split_window(start_directory=pane_cwd, vertical=not split_horizontal)
+
+        if pane_pretype:
+            pane.send_keys(pane_pretype, enter=False, suppress_history=False)
+
+
+def get_next_vacant(session):
+    next_vacant = END_ZONE_START
+    for win in session.windows:
+        win_idx = int(win['window_index'])
+
+    for win in session.windows:
+        win_idx = int(win['window_index'])
+        if win_idx >= next_vacant:
+            next_vacant = 1 + max([next_vacant, win_idx])
+    return next_vacant
+
+
+def move_to_end_zone(window):
+    win_idx = int(window['window_index'])
+    if win_idx >= END_ZONE_START:
+        return
+    next = get_next_vacant(window.session)
+    window.move_window(str(next))
+
+
+@click.command()
+@click.argument('name', required=False)
+def main(name):
+    if not name:
+        print("Please choose from:")
+        for entry in CONFIG_DIR.iterdir():
+            if entry.name.startswith('.'):
+                continue
+            if entry.name.endswith('.json'):
+                print('  ' + entry.name[:-5])
+        sys.exit(1)
+
+    # does it exist?
+    TARGET_FILE = CONFIG_DIR / ('{}.json'.format(name))
+    if not TARGET_FILE.exists():
+        raise click.BadParameter(
+            "envup config {!r} doesn't exist".format(name))
+
+    with TARGET_FILE.open('r') as f:
+        data = simplejson.load(f)
+
+    default_cwd = data['default_cwd']
+
+    server = libtmux.Server()
+
+    session, fresh = pick_a_session(server, data['session_name'])
+
+    if fresh:
+        old_win = session.attached_window
+
+    # move all existing windows to the vacant zone
+    for window in session.windows:
+        move_to_end_zone(window)
+
+    # make an 'EDIT' window if it's not already there
+    # if this is a fresh session, reuse whatever the existing window is
+    for win_info in data['session_windows']:
+        panes = [
+            (p.get('pane_cwd', default_cwd), p.get('pane_pretype'))
+            for p in win_info['window_panes']
+        ]
+        make_window(session,
+                    win_info['window_name'],
+                    panes=panes,
+                    split_horizontal=win_info.get('window_split_horizontal', False))
+
+    # finally at the end we can kill the original window
+    if fresh:
+        old_win.kill_window()
+
+
+if __name__ == '__main__':
+    main()
