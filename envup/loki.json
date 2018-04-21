@@ -1,0 +1,32 @@
+{
+	"session_name": "P90 MGMT",
+	"default_cwd": "~",
+	"session_windows": [
+		{
+			"window_name": "PORTS",
+			"window_panes": [
+				{"pane_pretype": "ssh -g -L 13000:localhost:3000 -N p90"},
+				{"pane_pretype": "ssh -g -L 13001:localhost:3001 -N p90"},
+				{"pane_pretype": "ssh -g -L 13002:localhost:3002 -N p90"}
+			]
+		},
+		{
+			"window_name": "TODO",
+			"window_panes": [
+				{
+					"pane_cwd": "~/Project90",
+					"pane_pretype": "n TODO.txt"
+				}
+			]
+		},
+		{
+			"window_name": "CONTACTS",
+			"window_panes": [
+				{
+					"pane_cwd": "~/Project90/ProductAdvisers",
+					"pane_pretype": "n *.txt"
+				}
+			]
+		}
+	]
+}
