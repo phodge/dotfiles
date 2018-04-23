@@ -91,6 +91,9 @@ if filereadable(s:plugpath)
 
   call plugmaster#begin('~/src/plugedit', '~/src', s:plugins) " {{{
 
+  " typescript support
+  Plug 'leafgarland/typescript-vim'
+
   Plug 'EinfachToll/DidYouMean'
   Plug 'FooSoft/vim-argwrap'
   Plug 'christoomey/vim-tmux-navigator'
