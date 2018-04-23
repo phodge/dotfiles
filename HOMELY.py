@@ -170,7 +170,12 @@ def tools():
         yum = None
         if haveexecutable('yum') and install_fedora_copr():
             yum = 'ripgrep'
-        installpkg('ripgrep', yum=yum, apt=False)
+        if haveexecutable('snap'):
+            # TODO: we won't be able to uninstall
+            execute(['sudo', 'snap', 'install', 'rg'], stdout="TTY")
+        else:
+            installpkg('ripgrep', yum=yum, apt=False)
+
     if yesno('install_with', 'Install `with` utility?', wantfull()):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
