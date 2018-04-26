@@ -9,11 +9,11 @@
                     "pane_cwd": "~/playground-6/project90.git/app",
                     "pane_pretype": ". ~/playground-6/bin/activate\rnpm run devserver"},
                 {
-                    "pane_cwd": "~/playground-6/project90.git/python_backend",
-                    "pane_pretype": ". ~/playground-6/bin/activate\rpython app.py"},
+                    "pane_cwd": "~/playground-6/project90.git/app",
+                    "pane_pretype": ". ~/playground-6/bin/activate\rnpm run devbuilder"},
                 {
                     "pane_cwd": "~/playground-6/project90.git/app",
-                    "pane_pretype": ". ~/playground-6/bin/activate\rnpm run devbuilder"}
+                    "pane_pretype": ". ~/playground-6/bin/activate\r./bin/app-tsc --watch"}
             ]
         }
     ]
