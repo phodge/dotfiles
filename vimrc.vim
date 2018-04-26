@@ -99,6 +99,7 @@ if filereadable(s:plugpath)
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
+
   if 0
     " going back to SnipMate because UltiSnips is making neovim freeze
     Plug 'MarcWeber/vim-addon-mw-utils'
@@ -353,11 +354,11 @@ set fileformats=unix,dos,mac
 let g:mapleader = '\\'
 
 " use <F5> and <F6> to run ack searches
-if 0 && executable('rg')
+if executable('rg')
   " NOTE: I'm not defaulting to rg yet because it doesn't include line numbers
   " in the output
-  nnoremap <F5> :Shell rg -wl <C-R><C-W><CR>
-  nnoremap <F6> :Shell rg -wli <C-R><C-W><CR>
+  nnoremap <F5> :Shell rg -wn <C-R><C-W><CR>
+  nnoremap <F6> :Shell rg -wni <C-R><C-W><CR>
 else
   nnoremap <F5> :Shell ag -ws <C-R><C-W><CR>
   nnoremap <F6> :Shell ag -wsi <C-R><C-W><CR>
@@ -394,8 +395,6 @@ syntax on
 augroup CustomFiletype
 autocmd! BufNewFile,BufReadPost *.md set filetype=markdown
 augroup end
-
-
 
 if version >= 703
   if has('nvim')
