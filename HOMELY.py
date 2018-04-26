@@ -285,7 +285,14 @@ def mypips(venv_pip=None):
 
     # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
     # present
-    packages = ['simplejson', 'jedi', 'yapf', 'isort']
+    packages = [
+        'simplejson',
+        'jedi',
+        'yapf',
+        'isort',
+        # needed for `git rebase -i` commit comparisons
+        'GitPython',
+    ]
     if wantnvim():
         # if we want nvim then we always want the neovim python package
         packages.append('neovim')
