@@ -94,10 +94,29 @@ if filereadable(s:plugpath)
   " typescript support
   Plug 'leafgarland/typescript-vim'
 
+  if has('nvim') && get(g:, 'peter_use_ycm', 0)
+    " when in neovim land, use YouCompleteMe
+    Plug 'Valloric/YouCompleteMe'
+
+    " when jumping to definitions, do so in a new split
+    let g:ycm_goto_buffer_command = 'horizontal-split'
+
+    " don't map <tab> key, it interferes with UltiSnips
+    let g:ycm_key_list_select_completion = []
+
+    let g:ycm_min_num_of_chars_for_completion = 99
+    let g:ycm_min_num_identifier_candidate_chars = 99
+
+    nnoremap gd :split<CR>:YcmCompleter GoTo<CR>
+    nnoremap <space>r :YcmCompleter RefactorRename <C-R><C-W>
+  else
+    " fallback for just python compeletion when we're in plain old Vim
+    Plug 'davidhalter/jedi-vim'
+  endif
+
   Plug 'EinfachToll/DidYouMean'
   Plug 'FooSoft/vim-argwrap'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'davidhalter/jedi-vim'
   Plug 'hynek/vim-python-pep8-indent'
 
   if 0

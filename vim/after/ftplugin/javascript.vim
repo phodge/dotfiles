@@ -25,11 +25,13 @@ endif
 if exists('*tern#Enable')
   call tern#Enable()
 endif
-nnoremap <space>d :TernDef<CR>
-nnoremap <space>h :TernDoc<CR>
-nnoremap <space>t :TernType<CR>
-nnoremap <space>u :TernRefs<CR>
-nnoremap <space>r :TernRename<CR>
+if !has('nvim')
+  nnoremap <buffer> <space>d :TernDef<CR>
+  nnoremap <buffer> <space>h :TernDoc<CR>
+  nnoremap <buffer> <space>t :TernType<CR>
+  nnoremap <buffer> <space>u :TernRefs<CR>
+  nnoremap <buffer> <space>r :TernRename<CR>
+endif
 
 
 " use K and CTRL+K for comment/uncomment
