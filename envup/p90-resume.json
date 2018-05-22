@@ -1,0 +1,16 @@
+{
+    "session_name": "RESUME",
+    "default_cwd": "~/playground-resume/resume.git",
+    "session_windows": [
+        {
+            "window_name": "nvim",
+            "window_panes": [
+                {
+                    "pane_cwd": "~/playground-resume/resume.git",
+                    "pane_pretype": "ls -la\r"}
+            ]
+        }
+    ]
+}
+
+
