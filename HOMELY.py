@@ -503,6 +503,15 @@ def docker_utils():
     execute(['chmod', '755', dest])
 
 
+@section
+def ctags():
+    ctagsdir = HOME + '/.ctags.d'
+    mkdir(ctagsdir)
+    for orig in glob.glob(HERE + '/ctags.d/*.ctags'):
+        basename = os.path.basename(orig)
+        symlink(orig, ctagsdir + '/' + basename)
+
+
 # TODO: https://github.com/clvv/fasd
 
 
