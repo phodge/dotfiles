@@ -1,11 +1,11 @@
 import os
 
-from homely.general import WHERE_END, lineinfile, mkdir, section, writefile
+from homely.general import WHERE_END, blockinfile, mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
-from HOMELY import (HERE, HOME, mypipinstall, powerline_path, wantjerjerrod,
-                    wantpowerline)
+from HOMELY import (HERE, HOME, mypipinstall, powerline_path, want_unicode_fix,
+                    wantjerjerrod, wantpowerline)
 
 
 @section
@@ -22,9 +22,18 @@ def powerline():
         "%s/powerline" % HERE,
         "%s/.config/powerline" % HOME,
     ]
-    lineinfile('~/.shellrc',
-               'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
-               where=WHERE_END)
+
+    lines = [
+        'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
+    ]
+    if want_unicode_fix():
+        lines.append('export HOMELY_POWERLINE_HOUSE=H')
+
+    blockinfile(
+        '~/.shellrc',
+        lines,
+        WHERE_END
+    )
 
     # ask the user what colour prefs they would like and put it in
     # ~/.config/powerline/colors.sh
@@ -134,8 +143,12 @@ def powerline_theme():
     })
     right.append({"function": "powerline.segments.common.net.hostname"})
 
+    config = {"segments": {"right": right}}
+    if want_unicode_fix():
+        config["segment_data"] = {"time": {"before": ""}}
+
     import simplejson
-    dumped = simplejson.dumps({"segments": {"right": right}})
+    dumped = simplejson.dumps(config)
     mkdir('~/.config')
     mkdir('~/.config/powerline')
     mkdir('~/.config/powerline/themes')

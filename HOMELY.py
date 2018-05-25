@@ -86,6 +86,12 @@ def wantzsh():
     return yesno('use_zsh', 'Install zsh config?', wantfull())
 
 
+@cachedfunc
+def want_unicode_fix():
+    q = 'Old versions of glibc can cause render issues with GnomeTerminal>ssh>tmux>powerline. Remove Unicode chars in powerline status?'
+    return yesno('want_unicode_fix', q)
+
+
 def whenmissing(filename, substr):
     if os.path.exists(filename):
         with open(filename, 'r') as f:
