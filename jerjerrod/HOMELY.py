@@ -14,8 +14,8 @@ def jerjerrod_install():
                              '~/src/jerjerrod.git')
     inst.select_branch('master')
     inst.compile_cmd([
-        ['pip2', 'install', '--user', '-e', '.', '--upgrade'],
-        ['pip3', 'install', '--user', '-e', '.', '--upgrade'],
+        # NOTE: only install jerjerrod where we've installed powerline
+        ['pip3', 'install', '--user', '-e', '.'],
     ])
     run(inst)
 
