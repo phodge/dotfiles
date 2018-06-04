@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+from subprocess import check_call
+
+import click
+from click import Path
+
+
+@click.command()
+@click.option('-o', '--outfile', required=True,
+              type=Path(exists=False, dir_okay=False))
+@click.argument('inputs', nargs=-1)
+def main(outfile, inputs):
+    if not len(inputs):
+        raise click.ClickException('At least one input file must be specified')
+    command = [
+        'gs',
+        '-dBATCH',
+        '-dNOPAUSE',
+        '-q',
+        '-sDEVICE=pdfwrite',
+        '-sOutputFile=' + outfile,
+    ]
+    command.extend(inputs)
+    check_call(command)
+
+
+if __name__ == '__main__':
+    main()
