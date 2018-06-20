@@ -109,6 +109,7 @@ if filereadable(s:plugpath)
 
     nnoremap gd :split<CR>:YcmCompleter GoTo<CR>
     nnoremap <space>r :YcmCompleter RefactorRename <C-R><C-W>
+    nnoremap <space>t :YcmCompleter GetType<CR>
   else
     " fallback for just python compeletion when we're in plain old Vim
     Plug 'davidhalter/jedi-vim'
