@@ -341,7 +341,7 @@ def pipfavourites():
 
 @section
 def envup_install():
-    pipinstall('libtmux', ['pip3'])
+    pipinstall('libtmux', trypips=['pip3'])
     symlink('bin/envup', '~/bin/envup')
     mkdir('~/.envup')
     symlink('envup/loki.json', '~/.envup/loki.json')
