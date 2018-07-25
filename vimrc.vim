@@ -125,8 +125,8 @@ if filereadable(s:plugpath)
     Plug 'MarcWeber/vim-addon-mw-utils'
     Plug 'tomtom/tlib_vim'
     Plug 'garbas/vim-snipmate'
-  else
-    Plug 'SirVer/ultisnips'
+  elseif v:version >= 704
+    Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
   endif
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
@@ -148,7 +148,7 @@ if filereadable(s:plugpath)
   endif
 
   " git-gutter
-  if has('signs')
+  if has('signs') && v:version >= 704
     Plug 'airblade/vim-gitgutter'
 
     " make it disabled by default, by toggle-able by space-g
@@ -206,7 +206,7 @@ if filereadable(s:plugpath)
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_ctags_tagfile = '.tags'
   let g:gutentags_ctags_exclude = ['.mypy_cache']
-  Plug 'ludovicchabant/vim-gutentags', executable('ctags') ? {} : {'on': []}
+  Plug 'ludovicchabant/vim-gutentags', executable('ctags') && v:version >= 704 ? {} : {'on': []}
 
   Plug 'majutsushi/tagbar'
   nnoremap <space>n :TagbarToggle<CR>
