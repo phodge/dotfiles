@@ -296,7 +296,7 @@ def vim_plugin_update():
     if True:
         template = '#!/usr/bin/env bash\nvim-update-then-run {} "$@"\n'
         for what in ('vim', 'nvim'):
-            exec = HOME + '/bin/' + what
-            with writefile(exec) as f:
+            exec_ = HOME + '/bin/' + what
+            with writefile(exec_) as f:
                 f.write(template.format(what))
-            os.chmod(exec, 0o755)
+            os.chmod(exec_, 0o755)
