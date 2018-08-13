@@ -64,7 +64,9 @@ def tmux_install():
         return
 
     if yesno('own_tmux', 'Compile tmux from source?', None):
-        # FIXME: compiling tmux from source like this requires libevent ...
+        # FIXME: compiling tmux from source like this requires
+        # - libevent (libevent-dev on Ubuntu)
+        # - curses (ncurses-dev on Ubuntu)
         # how do we make sure that that library has been installed?
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                  '~/src/tmux.git')
