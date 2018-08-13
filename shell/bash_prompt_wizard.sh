@@ -8,8 +8,12 @@ if which fast-hg-status &> /dev/null; then
 fi
 prompt_wizard_plugins_line2="bash_wizard_jobcount bash_wizard_exitcode bash_wizard_prompt"
 
-wizard_prompt_color_primary=
-wizard_prompt_color_secondary=
+if [ -z "$wizard_prompt_color_primary" ]; then
+	wizard_prompt_color_primary=gray
+fi
+if [ -z "$wizard_prompt_color_secondary" ]; then
+	wizard_prompt_color_secondary=palegray
+fi
 
 PS1='`LAST_EXIT=$?;__generate_bash_prompt`'
 
