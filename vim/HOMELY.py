@@ -189,7 +189,7 @@ def nvim_install():
         # - gcc-c++
         # - unzip (seriously ... the error on this one is aweful)
         # NOTE: on ubuntu the requirements are:
-        # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+        # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip gettext
         n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
         n.select_tag(NVIM_TAG)
         n.compile_cmd([
