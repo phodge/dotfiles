@@ -23,6 +23,10 @@ def powerline():
         "%s/.config/powerline" % HOME,
     ]
 
+    msg = 'Install fonts-powerline package for this OS? (Works on Ubuntu)'
+    if yesno('powerline_fonts', msg, False, noprompt=False):
+        execute(['sudo', 'apt-get', 'install', 'fonts-powerline'], stdout="TTY")
+
     lines = [
         'export POWERLINE_CONFIG_PATHS=%s' % ":".join(paths),
     ]
