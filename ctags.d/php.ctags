@@ -1,0 +1,2 @@
+# don't tag aliases ('use XXX;' imports)
+--php-kinds=-a
