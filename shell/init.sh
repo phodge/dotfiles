@@ -97,7 +97,18 @@ alias f='find *'
 
 # fuzzy-finder settings
 export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse --bind=change:top"
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+if [ -z "$FZF_DEFAULT_COMMAND" ]; then
+	if which rg &> /dev/null; then
+		export FZF_DEFAULT_COMMAND='rg --files --glob "!.git"'
+	elif which ag &> /dev/null; then
+		export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+	elif [ -z "$FZF_WARNED" ]; then
+        if which fzf >/dev/null; then
+            echo 'WARNING: fzf works better with rg or ag installed' >&2
+        fi
+        export FZF_WARNED=1
+	fi
+fi
 
 # make sure we include fuzzy-finder completion for these commands as well
 if [ -n "$BASHPID" ]; then
