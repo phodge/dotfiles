@@ -224,6 +224,8 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-vcs'
   PlugMaster 'phodge/vim-hiword', {'on': []}
 
+  Plug 'lumiliet/vim-twig'
+
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
   Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
