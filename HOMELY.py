@@ -63,6 +63,11 @@ def wantjerjerrod():
     return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
+@cachedfunc
+def want_silver_searcher():
+    return yesno('install_ag', 'Install ag (required for fzf)?', wantfull())
+
+
 def jerjerrod_addline(command, path, ignore=[]):
     # track projects in ~/src
     mkdir('~/.config')
@@ -162,7 +167,7 @@ def install_pip():
 def tools():
     if yesno('install_ack', 'Install ack?', wantfull()):
         installpkg('ack', apt='ack-grep')
-    if yesno('install_ag', 'Install ag?', wantfull()):
+    if want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
                    apt='the_silver_searcher')
