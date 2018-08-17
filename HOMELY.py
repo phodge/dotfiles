@@ -529,6 +529,22 @@ def ctags():
         symlink(orig, ctagsdir + '/' + basename)
 
 
+@section
+def git_install():
+    if not haveexecutable('apt-get'):
+        return
+
+    if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=wantfull()):
+        return
+
+    for cmd in [
+            ['sudo', 'apt-add-repository', 'ppa:git-core/ppa'],
+            ['sudo', 'apt-get', 'update'],
+            ['sudo', 'apt-get', 'install', 'git'],
+    ]:
+        execute(cmd, stdout="TTY")
+
+
 # TODO: https://github.com/clvv/fasd
 
 
