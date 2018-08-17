@@ -177,7 +177,8 @@ def tools():
             yum = 'ripgrep'
         if haveexecutable('snap'):
             # TODO: we won't be able to uninstall
-            execute(['sudo', 'snap', 'install', 'rg'], stdout="TTY")
+            #execute(['sudo', 'snap', 'install', 'rg', '--classic'], stdout="TTY")
+            pass
         else:
             installpkg('ripgrep', yum=yum, apt=False)
 
