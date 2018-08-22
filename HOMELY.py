@@ -15,6 +15,9 @@ HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
 
 
+IS_OSX = os.getenv('HOME').startswith('/Users/')
+
+
 # decorator to make a function that caches its result temporarily
 def cachedfunc(func):
     def wrapper(*args, **kwargs):

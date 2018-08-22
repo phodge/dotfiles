@@ -8,7 +8,7 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, allowpull, note, warn, yesno
 
-from HOMELY import HOME, getpippaths, wantfull, wantjerjerrod
+from HOMELY import HOME, IS_OSX, getpippaths, wantfull, wantjerjerrod
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -19,6 +19,34 @@ def install_completions(rcfile):
     lineinfile(rcfile, 'want_click_completion homely')
     if wantjerjerrod():
         lineinfile(rcfile, 'want_click_completion jerjerrod')
+
+
+@section
+def bash_install():
+    if not (IS_OSX and haveexecutable('brew')):
+        return
+
+    if not yesno('upgrade_bash', 'Upgrade bash?', default=False):
+        return
+
+    # install newer version of bash using homebrew or some other mechanism
+    execute(['brew', 'install', 'bash'])
+
+    bash_exec = '/usr/local/bin/bash'
+
+    # how to add /usr/local/bin/bash to /etc/shells?
+    for line in open('/etc/shells').readlines():
+        if line.strip() == bash_exec:
+            break
+    else:
+        # TODO: this line needs testing
+        execute(
+            ['sudo', 'bash', '-c', 'echo {} >> /etc/shells'.format(bash_exec)],
+            stdout="TTY")
+
+    if os.getenv('SHELL') != bash_exec:
+        USER = os.getenv('USER')
+        execute(['sudo', 'chpass', '-s', bash_exec, USER], stdout="TTY")
 
 
 @section
