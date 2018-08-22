@@ -211,11 +211,6 @@ def tools():
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
 
-    # TODO: complete the code that installs markdown
-    #if yesno('install_markdown', "Install markdown util?", wantfull()):
-        #url = 'http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip'
-        # TODO: where do you want to put this thing?
-
 
 @section
 def fzf_install():
