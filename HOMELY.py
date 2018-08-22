@@ -219,25 +219,27 @@ def fzf_install():
 
     if haveexecutable('brew'):
         installpkg('fzf')
-        return
+        fzf_path = '/usr/local/opt/fzf'
+    else:
+        # do it the long way
+        import os.path
+        fzf_repo = os.path.expanduser('~/src/fzf.git')
+        fzf_install = InstallFromSource('https://github.com/junegunn/fzf.git',
+                                        fzf_repo)
+        fzf_install.select_tag('0.17.3')
+        fzf_install.compile_cmd([
+            ['./install', '--bin'],
+        ])
+        fzf_install.symlink('bin/fzf', '~/bin/fzf')
+        run(fzf_install)
+        execute(['./install', '--bin'], cwd=fzf_repo, stdout='TTY')
+        fzf_path = fzf_repo
 
-    # do it the long way
-    import os.path
-    fzf_repo = os.path.expanduser('~/src/fzf.git')
-    fzf_install = InstallFromSource('https://github.com/junegunn/fzf.git',
-                                    fzf_repo)
-    fzf_install.select_tag('0.17.3')
-    fzf_install.compile_cmd([
-        ['./install', '--bin'],
-    ])
-    fzf_install.symlink('bin/fzf', '~/bin/fzf')
-    run(fzf_install)
-    execute(['./install', '--bin'], cwd=fzf_repo, stdout='TTY')
-    lineinfile('~/.bashrc', 'source {}/shell/completion.bash'.format(fzf_repo))
-    lineinfile('~/.bashrc', 'source {}/shell/key-bindings.bash'.format(fzf_repo))
+    lineinfile('~/.bashrc', 'source {}/shell/completion.bash'.format(fzf_path))
+    lineinfile('~/.bashrc', 'source {}/shell/key-bindings.bash'.format(fzf_path))
     if wantzsh():
-        lineinfile('~/.zshrc', 'source {}/shell/completion.zsh'.format(fzf_repo))
-        lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_repo))
+        lineinfile('~/.zshrc', 'source {}/shell/completion.zsh'.format(fzf_path))
+        lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_path))
 
 
 @cachedfunc
