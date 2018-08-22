@@ -227,6 +227,12 @@ def tools():
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
 
+    # on OSX we want to install gnu utils (brew install coreutils findutils)
+    # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
+    if IS_OSX and haveexecutable('brew'):
+        if yesno('brew_install_coreutils', 'Install gnu utils?', default=wantfull()):
+            execute(['brew', 'install', 'coreutils', 'findutils'])
+
 
 @section
 def fzf_install():
