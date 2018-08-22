@@ -1,5 +1,5 @@
 # set up our dotfiles repo
-if [ -n "$BASHPID" ]; then
+if [ -n "$BASHPID" -o -n "$BASH_VERSION" ]; then
     DOTFILES_PATH="$(dirname $(dirname ${BASH_SOURCE[0]}))"
 else
     DOTFILES_PATH="$(dirname $(dirname ${(%):-%N}))"
