@@ -149,6 +149,7 @@ if filereadable(s:plugpath)
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
   Plug 'easymotion/vim-easymotion'
+  " TODO: revisit this and see if we can get some nice mappings up
   Plug 'brooth/far.vim'
 
   if has('nvim') && get(g:, 'want_fzf', 0)
@@ -291,6 +292,23 @@ if filereadable(s:plugpath)
   " to all the time
   Plug 'vim-scripts/Align', {'frozen': 0}
 
+  " TODO: have a crack at some of these plugins
+  " Plug 'chrisbra/NrrwRgn'
+  " https://github.com/prettier/prettier
+  " https://github.com/tpope/vim-projectionist
+  " https://github.com/danro/rename.vim
+  " https://github.com/shougo/deoplete.nvim
+  " https://github.com/myusuf3/numbers.vim
+  " https://github.com/xolox/vim-session
+  " https://github.com/vim-scripts/grep.vim
+  "https://github.com/michaeljsmith/vim-indent-object  
+  "https://github.com/andrewradev/splitjoin.vim
+  "https://github.com/vim-scripts/a.vim
+  "https://github.com/vim-airline/vim-airline
+  "https://vimawesome.com/plugin/ack-vim
+  "https://vimawesome.com/plugin/commentary-vim
+  "https://vimawesome.com/plugin/jedi-vim
+  "https://vimawesome.com/plugin/vim-easy-align
   call plug#end() " }}}
 endif
 
