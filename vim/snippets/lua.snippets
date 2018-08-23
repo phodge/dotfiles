@@ -7,3 +7,18 @@ snippet outd
 	  print(string.format('  "%s"=%s', __k, __v))
 	end
 	print('}')
+snippet logd
+	-- TODO: remove this debug
+	local __expr = ${1:somevar}
+	local __f = io.open('/tmp/q', 'a')
+	__f:write('${2:$1} = {\n')
+	for __k, __v in pairs(__expr) do
+	  __t = type(__v)
+	  if __t == "string" or __t == "boolean" then
+		__out = __v
+	  else
+		__out = '<'..__t..'>'
+	  end
+	  __f:write(string.format('  ["%s"]=%s\n', __k, __out))
+	end
+	__f:write('}\n') -- TODO: remove this debug
