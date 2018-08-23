@@ -183,21 +183,29 @@ def vim_install():
 
 @section
 def nvim_install():
-    if wantnvim():
-        # TODO: we suggest yum installing
-        # - cmake
-        # - gcc-c++
-        # - unzip (seriously ... the error on this one is aweful)
-        # NOTE: on ubuntu the requirements are:
-        # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip gettext
-        n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
-        n.select_tag(NVIM_TAG)
-        n.compile_cmd([
-            ['make', 'distclean'],
-            ['make'],
-            ['sudo', 'make', 'install'],
-        ])
-        run(n)
+    if not wantnvim():
+        return
+
+    if haveexecutable('brew'):
+        execute(['brew', 'install', 'neovim'])
+        return
+
+    # TODO: we suggest yum installing
+    # - cmake
+    # - gcc-c++
+    # - unzip (seriously ... the error on this one is aweful)
+    # NOTE: on ubuntu the requirements are:
+    # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip gettext
+    # NOTE: on OSX the requirements are:
+    # brew install cmake libtool gettext
+    n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
+    n.select_tag(NVIM_TAG)
+    n.compile_cmd([
+        ['make', 'distclean'],
+        ['make'],
+        ['sudo', 'make', 'install'],
+    ])
+    run(n)
 
 
 @section
