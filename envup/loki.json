@@ -5,9 +5,9 @@
 		{
 			"window_name": "PORTS",
 			"window_panes": [
-				{"pane_pretype": "ssh -g -L 13000:localhost:3000 -N p90"},
-				{"pane_pretype": "ssh -g -L 13001:localhost:3001 -N p90"},
-				{"pane_pretype": "ssh -g -L 13002:localhost:3002 -N p90"}
+				{"pane_pretype": "while :; do ssh -g -L 13000:localhost:3000 -N p90 || echo ERROR; done"},
+				{"pane_pretype": "while :; do ssh -g -L 13001:localhost:3001 -N p90 || echo ERROR; done"},
+				{"pane_pretype": "while :; do ssh -g -L 13002:localhost:3002 -N p90 || echo ERROR; done"}
 			]
 		},
 		{
