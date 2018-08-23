@@ -10,7 +10,7 @@ from homely.ui import allowinteractive, yesno
 from HOMELY import (HERE, HOME, jerjerrod_addline, mypips, wantfull,
                     wantjerjerrod, wantnvim, whenmissing)
 
-VIM_TAG = 'v8.0.0503'
+VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.3.0'
 
 
