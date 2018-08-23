@@ -215,18 +215,16 @@ def nvim_devel():
     # where to put the local clone
     dest = HOME + '/playground-6/neovim'
 
+    if not os.path.exists(dest):
+        # NOTE: using execute() directly means the dest directory isn't tracked by
+        # homely ... this is exactly what I want
+        execute(['git', 'clone', origin, dest])
+        execute(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
+        execute(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
+
     # create the symlink for the neovim project
     mkdir('~/playground-6')
     symlink(HERE + '/vimproject/neovim', dest + '/.vimproject')
-
-    if os.path.exists(dest):
-        return
-
-    # NOTE: using execute() directly means the dest directory isn't tracked by
-    # homely ... this is exactly what I want
-    execute(['git', 'clone', origin, dest])
-    execute(['git', 'remote', 'add', 'neovim', neovim], cwd=dest)
-    execute(['git', 'fetch', 'neovim', '--prune'], cwd=dest)
 
 
 @section
