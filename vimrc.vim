@@ -2,6 +2,10 @@ if ! exists('g:vim_peter')
   let g:vim_peter = 1
 endif
 
+if ! exists('g:peter_use_builtin_php_syntax')
+  let g:peter_use_builtin_php_syntax = 0
+endif
+
 if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
@@ -279,13 +283,15 @@ if filereadable(s:plugpath)
 
   " custom PHP syntax - causes problems when g:php_show_semicolon_error is
   " turned on though
-  Plug 'vim-scripts/php.vim--Hodge'
-  let g:php_show_semicolon_error = 0
-  let g:php_alt_construct_parents = 1
-  let g:php_alt_arrays = 2
-  let g:php_highlight_quotes = 1
-  let g:php_alt_properties = 1
-  let g:php_smart_members = 1
+  if ! g:peter_use_builtin_php_syntax
+    Plug 'vim-scripts/php.vim--Hodge'
+    let g:php_show_semicolon_error = 0
+    let g:php_alt_construct_parents = 1
+    let g:php_alt_arrays = 2
+    let g:php_highlight_quotes = 1
+    let g:php_alt_properties = 1
+    let g:php_smart_members = 1
+  endif
 
 
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
