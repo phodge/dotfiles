@@ -581,6 +581,27 @@ def font_install():
             execute(['brew', 'install'] + fonts)
 
 
+@section
+def iterm2_prefs():
+    if IS_OSX and yesno('use_iterm2_prefs', 'Use custom iterm2 prefs?', default=True):
+        execute([
+            'defaults',
+            'write',
+            'com.googlecode.iterm2.plist',
+            'PrefsCustomFolder',
+            '-string',
+            '~/dotfiles/iterm2',
+        ])
+        execute([
+            'defaults',
+            'write',
+            'com.googlecode.iterm2.plist',
+            'LoadPrefsFromCustomFolder',
+            '-bool',
+            'true',
+        ])
+
+
 # TODO: https://github.com/clvv/fasd
 
 
