@@ -102,6 +102,15 @@ if filereadable(s:plugpath)
   " typescript support
   Plug 'leafgarland/typescript-vim'
 
+  " the awesome Jedi library for python
+  Plug 'davidhalter/jedi-vim'
+  let g:jedi#use_splits_not_buffers = "winwidth"
+  " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
+  " B() vim isfreezing and I don't know why
+  let g:jedi#show_call_signatures = 0
+  let g:jedi#smart_auto_mappings = 0
+  let g:jedi#popup_on_dot = 0
+
   if has('nvim') && get(g:, 'peter_use_ycm', 0)
     " when in neovim land, use YouCompleteMe
     Plug 'Valloric/YouCompleteMe'
@@ -118,9 +127,9 @@ if filereadable(s:plugpath)
     nnoremap gd :split<CR>:YcmCompleter GoTo<CR>
     nnoremap <space>r :YcmCompleter RefactorRename <C-R><C-W>
     nnoremap <space>t :YcmCompleter GetType<CR>
-  else
-    " fallback for just python compeletion when we're in plain old Vim
-    Plug 'davidhalter/jedi-vim'
+
+    " don't use jedi completions if we have YCM enabled
+    let g:jedi#completions_enabled = 0
   endif
 
   Plug 'EinfachToll/DidYouMean'
@@ -391,14 +400,6 @@ let g:shell_command_reload_map = '<F12>'
 " use F12 in any other buffer to reload ALL shell windows
 nnoremap <F12> :ShellRerun<CR>
 
-
-" options for JEDI-vim
-let g:jedi#use_splits_not_buffers = "winwidth"
-" NOTE: I'm disabling call signatures because A) it doesn't seem to work and
-" B() vim isfreezing and I don't know why
-let g:jedi#show_call_signatures = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
 
 " syntastic config
 let g:syntastic_aggregate_errors = 1
