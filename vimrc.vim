@@ -68,9 +68,6 @@ endif
 
     " add our own vim/ and vim-multi-python/ folders to runtimepath
     let s:specials = ['vim', 'vim-multi-python', 'vim-git-magic']
-    if g:tmux_session == 'SPACETEA'
-      call add(s:specials, 'vim-space-tea')
-    endif
     for s:name in s:specials
       let s:local = expand('<sfile>:h').'/'.s:name
       let &runtimepath = printf('%s,%s,%s/after', s:local, &runtimepath, s:local)
@@ -98,6 +95,10 @@ if filereadable(s:plugpath)
   let s:plugins = has('nvim') ? '~/.nvim/plugged' : '~/.vim/plugged'
 
   call plugmaster#begin('~/src/plugedit', '~/src', s:plugins) " {{{
+
+  if g:tmux_session == 'SPACETEA-DEV'
+    Plug 'phodge/spacetea.vim'
+  endif
 
   " typescript support
   Plug 'leafgarland/typescript-vim'
