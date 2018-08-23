@@ -33,6 +33,14 @@ if exists('&termguicolors')
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   endif
 
+  " vim8 needs explicit terminal codes if we want cursor shape changing to
+  " work
+  if ! has('nvim')
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
+  endif
+
 elseif has('nvim') && &term == 'screen'
   " TODO: what was this for?
   "set term=screen-256color
@@ -272,15 +280,6 @@ if filereadable(s:plugpath)
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
   " to all the time
   Plug 'vim-scripts/Align', {'frozen': 0}
-  
-  " makes the cursor change shape when in insert mode
-  if has('nvim')
-    let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-  else
-    " NOTE: normally you're not supposed to do this, but I have different
-    " plugin paths for vim/nvim so this works for me
-    Plug 'sjl/vitality.vim'
-  endif
 
   call plug#end() " }}}
 endif
