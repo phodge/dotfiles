@@ -24,7 +24,7 @@ def _get_refs():
             tags.add(ref[10:])
         elif ref.startswith('refs/remotes/'):
             if not ref.endswith('/HEAD'):
-                name, branch = ref[13:].split('/')
+                name, branch = ref[13:].split('/', 1)
                 remote.setdefault(name, set()).add(branch)
         elif ref == 'refs/stash':
             continue
