@@ -253,7 +253,7 @@ if filereadable(s:plugpath)
   Plug 'rizzatti/dash.vim'
   Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
   Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
-  Plug 'ternjs/tern_for_vim'
+  "Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
   Plug 'tpope/vim-repeat'
