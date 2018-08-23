@@ -564,6 +564,23 @@ def git_install():
         execute(cmd, stdout="TTY")
 
 
+@section
+def font_install():
+    if IS_OSX:
+        if haveexecutable('brew'):
+            fonts = [
+                'homebrew/cask-fonts/font-inconsolata',
+                'homebrew/cask-fonts/font-anonymous-pro',
+            ]
+            if wantpowerline():
+                fonts.extend([
+                    'homebrew/cask-fonts/font-inconsolata-for-powerline',
+                    'homebrew/cask-fonts/font-anonymice-powerline',
+                ])
+            # install some nicer fonts
+            execute(['brew', 'install'] + fonts)
+
+
 # TODO: https://github.com/clvv/fasd
 
 
