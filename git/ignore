@@ -7,3 +7,5 @@
 .cache
 .gutctags
 .mypy_cache
+.tags.lock
+.tags.temp
