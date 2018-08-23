@@ -45,6 +45,7 @@ fun! <SID>ShowGitLog(gitcmd)
   rightbelow vnew
   let s:previewwindows[l:mainbuf] = win_getid()
   try
+    " TODO: we need to CD to the path of the git repo
     setlocal buftype=nofile bufhidden=wipe
     exe 'read !'.a:gitcmd
     silent! exe 'file '.fnameescape(a:gitcmd)
