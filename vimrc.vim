@@ -104,9 +104,6 @@ if filereadable(s:plugpath)
     Plug 'phodge/spacetea.vim'
   endif
 
-  " typescript support
-  Plug 'leafgarland/typescript-vim'
-
   " the awesome Jedi library for python
   Plug 'davidhalter/jedi-vim'
   let g:jedi#use_splits_not_buffers = "winwidth"
@@ -234,7 +231,28 @@ if filereadable(s:plugpath)
   Plug 'majutsushi/tagbar'
   nnoremap <space>n :TagbarToggle<CR>
   
-  PlugMaster 'phodge/vim-javascript-syntax'
+  if 1
+    PlugMaster 'phodge/vim-javascript-syntax'
+
+    " typescript support
+    Plug 'leafgarland/typescript-vim'
+
+    " tsx syntax as well
+    Plug 'peitalin/vim-jsx-typescript'
+
+    aug TypeScriptTSX
+    aug end
+    autocmd! TypeScriptTSX BufNewFile,BufRead *.tsx set filetype=typescript.jsx
+  else
+    Plug 'pangloss/vim-javascript'
+    Plug 'othree/javascript-libraries-syntax.vim'
+
+    let g:used_javascript_libs = 'jquery,angularjs'
+
+    " typescript support
+    Plug 'leafgarland/typescript-vim'
+  endif
+
   PlugMaster 'phodge/vim-python-syntax'
   PlugMaster 'phodge/vim-jsx'
   PlugMaster 'phodge/MicroRefactor'
