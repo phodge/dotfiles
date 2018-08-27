@@ -419,6 +419,8 @@ set ttimeoutlen=40
 
 set timeoutlen=500 " give me time to enter multi-key mappings
 
+" don't jump to the start of the line when moving around or re-indenting
+set nostartofline
 
 set fileformats=unix,dos,mac
 
