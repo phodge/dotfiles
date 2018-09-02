@@ -11,7 +11,7 @@ from HOMELY import (HERE, HOME, jerjerrod_addline, mypips, wantfull,
                     wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
-NVIM_TAG = 'v0.3.0'
+NVIM_TAG = 'v0.3.1'
 
 
 @section
