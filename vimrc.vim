@@ -243,6 +243,9 @@ if filereadable(s:plugpath)
     aug TypeScriptTSX
     aug end
     autocmd! TypeScriptTSX BufNewFile,BufRead *.tsx set filetype=typescript.jsx
+
+    " Vue support
+    Plug 'posva/vim-vue'
   else
     Plug 'pangloss/vim-javascript'
     Plug 'othree/javascript-libraries-syntax.vim'
