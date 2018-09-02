@@ -186,7 +186,7 @@ def tools():
     if want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
-                   apt='the_silver_searcher')
+                   apt='silversearcher-ag')
     if yesno('install_ripgrep', 'Install ripgrep?', wantfull()):
         yum = None
         if haveexecutable('yum') and install_fedora_copr():
