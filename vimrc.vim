@@ -392,6 +392,10 @@ if filereadable(s:plugpath)
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
   " to all the time
   Plug 'vim-scripts/Align', {'frozen': 0}
+  
+  if g:tmux_session == 'NEOSITTER'
+    PlugMaster 'phodge/neovim-tree-sitter'
+  endif
 
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
