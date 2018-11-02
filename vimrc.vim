@@ -305,7 +305,7 @@ if filereadable(s:plugpath)
   " custom PHP syntax - causes problems when g:php_show_semicolon_error is
   " turned on though
   if ! g:peter_use_builtin_php_syntax
-    Plug 'vim-scripts/php.vim--Hodge'
+    PlugMaster 'phodge/php-syntax.vim'
     let g:php_show_semicolon_error = 0
     let g:php_alt_construct_parents = 1
     let g:php_alt_arrays = 2
