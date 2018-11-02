@@ -125,7 +125,7 @@ fi
 dex() {
     local search="$1"
     shift
-    docker exec -ti $(docker ps -qf name="$search") "$@"
+    docker exec -ti $(docker ps -qf ancestor="$search") "$@"
 }
 
 # register a python/click based script for completion generation
