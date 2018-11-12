@@ -19,7 +19,7 @@ endif
 
 " sensible defaults to start with
 if &compatible
-	setglobal nocompatible
+  setglobal nocompatible
 endif
 
 set confirm
