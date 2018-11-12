@@ -18,6 +18,16 @@ HERE = os.path.dirname(__file__)
 IS_OSX = os.getenv('HOME').startswith('/Users/')
 
 
+# TODO: build a platform-neutral clipboard system
+# - bin/C bin/P for copy/paste which is aliased to / or wraps system clipboard
+# - detect when coming via X11 ssh ($DISPLAY is set?) and use xsel for clipboard, even on OSX
+# - configure vim/nvim to use bin/C and bin/P and clipboard=unnamedplus
+# - provide some mechanism for automatically doing the .ssh config to enable X11-forwarding to
+#   specific hosts
+# - find a mechanism that allows us to forward pbcopy/pbpaste from OS X
+# - configure tmux to use bin/C and bin/P for copy+paste
+
+
 # decorator to make a function that caches its result temporarily
 def cachedfunc(func):
     def wrapper(*args, **kwargs):
