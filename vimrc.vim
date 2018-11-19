@@ -283,7 +283,7 @@ if filereadable(s:plugpath)
   " show vertical lines to indicate indent level
   Plug 'Yggdroot/indentLine'
   " stop making JSON quotes disappear
-  let g:indentLine_fileTypeExclude = ['help', 'json']
+  let g:indentLine_fileTypeExclude = ['help', 'json', 'markdown']
 
   " TODO: also try 'nathanaelkane/vim-indent-guides'
 
