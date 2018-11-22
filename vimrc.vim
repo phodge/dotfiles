@@ -336,6 +336,7 @@ if filereadable(s:plugpath)
   "https://vimawesome.com/plugin/commentary-vim
   "https://vimawesome.com/plugin/jedi-vim
   "https://vimawesome.com/plugin/vim-easy-align
+  "https://github.com/numirias/semshi
   call plug#end() " }}}
 endif
 
