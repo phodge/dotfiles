@@ -303,15 +303,15 @@ if filereadable(s:plugpath)
   if 1
     PlugMaster 'phodge/vim-javascript-syntax'
 
-    " typescript support
-    Plug 'leafgarland/typescript-vim'
-
-    " tsx syntax as well
-    Plug 'peitalin/vim-jsx-typescript'
-
     aug TypeScriptTSX
     aug end
-    autocmd! TypeScriptTSX BufNewFile,BufRead *.tsx set filetype=typescript.jsx
+    autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
+
+    " typescript support
+    Plug 'leafgarland/typescript-vim', {'on': []}
+
+    " tsx syntax as well
+    Plug 'peitalin/vim-jsx-typescript', {'on': []}
 
     " Vue support
     Plug 'posva/vim-vue'
