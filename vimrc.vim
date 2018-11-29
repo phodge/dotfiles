@@ -1201,5 +1201,8 @@ fun! <SID>Hiwords()
 endfun
 com! -nargs=0 Hiwords call <SID>Hiwords()
 
+" XXX: languageClient-neovim turns on this option, but shortmess=F stops DidYouMean from working
+set shortmess-=F
+
 
 let s:vim_entered = 1
