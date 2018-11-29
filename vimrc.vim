@@ -1083,6 +1083,25 @@ fun! <SID>JerjerrodClearCache()
 endfunction
 
 
+let s:skeletons_dir = expand('<sfile>:h:p').'/vim/skeletons'
+aug Skeletons
+aug end
+au! Skeletons BufNewFile *.tsx call <SID>NamedSkeleton('component.tsx', expand('<afile>'))
+
+function! <SID>NamedSkeleton(template_name, buffer_name)
+  " paste in the template file
+  exe printf('read %s/%s', s:skeletons_dir, a:template_name)
+  normal! ggdd
+  setlocal modified
+
+  " work out the name of the thing
+  let l:auto_name = fnamemodify(a:buffer_name, ':t:r:r:r:r')
+
+  " replace in the name of the thing
+  exe '%s/\<__NAME__\>/'.l:auto_name.'/ge'
+endfun
+
+
 fun! <SID>Hiwords()
   if ! exists(':Hiword')
     return
