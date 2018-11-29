@@ -24,6 +24,10 @@ endif
 
 set confirm
 
+" when to use LSP and YCM
+let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
+let s:use_ycm = has('nvim') && get(g:, 'peter_use_ycm', 0) && !s:use_lsp
+
 " 256-color mode for vim8/neovim
 if exists('&termguicolors')
   " NOTE: this needs to be set at startup
@@ -117,7 +121,60 @@ if filereadable(s:plugpath)
   let g:jedi#smart_auto_mappings = 0
   let g:jedi#popup_on_dot = 0
 
-  if has('nvim') && get(g:, 'peter_use_ycm', 0)
+  " ALE setup {{{
+
+    Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
+
+    let g:ale_linters = get(g:, 'ale_linters', {})
+    let g:ale_linters.php = ['phan', 'phpcs', 'psalm']
+
+    let g:ale_php_cs_fixer_use_global = 1
+    let g:ale_php_cs_fixer_executable = $HOME.'/.config/composer/vendor/bin/php-cs-fixer'
+    let g:ale_fixers = get(g:, 'ale_fixers', {})
+    let g:ale_fixers.php = ['php_cs_fixer']
+
+    if ! s:use_lsp
+      " when not using LSP plugin, allow Ale to talk to the language server
+      "let g:ale_php_langserver_use_global = 1
+      "let g:ale_php_langserver_executable = $HOME.'/.config/composer/vendor/felixfbecker/language-server/bin/php-language-server.php'
+      "call add(g:ale_linters.php, 'langserver')
+      
+      if ! s:use_ycm
+        " when neither LSP or YCM is enabled, ALE will perform these things:
+        nnoremap <space>d :ALEGoToDefinition<CR>
+      endif
+    endif
+
+  " }}}
+
+  if s:use_lsp
+    " language servers
+    Plug 'autozimu/LanguageClient-neovim', {
+          \ 'branch': 'next',
+          \ 'do': 'bash install.sh',
+          \ }
+    let g:LanguageClient_serverCommands = {'php': ['tcp://127.0.0.1:12346']}
+
+    " don't use language server for linting - Ale does a better job of this already
+    let g:LanguageClient_diagnosticsEnable = 0
+
+    " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    " \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
+    " \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
+    " \ 'python': ['/usr/local/bin/pyls'],
+    " \ }
+
+    Plug 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins'}
+
+    "Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run-script parse-stubs'}
+
+    aug PeterLSP
+    au!
+    au FileType php nnoremap <buffer> <space>d :sp <BAR> call LanguageClient_textDocument_definition()<CR>
+    au FileType php nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
+    au FileType php nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
+    aug end
+  elseif s:use_ycm
     " when in neovim land, use YouCompleteMe
     Plug 'Valloric/YouCompleteMe'
 
@@ -277,7 +334,6 @@ if filereadable(s:plugpath)
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
   Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
-  Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
   "Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
