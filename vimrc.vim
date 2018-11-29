@@ -104,6 +104,10 @@ if filereadable(s:plugpath)
     Plug 'phodge/spacetea.vim'
   endif
 
+  " why not
+  Plug 'editorconfig/editorconfig-vim'
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
   " the awesome Jedi library for python
   Plug 'davidhalter/jedi-vim'
   let g:jedi#use_splits_not_buffers = "winwidth"
