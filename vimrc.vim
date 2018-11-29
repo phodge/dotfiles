@@ -289,6 +289,14 @@ if filereadable(s:plugpath)
   let g:gutentags_ctags_exclude = ['.mypy_cache']
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') && v:version >= 704 ? {} : {'on': []}
 
+  " configure gutenttags to use git ls-files to find files ... I don't know why this isn't the
+  " default
+  let g:gutentags_file_list_command = {
+        \ 'markers': {
+        \   '.git': 'git ls-files --cached --others --exclude-standard',
+        \   },
+        \ }
+
   Plug 'majutsushi/tagbar'
   nnoremap <space>n :TagbarToggle<CR>
   
