@@ -125,6 +125,26 @@ def whenmissing(filename, substr):
 
 
 @section
+def my_settings():
+    try:
+        from homely.install import setallowinstall
+    except ImportError:
+        raise Exception('setallowinstall() not importable - please upgrade homely')
+
+    if wantfull():
+        # determine whether we're allowed to install packages
+        allow_packages = yesno(
+            'allow_install',
+            'Allow installing of packages using yum/apt or `sudo make install` etc?',
+            None
+        )
+    else:
+        allow_packages = False
+
+    setallowinstall(allow_packages)
+
+
+@section
 def brew_install():
     if not (IS_OSX and wantfull()):
         return
