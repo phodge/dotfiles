@@ -396,15 +396,17 @@ if filereadable(s:plugpath)
   " https://github.com/myusuf3/numbers.vim
   " https://github.com/xolox/vim-session
   " https://github.com/vim-scripts/grep.vim
-  "https://github.com/michaeljsmith/vim-indent-object  
-  "https://github.com/andrewradev/splitjoin.vim
-  "https://github.com/vim-scripts/a.vim
-  "https://github.com/vim-airline/vim-airline
-  "https://vimawesome.com/plugin/ack-vim
-  "https://vimawesome.com/plugin/commentary-vim
-  "https://vimawesome.com/plugin/jedi-vim
-  "https://vimawesome.com/plugin/vim-easy-align
-  "https://github.com/numirias/semshi
+  " https://github.com/michaeljsmith/vim-indent-object  
+  " https://github.com/andrewradev/splitjoin.vim
+  " https://github.com/vim-scripts/a.vim
+  " https://github.com/vim-airline/vim-airline
+  " https://vimawesome.com/plugin/ack-vim
+  " https://vimawesome.com/plugin/commentary-vim
+  " https://vimawesome.com/plugin/jedi-vim
+  " https://vimawesome.com/plugin/vim-easy-align
+  " https://github.com/numirias/semshi
+  " https://github.com/erikfercak/php-search-doc
+  " https://github.com/beanworks/vim-phpfmt
   call plug#end() " }}}
 endif
 
