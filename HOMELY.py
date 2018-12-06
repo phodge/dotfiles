@@ -63,7 +63,7 @@ def allowinstallingthings():
 
 @cachedfunc
 def install_fedora_copr():
-    if not wantfull():
+    if not allowinstallingthings():
         return False
 
     if not haveexecutable('yum'):
@@ -201,7 +201,7 @@ def pythonpath():
 
 @section
 def install_pip():
-    if not wantfull():
+    if not allowinstallingthings():
         return
     import subprocess
     if not haveexecutable('pip2'):
@@ -583,6 +583,9 @@ def ctags():
 @section
 def git_install():
     if not haveexecutable('apt-get'):
+        return
+
+    if not allowinstallingthings():
         return
 
     if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=wantfull()):

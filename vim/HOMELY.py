@@ -7,8 +7,8 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
-from HOMELY import (HERE, HOME, jerjerrod_addline, mypips, wantfull,
-                    wantjerjerrod, wantnvim, whenmissing)
+from HOMELY import (HERE, HOME, allowinstallingthings, jerjerrod_addline,
+                    mypips, wantfull, wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.3.1'
@@ -133,6 +133,9 @@ def vim_config():
 
 @section
 def vim_install():
+    if not allowinstallingthings():
+        return
+
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
     if not yesno('compile_vim', 'Compile vim from source?', wantfull()):
@@ -188,6 +191,13 @@ def nvim_install():
 
     if haveexecutable('brew'):
         execute(['brew', 'install', 'neovim'])
+        return
+
+    the_hard_way = yesno('compile_nvim',
+                         'Compile/install nvim from source?',
+                         recommended=allowinstallingthings()
+                         )
+    if not the_hard_way:
         return
 
     # TODO: we suggest yum installing
