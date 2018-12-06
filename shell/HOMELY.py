@@ -154,6 +154,8 @@ def zsh_config():
 
 @section
 def install_fast_hg_status():
+    if not haveexecutable('hg'):
+        return
 
     wanted = yesno('install_fast_hg_status', 'Install fast-hg-status?', wantfull())
     if not wanted:
