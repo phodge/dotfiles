@@ -33,7 +33,20 @@ hg_fast_state() {
 if [ -n "$ZSH_NAME" ]; then
     source $DOTFILES_PATH/shell/zsh.sh
 else
-    shopt -s histappend
+	# don't put duplicate lines or lines starting with space in the history.
+	# See bash(1) for more options
+	HISTCONTROL=ignoredups:erasedups
+
+	# append to the history file, don't overwrite it
+	shopt -s histappend
+
+	# make history / history file sizes a bit more generous
+	HISTSIZE=10000
+	HISTFILESIZE=10000
+
+	# check the window size after each command and, if necessary,
+	# update the values of LINES and COLUMNS.
+	shopt -s checkwinsize
 
     if [ -e $HOME/src/git-completion.bash ]; then
         source $HOME/src/git-completion.bash
