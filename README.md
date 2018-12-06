@@ -1,6 +1,23 @@
 INSTALLATION INSTRUCTIONS
 =========================
 
+Ubuntu
+------
+
+First, make life easier on yourself:
+
+    export PATH=$HOME/.local/bin
+
+Next, `python3-pip` seems to install an old version of pip3 that segfaults, and
+`ensurepip` doesn't seem to be installed. So you can use:
+
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	python3 get-pip.py --user && pip3 --version && rm -i get-pip.py
+
+
+Universal
+---------
+
 1) Install homely:
 
     pip3 install homely
