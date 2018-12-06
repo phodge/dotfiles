@@ -1,7 +1,7 @@
 import json
 import os
 
-from homely.general import section, writefile
+from homely.general import mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
@@ -19,6 +19,8 @@ def init_composer():
         'minimum-stability': 'dev',
         'prefer-stable': True,
     }
+    mkdir('~/.config')
+    mkdir('~/.config/composer')
     with writefile('~/.config/composer/composer.json') as f:
         json.dump(composer_config, f)
 
