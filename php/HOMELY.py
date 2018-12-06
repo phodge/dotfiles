@@ -1,10 +1,12 @@
 import json
+import os
 
 from homely.general import section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
 INIT_DONE = False
+HOME = os.getenv('HOME')
 
 
 def init_composer():
@@ -35,7 +37,7 @@ def install_php_language_server():
     )
     execute(
         ['composer', 'run-script', 'parse-stubs'],
-        cwd='~/.config/composer/vendor/felixfbecker/language-server',
+        cwd=HOME + '/.config/composer/vendor/felixfbecker/language-server',
     )
 
 
