@@ -354,7 +354,6 @@ def mypips(venv_pip=None):
     # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
     # present
     packages = [
-        'simplejson',
         'jedi',
         'yapf',
         'isort',
@@ -381,6 +380,9 @@ def mypips(venv_pip=None):
     if venv_pip:
         venv_exec(venv_pip, ['pip', 'install', 'flake8'])
     else:
+        # always install simplejson globally as we need it for other parts of our homely install
+        mypipinstall('simplejson', trypips=['pip2', 'pip3'])
+
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
             mypipinstall('flake8', ['pip3'])
