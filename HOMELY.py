@@ -5,7 +5,7 @@ import re
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             haveexecutable, include, lineinfile, mkdir, run,
-                            section, symlink)
+                            section, symlink, writefile)
 from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 from homely.system import execute
@@ -344,7 +344,7 @@ def venv_exec(venv_pip, cmd, **kwargs):
     return execute(cmd, env=env, **kwargs)
 
 
-def mypips(venv_pip=None):
+def mypips(venv_pip=None, write_dev_reqs=False):
     # of course we probably want virtualenv!
     if venv_pip is None:
         pipinstall('virtualenv')
@@ -352,7 +352,7 @@ def mypips(venv_pip=None):
     theworks = wantfull() or venv_pip
 
     # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
-    # present
+    # present. They're needed for development.
     packages = [
         'jedi',
         'yapf',
@@ -360,15 +360,32 @@ def mypips(venv_pip=None):
         # needed for `git rebase -i` commit comparisons
         'GitPython',
     ]
+
     if wantnvim():
         # if we want nvim then we always want the neovim python package
         packages.append('neovim')
+
+    # a nice python repl
     if theworks or yesno('install_ptpython', 'PIP Install ptpython?', True):
         packages.append('ptpython')
+
+    # another nice python repl
     if theworks or yesno('install_ipython', 'PIP Install iPython?', True):
         packages.append('ipython')
+
+    # a few of my macros use `q` for logging
     if theworks or yesno('install_python_q', 'PIP Install `q`?', True):
         packages.append('q')
+
+    if write_dev_reqs:
+        assert venv_pip is None
+        mkdir('~/.config')
+
+        with writefile('~/.config/dev_requirements.txt') as f:
+            f.write('flake8\n')
+            for p in packages:
+                f.write(p + '\n')
+
     for package in packages:
         if venv_pip:
             venv_exec(venv_pip, ['pip', 'install', package])
@@ -393,7 +410,7 @@ def mypips(venv_pip=None):
 @section
 def pipfavourites():
     # install my favourite pip modules with --user
-    mypips()
+    mypips(write_dev_reqs=True)
 
 
 @section
