@@ -1155,20 +1155,36 @@ endfunction
 
 let s:skeletons_dir = expand('<sfile>:h:p').'/vim/skeletons'
 aug Skeletons
+au!
+au BufNewFile *.tsx call <SID>NamedSkeleton('component.tsx', expand('<afile>'))
+au BufNewFile retest.sh call <SID>NamedSkeleton('retest.sh', expand('<afile>'))
 aug end
-au! Skeletons BufNewFile *.tsx call <SID>NamedSkeleton('component.tsx', expand('<afile>'))
+
+if ! exists('s:next_group_number')
+  let s:next_group_number = 1
+endif
 
 function! <SID>NamedSkeleton(template_name, buffer_name)
   " paste in the template file
-  exe printf('read %s/%s', s:skeletons_dir, a:template_name)
+  let l:template_path = printf('%s/%s', s:skeletons_dir, a:template_name)
+  exe 'read' l:template_path
   normal! ggdd
   setlocal modified
 
-  " work out the name of the thing
-  let l:auto_name = fnamemodify(a:buffer_name, ':t:r:r:r:r')
+  " set up a self-destructing autocmd that will put the correct permissions on the file on write
+  let l:perms = getfperm(l:template_path)
+  let g:foo = [l:perms]
+  if l:perms != ''
+    let l:group_number = s:next_group_number
+    let s:next_group_number += 1
 
-  " replace in the name of the thing
-  exe '%s/\<__NAME__\>/'.l:auto_name.'/ge'
+    let l:au_group = 'SkeletonPerms_' . l:group_number
+    call add(g:foo, l:au_group)
+    exe 'augroup' l:au_group
+    exe printf('au BufWritePost <buffer> call setfperm(bufname(""), "%s") | au! %s | aug! %s',
+          \ l:perms, l:au_group, l:au_group)
+    augroup END
+  endif
 endfun
 
 
