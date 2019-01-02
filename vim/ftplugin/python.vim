@@ -18,13 +18,42 @@ nnoremap <buffer> <space>2 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 
+command! -bang -nargs=+ -bar -buffer Flake8Ignore call <SID>Ignore('<bang>' == '!', <f-args>)
+
 " This is the default flake8 ignore list. See
 let s:flake8_default_ignore = split('E121 E123 E126 E226 E24 E704')
 
-" Always ignore E265 (no space between '#' and comment text) and E116
-" (unexpected indent (comment)) since my comment-adding mappings always
-" produce these errors
-let b:flake8_ignore = ['E265', 'E116']
+function! <SID>Ignore(reset, ...)
+  if a:reset
+    " reset ignore list
+    let b:flake8_ignore = []
+  else
+    " make sure variable is set
+    let b:flake8_ignore = get(b:, 'flake8_ignore', [])
+  endif
+
+  " items to be added/removed
+  for l:item in a:000
+    if l:item =~ '^-'
+      let l:name = strpart(l:item, 1)
+      " remove item as many times as it appears
+      for i in range(100)
+        let l:idx = index(b:flake8_ignore, l:name)
+        if l:idx == -1
+          break
+        endif
+        call remove(b:flake8_ignore, l:idx)
+      endfor
+    elseif strlen(l:item)
+      " add the item if it isn't already there
+      if -1 == index(b:flake8_ignore, l:item)
+        call add(b:flake8_ignore, l:item)
+      endif
+    endif
+  endfor
+
+  call <SID>PyVersionChanged()
+endfun
 
 " create the dict for adding isort flags
 if !exists('b:isort_flags')
@@ -84,6 +113,11 @@ fun! <SID>PyVersionChanged()
   let b:python_py3_compat = l:want3 ? 1 : 0
   syn clear
   set syntax=python
+
+  " redo ALE errors if necessary
+  if exists(':ALELint')
+    ALELint
+  endif
 endfun
 
 fun! <SID>FormatFile()
@@ -501,3 +535,9 @@ fun! <SID>GetCurrentImports() " {{{
   endfor
   return l:imports
 endfun " }}}
+
+
+" Always ignore E265 (no space between '#' and comment text) and E116
+" (unexpected indent (comment)) since my comment-adding mappings always
+" produce these errors
+Flake8Ignore E265 E116
