@@ -28,6 +28,7 @@ endfunction
 function! <SID>SetupAutocmds(projectpath, projectrtp)
   " - set up autocmd's such that ftplugin and after/ftplugin files are sourced
   exe printf("au! VimProject BufRead,BufNewFile %s/** call <SID>LocalFTPlugin('%s')", a:projectpath, a:projectrtp)
+  exe printf("au! VimProject FileType * if stridx(expand('<afile>:p'), '%s') == 0 | call <SID>LocalFTPlugin('%s') | endif", a:projectpath, a:projectrtp)
   exe printf("au! VimProject Syntax * if stridx(expand('<afile>:p'), '%s') == 0 | call <SID>LocalSyntax('%s') | endif", a:projectpath, a:projectrtp)
   "   when editing the files
   " - anything else? No I don't think so ...
