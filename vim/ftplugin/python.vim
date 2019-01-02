@@ -75,10 +75,7 @@ fun! <SID>PyVersionChanged()
     call add(l:flakes, 2)
   endif
 
-  " tell syntastic to use our multiflake8 for the current buffer
-  let b:syntastic_checkers = ['flake8']
-  let b:syntastic_flake8_exec = 'multiflake8'
-  " configure Ale the same way
+  " tell Ale to use our multiflake8 for the current buffer
   let b:ale_linters = {"python": ['flake8', 'mypy']}
   let b:ale_python_flake8_executable = 'multiflake8'
   " tell ALE that we always want to use the 'multiflake8' executable - even
@@ -104,9 +101,8 @@ fun! <SID>PyVersionChanged()
     call add(l:args, '--use-this-checker='.l:flake)
   endfor
 
-  " put the finalised args where ale/syntastic will find them
+  " put the finalised args where ale will find them
   let b:ale_python_flake8_options = join(map(l:args, 'shellescape(v:val)'), ' ')
-  let b:syntastic_python_flake8_post_args = b:ale_python_flake8_options
 
   " toggle python2/3 syntax compatibility
   let b:python_py2_compat = l:want2 ? 1 : 0
@@ -354,15 +350,6 @@ else
   silent! nunmap <buffer>     K
   silent! nunmap <buffer> <C-K>
 endif
-
-" ignore warning about no space after # ... this causes all our commented code
-" to get flagged.
-if ! exists('g:syntastic_python_flake8_quiet_messages')
-  let g:syntastic_python_flake8_quiet_messages = {}
-endif
-let g:syntastic_python_flake8_quiet_messages['regex'] = '\[E265\]$'
-
-
 
 function! <SID>AddComment() " {{{
   s,^\(\s*\)\@>\([^#]\),\1#\2,e

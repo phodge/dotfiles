@@ -43,13 +43,6 @@ if not exists('g:hackymappings') then
   let('hackymappings', 0)
 end
 
-if not exists('g:want_syntastic') then
-  let('want_syntastic', 0)
-  -- this is needed because we still have syntastic installed (although not in
-  -- &runtimepath)
-  let('ale_emit_conflict_warnings', 0)
-end
-
 -- sensible defaults to start with
 if eval('&compatible') then
   setglobal('compatible', false)
@@ -285,8 +278,7 @@ if filereadable(plugpath) then
 
   --"Plug 'python-rope/ropevim'
   --Plug 'rizzatti/dash.vim'
-  --Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
-  --Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
+  --Plug 'w0rp/ale'
   --Plug 'ternjs/tern_for_vim'
   --Plug 'tpope/vim-fugitive'
   --Plug 'tpope/vim-obsession'
@@ -458,15 +450,6 @@ end
 --nnoremap <F12> :ShellRerun<CR>
 
 
---" syntastic config
---let g:syntastic_aggregate_errors = 1
---if ! exists('g:syntastic_python_checkers')
-  --let g:syntastic_python_checkers = ['flake8']
---endif
---if ! exists('g:syntastic_javascript_checkers')
-  --let g:syntastic_javascript_checkers = executable('eslint') ? ['eslint'] : []
---endif
-
 --filetype plugin indent on
 --syntax on
 
@@ -596,11 +579,8 @@ end
   --set statusline+=%n\ \ %f
   --set statusline+=\ %{(&l:ff=='dos')?':dos:\ ':''}%m%<%r%h%w
 
-  --" syntastic errors
-  --if g:want_syntastic
-    --set statusline+=%#Error#
-    --set statusline+=%{SyntasticStatuslineFlag()}
-  --elseif exists('*get')
+  --" ALE status
+  --if exists('*get')
     --set statusline+=%#Error#
     --set statusline+=%{get(b:,'__ale_error_flag','')}
     --set statusline+=%#Search#

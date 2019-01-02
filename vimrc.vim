@@ -10,13 +10,6 @@ if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
 
-if ! exists('g:want_syntastic')
-  let g:want_syntastic = 0
-  " this is needed because we still have syntastic installed (although not in
-  " &runtimepath)
-  let g:ale_emit_conflict_warnings = 0
-endif
-
 " sensible defaults to start with
 if &compatible
   setglobal nocompatible
@@ -123,7 +116,7 @@ if filereadable(s:plugpath)
 
   " ALE setup {{{
 
-    Plug 'w0rp/ale', g:want_syntastic ? {'on': []} : {}
+    Plug 'w0rp/ale'
 
     let g:ale_linters = get(g:, 'ale_linters', {})
     let g:ale_linters.php = ['phan', 'phpcs', 'psalm']
@@ -341,7 +334,6 @@ if filereadable(s:plugpath)
 
   "Plug 'python-rope/ropevim'
   Plug 'rizzatti/dash.vim'
-  Plug 'scrooloose/syntastic', g:want_syntastic ? {} : {'on': []}
   "Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
@@ -520,15 +512,6 @@ let g:shell_command_reload_map = '<F12>'
 nnoremap <F12> :ShellRerun<CR>
 
 
-" syntastic config
-let g:syntastic_aggregate_errors = 1
-if ! exists('g:syntastic_python_checkers')
-  let g:syntastic_python_checkers = ['flake8']
-endif
-if ! exists('g:syntastic_javascript_checkers')
-  let g:syntastic_javascript_checkers = executable('eslint') ? ['eslint'] : []
-endif
-
 filetype plugin indent on
 syntax on
 
@@ -658,11 +641,8 @@ if g:vim_peter && version >= 700
   set statusline+=%n\ \ %f
   set statusline+=\ %{(&l:ff=='dos')?':dos:\ ':''}%m%<%r%h%w
 
-  " syntastic errors
-  if g:want_syntastic
-    set statusline+=%#Error#
-    set statusline+=%{SyntasticStatuslineFlag()}
-  elseif exists('*get')
+  " ALE status
+  if exists('*get')
     set statusline+=%#Error#
     set statusline+=%{get(b:,'__ale_error_flag','')}
     set statusline+=%#Search#
