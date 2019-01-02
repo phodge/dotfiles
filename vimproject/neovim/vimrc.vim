@@ -25,8 +25,8 @@ function! SyntaxCheckers_c_clint_GetLocList() dict
 endfunction
 
 
-nnoremap <F5> :Shell ag -ws <C-R><C-W><CR>
-nnoremap <F6> :Shell ag -wis <C-R><C-W><CR>
+nnoremap <F5> :Shell rg -ws <C-R><C-W><CR>
+nnoremap <F6> :Shell rg -wis <C-R><C-W><CR>
 
 augroup CustomFileType
 augroup end
