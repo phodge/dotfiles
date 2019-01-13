@@ -868,7 +868,8 @@ set sidescrolloff=20
   nnoremap gst :execute 'stj' expand('<cword>')<CR>zv
 
   " fugitive
-  nnoremap \g :tab sp<CR>:exe (exists(':Gstatus') =~ '[12]' ? 'Gstatus' : 'Shell hg st')<CR>1<C-W>w:close<CR>1<C-W>w:tabmove<CR>
+  nnoremap \g :tab sp<CR>:exe (exists(':Gstatus') =~ '[12]' ? 'Gstatus' : 'Shell hg st')<CR>
+ "nnoremap \g :tab sp<CR>:exe (exists(':Gstatus') =~ '[12]' ? 'Gstatus' : 'Shell hg st')<CR>1<C-W>w:close<CR>1<C-W>w:tabmove<CR>
 
   if g:vim_peter
     nnoremap <silent> go :call <SID>NewlineNoFO('o')<CR>xa
