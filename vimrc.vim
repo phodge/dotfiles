@@ -193,6 +193,9 @@ if filereadable(s:plugpath)
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'hynek/vim-python-pep8-indent'
 
+  " make inactive windows dim slightly
+  "Plug 'TaDaa/vimade'
+
   if 0
     " going back to SnipMate because UltiSnips is making neovim freeze
     Plug 'MarcWeber/vim-addon-mw-utils'
