@@ -27,3 +27,9 @@ vim-powerline-lint:
     "   powerline-lint \
     "       -p /home/peter/.local/lib/python3.5/site-packages/powerline/config_files \
     "       -p ~/.config/powerline
+
+
+
+gnome-tweaks
+- switch mouse acceleration to "adaptive"
+- set workspaces to span multiple desktops
