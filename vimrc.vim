@@ -194,7 +194,10 @@ if filereadable(s:plugpath)
   Plug 'hynek/vim-python-pep8-indent'
 
   " make inactive windows dim slightly
-  "Plug 'TaDaa/vimade'
+  let g:vimade = get(g:, 'vimade', {})
+  let g:vimade.fadelevel = 0.4
+  let g:vimade.basebg = '#000000'
+  Plug 'TaDaa/vimade'
 
   if 0
     " going back to SnipMate because UltiSnips is making neovim freeze
