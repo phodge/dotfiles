@@ -346,6 +346,10 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " Minimap!
+  " TODO: make a faster version of this?
+  "Plug 'severin-lemaignan/vim-minimap'
+
   " show vertical lines to indicate indent level
   Plug 'Yggdroot/indentLine'
   " stop making JSON quotes disappear
