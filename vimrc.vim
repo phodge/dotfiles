@@ -195,7 +195,7 @@ if filereadable(s:plugpath)
 
   " make inactive windows dim slightly
   let g:vimade = get(g:, 'vimade', {})
-  let g:vimade.fadelevel = 0.4
+  let g:vimade.fadelevel = 0.5
   let g:vimade.basebg = '#000000'
   Plug 'TaDaa/vimade'
 
