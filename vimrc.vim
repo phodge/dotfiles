@@ -1164,13 +1164,11 @@ function! <SID>NamedSkeleton(template_name, buffer_name)
 
   " set up a self-destructing autocmd that will put the correct permissions on the file on write
   let l:perms = getfperm(l:template_path)
-  let g:foo = [l:perms]
   if l:perms != ''
     let l:group_number = s:next_group_number
     let s:next_group_number += 1
 
     let l:au_group = 'SkeletonPerms_' . l:group_number
-    call add(g:foo, l:au_group)
     exe 'augroup' l:au_group
     exe printf('au BufWritePost <buffer> call setfperm(bufname(""), "%s") | au! %s | aug! %s',
           \ l:perms, l:au_group, l:au_group)
