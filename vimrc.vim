@@ -119,7 +119,7 @@ if filereadable(s:plugpath)
     Plug 'w0rp/ale'
 
     let g:ale_linters = get(g:, 'ale_linters', {})
-    let g:ale_linters.php = ['phan', 'phpcs', 'psalm']
+    let g:ale_linters.php = ['php', 'phan', 'phpcs', 'psalm']
 
     let g:ale_php_cs_fixer_use_global = 1
     let g:ale_php_cs_fixer_executable = $HOME.'/.config/composer/vendor/bin/php-cs-fixer'
