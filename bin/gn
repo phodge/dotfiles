@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nvim "+Shell rg -n $*" '+bw 1'
