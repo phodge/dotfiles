@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import contextlib
+import os
+import os.path
+import shlex
+import shutil
+import time
+from subprocess import check_call, run
+from tempfile import TemporaryDirectory
+
+import click
+from git import Repo
+
+
+def heading(msg):
+    click.secho(msg, bg='yellow', fg='black', bold=True)
+
+
+@contextlib.contextmanager
+def get_tmp_worktree(repo):
+    with TemporaryDirectory() as tmpdir:
+        dest = tmpdir + '/repo'
+        click.secho(f'Creating worktree at {dest}', fg='cyan')
+        try:
+            click.echo(f'{repo.working_dir}$ git worktree add {dest}')
+            check_call(['git', 'worktree', 'add', dest], cwd=repo.working_dir)
+            yield dest
+        finally:
+            click.secho(f'Removing worktree at {dest}', fg='cyan')
+            if os.path.exists(dest):
+                shutil.rmtree(dest)
+            click.secho(f'Pruning worktree at {dest}', fg='cyan')
+            check_call(['git', 'worktree', 'prune'], cwd=repo.working_dir)
+
+
+def attempt_command(workdir, args):
+    quoted = ' '.join((shlex.quote(a) for a in args))
+    click.secho(f'{workdir}$ {quoted}', fg='blue', bold=True)
+    result = run(args, cwd=workdir).returncode
+    if result == 0:
+        click.secho('  Success!  ', bg='green', fg='black')
+    else:
+        click.secho(f'  Error ({result})!  ', bg='red', fg='white', bold=True)
+
+
+@click.command()
+@click.argument('args', nargs=-1, required=True)
+def main(args):
+    repo = Repo(os.getcwd())
+    branch = repo.active_branch.name
+
+    commit = repo.branches[branch].commit
+    heading(f'Tracking branch {branch} ({commit.hexsha:.8})'
+            f' "{commit.summary}"')
+
+    prev_head = None
+
+    with get_tmp_worktree(repo) as workdir:
+        click.echo(f'Using temp worktree {workdir}')
+
+        while True:
+            new_head = repo.branches[branch].commit
+            if prev_head and new_head.hexsha == prev_head.hexsha:
+                time.sleep(2)
+                continue
+            prev_head = new_head
+
+            click.clear()
+            heading(f'Branch {branch} is now at {new_head.hexsha:.8}'
+                    f' "{new_head.summary}"')
+
+            # checkout the new sha
+            check_call(['git', 'checkout', new_head.hexsha], cwd=workdir)
+
+            attempt_command(workdir, args)
+
+
+if __name__ == '__main__':
+    main()
