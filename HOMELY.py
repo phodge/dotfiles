@@ -33,7 +33,7 @@ def cachedfunc(func):
     def wrapper(*args, **kwargs):
         try:
             return func._result
-        except AttributeError as err:
+        except AttributeError:
             func._result = func(*args, **kwargs)
         return func._result
     wrapper.__name__ = func.__name__
