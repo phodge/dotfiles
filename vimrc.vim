@@ -354,6 +354,12 @@ if filereadable(s:plugpath)
   " TODO: make a faster version of this?
   "Plug 'severin-lemaignan/vim-minimap'
 
+  " we don't necessarily want automatic stripping, but the highlighting will
+  " be helpful
+  Plug 'tweekmonster/wstrip.vim'
+  " :HelpfulVersion PATTERN for version info about features matching PATTERN
+  Plug 'tweekmonster/helpful.vim'
+
   " show vertical lines to indicate indent level
   Plug 'Yggdroot/indentLine'
   " stop making JSON quotes disappear
