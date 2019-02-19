@@ -388,6 +388,10 @@ if filereadable(s:plugpath)
     let g:php_smart_members = 1
   endif
 
+  " helps with working on neovim itself
+  Plug 'neovim/nvimdev.nvim'
+  " I don't need the auto-ctags feature because gutentags does this for me
+  let g:nvimdev_auto_ctags = 0
 
   " TODO: use frozen option for plugins on the BBVPN that we don't have access
   " to all the time
