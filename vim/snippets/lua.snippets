@@ -1,5 +1,10 @@
 snippet out
 	print(string.format('${2:$1} = %s', ${1:somevar}))
+snippet log
+	-- TODO: remove this debug
+	local __f = io.open('/tmp/q', 'a')
+	__f:write(string.format('${2:$1} = %s\n', ${1:somevar}))
+	__f:close() -- TODO: remove this debug
 snippet outd
 	local __expr = ${1:somevar}
 	print('${2:$1} = {')
