@@ -263,7 +263,14 @@ def tools():
     # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
     if IS_OSX and haveexecutable('brew'):
         if yesno('brew_install_coreutils', 'Install gnu utils?', default=wantfull()):
-            execute(['brew', 'install', 'coreutils', 'findutils'])
+            brew_list = set(execute(['brew', 'list'], stdout=True)[1].decode('utf-8').splitlines())
+            install = [
+                pkg
+                for pkg in ('coreutils', 'findutils')
+                if pkg not in brew_list
+            ]
+            if len(install):
+                execute(['brew', 'install'] + install)
 
 
 @section
