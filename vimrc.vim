@@ -305,7 +305,7 @@ if filereadable(s:plugpath)
   " go to next ALE error. We use :ALENextWrap instead of :ALEFirst because often I can fix a bug and
   " hit '\a' again before ale has re-linted and removed the current error.
   nnoremap \a :ALENextWrap<CR>
-  
+
   if 1
     PlugMaster 'phodge/vim-javascript-syntax'
 
