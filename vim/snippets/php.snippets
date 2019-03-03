@@ -6,3 +6,9 @@ snippet out
 	echo '${2:$1} = ', str_replace("\n", "\n\t", var_export(${1:$_POST}, 1)), "\n";
 snippet txt
 	error_log('${2:$1} = ' . debug_txt(${1:$_POST}));
+snippet logdump
+	$cloner = new \Symfony\Component\VarDumper\Cloner\VarCloner;
+	$dumper = new \Symfony\Component\VarDumper\Dumper\CliDumper;
+	$exported = $dumper->dump($cloner->cloneVar(${1:$_POST}), true, ['maxDepth' => 3]);
+	$now = date('c');
+	error_log("[$now] \\${2:$1}:\n$exported", 3, '/tmp/q');
