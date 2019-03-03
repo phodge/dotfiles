@@ -215,7 +215,9 @@ if filereadable(s:plugpath)
 
   if has('nvim') && get(g:, 'want_fzf', 0)
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'}
+    Plug 'junegunn/fzf.vim'
     nnoremap <C-P> :FZF<CR>
+    nnoremap \\ :call fzf#vim#grep('git-branch-status --short --quiet', 0)<CR>
     let g:fzf_action = {
                 \ 'ctrl-t': 'tab split',
                 \ 'ctrl-x': 'split',
