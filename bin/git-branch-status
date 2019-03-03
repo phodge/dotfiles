@@ -1,26 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env python3
+from subprocess import check_output
 
-_branch="$(git branch 2> /dev/null | grep '^\*' | cut -b 3-)"
-if [ x-q = "x$1" ]; then
-	_quiet=1
-fi
+import click
 
-_fail() {
-	echo "$1" >&2
-	exit 1
-}
 
-if [ -z "$_branch" ]; then
-	_fail "ERROR: Not a git repository"
-fi
+@click.command()
+@click.option('-s', '--short', is_flag=True,
+              help="Don't include [AMD] prefix column in output")
+@click.option('-q', '--quiet', is_flag=True,
+              help="Don't include header line")
+def main(quiet, short):
+    branch = check_output(
+        "git branch 2> /dev/null | grep '^\*' | cut -b 3-",
+        shell=True
+    ).decode('utf-8').strip()
 
-if [ -z "$_quiet" ]; then
-	echo "BRANCH: $_branch"
-fi
-if git diff --quiet master...HEAD; then
-	if [ -z "$_quiet" ]; then
-		echo "(No files changed)"
-	fi
-else
-	git diff --name-status master...HEAD
-fi
+    if not branch:
+        raise click.ClickException("Not a git repository")
+
+    if not quiet:
+        click.echo("BRANCH: " + branch)
+
+    opt = '--name-only' if short else '--name-status'
+    cmd = ['git', 'diff', opt, 'master...HEAD']
+    diff = check_output(cmd).decode('utf-8')
+    if diff:
+        click.echo(diff.strip())
+    elif not quiet:
+        click.echo("(No files changed)")
+
+
+if __name__ == '__main__':
+    main()
