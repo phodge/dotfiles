@@ -384,6 +384,19 @@ if filereadable(s:plugpath)
   Plug 'vim-scripts/InsertChar'
   Plug 'vim-scripts/AfterColors.vim'
 
+  " php - insert/sort Use statements automatically {{{
+
+    Plug 'arnaud-lb/vim-php-namespace'
+
+    aug PHPStuff
+    au!
+    au FileType php nnoremap <buffer> <space>i :call PhpInsertUse()<CR>
+    au FileType php nnoremap <buffer> <space>e :call PhpExpandClass()<CR>
+    au FileType php com! -buffer SortUseStatements call PhpSortUse()<CR>
+    aug end
+
+  " }}}
+
   " custom PHP syntax - causes problems when g:php_show_semicolon_error is
   " turned on though
   if ! g:peter_use_builtin_php_syntax
@@ -403,7 +416,7 @@ if filereadable(s:plugpath)
 
   " to all the time
   Plug 'vim-scripts/Align', {'frozen': 0}
-  
+
   if g:tmux_session == 'NEOSITTER'
     PlugMaster 'phodge/neovim-tree-sitter'
   endif
@@ -417,7 +430,7 @@ if filereadable(s:plugpath)
   " https://github.com/myusuf3/numbers.vim
   " https://github.com/xolox/vim-session
   " https://github.com/vim-scripts/grep.vim
-  " https://github.com/michaeljsmith/vim-indent-object  
+  " https://github.com/michaeljsmith/vim-indent-object
   " https://github.com/andrewradev/splitjoin.vim
   " https://github.com/vim-scripts/a.vim
   " https://github.com/vim-airline/vim-airline
