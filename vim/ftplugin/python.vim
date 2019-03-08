@@ -407,9 +407,9 @@ fun! <SID>SmartImportUI() " {{{
 
   " these words instantly trigger adding an import for a top-level module
   let l:always_modules = split(
-        \ 'os sys re collections click simplejson homely enum pprint itertools functools'
+        \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
-        \ .' contextlib'
+        \ .' contextlib tempfile neovim'
         \ )
 
   " these names are always imported from these modules
@@ -421,13 +421,31 @@ fun! <SID>SmartImportUI() " {{{
         \ "check_output": "subprocess",
         \ "Popen": "subprocess",
         \ "Enum": "enum",
+        \ "namedtuple": "collections",
         \ }
 
+  " these names are suggested when the identifiers are encountered
   let l:typical = {
         \ "Path": "pathlib",
         \ "b64encode": "base64",
         \ "b64decode": "base64",
         \ "Href": "werkzeug",
+        \ "List": "typing",
+        \ "Dict": "typing",
+        \ "Iterator": "typing",
+        \ "Iterable": "typing",
+        \ "Set": "typing",
+        \ "Tuple": "typing",
+        \ "Any": "typing",
+        \ "Callable": "typing",
+        \ "Optional": "typing",
+        \ "Union": "typing",
+        \ "NewType": "typing",
+        \ "datetime": "datetime",
+        \ "date": "datetime",
+        \ "time": "time",
+        \ "TemporaryDirectory": "tempfile",
+        \ "Gitlab": "gitlab",
         \ }
 
   let l:module = get(l:vocabulary, l:word, "")
