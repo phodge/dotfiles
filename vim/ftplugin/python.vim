@@ -405,13 +405,6 @@ vnoremap <buffer> <space>i <ESC>:call <SID>SmartImportUI()<CR>
 fun! <SID>SmartImportUI() " {{{
   let l:word = expand('<cword>')
 
-  " these words instantly trigger adding an import for a top-level module
-  let l:always_modules = split(
-        \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
-        \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
-        \ .' contextlib tempfile neovim'
-        \ )
-
   " these names are always imported from these modules
   let l:vocabulary = {
         \ "partial": "functools",
@@ -423,6 +416,13 @@ fun! <SID>SmartImportUI() " {{{
         \ "Enum": "enum",
         \ "namedtuple": "collections",
         \ }
+
+  " these words instantly trigger adding an import for a top-level module
+  let l:always_modules = split(
+        \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
+        \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
+        \ .' contextlib tempfile neovim'
+        \ )
 
   " these names are suggested when the identifiers are encountered
   let l:typical = {
