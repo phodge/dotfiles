@@ -4,6 +4,8 @@ if ! &l:diff
   setlocal foldlevel=1
 endif
 
+setlocal suffixesadd=.js,.jsx,.ts,.tsx,.json
+
 " use & to search for variables
 if g:vim_peter
   nnoremap <buffer> &  /<C-R>=<SID>GetVarSearch()<CR><CR>
