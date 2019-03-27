@@ -717,7 +717,7 @@ set incsearch
 set history=10000
 set splitbelow splitright noequalalways winwidth=126 winminwidth=15
 set number
-set shiftround ts=4 sw=4 sts=0
+set shiftround
 set nolist
 "set listchars=tab:\|_,trail:@,precedes:<,extends:>
 set listchars=tab:\|_,trail:@
