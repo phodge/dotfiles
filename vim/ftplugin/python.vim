@@ -400,7 +400,7 @@ endif
 " }}}
 
 
-vnoremap <space>i <ESC>:call <SID>SmartImportUI()<CR>
+vnoremap <buffer> <space>i <ESC>:call <SID>SmartImportUI()<CR>
 
 fun! <SID>SmartImportUI() " {{{
   let l:word = expand('<cword>')
