@@ -469,6 +469,22 @@ fun! <SID>SmartImportUI() " {{{
   " make a list of imports already in the module
   call extend(l:modules, <SID>GetCurrentImports())
 
+  " also look through tags to see if there is an importable match in another
+  " file
+  for l:tag in taglist(l:word)
+    if l:tag.name == l:word && l:tag.filename =~ '\.py$'
+      " convert path separators to .
+      let l:candidate = substitute(fnamemodify(l:tag.filename, ':.:r'), '/', '.', 'g')
+
+      if l:candidate =~ '\.__init__$'
+        let l:candidate = strpart(l:candidate, 0, strlen(l:candidate) - 9)
+      endif
+
+      " if the name ends with '.__init__', strip it off
+      let l:modules[l:candidate] = "tags file"
+    endif
+  endfor
+
   if len(l:modules)
     let l:options = []
     " ask the user if they'd like to import it from one of the existing modules?
