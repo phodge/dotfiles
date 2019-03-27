@@ -535,14 +535,32 @@ endfun " }}}
 fun! <SID>AddImportLineNow(line) " {{{
   let l:where = 1
 
+  let l:in_docblock = ""
   while l:where < line('$')
     if getline(l:where) =~ '^#'
       let l:where += 1
       continue
     endif
+
+    " are we in the middle of a docblock?
+    if strlen(l:in_docblock)
+      if getline(l:where) == l:in_docblock
+        let l:in_docblock = ""
+      endif
+      let l:where += 1
+      continue
+    endif
+
+    " is the current line starting/ending a docblock
+    if getline(l:where) =~ '^"""' || getline(l:where) =~ "^'''"
+      let l:in_docblock = strpart(getline(l:where), 0, 3)
+      let l:where += 1
+      continue
+    endif
+
     " add a mark we can jump back to
     normal! mi
-    call append(l:where, a:line)
+    call append(l:where -1, a:line)
     Isort
     normal! `i
     return
