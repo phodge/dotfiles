@@ -463,7 +463,7 @@ fun! <SID>SmartImportUI() " {{{
   let l:modules = {}
   let l:module = get(l:typical, l:word, "")
   if strlen(l:module)
-    let l:modules[l:module] = ""
+    let l:modules[l:module] = "stdlib"
   endif
 
   " make a list of imports already in the module
@@ -484,6 +484,12 @@ fun! <SID>SmartImportUI() " {{{
       echon ' import '
       echohl None
       echon l:word
+      let l:origin = l:modules[l:module]
+      if strlen(l:origin)
+        echohl Comment
+        echon printf('  # from %s', l:origin)
+      endif
+      echohl None
       echo ''
     endfor
     let l:choice = input("Enter the number of the import you would like to add, or press ESC to abort\n")
@@ -532,7 +538,7 @@ fun! <SID>GetCurrentImports() " {{{
   for l:nr in range(1, line('$'))
     let l:match = matchlist(getline(l:nr), '^\s*\(from\|import\)\s\+\([a-zA-Z0-9_.]\+\)')
     if len(l:match)
-      let l:imports[l:match[2]] = l:match[1]
+      let l:imports[l:match[2]] = ''
     elseif getline(l:nr) =~ '^\%(def\|class\)\s'
       " stop searching as soon as we hit a function or class that isn't indented
       break
