@@ -1,29 +1,35 @@
 {
-    "session_name": "P90",
-    "default_cwd": "~/playground-6/project90.git",
+    "session_name": "PLp90 TASKITRON",
+    "default_cwd": "~",
     "session_windows": [
         {
-            "window_name": "app",
+            "window_name": "CODE",
             "window_panes": [
                 {
-                    "pane_cwd": "~/playground-6/project90.git/app",
-                    "pane_pretype": ". ~/playground-6/bin/activate\rls -la\r"}
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rls -la\r"}
             ]
         },
         {
-            "window_name": "python_backend",
+            "window_name": "SERVERS",
             "window_panes": [
                 {
-                    "pane_cwd": "~/playground-6/project90.git/python_backend",
-                    "pane_pretype": ". ~/playground-6/bin/activate\rls -la\r"}
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-build-web-fe-ts -w"},
+                {
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-run-web-fe-nginx"},
+                {
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-ticket-server-app ../project90-data"}
             ]
         },
         {
-            "window_name": "website",
+            "window_name": "TICKETS",
             "window_panes": [
                 {
-                    "pane_cwd": "~/playground-6/project90.git/website",
-                    "pane_pretype": ". ~/playground-6/bin/activate\rls -la\r"}
+                    "pane_cwd": "~/playground-p90/project90-data",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rls -la\r"}
             ]
         }
     ]
