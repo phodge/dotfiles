@@ -638,7 +638,7 @@ if version >= 700
   inoremap <C-J> <C-O>:set completefunc=StringComplete#GetList<CR><C-X><C-U>
 endif
 
-nnoremap <SPACE>m :<C-R>=(exists(':Make')==2?'Make':'make')<CR><CR>
+nnoremap <space>m :<C-R>=(exists(':Make')==2?'Make':'make')<CR><CR>
 
 if version >= 700 && g:vim_peter
   nnoremap gss :call MySchema#GetSchema(expand('<cword>'))<CR>
