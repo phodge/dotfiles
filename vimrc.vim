@@ -188,8 +188,15 @@ if filereadable(s:plugpath)
     let g:jedi#completions_enabled = 0
   endif
 
+  " ArgWrap {{{ 
+
+    Plug 'FooSoft/vim-argwrap'
+    let g:argwrap_tail_comma = 1
+    nnoremap <space>a :ArgWrap<CR>
+
+  " }}}
+
   Plug 'EinfachToll/DidYouMean'
-  Plug 'FooSoft/vim-argwrap'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'hynek/vim-python-pep8-indent'
 
@@ -631,7 +638,6 @@ if version >= 700
   inoremap <C-J> <C-O>:set completefunc=StringComplete#GetList<CR><C-X><C-U>
 endif
 
-nnoremap <SPACE>a :ArgWrap<CR>
 nnoremap <SPACE>m :<C-R>=(exists(':Make')==2?'Make':'make')<CR><CR>
 
 if version >= 700 && g:vim_peter
