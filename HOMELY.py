@@ -259,6 +259,9 @@ def tools():
     if yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
 
+    if yesno('install_tidy', 'Install tidy cli tool?', wantfull()):
+        installpkg('tidy', apt='tidy')
+
     # on OSX we want to install gnu utils (brew install coreutils findutils)
     # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
     if IS_OSX and haveexecutable('brew'):
