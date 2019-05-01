@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+import os
+import shutil
+from os.path import basename
+from subprocess import check_call
+
+import click
+
+import taglib
+
+
+@click.command()
+@click.argument('target', nargs=-1)
+@click.option('--trash',
+              type=click.Path(exists=True, file_okay=False),
+              help="Move wma files into this folder after done")
+def main(target, trash):
+    for t in target:
+        convert_target(t, trash)
+
+
+def convert_target(wmaname, trashdir):
+    assert wmaname.endswith('.wma')
+    mp3name = wmaname[:-4] + '.mp3'
+    print("Converting {} to {}".format(wmaname, mp3name))
+
+    # pull out the metadata
+    origtags = taglib.File(wmaname).tags
+
+    #remove uppercase
+    #for i in *.[Ww][Mm][Aa]; do mv "$i" `echo $i | tr '[A-Z]' '[a-z]'`; done
+
+    #Rip with Mplayer / encode with LAME
+    check_call([
+        'mplayer',
+        '-vo', 'null',
+        '-vc', 'dummy',
+        '-af', 'resample=44100',
+        '-ao', 'pcm',
+        '-ao', 'pcm:waveheader',
+        wmaname,
+    ])
+    check_call(['lame', '-m', 's', 'audiodump.wav', '-o', mp3name])
+
+    # add tags to the mp3 file
+    mp3 = taglib.File(mp3name)
+    fields = [
+        'ARTIST',
+        'ALBUM',
+        'DATE',
+        'TITLE',
+        'TRACKNUMBER',
+    ]
+    for field in fields:
+        if field in origtags:
+            mp3.tags[field] = origtags[field]
+    mp3.save()
+
+    #cleanup
+    os.unlink('audiodump.wav')
+    if trashdir:
+        shutil.move(wmaname, trashdir + '/' + basename(wmaname))
+
+
+if __name__ == '__main__':
+    main()
