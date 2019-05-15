@@ -196,6 +196,12 @@ if filereadable(s:plugpath)
 
   " }}}
 
+  if has('macunix') " Kapeli Dash docs viewer for Mac {{{
+    Plug 'rizzatti/dash.vim'
+    nnoremap <S-F5> :Dash <cword><CR>
+  endif " }}}
+  
+
   Plug 'EinfachToll/DidYouMean'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'hynek/vim-python-pep8-indent'
