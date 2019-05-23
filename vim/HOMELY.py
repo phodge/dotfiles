@@ -8,7 +8,8 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 from HOMELY import (HERE, HOME, allowinstallingthings, jerjerrod_addline,
-                    mypips, wantfull, wantjerjerrod, wantnvim, whenmissing)
+                    mypips, need_autoconf, wantfull, wantjerjerrod, wantnvim,
+                    whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.3.1'
@@ -168,6 +169,7 @@ def vim_install():
 
     # NOTE: on ubuntu the requirements are:
     # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+    need_autoconf()
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
     inst.select_tag(VIM_TAG)
     configure = ['./configure']
@@ -206,6 +208,7 @@ def nvim_install():
     # - unzip (seriously ... the error on this one is aweful)
     # NOTE: on ubuntu the requirements are:
     # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip gettext
+    need_autoconf()
     # NOTE: on OSX the requirements are:
     # brew install cmake libtool gettext
     n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')

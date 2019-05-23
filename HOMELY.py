@@ -50,6 +50,14 @@ def wantfull():
 
 
 @cachedfunc
+def need_autoconf():
+    if not wantfull():
+        raise Exception("Can't install autoconf when only doing minimal config")
+
+    installpkg('autoconf')
+
+
+@cachedfunc
 def allowinstallingthings():
     if not wantfull():
         return False
@@ -238,6 +246,7 @@ def tools():
         run(withutil)
 
     if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
+        need_autoconf()
         mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew
