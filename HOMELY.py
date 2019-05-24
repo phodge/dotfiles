@@ -53,11 +53,11 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
         raise Exception("Can't install {} when only doing minimal config".format(what))
 
     for name in apt or []:
-        installpkg('autoconf', apt=name,  brew=False, yum=False, port=False)
+        installpkg(name,            brew=False, yum=False, port=False)
     for name in brew or []:
-        installpkg('autoconf', apt=False, brew=name,  yum=False, port=False)
+        installpkg(name, apt=False,             yum=False, port=False)
     for name in yum or []:
-        installpkg('autoconf', apt=False, brew=False, yum=name,  port=False)
+        installpkg(name, apt=False, brew=False,            port=False)
 
 
 @memoize
