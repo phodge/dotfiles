@@ -177,6 +177,7 @@ def vim_install():
         'g++',
         'pkg-config',
         'unzip',
+        'ncurses-dev',
     ))
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
     inst.select_tag(VIM_TAG)
