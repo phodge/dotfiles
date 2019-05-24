@@ -93,7 +93,7 @@ fun! <SID>PyVersionChanged()
 
   " combine the default ignore list with this buffer's ignore list
   let l:ignore = get(b:, 'flake8_ignore', []) + s:flake8_default_ignore
-  call add(l:args, '--ignore='.join(l:ignore, ','))
+  call add(l:args, '--extend-ignore='.join(l:ignore, ','))
 
   for l:major in l:flakes
     " Tell multiflake8 exactly where to find the flake8 for this python version.
