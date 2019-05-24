@@ -70,7 +70,8 @@ def tmux_install():
                                  '~/src/tmux.git')
         tmux.select_tag('2.7')
         tmux.compile_cmd([
-            ['make', 'distclean'],
+            # distclean will always fail if there's nothing to clean
+            ['bash', '-c', 'make distclean || :'],
             ['sh', 'autogen.sh'],
             ['./configure'],
             ['make'],
