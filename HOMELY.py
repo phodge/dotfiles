@@ -47,19 +47,17 @@ def wantfull():
 
 
 @memoize
-def need_autoconf():
-    if not wantfull():
-        raise Exception("Can't install autoconf when only doing minimal config")
+def need_installpkg(*, apt=None, brew=None, yum=None):
+    if not allowinstallingthings():
+        what = apt or brew or yum
+        raise Exception("Can't install {} when only doing minimal config".format(what))
 
-    installpkg('autoconf')
-
-
-@memoize
-def need_gplusplus():
-    if not wantfull():
-        raise Exception("Can't install g++ when only doing minimal config")
-
-    installpkg('g++')
+    for name in apt or []:
+        installpkg('autoconf', apt=name, brew=None, yum=None)
+    for name in brew or []:
+        installpkg('autoconf', apt=None, brew=name, yum=None)
+    for name in yum or []:
+        installpkg('autoconf', apt=None, brew=None, yum=name)
 
 
 @memoize
@@ -251,8 +249,8 @@ def tools():
         run(withutil)
 
     if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
-        need_autoconf()
-        need_gplusplus()
+        need_installpkg(apt='autoconf')
+        need_installpkg(apt='g++')
         mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew

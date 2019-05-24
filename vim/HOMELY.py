@@ -8,8 +8,8 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 from HOMELY import (HERE, HOME, allowinstallingthings, jerjerrod_addline,
-                    mypips, need_autoconf, need_gplusplus, wantfull,
-                    wantjerjerrod, wantnvim, whenmissing)
+                    mypips, need_installpkg, wantfull, wantjerjerrod, wantnvim,
+                    whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.3.1'
@@ -167,10 +167,17 @@ def vim_install():
     if yesno(None, 'Edit %s now?' % flagsfile, written, noprompt=False):
         execute(['vim', flagsfile], stdout="TTY")
 
-    # NOTE: on ubuntu the requirements are:
-    # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
-    need_gplusplus()
-    need_autoconf()
+    # install required libraries first
+    need_installpkg(apt=[
+        'libtool',
+        'libtool-bin',
+        'autoconf',
+        'automake',
+        'cmake',
+        'g++',
+        'pkg-config',
+        'unzip',
+    ])
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
     inst.select_tag(VIM_TAG)
     configure = ['./configure']
@@ -203,16 +210,21 @@ def nvim_install():
     if not the_hard_way:
         return
 
-    # TODO: we suggest yum installing
-    # - cmake
-    # - gcc-c++
-    # - unzip (seriously ... the error on this one is aweful)
-    # NOTE: on ubuntu the requirements are:
-    # apt-get install libtool libtool-bin autoconf automake cmake g++ pkg-config unzip gettext
-    need_gplusplus()
-    need_autoconf()
-    # NOTE: on OSX the requirements are:
-    # brew install cmake libtool gettext
+    need_installpkg(
+        apt=[
+            'libtool',
+            'libtool-bin',
+            'autoconf',
+            'automake',
+            'cmake',
+            'g++',
+            'pkg-config',
+            'unzip',
+            'gettext',
+        ],
+        yum=['cmake', 'gcc-c++', 'unzip'],
+        brew=['cmake', 'libtool', 'gettext'],
+    )
     n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
     n.select_tag(NVIM_TAG)
     n.compile_cmd([
