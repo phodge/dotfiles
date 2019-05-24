@@ -119,10 +119,25 @@ def jerjerrod_addline(command, path, ignore=[]):
                "{} {} {}".format(command, path, " ".join(flags)).rstrip())
 
 
-# install a local copy of neovim?
+# install neovim?
 @memoize
 def wantnvim():
     return yesno('install_nvim', 'Install neovim?', wantfull())
+
+
+@memoize
+def install_nvim_via_apt():
+    if not wantnvim():
+        return False
+
+    if not allowinstallingthings():
+        return False
+
+    if not haveexecutable('apt'):
+        return False
+
+    return yesno('install_nvim_package', 'Install nvim from apt?')):
+
 
 
 @memoize
@@ -381,9 +396,8 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         'GitPython',
     ]
 
-    if wantnvim():
-        # if we want nvim then we always want the neovim python package
-        need_installpkg(apt=('python3-dev', ))
+    if wantnvim() and not install_nvim_via_apt():
+        # if we want nvim then we probably need the pynvim package
         packages.append('pynvim')
 
     # a nice python repl

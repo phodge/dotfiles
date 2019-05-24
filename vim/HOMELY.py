@@ -7,9 +7,9 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
-from HOMELY import (HERE, HOME, allowinstallingthings, jerjerrod_addline,
-                    mypips, need_installpkg, wantfull, wantjerjerrod, wantnvim,
-                    whenmissing)
+from HOMELY import (HERE, HOME, allowinstallingthings, install_nvim_via_apt,
+                    jerjerrod_addline, mypips, need_installpkg, wantfull,
+                    wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.3.1'
@@ -199,17 +199,23 @@ def nvim_install():
     if not wantnvim():
         return
 
+    if install_nvim_via_apt():
+        installpkg('neovim')
+        installpkg('neovim-python')
+        return
+
     if (allowinstallingthings() and
-            (haveexecutable('brew') or haveexecutable('apt')) and
+            haveexecutable('brew') and
             yesno('install_nvim_package', 'Install nvim from apt/brew?')):
         installpkg('neovim')
+        return
 
     the_hard_way = yesno('compile_nvim',
                          'Compile/install nvim from source?',
                          recommended=allowinstallingthings()
                          )
     if not the_hard_way:
-        return
+        raise Exception('No way to install neovim')
 
     need_installpkg(
         apt=(
