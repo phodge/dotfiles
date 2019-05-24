@@ -168,7 +168,7 @@ def vim_install():
         execute(['vim', flagsfile], stdout="TTY")
 
     # install required libraries first
-    need_installpkg(apt=[
+    need_installpkg(apt=(
         'libtool',
         'libtool-bin',
         'autoconf',
@@ -177,7 +177,7 @@ def vim_install():
         'g++',
         'pkg-config',
         'unzip',
-    ])
+    ))
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
     inst.select_tag(VIM_TAG)
     configure = ['./configure']
@@ -211,7 +211,7 @@ def nvim_install():
         return
 
     need_installpkg(
-        apt=[
+        apt=(
             'libtool',
             'libtool-bin',
             'autoconf',
@@ -221,9 +221,9 @@ def nvim_install():
             'pkg-config',
             'unzip',
             'gettext',
-        ],
-        yum=['cmake', 'gcc-c++', 'unzip'],
-        brew=['cmake', 'libtool', 'gettext'],
+        ),
+        yum=('cmake', 'gcc-c++', 'unzip'),
+        brew=('cmake', 'libtool', 'gettext'),
     )
     n = InstallFromSource('https://github.com/neovim/neovim.git', '~/src/neovim.git')
     n.select_tag(NVIM_TAG)

@@ -249,8 +249,7 @@ def tools():
         run(withutil)
 
     if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
-        need_installpkg(apt='autoconf')
-        need_installpkg(apt='g++')
+        need_installpkg(apt=('autoconf', 'g++'))
         mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew
