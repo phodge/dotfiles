@@ -136,8 +136,7 @@ def install_nvim_via_apt():
     if not haveexecutable('apt'):
         return False
 
-    return yesno('install_nvim_package', 'Install nvim from apt?')):
-
+    return yesno('install_nvim_package', 'Install nvim from apt?')
 
 
 @memoize
