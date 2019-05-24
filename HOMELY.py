@@ -380,7 +380,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
 
     if wantnvim():
         # if we want nvim then we always want the neovim python package
-        packages.append('neovim')
+        packages.append('pynvim')
 
     # a nice python repl
     if theworks or yesno('install_ptpython', 'PIP Install ptpython?', True):
