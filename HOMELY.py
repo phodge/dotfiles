@@ -18,6 +18,17 @@ HERE = os.path.dirname(__file__)
 IS_OSX = os.getenv('HOME').startswith('/Users/')
 
 
+try:
+    # try and build a memoize decorator from the one in functools
+    from functools import lru_cache
+
+    memoize = lru_cache(maxsize=None, typed=True)
+except ImportError:
+    # Otherwise, we just pretend. If this memoize() is used, no function caching will occur.
+    def memoize(fn):
+        return fn
+
+
 # TODO: build a platform-neutral clipboard system
 # - bin/C bin/P for copy/paste which is aliased to / or wraps system clipboard
 # - detect when coming via X11 ssh ($DISPLAY is set?) and use xsel for clipboard, even on OSX
@@ -28,28 +39,14 @@ IS_OSX = os.getenv('HOME').startswith('/Users/')
 # - configure tmux to use bin/C and bin/P for copy+paste
 
 
-# decorator to make a function that caches its result temporarily
-def cachedfunc(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func._result
-        except AttributeError:
-            func._result = func(*args, **kwargs)
-        return func._result
-    wrapper.__name__ = func.__name__
-    wrapper.__doc__ = func.__doc__
-    wrapper._result = None
-    return wrapper
-
-
-@cachedfunc
+@memoize
 def wantfull():
     return not yesno('only_config',
                      'Minimal install? (Config files only - nothing extra installed)',
                      None)
 
 
-@cachedfunc
+@memoize
 def need_autoconf():
     if not wantfull():
         raise Exception("Can't install autoconf when only doing minimal config")
@@ -57,7 +54,7 @@ def need_autoconf():
     installpkg('autoconf')
 
 
-@cachedfunc
+@memoize
 def need_gplusplus():
     if not wantfull():
         raise Exception("Can't install g++ when only doing minimal config")
@@ -65,7 +62,7 @@ def need_gplusplus():
     installpkg('g++')
 
 
-@cachedfunc
+@memoize
 def allowinstallingthings():
     if not wantfull():
         return False
@@ -77,7 +74,7 @@ def allowinstallingthings():
     )
 
 
-@cachedfunc
+@memoize
 def install_fedora_copr():
     if not allowinstallingthings():
         return False
@@ -97,14 +94,14 @@ def install_fedora_copr():
     return True
 
 
-@cachedfunc
+@memoize
 def wantjerjerrod():
     if not wantfull():
         return False
     return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
-@cachedfunc
+@memoize
 def want_silver_searcher():
     return yesno('install_ag', 'Install ag (required for fzf)?', wantfull())
 
@@ -122,17 +119,17 @@ def jerjerrod_addline(command, path, ignore=[]):
 
 
 # install a local copy of neovim?
-@cachedfunc
+@memoize
 def wantnvim():
     return yesno('install_nvim', 'Install neovim?', wantfull())
 
 
-@cachedfunc
+@memoize
 def wantzsh():
     return yesno('use_zsh', 'Install zsh config?', wantfull())
 
 
-@cachedfunc
+@memoize
 def want_unicode_fix():
     q = 'Old versions of glibc can cause render issues with GnomeTerminal>ssh>tmux>powerline. Remove Unicode chars in powerline status?'
     return yesno('want_unicode_fix', q)
@@ -324,7 +321,7 @@ def fzf_install():
         lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_path))
 
 
-@cachedfunc
+@memoize
 def getpippaths():
     if platform.system() == "Darwin":
         return {}
@@ -583,12 +580,12 @@ def yapf():
     symlink('.style.yapf')
 
 
-@cachedfunc
+@memoize
 def wantpowerline():
     return yesno('use_powerline', 'Use powerline for tmux/vim?', wantfull())
 
 
-@cachedfunc
+@memoize
 def powerline_path():
     cmd = ['python3', '-c', 'import powerline; print(powerline.__file__)']
     powerline_file = execute(cmd, stdout=True)[1]

@@ -6,11 +6,11 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import haveexecutable
 from homely.ui import warn, yesno
 
-from HOMELY import (HERE, HOME, cachedfunc, lineinfile, mypipinstall,
+from HOMELY import (HERE, HOME, lineinfile, memoize, mypipinstall,
                     powerline_path, wantfull, wantpowerline)
 
 
-@cachedfunc
+@memoize
 def _wanttmux():
     return yesno('install_tmux', 'Install tmux?', wantfull())
 
