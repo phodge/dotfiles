@@ -3,7 +3,7 @@ import os
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section, symlink,
                             writefile)
-from homely.install import InstallFromSource
+from homely.install import InstallFromSource, installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
@@ -199,9 +199,10 @@ def nvim_install():
     if not wantnvim():
         return
 
-    if haveexecutable('brew'):
-        execute(['brew', 'install', 'neovim'])
-        return
+    if (allowinstallingthings() and
+            (haveexecutable('brew') or haveexecutable('apt')) and
+            yesno('install_nvim_package', 'Install nvim from apt/brew?')):
+        installpkg('neovim')
 
     the_hard_way = yesno('compile_nvim',
                          'Compile/install nvim from source?',
