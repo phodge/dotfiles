@@ -53,11 +53,11 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
         raise Exception("Can't install {} when only doing minimal config".format(what))
 
     for name in apt or []:
-        installpkg('autoconf', apt=name, brew=None, yum=None)
+        installpkg('autoconf', apt=name,  brew=False, yum=False, port=False)
     for name in brew or []:
-        installpkg('autoconf', apt=None, brew=name, yum=None)
+        installpkg('autoconf', apt=False, brew=name,  yum=False, port=False)
     for name in yum or []:
-        installpkg('autoconf', apt=None, brew=None, yum=name)
+        installpkg('autoconf', apt=False, brew=False, yum=name,  port=False)
 
 
 @memoize
@@ -224,22 +224,17 @@ def install_pip():
 # my favourite developer tools
 @section
 def tools():
-    if yesno('install_ack', 'Install ack?', wantfull()):
+    if allowinstallingthings() and yesno('install_ack', 'Install ack?', False):
         installpkg('ack', apt='ack-grep')
-    if want_silver_searcher():
+    if allowinstallingthings() and want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
                    apt='silversearcher-ag')
-    if yesno('install_ripgrep', 'Install ripgrep?', wantfull()):
-        yum = None
+    if allowinstallingthings() and yesno('install_ripgrep', 'Install ripgrep?', True):
+        yum = False
         if haveexecutable('yum') and install_fedora_copr():
             yum = 'ripgrep'
-        if haveexecutable('snap'):
-            # TODO: we won't be able to uninstall
-            #execute(['sudo', 'snap', 'install', 'rg', '--classic'], stdout="TTY")
-            pass
-        else:
-            installpkg('ripgrep', yum=yum, apt=False)
+        installpkg('ripgrep', yum=yum)
 
     if yesno('install_with', 'Install `with` utility?', wantfull()):
         withutil = InstallFromSource('https://github.com/mchav/with',
@@ -266,17 +261,17 @@ def tools():
             ])
             uc.symlink('ctags', '~/bin/ctags')
             run(uc)
-    elif yesno('install_ctags', 'Install `ctags`?', wantfull()):
+    elif allowinstallingthings() and yesno('install_ctags', 'Install `ctags`?', wantfull()):
         installpkg('ctags')
-    if yesno('install_patch', 'Install patch?', wantfull()):
+    if allowinstallingthings() and yesno('install_patch', 'Install patch?', wantfull()):
         installpkg('patch')
 
-    if yesno('install_tidy', 'Install tidy cli tool?', wantfull()):
-        installpkg('tidy', apt='tidy')
+    if allowinstallingthings() and yesno('install_tidy', 'Install tidy cli tool?', wantfull()):
+        installpkg('tidy')
 
     # on OSX we want to install gnu utils (brew install coreutils findutils)
     # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
-    if IS_OSX and haveexecutable('brew'):
+    if IS_OSX and haveexecutable('brew') and allowinstallingthings():
         if yesno('brew_install_coreutils', 'Install gnu utils?', default=wantfull()):
             brew_list = set(execute(['brew', 'list'], stdout=True)[1].decode('utf-8').splitlines())
             install = [
