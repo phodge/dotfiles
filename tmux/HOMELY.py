@@ -85,7 +85,7 @@ def tmux_install():
         try:
             # install tmux using brew or apt-get ...
             installpkg('tmux')
-        except:
+        except Exception:
             print("-" * 50)
             print("Compiling `tmux` failed - do you need to install automake or gcc?")  # noqa
             print("-" * 50)
