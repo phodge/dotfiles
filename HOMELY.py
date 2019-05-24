@@ -58,6 +58,14 @@ def need_autoconf():
 
 
 @cachedfunc
+def need_gplusplus():
+    if not wantfull():
+        raise Exception("Can't install g++ when only doing minimal config")
+
+    installpkg('g++')
+
+
+@cachedfunc
 def allowinstallingthings():
     if not wantfull():
         return False
@@ -247,6 +255,7 @@ def tools():
 
     if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
         need_autoconf()
+        need_gplusplus()
         mkdir('~/bin')
         if haveexecutable('brew'):
             # install with homebrew
