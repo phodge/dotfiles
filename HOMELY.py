@@ -380,6 +380,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
 
     if wantnvim():
         # if we want nvim then we always want the neovim python package
+        need_installpkg('python3-dev')
         packages.append('pynvim')
 
     # a nice python repl
