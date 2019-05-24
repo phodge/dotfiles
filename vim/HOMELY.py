@@ -201,7 +201,7 @@ def nvim_install():
 
     if install_nvim_via_apt():
         installpkg('neovim')
-        installpkg('neovim-python')
+        installpkg('python-neovim')
         return
 
     if (allowinstallingthings() and
