@@ -52,12 +52,15 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
         what = apt or brew or yum
         raise Exception("Can't install {} when only doing minimal config".format(what))
 
-    for name in apt or []:
-        installpkg(name,            brew=False, yum=False, port=False)
-    for name in brew or []:
-        installpkg(name, apt=False,             yum=False, port=False)
-    for name in yum or []:
-        installpkg(name, apt=False, brew=False,            port=False)
+    if haveexecutable('apt'):
+        for name in apt or []:
+            installpkg(name,            brew=False, yum=False, port=False)
+    if haveexecutable('brew'):
+        for name in brew or []:
+            installpkg(name, apt=False,             yum=False, port=False)
+    if haveexecutable('yum'):
+        for name in yum or []:
+            installpkg(name, apt=False, brew=False,            port=False)
 
 
 @memoize
