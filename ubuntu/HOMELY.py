@@ -41,3 +41,23 @@ def ubuntu_key_repeat_rate():
     ]
     for key, value in new_values:
         execute(['gsettings', 'set', 'org.gnome.desktop.peripherals.keyboard', key, value])
+
+
+@section
+def ubuntu_app_switcher_current_workspace():
+    if not wantfull():
+        return
+
+    if not yesno(
+        'ubuntu_set_app_switcher_current_workspace',
+        'Ubuntu: Set alt-tab to only use current workspace?',
+    ):
+        return
+
+    execute([
+        'gsettings',
+        'set',
+        'org.gnome.shell.app-switcher',
+        'current-workspace-only',
+        'true',
+    ])
