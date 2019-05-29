@@ -3,10 +3,18 @@ import csv
 import sys
 from collections import defaultdict
 
-headings = dict(
-    have='HaveWorkedLanguage',
-    want='WantWorkLanguage',
-)
+datayear = 2019
+
+if datayear == 2019:
+    headings = dict(
+        have='LanguageWorkedWith',
+        want='LanguageDesireNextYear',
+    )
+else:
+    headings = dict(
+        have='HaveWorkedLanguage',
+        want='WantWorkLanguage',
+    )
 
 # groovy, haskell, elixir
 T = sys.argv[1]
