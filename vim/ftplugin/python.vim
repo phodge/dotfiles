@@ -135,6 +135,9 @@ endfun
 com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
 fun! <SID>DoSort(line1, line2)
   if exists('b:isort_disabled') && b:isort_disabled
+    echohl WarningMsg
+    echo 'isort is disabled for this buffer via b:isort_disabled'
+    echohl None
     return
   endif
 
