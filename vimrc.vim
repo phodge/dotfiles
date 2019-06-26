@@ -360,6 +360,26 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " CSV plugin
+  " :WhatColumn
+  "   what column number is the cursor in, or the heading if "!" is included
+  " :SearchInColumn <nr> /pat/
+  "   Search for a value in a particular column
+  " :HiColumn[!] [<nr>]
+  "   Highlight column <nr> or the current column. "!" removes highlighting
+  " :DeleteColumn [<nr>]
+  "   Remove column <nr> or the current column.
+  " :Header <count>
+  "   Add a split window that shows the first <count> lines of the file.
+  " :ArrangeColumn
+  "   Rewrite the entire file to be vertically aligned
+  " :NewDelimiter <char>
+  "   Set the delimiter to <char>
+  " HLKJ
+  "   Move left/right between cells or up/down staying within the same column
+  " See also https://github.com/chrisbra/csv.vim#commands
+  Plug 'chrisbra/csv.vim'
+
   " Minimap!
   " TODO: make a faster version of this?
   "Plug 'severin-lemaignan/vim-minimap'
