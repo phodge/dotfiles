@@ -416,15 +416,17 @@ fun! <SID>SmartImportUI() " {{{
         \ "check_call": "subprocess",
         \ "check_output": "subprocess",
         \ "Popen": "subprocess",
-        \ "Enum": "enum",
         \ "namedtuple": "collections",
+        \ "OrderedDict": "collections",
+        \ "defaultdict": "collections",
+        \ "Decimal": "decimal",
         \ }
 
   " these words instantly trigger adding an import for a top-level module
   let l:always_modules = split(
         \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
-        \ .' contextlib tempfile neovim'
+        \ .' contextlib tempfile neovim dataclasses typing decimal'
         \ )
 
   " these names are suggested when the identifiers are encountered
@@ -441,14 +443,17 @@ fun! <SID>SmartImportUI() " {{{
         \ "Tuple": "typing",
         \ "Any": "typing",
         \ "Callable": "typing",
+        \ "Literal": "typing_extensions",
         \ "Optional": "typing",
         \ "Union": "typing",
         \ "NewType": "typing",
+        \ "Type": "typing",
         \ "datetime": "datetime",
         \ "date": "datetime",
         \ "time": "time",
         \ "TemporaryDirectory": "tempfile",
         \ "Gitlab": "gitlab",
+        \ "run": "subprocess",
         \ }
 
   let l:module = get(l:vocabulary, l:word, "")
