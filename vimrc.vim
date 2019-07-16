@@ -200,6 +200,13 @@ if filereadable(s:plugpath)
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'hynek/vim-python-pep8-indent'
 
+  " python imports {{{
+
+    " adds :ImportName and :ImportNameHere commands
+    Plug 'mgedmin/python-imports.vim'
+
+  " }}}
+
   " make inactive windows dim slightly
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
