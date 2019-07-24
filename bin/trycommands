@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+"""
+Run commands from an input file, removing the commands that succeed.
+"""
+import enum
+import os.path
+import shutil
+import subprocess
+import sys
+from typing import Callable, Optional, Tuple, Union
+
+import click
+
+CommandPair = Tuple[Optional[str], Callable[[bool], None]]
+
+
+class CommandState(enum.Enum):
+    inprogress = 2
+    nomore = 3
+
+
+class InputManager:
+    nextcommand: Union[str, CommandState]
+    errorcount = 0
+
+    def __init__(self, commandsfile: str) -> None:
+        self.commandsfile = commandsfile
+        self.commandstmp = commandsfile + '.processing'
+        self.commandserrors = commandsfile + '.failed'
+        self._queueNextCommand(False)
+
+    def getNextCommand(self) -> CommandPair:
+        if self.nextcommand is CommandState.inprogress:
+            raise Exception('Called getNextCommand() before finishing the previous command')
+
+        if self.nextcommand is CommandState.nomore:
+            # no more commands
+            return None, lambda b: None
+
+        assert isinstance(self.nextcommand, str)
+        cmd: str = self.nextcommand
+        self.nextcommand = CommandState.inprogress
+
+        def onComplete(success: bool) -> None:
+            # mark the last command as successful or not
+            assert cmd is not None
+            assert self.nextcommand is CommandState.inprogress
+
+            if success:
+                # queue up the next command, dropping the current one
+                self._queueNextCommand(True)
+            else:
+                # mark the current command as failed; queue up the next one
+                self.errorcount += 1
+                self._queueNextCommand(False)
+
+        return cmd, onComplete
+
+    def _queueNextCommand(self, dropnext: bool) -> None:
+        """
+        Read the next command from commandsfile and put it in self.currentcommand
+
+        Skip over N lines if the first N lines are marked as errors.
+
+        If dropnext is True, the first line after the errors is considered to have been successful
+        and is ignored.
+        """
+        nextcommand: Union[str, CommandState] = CommandState.nomore
+        tmp = self.commandsfile + '.tmp'
+        with open(self.commandsfile) as f1, open(tmp, 'x') as f2:
+            errorscopied = 0
+            for line in (s.strip() for s in f1):
+                # copy blank lines and comments straight over to the new file
+                if line == '' or line.startswith('#'):
+                    f2.write(line + '\n')
+                    continue
+
+                # was this line an error? If so copy it straight over to f2 and ignore it
+                if errorscopied < self.errorcount:
+                    f2.write(line + '\n')
+                    errorscopied += 1
+                    continue
+
+                # are we supposed to drop the next command?
+                if dropnext:
+                    dropnext = False
+                    continue
+
+                # the next line should be our command
+                if nextcommand is CommandState.nomore:
+                    nextcommand = line
+
+                # we copy all remaining lines to f2
+                f2.write(line + '\n')
+
+        # now swap files around
+        shutil.move(tmp, self.commandsfile)
+        self.nextcommand = nextcommand
+
+
+@click.command()
+@click.argument('commandsfile')
+def main(commandsfile):
+    if not os.path.exists(commandsfile):
+        raise click.ClickException('commandsfile {} does not exist'.format(commandsfile))
+
+    # use InputManager to process file lines reliably
+    im = InputManager(commandsfile)
+    exitcode = 0
+
+    while True:
+        cmd, onComplete = im.getNextCommand()
+
+        if cmd is None:
+            break
+
+        # try and execute it:
+        click.secho('RUN: ' + cmd, fg='yellow')
+        result = subprocess.call(cmd, shell=True)
+        onComplete(result == 0)
+        if result == 0:
+            word = 'OK'
+            fg = 'green'
+        else:
+            word = 'FAILED'
+            fg = 'red'
+            exitcode = 1
+        click.secho('{}: {}'.format(word, cmd), fg=fg, bold=True)
+
+    sys.exit(exitcode)
+
+
+if __name__ == '__main__':
+    main()
