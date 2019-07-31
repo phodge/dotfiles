@@ -14,6 +14,14 @@ PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH
 
+# if we're running on ubuntu, make an open() alias that uses `gio open`
+if [ -e /etc/lsb-release ]; then
+    open() {
+        # suppress errors from Nautilus
+        gio open "$@" 1> /dev/null
+    }
+fi
+
 # add our SSH key to ssh agent
 test -z "$TMUX" && ssh-add -K ~/.ssh/id_rsa 2>/dev/null || :
 
