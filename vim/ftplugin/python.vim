@@ -193,7 +193,7 @@ fun! <SID>SmartIsortTrigger() " {{{
   " if the character under the cursor is alphanumeric, work out what the word is
   " if the current line is an import statement, 
   let l:line = getline('.')
-  if l:line =~ '^\s*\%(from\|import\)'
+  if l:line =~ '^\s*\%(from\|import\)\>'
     Isort
     return
   endif
