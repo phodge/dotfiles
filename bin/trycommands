@@ -67,18 +67,21 @@ class InputManager:
         """
         nextcommand: Union[str, CommandState] = CommandState.nomore
         tmp = self.commandsfile + '.tmp'
+        isempty = True
         with open(self.commandsfile) as f1, open(tmp, 'x') as f2:
             errorscopied = 0
             for line in (s.strip() for s in f1):
                 # copy blank lines and comments straight over to the new file
                 if line == '' or line.startswith('#'):
                     f2.write(line + '\n')
+                    isempty = False
                     continue
 
                 # was this line an error? If so copy it straight over to f2 and ignore it
                 if errorscopied < self.errorcount:
                     f2.write(line + '\n')
                     errorscopied += 1
+                    isempty = False
                     continue
 
                 # are we supposed to drop the next command?
@@ -92,9 +95,17 @@ class InputManager:
 
                 # we copy all remaining lines to f2
                 f2.write(line + '\n')
+                isempty = False
 
-        # now swap files around
-        shutil.move(tmp, self.commandsfile)
+        if isempty:
+            # if the new file is empty (we have successfully executed all commands), just delete it
+            print(f'Removing empty {self.commandsfile}')
+            os.unlink(tmp)
+            os.unlink(self.commandsfile)
+        else:
+            # replace commandsfile with our shortened tmp file
+            shutil.move(tmp, self.commandsfile)
+
         self.nextcommand = nextcommand
 
 
