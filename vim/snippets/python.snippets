@@ -20,11 +20,23 @@ snippet outl
 	for _ in ${1:locals()}:
 		print('  '+repr(_)+',')
 	print(']')
+snippet errl
+	import sys
+	sys.stderr.write('${2:$1} = [\n')  # TODO
+	for _ in ${1:locals()}:
+		sys.stderr.write('  '+repr(_)+',\n')
+	sys.stderr.write(']\n')
 snippet outd
 	print('${2:$1} = {')  # TODO
 	for _ in ${1:locals()}.items():
 		print('  '+repr(_[0])+': '+repr(_[1])+',')
 	print('}')
+snippet errd
+	import stderr
+	sys.stderr.write('${2:$1} = {\n')  # TODO
+	for _ in ${1:locals()}.items():
+		sys.stderr.write('  '+repr(_[0])+': '+repr(_[1])+',\n')
+	sys.stderr.write('}\n')
 snippet lxml
 	from lxml.html import tostring
 	print('========== <${2:$1}> ==========\n%s\n========== </${2:$1}> =========' % tostring(${1:locals()}))  # noqa
@@ -116,3 +128,5 @@ snippet qlog
 snippet main
 	if __name__ == '__main__':
 		${1:main()}
+snippet rev
+	reveal_type(${1:locals()})  # noqa: F821
