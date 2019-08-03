@@ -462,6 +462,16 @@ if filereadable(s:plugpath)
     PlugMaster 'phodge/neovim-tree-sitter'
   endif
 
+  " fast/live grep {{{
+
+    Plug 'dyng/ctrlsf.vim'
+
+    " Press ENTER to open a fiel in results window, CTRL+C to cancel
+
+    com! -nargs=+ S CtrlSF <args>
+
+  " }}}
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
