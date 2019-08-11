@@ -21,7 +21,7 @@
                     "pane_pretype": ". ~/playground-p90/bin/activate\rp90-run-web-fe-nginx"},
                 {
                     "pane_cwd": "~/playground-p90/project90.git",
-                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-ticket-server-app ../project90-data"}
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-ticket-server-app"}
             ]
         },
         {
