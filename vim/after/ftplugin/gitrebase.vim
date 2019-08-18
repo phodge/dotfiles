@@ -1,4 +1,5 @@
 nnoremap <buffer> <cr> :call <SID>ShowRev()<CR>
+com! -nargs=0 -buffer RebaseAddSeparator call <SID>AddSeparator()
 
 let s:rebase_py = expand('<sfile>:p:h') . '/gitrebase.py'
 
@@ -28,4 +29,46 @@ function! <SID>OutputHandler(jobid, lines, eventtype)
       silent exe printf('!echo %s >> %s', shellescape(l:line), l:nvimlog)
     endfor
   endif
+endfun
+
+let s:chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+fun! <SID>AddSeparator()
+  let l:curpos = getcurpos()
+  try
+    " check to see what "exec touch ..." lines already exist in the file
+    let l:exectouch = {}
+    for l:linenr in range(1, line('$'))
+      let l:line = getline(l:linenr)
+      if l:line =~ '^exec touch [A-Z] '
+        let l:char = strpart(l:line, 11, 1)
+        let l:exectouch[l:char] = 1
+      endif
+    endfor
+
+    echo l:exectouch
+
+    for l:char in split(s:chars, '\zs')
+      " check to see if there is already an "exec touch ..." line for this
+      " character
+      if get(l:exectouch, l:char)
+        continue
+      endif
+
+      " if the file has already been created, don't use it again
+      if filereadable(l:char)
+        continue
+      endif
+
+      " add an exec line for this file
+      let l:newline = 'exec touch %s && git add %s && git commit -m "===== SEPARATOR ====="'
+      call setpos('.', l:curpos)
+      call append(line('.'), printf(l:newline, l:char, l:char))
+      return
+    endfor
+
+    echoerr 'No separator file available'
+  finally
+    call setpos('.', l:curpos)
+  endtry
 endfun
