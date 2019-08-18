@@ -481,12 +481,48 @@ fun! <SID>SmartImportUI() " {{{
   " make a list of imports already in the module
   call extend(l:modules, <SID>GetCurrentImports())
 
+  let l:projectmarkers = ['.hg', '.git', 'pyproject.toml', 'setup.py']
+
   " also look through tags to see if there is an importable match in another
   " file
   for l:tag in taglist(l:word)
     if l:tag.name == l:word && l:tag.filename =~ '\.py$'
-      " convert path separators to .
-      let l:candidate = substitute(fnamemodify(l:tag.filename, ':.:r'), '/', '.', 'g')
+      " work out the nearest 'setup.py', 'pyproject.toml' or '.git' dir for
+      " the candidate file
+      let l:filename = fnamemodify(l:tag.filename, ':p')
+      let l:examine = l:filename
+      let l:candidateroot = ''
+      let l:guard = 0
+      while strlen(l:examine) > 2 && l:candidateroot == ''
+        let l:guard += 1
+        if l:guard >= 100
+          continue
+        endif
+
+        " strip off the last '/<filename>' part
+        let l:examine = substitute(l:examine, '/[^/]*$', '', '')
+
+        " if there is a 
+        for l:lookfor in l:projectmarkers
+          let l:check = l:examine . '/' . l:lookfor
+          if isdirectory(l:check) || filereadable(l:check)
+            let l:candidateroot = l:examine
+            break
+          endif
+        endfor
+      endwhile
+
+      if strlen(l:candidateroot)
+        " get candidate filename relative to candidateroot by stripping the
+        " correct number of characters off the front (plus one extra for the '/')
+        let l:candidate = strpart(l:filename, strlen(l:candidateroot) + 1)
+      else
+        " otherwise just get candidate name relative to cwd
+        let l:candidate = fnamemodify(l:filename, ':.')
+      endif
+
+      " remove '.py' extension; convert path separators to '.'
+      let l:candidate = substitute(fnamemodify(l:candidate, ':r'), '/', '.', 'g')
 
       if l:candidate =~ '\.__init__$'
         let l:candidate = strpart(l:candidate, 0, strlen(l:candidate) - 9)
