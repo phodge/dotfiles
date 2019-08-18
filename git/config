@@ -23,3 +23,9 @@
 [core]
     excludesFile = ~/.gitignore
     pager = less -niSFX
+
+[diff]
+    submodule = log
+
+[status]
+    submodulesummary = true
