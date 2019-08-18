@@ -91,6 +91,10 @@ fun! <SID>PyVersionChanged()
   " work out the arguments needed for multiflake8
   let l:args = ['--filename=*', '--max-line-length='.l:maxlen]
 
+  " let flake8 know what the name of the file from stdin is so that it can
+  " respect the "per-file-ignores" options
+  call add(l:args, '--stdin-display-name='.bufname(''))
+
   " combine the default ignore list with this buffer's ignore list
   let l:ignore = get(b:, 'flake8_ignore', []) + s:flake8_default_ignore
   call add(l:args, '--extend-ignore='.join(l:ignore, ','))
