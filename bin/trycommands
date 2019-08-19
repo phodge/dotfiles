@@ -111,13 +111,15 @@ class InputManager:
 
 @click.command()
 @click.argument('commandsfile')
-def main(commandsfile):
+@click.option('--max-failures', type=int, default=-1)
+def main(commandsfile, max_failures):
     if not os.path.exists(commandsfile):
         raise click.ClickException('commandsfile {} does not exist'.format(commandsfile))
 
     # use InputManager to process file lines reliably
     im = InputManager(commandsfile)
     exitcode = 0
+    failcount = 0
 
     while True:
         cmd, onComplete = im.getNextCommand()
@@ -136,7 +138,12 @@ def main(commandsfile):
             word = 'FAILED'
             fg = 'red'
             exitcode = 1
+            failcount += 1
         click.secho('{}: {}'.format(word, cmd), fg=fg, bold=True)
+
+        if max_failures >= 0 and failcount >= max_failures:
+            click.secho('Reached {} failures - aborting'.format(failcount), fg='yellow')
+            break
 
     sys.exit(exitcode)
 
