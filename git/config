@@ -19,6 +19,9 @@
     ui = true
 [push]
     default = simple
+    # if a repo has submodules, don't allow us to push unless the related
+    # submodules' commits have also been pushed
+    recurseSubmodules = check
 
 [core]
     excludesFile = ~/.gitignore
@@ -28,4 +31,5 @@
     submodule = log
 
 [status]
+    # show a summary of submodules when running git status
     submodulesummary = true
