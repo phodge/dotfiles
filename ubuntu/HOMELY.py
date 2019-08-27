@@ -61,3 +61,13 @@ def ubuntu_app_switcher_current_workspace():
         'current-workspace-only',
         'true',
     ])
+
+
+def ubuntu_winwin_shortcuts():
+    if not wantfull():
+        return
+
+    if not yesno('install_ubuntu_winwin_shortcut', 'Install ubuntu winwin shortcut?'):
+        return
+
+    raise Exception("TODO: install the shortcut")  # noqa

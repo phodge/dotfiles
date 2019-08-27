@@ -1,0 +1,64 @@
+THREE OPTIONS
+1) iTerm/Terminal + Tmux + bash/zsh
+  Limitations:
+    - can't save/restore sessions easily, especially on VMs
+	- awkward key combinations for tmux-related stuff
+	- powerline not great to work with
+2) Nvimux + ???
+  Limitations:
+    - how to do powerline statusbar?
+	- How to run it on a remote host?
+3) Oni + ???
+4) Kitty + xonsh
+  Limitations:
+    - 
+
+
+
+
+Spike! We want/need these capabilities to do everything mentioned below:
+- query/control tmux running on the laptop from inside an ssh'd host
+- conduct RPC with vim/nvim running on 
+- find out what program(s) are currently running inside a tmux pane and what their PIDs are
+- conduct RPC with vim/nvim by PID
+
+
+ALTERNATIVELY
+- nvimux
+  - PROs
+    - easy to script everything
+	- easy to save/restore session scrollback? maybe not ...
+
+
+Saving sessions:
+- terminal windows and positions (only windows for the current session though - how do we track which windows belong to each session though?)
+- tmux session(s) inside each terminal window/tab
+  - what about tmux session(s) on remote host???
+- tmux session:
+  - name
+  - windows
+  - panes
+  - scrollback history for each Pane
+  - history of closed Panes as well
+  - any programs that are running in bg for each shell
+  - get each vim/nvim session to :mksession and :qall
+  - remember other commands that are running so we can (maybe?) restart them later
+
+Startup:
+- a keyboard shortcut and/or Dock shortcut that asks about starting a previous session or creating a new one
+- a keyboard shortcut for saving the current session
+- hook for saving the current session on [possibly unexpected] shutdown
+- a "cron" job that saves the current session every 5 minutes
+
+- ability to create an icon or keyboard shortcut that starts
+
+Keybindings:
+- 
+
+- What shortcuts do we need to copy across from TMUX?
+
+
+Script these:
+- installing kitty
+  - curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
