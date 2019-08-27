@@ -1,0 +1,18 @@
+- move everything into new repo
+- add to vimrc.vim
+- add config option to specify which repos vim projects can be found in
+- add code to determine git repo from a file and cache the result
+- redo autocmd setup code to load from other repo rather than local dirs
+- three different places a .vimproject dir can go:
+  - comitted inside the repo itself (self-contained)
+  - inside its own vim plugin?
+    - (but how would we ensure it's only sourced for the correct files? We can't just add it to 'rtp')
+  - stored as a subdir of another repo (e.g. your dotfiles repo)
+- add a command `:VimprojectEdit` which opens up the .vimproject/vimrc.vim for
+  the current file (possibly creating it for you along the way)
+- could we have multiple .vimproject files per project? Why would you want this
+  instead of just chucking something in your main .vimrc?
+  - on my laptop I'm primarily working on A) my work projects; B) my own open-source things
+  - I can put things in my personal dotfiles and work dotfiles, but I don't
+    have a way to target things like ftplugins at the correct files unless I
+    manually set up a bunch of autocmds that set b: variables on a per-buffer basis
