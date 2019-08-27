@@ -9,3 +9,4 @@
 .mypy_cache
 .tags.lock
 .tags.temp
+.tags.files
