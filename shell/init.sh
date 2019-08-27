@@ -150,7 +150,7 @@ dex() {
 }
 
 # register a python/click based script for completion generation
-__click_completion="homely"
+__click_completion=""
 want_click_completion() {
     __click_completion="$__click_completion $*"
 }
@@ -159,7 +159,14 @@ unset PATH_MODIFIED
 
 # this function should be the last thing in your .bashrc/.zshrc
 shell_init_done() {
-    completions="$HOME/.completions.sh"
+    completions_zsh="$HOME/.completions.zsh.sh"
+    completions_bash="$HOME/.completions.bash.sh"
+
+    if [ -n "$ZSH_NAME" ]; then
+        completions="$completions_zsh"
+    else
+        completions="$completions_bash"
+    fi
 
     # modify PATH now if it hasn't been done yet
     if [ -z "$PATH_MODIFIED" ]; then
@@ -173,19 +180,24 @@ shell_init_done() {
         return
     fi
 
-    # empty the completions file
-    : > "$completions"
+    # empty the completions file(s)
+    : > "$completions_bash"
+    : > "$completions_zsh"
 
     for cmd in $(echo $__click_completion); do
-        echo "Generating completions for $cmd ..."
-        if which $cmd &> /dev/null; then
-            echo "# Completions for $cmd ..." >> "$completions"
+        echo "Generating Bash/Zsh completions for $cmd ..."
+        if which $cmd > /dev/null; then
+            echo "# Completions for $cmd ..." >> "$completions_bash"
+            echo "# Completions for $cmd ..." >> "$completions_zsh"
             upper=$(echo $cmd | tr '[:lower:]' '[:upper:]')
-            eval "_${upper}_COMPLETE=source $cmd" >> "$completions"
-            echo >> "$completions"
+            eval "_${upper}_COMPLETE=source $cmd" >> "$completions_bash"
+            eval "_${upper}_COMPLETE=source_zsh $cmd" >> "$completions_zsh"
+            echo >> "$completions_bash"
+            echo >> "$completions_zsh"
         fi
     done
 
+    # source the correct completions file for our shell
     source "$completions"
 }
 
