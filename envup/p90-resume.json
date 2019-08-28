@@ -9,6 +9,17 @@
                     "pane_cwd": "~/playground-resume/resume.git",
                     "pane_pretype": "ls -la\r"}
             ]
+        },
+        {
+            "window_name": "BG",
+            "window_panes": [
+                {
+                    "pane_cwd": "~/playground-resume/resume.git",
+                    "pane_pretype": "bin/devbuild-watcher"},
+                {
+                    "pane_cwd": "~/playground-resume/resume.git",
+                    "pane_pretype": "bin/devserver 5000"}
+            ]
         }
     ]
 }
