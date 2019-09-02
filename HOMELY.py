@@ -461,11 +461,17 @@ def envup_install():
 
 @section
 def git():
+    hooksdir = HOME + '/.githooks'
+    mkdir(hooksdir)
+
+    # symlink our pre-commit hook into ~/.githooks
+    symlink('git/hooks/pre-commit', '~/.githooks/pre-commit')
+
     lines = [
         # include our dotfiles git config from ~/.gitconfig
         "[include] path = %s/git/config" % HERE,
         # because git config files don't support ENV vars, we need to tell it where to find our hooks
-        "[core] hooksPath = %s/git/hooks" % HERE,
+        "[core] hooksPath = %s/.githooks" % HOME,
     ]
     blockinfile('~/.gitconfig', lines, WHERE_TOP)
 
