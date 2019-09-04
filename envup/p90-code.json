@@ -28,7 +28,7 @@
             "window_name": "TICKETS",
             "window_panes": [
                 {
-                    "pane_cwd": "~/playground-p90/project90-data",
+                    "pane_cwd": "~/playground-p90/project90-patchdb",
                     "pane_pretype": ". ~/playground-p90/bin/activate\rls -la\r"}
             ]
         }
