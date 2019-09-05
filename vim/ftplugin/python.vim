@@ -438,6 +438,20 @@ fun! <SID>SmartImportUI() " {{{
         \ "Type": "typing",
         \ "Union": "typing",
         \ "Literal": "typing_extensions",
+        \ "or_": "sqlalchemy",
+        \ "Boolean": "sqlalchemy",
+        \ "Column": "sqlalchemy",
+        \ "Enum": "sqlalchemy",
+        \ "ForeignKey": "sqlalchemy",
+        \ "Integer": "sqlalchemy",
+        \ "String": "sqlalchemy",
+        \ "Text": "sqlalchemy",
+        \ "Numeric": "sqlalchemy",
+        \ "create_engine": "sqlalchemy",
+        \ "relationship": "sqlalchemy.orm",
+        \ "sessionmaker": "sqlalchemy.orm",
+        \ "desc": "sqlalchemy",
+        \ "declarative_base": "sqlalchemy.ext.declarative",
         \ }
 
   " these words instantly trigger adding an import for a top-level module
