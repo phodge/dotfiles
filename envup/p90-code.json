@@ -15,7 +15,7 @@
             "window_panes": [
                 {
                     "pane_cwd": "~/playground-p90/project90.git",
-                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-build-web-fe-ts -w"},
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rbin/build-web-fe-ts --fast -w"},
                 {
                     "pane_cwd": "~/playground-p90/project90.git",
                     "pane_pretype": ". ~/playground-p90/bin/activate\rp90-run-web-fe-nginx"},
