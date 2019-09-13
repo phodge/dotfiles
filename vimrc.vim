@@ -319,6 +319,9 @@ if filereadable(s:plugpath)
         \   },
         \ }
 
+  " use vim-projectroot to figure out the project root
+  let g:gutentags_project_root_finder = 'projectroot#get'
+
   Plug 'majutsushi/tagbar'
   nnoremap <space>n :TagbarToggle<CR>
 
@@ -471,6 +474,9 @@ if filereadable(s:plugpath)
     com! -nargs=+ S CtrlSF <args>
 
   " }}}
+
+  PlugMaster 'phodge/vim-projectroot'
+  let g:projectroot_ignore_git_submodule = 1
 
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
