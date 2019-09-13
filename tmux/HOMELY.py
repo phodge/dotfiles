@@ -167,6 +167,11 @@ def tmux_keys():
             static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"'
         elif haveexecutable("pbcopy"):
             static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "pbcopy"'
+        elif True:
+            # XXX: I've been having issues with Ubuntu terminal lately where it
+            # can't decipher the terminal codes coming from tmux's
+            # copy-selection command
+            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "xsel -b -i"'
         else:
             static['tmux_copy_cmd'] = 'copy-selection'
 
