@@ -439,6 +439,8 @@ fun! <SID>SmartImportUI() " {{{
         \ "Union": "typing",
         \ "Literal": "typing_extensions",
         \ "or_": "sqlalchemy",
+        \ "in_": "sqlalchemy",
+        \ "notin_": "sqlalchemy",
         \ "Boolean": "sqlalchemy",
         \ "Column": "sqlalchemy",
         \ "Enum": "sqlalchemy",
@@ -451,6 +453,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "relationship": "sqlalchemy.orm",
         \ "sessionmaker": "sqlalchemy.orm",
         \ "desc": "sqlalchemy",
+        \ "func": "sqlalchemy.sql",
         \ "declarative_base": "sqlalchemy.ext.declarative",
         \ }
 
