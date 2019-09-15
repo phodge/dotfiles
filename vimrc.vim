@@ -476,7 +476,7 @@ if filereadable(s:plugpath)
   " }}}
 
   PlugMaster 'phodge/vim-projectroot'
-  let g:projectroot_ignore_git_submodule = 1
+  let g:projectroot_nested_git_submodule = 0
 
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
