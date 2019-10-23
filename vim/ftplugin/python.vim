@@ -617,6 +617,12 @@ fun! <SID>AddImportLineNow(line) " {{{
       continue
     endif
 
+    " is the current line a self-contained docblock?
+    if getline(l:where) =~ '^\("""\|''''''\).\{-}\1$'
+      let l:where += 1
+      continue
+    endif
+
     " is the current line starting/ending a docblock
     if getline(l:where) =~ '^"""' || getline(l:where) =~ "^'''"
       let l:in_docblock = strpart(getline(l:where), 0, 3)
