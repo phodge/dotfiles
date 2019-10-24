@@ -131,7 +131,7 @@ if filereadable(s:plugpath)
       "let g:ale_php_langserver_use_global = 1
       "let g:ale_php_langserver_executable = $HOME.'/.config/composer/vendor/felixfbecker/language-server/bin/php-language-server.php'
       "call add(g:ale_linters.php, 'langserver')
-      
+
       if ! s:use_ycm
         " when neither LSP or YCM is enabled, ALE will perform these things:
         nnoremap <space>d :ALEGoToDefinition<CR>
@@ -200,7 +200,7 @@ if filereadable(s:plugpath)
     Plug 'rizzatti/dash.vim'
     nnoremap <S-F5> :Dash <cword><CR>
   endif " }}}
-  
+
 
   Plug 'EinfachToll/DidYouMean'
   Plug 'christoomey/vim-tmux-navigator'
@@ -655,7 +655,7 @@ function! ExcaliburQuitWindow() " {{{
 
   " use bwipeout to get rid of the current buffer
   bwipeout
-  
+
   " if we are still on the same buffer, it means there was nothing else to
   " load (only other buffers are help buffers)
   if bufnr("") == l:current_bufnr
@@ -819,7 +819,7 @@ set sidescrolloff=20
 
     " use the slightly better gF instead of gf
     nnoremap gf gF
-    
+
     " when using i{ in line-wise Visual mode, don't revert to character-wise
     " mode
     vnoremap i{ i{V
@@ -896,7 +896,7 @@ set sidescrolloff=20
       silent! nunmap dp
       silent! nunmap do
     endif
-    
+
     " r(, r[, and r{ will replace BOTH brackets
     if g:vim_peter
       nnoremap r( :call <SID>ReplaceBrackets('()')<CR>
@@ -907,7 +907,7 @@ set sidescrolloff=20
       nunmap r[
       nunmap r{
     endif
-    
+
     function! <SID>ReplaceBrackets(newbrackets) " {{{
       " if the letter under the cursor is an opening bracket, replace both at once
       let l:line = line('.')
@@ -1019,7 +1019,7 @@ set sidescrolloff=20
     vnoremap <F4> mt:Align! p0 :<CR>gv:s/\(\s\+\):/:\1/g<CR>`t
 
     " use c" to swap quote types {{{
-    
+
       nnoremap <silent> c" :call <SID>SwapQuotes()<CR>
 
       function! <SID>SwapQuotes() " {{{
