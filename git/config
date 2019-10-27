@@ -17,6 +17,7 @@
 
 [color]
     ui = true
+
 [push]
     default = simple
     # if a repo has submodules, don't allow us to push unless the related
@@ -28,8 +29,10 @@
     pager = less -niSFX
 
 [diff]
+    # show details of what's changed in git submodules (rather than just a
+    # commit hash)
     submodule = log
 
 [status]
-    # show a summary of submodules when running git status
+    # show a description of new submodule commits when running git status
     submodulesummary = true
