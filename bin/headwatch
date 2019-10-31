@@ -44,8 +44,14 @@ def attempt_command(workdir, args):
 
 
 @click.command()
-@click.argument('args', nargs=-1, required=True)
-def main(args):
+@click.argument('command', nargs=-1, required=True)
+def main(command):
+    """
+    Run <command> against a the current branch each time it changes.
+
+    A temporary git worktree is created so that the branch head is checked out
+    cleanly each time.
+    """
     repo = Repo(os.getcwd())
     branch = repo.active_branch.name
 
@@ -72,7 +78,7 @@ def main(args):
             # checkout the new sha
             check_call(['git', 'checkout', new_head.hexsha], cwd=workdir)
 
-            attempt_command(workdir, args)
+            attempt_command(workdir, command)
 
 
 if __name__ == '__main__':
