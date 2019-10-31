@@ -213,6 +213,12 @@ if filereadable(s:plugpath)
 
   " }}}
 
+  " python code formatting via Black
+  " TODO: I've had to uninstall this because it keeps complaining about
+  " needing Vim7+ with Python3.6
+  Plug 'psf/black'
+
+
   " make inactive windows dim slightly
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
