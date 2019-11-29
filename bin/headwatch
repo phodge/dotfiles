@@ -44,8 +44,9 @@ def attempt_command(workdir, args):
 
 
 @click.command()
+@click.option("--branch", "-b", help="Which branch to use. Defaults to current branch.")
 @click.argument('command', nargs=-1, required=True)
-def main(command):
+def main(branch, command):
     """
     Run <command> against a the current branch each time it changes.
 
@@ -53,9 +54,22 @@ def main(command):
     cleanly each time.
     """
     repo = Repo(os.getcwd())
-    branch = repo.active_branch.name
+    if not branch:
+        branch = repo.active_branch.name
 
-    commit = repo.branches[branch].commit
+    if branch.startswith('origin/'):
+        # TODO: add support for remotes named something other than 'origin'
+        remote = 'origin'
+        remotebranch = branch[len(remote) + 1:]
+
+        def _get_latest_commit():
+            return repo.remotes[remote].refs[remotebranch].commit
+    else:
+        # default mechanism to get the latest commit for the branch
+        def _get_latest_commit():
+            return repo.branches[branch].commit
+
+    commit = _get_latest_commit()
     heading(f'Tracking branch {branch} ({commit.hexsha:.8})'
             f' "{commit.summary}"')
 
@@ -65,7 +79,7 @@ def main(command):
         click.echo(f'Using temp worktree {workdir}')
 
         while True:
-            new_head = repo.branches[branch].commit
+            new_head = _get_latest_commit()
             if prev_head and new_head.hexsha == prev_head.hexsha:
                 time.sleep(2)
                 continue
