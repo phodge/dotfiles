@@ -225,13 +225,14 @@ if filereadable(s:plugpath)
   let g:vimade.basebg = '#000000'
   Plug 'TaDaa/vimade'
 
-  if 0
-    " going back to SnipMate because UltiSnips is making neovim freeze
+  if has('neovim') && v:version >= 704
+    Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
+  else
+    " NOTE: we need to use the older SnipMate on vim because UltiSnips keeps
+    " producing errors in vim 8.1
     Plug 'MarcWeber/vim-addon-mw-utils'
     Plug 'tomtom/tlib_vim'
     Plug 'garbas/vim-snipmate'
-  elseif v:version >= 704
-    Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
   endif
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
