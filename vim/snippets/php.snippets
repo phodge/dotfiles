@@ -12,5 +12,5 @@ snippet logdump
 	$__cloner = new \Symfony\Component\VarDumper\Cloner\VarCloner;
 	$__dumper = new \Symfony\Component\VarDumper\Dumper\CliDumper;
 	$__exported = $__dumper->dump($__cloner->cloneVar(${1:$_POST}), true, ['maxDepth' => 3]);
-	error_log($__t.'${2:$1}'.":\n$__exported", 3, '/tmp/q');
+	file_put_contents('/tmp/q', $__t.'${2:$1}'.":\n$__exported", FILE_APPEND);
 	//// TODO: remove debug above ////
