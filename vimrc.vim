@@ -225,7 +225,7 @@ if filereadable(s:plugpath)
   let g:vimade.basebg = '#000000'
   Plug 'TaDaa/vimade'
 
-  if has('neovim') && v:version >= 704
+  if has('nvim') && v:version >= 704
     Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
   else
     " NOTE: we need to use the older SnipMate on vim because UltiSnips keeps
