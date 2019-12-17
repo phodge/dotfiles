@@ -490,7 +490,11 @@ if filereadable(s:plugpath)
   " }}}
 
   PlugMaster 'phodge/vim-projectroot'
-  let g:projectroot_nested_git_submodule = 0
+
+  " tell vim-projectroot that when a file is part of a git repo that is a
+  " submodule of another git repo, the parent git repo should be considerd the
+  " project root
+  let g:projectroot_nested_git_submodule = 1
 
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
