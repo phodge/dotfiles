@@ -517,6 +517,7 @@ if filereadable(s:plugpath)
   " https://github.com/erikfercak/php-search-doc
   " https://github.com/beanworks/vim-phpfmt
   " https://github.com/wellle/tmux-complete.vim
+  " https://github.com/norcalli/nvim-colorizer.lua
   call plug#end() " }}}
 endif
 
