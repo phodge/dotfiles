@@ -213,6 +213,8 @@ if filereadable(s:plugpath)
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'hynek/vim-python-pep8-indent'
 
+  Plug 'tmhedberg/SimpylFold'
+
   " python imports {{{
 
     " adds :ImportName and :ImportNameHere commands

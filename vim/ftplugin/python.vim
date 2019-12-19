@@ -1,6 +1,3 @@
-if ! &l:diff
-  setlocal foldmethod=indent foldcolumn=1
-endif
 setlocal formatoptions=croqlj
 setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 
