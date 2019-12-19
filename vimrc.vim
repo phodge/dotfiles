@@ -232,7 +232,7 @@ if filereadable(s:plugpath)
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
   let g:vimade.basebg = '#000000'
-  Plug 'TaDaa/vimade'
+  Plug 'TaDaa/vimade', get(g:, 'want_vimade', 0) ? {} : {'on': []}
 
   if has('nvim') && v:version >= 704
     Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
