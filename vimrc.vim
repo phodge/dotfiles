@@ -520,6 +520,8 @@ if filereadable(s:plugpath)
   " https://github.com/beanworks/vim-phpfmt
   " https://github.com/wellle/tmux-complete.vim
   " https://github.com/norcalli/nvim-colorizer.lua
+  " https://github.com/galooshi/vim-import-js
+  " https://github.com/ruanyl/vim-sort-imports
   call plug#end() " }}}
 endif
 
