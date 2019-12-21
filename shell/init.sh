@@ -25,19 +25,6 @@ fi
 # add our SSH key to ssh agent
 test -z "$TMUX" && ssh-add -K ~/.ssh/id_rsa 2>/dev/null || :
 
-# function to quickly get hg branch name and status - used in zsh prompt and bash prompt
-hg_fast_state() {
-    here="$(realpath "$PWD")"
-    while [ -n "$here" -a / != "$here" ]; do
-        if [ -e "$here/.hg" ]; then
-            fast-hg-status
-            cat "$here/.hg/branch"
-            return
-        fi
-        here="$(dirname "$here")"
-    done
-}
-
 if [ -n "$ZSH_NAME" ]; then
     source $DOTFILES_PATH/shell/zsh.sh
 else

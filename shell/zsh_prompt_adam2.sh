@@ -59,15 +59,6 @@ function zsh_prompt_gitinfo() {
     fi
 }
 
-# === hg repo info ===
-
-function zsh_prompt_hginfo() {
-    local state="$(hg_fast_state)"
-    if [ -n "$state" ]; then
-        echo "%F{yellow}[$state]%{${reset_color}%}"
-    fi
-}
-
 
 # === other prompt segment functions ===
 
@@ -231,7 +222,7 @@ prompt_adam2_choose_prompt () {
 # default segments for each section
 zsh_prompt_topleft_segments=( zsh_prompt_userathost zsh_prompt_shortpath )
 zsh_prompt_topright_segments=( zsh_prompt_clock )
-zsh_prompt_rprompt_segments=( zsh_prompt_gitinfo zsh_prompt_hginfo )
+zsh_prompt_rprompt_segments=( zsh_prompt_gitinfo )
 zsh_prompt_lprompt_segments=( zsh_prompt_jobcount zsh_prompt_laststatus )
 
 
