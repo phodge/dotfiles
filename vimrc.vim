@@ -227,7 +227,6 @@ if filereadable(s:plugpath)
   " needing Vim7+ with Python3.6
   Plug 'psf/black'
 
-
   " make inactive windows dim slightly
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
@@ -380,12 +379,10 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/vim-vimui'
   PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
-  PlugMaster 'phodge/vim-hiword', {'on': []}
 
   Plug 'lumiliet/vim-twig'
 
   "Plug 'python-rope/ropevim'
-  Plug 'rizzatti/dash.vim'
   "Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
@@ -1292,37 +1289,6 @@ function! <SID>NamedSkeleton(template_name, buffer_name)
   endif
 endfun
 
-
-fun! <SID>Hiwords()
-  if ! exists(':Hiword')
-    return
-  endif
-  syntax off
-  Hiword Conditional if
-  Hiword Conditional else
-  Hiword Conditional elseif
-  Hiword Conditional elif
-  Hiword Conditional for
-  Hiword Conditional while
-  Hiword Conditional do
-  Hiword Conditional foreach
-  Hiword Operator in
-  Hiword Operator not
-  Hiword Operator and
-  Hiword Operator or
-  Hiword Macro import
-  Hiword Macro from
-  Hiword Macro def
-  Hiword Typedef self
-  Hiword Statement yield
-  Hiword Statement return
-  Hiword Statement break
-  Hiword Statement continue
-  Hiword IncSearch TODO
-  Hiword IncSearch test
-  Hiword IncSearch FIXME
-endfun
-com! -nargs=0 Hiwords call <SID>Hiwords()
 
 " XXX: languageClient-neovim turns on this option, but shortmess=F stops DidYouMean from working
 set shortmess-=F
