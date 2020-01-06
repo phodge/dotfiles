@@ -523,6 +523,7 @@ if filereadable(s:plugpath)
   " https://github.com/norcalli/nvim-colorizer.lua
   " https://github.com/galooshi/vim-import-js
   " https://github.com/ruanyl/vim-sort-imports
+  " https://github.com/skywind3000/vim-quickui
   call plug#end() " }}}
 endif
 
