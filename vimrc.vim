@@ -498,6 +498,11 @@ if filereadable(s:plugpath)
   " project root
   let g:projectroot_nested_git_submodule = 1
 
+  " NOTE: This isn't wasn't as useful as I'd hoped - it only looks at file
+  " extensions so is less useful for things like the MySU ORM/YAML files where
+  " more powerful manipulation is required
+  " Plug 'https://github.com/vim-scripts/a.vim'
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
@@ -509,7 +514,6 @@ if filereadable(s:plugpath)
   " https://github.com/vim-scripts/grep.vim
   " https://github.com/michaeljsmith/vim-indent-object
   " https://github.com/andrewradev/splitjoin.vim
-  " https://github.com/vim-scripts/a.vim
   " https://github.com/vim-airline/vim-airline
   " https://vimawesome.com/plugin/ack-vim
   " https://vimawesome.com/plugin/commentary-vim
