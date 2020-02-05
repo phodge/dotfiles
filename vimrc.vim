@@ -389,6 +389,12 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " Google Terraform syntax
+  " TODO: make this conditional
+  if get(g:, 'want_terraform_plugins', 0)
+    Plug 'hashivim/vim-terraform'
+  endif
+
   " CSV plugin
   " :WhatColumn
   "   what column number is the cursor in, or the heading if "!" is included
