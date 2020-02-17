@@ -33,6 +33,9 @@
     # commit hash)
     submodule = log
 
+[rebase]
+    autostash = true
+
 [status]
     # show a description of new submodule commits when running git status
     submodulesummary = true
