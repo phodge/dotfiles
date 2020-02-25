@@ -1,5 +1,6 @@
-from homely.general import section
-from homely.system import execute
+from homely.general import section, symlink, writefile
+from homely.install import installpkg
+from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
 from HOMELY import wantfull
@@ -45,6 +46,13 @@ def ubuntu_key_repeat_rate():
 
 @section
 def ubuntu_app_switcher_current_workspace():
+    """
+    Install devilspie2 under Ubuntu.
+
+    devilspie2 can "pin" apps like Rhythmbox or Spotify, causing them to move across all
+    desktops/workspaces. This means I don't accidentally flip to another desktop/workspace when I
+    go to play some music or respond to a chat message.
+    """
     if not wantfull():
         return
 
@@ -61,3 +69,27 @@ def ubuntu_app_switcher_current_workspace():
         'current-workspace-only',
         'true',
     ])
+
+
+@section
+def ubuntu_install_devilspie2():
+    if not haveexecutable('apt'):
+        return
+
+    if not wantfull():
+        return
+
+    question = 'Install devilspie2 to manage window sticky bits?'
+    if not yesno('want_devilspie2', question, default=True):
+        return
+
+    installpkg('devilspie2', apt='devilspie2', brew=None)
+
+    symlink('devilspie2', '~/.config/devilspie2')
+
+    with writefile('~/.config/autostart/devilspie2.desktop') as f:
+        f.write("[Desktop Entry]\n")
+        f.write("Name=devilspie2\n")
+        f.write("Exec=devilspie2\n")
+        f.write("Comment=devilspie2 - automatically pin stuff\n")
+        f.write("X-GNOME-Autostart-enabled=true\n")
