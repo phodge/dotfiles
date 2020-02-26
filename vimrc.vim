@@ -1300,5 +1300,9 @@ endfun
 " XXX: languageClient-neovim turns on this option, but shortmess=F stops DidYouMean from working
 set shortmess-=F
 
+aug TODOTXT
+au! BufReadPost ~/TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
+aug end
+
 
 let s:vim_entered = 1
