@@ -1301,7 +1301,7 @@ endfun
 set shortmess-=F
 
 aug TODOTXT
-au! BufReadPost ~/TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
+au! BufReadPost TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
 aug end
 
 
