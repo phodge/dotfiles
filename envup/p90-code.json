@@ -18,7 +18,10 @@
                     "pane_pretype": ". ~/playground-p90/bin/activate\rbin/build-web-fe-ts --fast -w"},
                 {
                     "pane_cwd": "~/playground-p90/project90.git",
-                    "pane_pretype": ". ~/playground-p90/bin/activate\rp90-run-web-fe-nginx"},
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rbin/run-web-fe-nginx"},
+                {
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rbin/run-app-redis"},
                 {
                     "pane_cwd": "~/playground-p90/project90.git",
                     "pane_pretype": ". ~/playground-p90/bin/activate\rp90-ticket-server-app"}
@@ -30,6 +33,17 @@
                 {
                     "pane_cwd": "~/playground-p90/project90-patchdb",
                     "pane_pretype": ". ~/playground-p90/bin/activate\rls -la\r"}
+            ]
+        },
+        {
+            "window_name": "DEMOTEST",
+            "window_panes": [
+                {
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rbin/demotest-one build-a-project ~/Desktop/p90-demotest --web-fe-dir=../web_fe_build"},
+                {
+                    "pane_cwd": "~/playground-p90/project90.git",
+                    "pane_pretype": ". ~/playground-p90/bin/activate\rbin/geckoserver --no-headless"}
             ]
         }
     ]
