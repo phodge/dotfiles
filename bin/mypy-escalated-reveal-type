@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-mypy "$@" | sed -eE 's/^\([^:]\{1,\}:\([0-9]\{1,\}:\)\{1,2\}\) note: Revealed type is /\1 error: Revealed type is /'
+mypy "$@" | sed -e 's/^\([^:]\{1,\}:\([0-9]\{1,\}:\)\{1,2\}\) note: Revealed type is /\1 error: Revealed type is /'
