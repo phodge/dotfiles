@@ -205,7 +205,11 @@ endfun " }}}
 
 let s:version_cache = {}
 
-fun! <SID>GetVenvInfo()
+fun! <SID>FindVenvInfo()
+  if strlen($VIRTUAL_ENV)
+    return <SID>GetVenvDirDetails($VIRTUAL_ENV, 1)
+  endif
+
   " TODO: we could cache this to make it faster
   if expand('%') =~ '^\w\+://'
     let l:try = getcwd()
@@ -216,46 +220,50 @@ fun! <SID>GetVenvInfo()
     let l:try = fnamemodify(l:try, ':h')
 
     if isdirectory(l:try.'/bin') && filereadable(l:try.'/bin/activate')
-      let l:pyexe = l:try.'/bin/python'
-      let l:basename = fnamemodify(resolve(l:pyexe), ':t')
-      if l:basename =~ '^python[23]\.[0-9]\+$'
-        let l:major = str2nr(strpart(l:basename, 6, 1))
-        let l:exact = strpart(l:basename, 6)
-        return [l:major, l:exact, l:try.'/bin']
-      endif
-
-      " we'll actually need to run the python executable to find out what it
-      " is ... try looking in the cache first
-      let l:ret = get(s:version_cache, l:pyexe, 0)
-      if type(l:ret) == type([])
-        return l:ret
-      endif
-
-      " run the executable to find out what it is
-      let l:code = 'import sys; print("%d.%d" % sys.version_info[:2])'
-      let l:cmd = printf("%s -c %s", l:pyexe, shellescape(l:code))
-      let l:output = systemlist(l:cmd)[0]
-      let l:major = str2nr(strpart(l:output, 0, 1))
-      let l:info = [l:major, l:output, l:try.'/bin']
-      let s:version_cache[l:pyexe] = l:info
-      return l:info
+      return <SID>GetVenvDirDetails(l:try)
     endif
   endwhile
 
   return []
 endfun
 
+fun! <SID>GetVenvDirDetails(path, allowfail)
+  let l:pyexe = a:path.'/bin/python'
+  let l:basename = fnamemodify(resolve(l:pyexe), ':t')
+  if l:basename =~ '^python[23]\.[0-9]\+$'
+    let l:major = str2nr(strpart(l:basename, 6, 1))
+    let l:exact = strpart(l:basename, 6)
+    return [l:major, l:exact, a:path.'/bin']
+  endif
+
+  " we'll actually need to run the python executable to find out what it
+  " is ... try looking in the cache first
+  let l:ret = get(s:version_cache, l:pyexe, 0)
+  if type(l:ret) == type([])
+    return l:ret
+  endif
+
+  " run the executable to find out what it is
+  let l:code = 'import sys; print("%d.%d" % sys.version_info[:2])'
+  let l:cmd = printf("%s -c %s", l:pyexe, shellescape(l:code))
+  let l:output = systemlist(l:cmd)[0]
+  let l:major = str2nr(strpart(l:output, 0, 1))
+  let l:info = [l:major, l:output, a:path.'/bin']
+  let s:version_cache[l:pyexe] = l:info
+  return l:info
+endfun
+
 " examines the current file to try and determine which python versions should
 " be supported
 fun! multipython#detectversions() " {{{
-  let l:venv_py = <SID>GetVenvInfo()
+  let l:venv_py = <SID>FindVenvInfo()
   if len(l:venv_py)
     " switch to that python version
     let [l:major, l:exact, l:bin] = l:venv_py
     call <SID>SetPyVersion(l:major, l:exact, "Virtualenv at ".l:bin, 0)
     return 1
   endif
-  
+
   if getline('1') =~ '^#!.*\bpython2'
     " try to enable python2
     call <SID>CyclePy(2, "", "python2 hash-bang")
@@ -277,7 +285,7 @@ endfun
 fun! multipython#getpythoncmd(major, cmd, mustexist, allowvenv) " {{{
   " if we're in a virtualenv, always try and use that version of the command
   " first
-  let l:venv = a:allowvenv ? <SID>GetVenvInfo() : []
+  let l:venv = a:allowvenv ? <SID>FindVenvInfo() : []
   if len(l:venv) && (a:major == 0 || a:major == l:venv[0])
     " if there is a virtualenv and it has the same major version (or we don't
     " care what majoy python version we use) then look for the cmd in the
