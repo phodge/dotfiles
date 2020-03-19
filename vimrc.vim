@@ -223,9 +223,13 @@ if filereadable(s:plugpath)
   " }}}
 
   " python code formatting via Black
-  " TODO: I've had to uninstall this because it keeps complaining about
-  " needing Vim7+ with Python3.6
-  Plug 'psf/black'
+  " XXX: I've had to uninstall this because it doesn't set up the virtualenv
+  " correctly for nvim
+  "Plug 'psf/black'
+  aug FakeBlack
+  au!
+  au! BufRead *.py command! -buffer Black !black %:p
+  aug end
 
   " make inactive windows dim slightly
   let g:vimade = get(g:, 'vimade', {})
