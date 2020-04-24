@@ -1276,6 +1276,28 @@ au BufNewFile retest.sh call <SID>NamedSkeleton('retest.sh', expand('<afile>'))
 au BufNewFile rebuild.sh call <SID>NamedSkeleton('rebuild.sh', expand('<afile>'))
 aug end
 
+" {{{ retest.sh / rebuild.sh
+
+  fun! <SID>Retest(sockname, filename)
+    " open the test file in a buffer if we haven't seen it before
+    if bufnr(a:filename) == -1
+      execute 'split' a:filename
+    elseif ! filereadable(a:sockname)
+      echoerr a:sockname . ' does not exist'
+    else
+      exe '!nudge - ' . a:sockname
+      redraw!
+    endif
+  endfun
+
+  nnoremap <space>t :call <SID>Retest('./.retest', 'retest.sh')<CR>
+  nnoremap <space>b :call <SID>Retest('./.rebuild', 'rebuild.sh')<CR>
+  nnoremap <space>T :split retest.sh<CR>
+  nnoremap <space>B :split rebuild.sh<CR>
+
+" }}}
+
+
 if ! exists('s:next_group_number')
   let s:next_group_number = 1
 endif
