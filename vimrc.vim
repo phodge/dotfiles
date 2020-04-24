@@ -533,6 +533,7 @@ if filereadable(s:plugpath)
   " https://github.com/galooshi/vim-import-js
   " https://github.com/ruanyl/vim-sort-imports
   " https://github.com/skywind3000/vim-quickui
+  " https://github.com/mg979/vim-visual-multi
   call plug#end() " }}}
 endif
 
