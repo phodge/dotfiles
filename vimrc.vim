@@ -394,7 +394,6 @@ if filereadable(s:plugpath)
   Plug 'AndrewRadev/linediff.vim'
 
   " Google Terraform syntax
-  " TODO: make this conditional
   if get(g:, 'want_terraform_plugins', 0)
     Plug 'hashivim/vim-terraform'
   endif
