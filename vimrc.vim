@@ -1273,6 +1273,7 @@ aug Skeletons
 au!
 au BufNewFile *.tsx call <SID>NamedSkeleton('component.tsx', expand('<afile>'))
 au BufNewFile retest.sh call <SID>NamedSkeleton('retest.sh', expand('<afile>'))
+au BufNewFile rebuild.sh call <SID>NamedSkeleton('rebuild.sh', expand('<afile>'))
 aug end
 
 if ! exists('s:next_group_number')
