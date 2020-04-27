@@ -534,6 +534,7 @@ if filereadable(s:plugpath)
   " https://github.com/ruanyl/vim-sort-imports
   " https://github.com/skywind3000/vim-quickui
   " https://github.com/mg979/vim-visual-multi
+  " https://github.com/nvim-treesitter/completion-treesitter
   call plug#end() " }}}
 endif
 
