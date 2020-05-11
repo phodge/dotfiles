@@ -536,6 +536,15 @@ fun! <SID>SmartImportUI() " {{{
         let l:candidate = fnamemodify(l:filename, ':.')
       endif
 
+      if exists('b:python_packages_dir') && type(b:python_packages_dir) == type([])
+        for l:dir in b:python_packages_dir
+          if stridx(l:candidate, l:dir . '/') == 0
+            let l:candidate = strpart(l:candidate, strlen(l:dir) + 1)
+            break
+          endif
+        endfor
+      endif
+
       " remove '.py' extension; convert path separators to '.'
       let l:candidate = substitute(fnamemodify(l:candidate, ':r'), '/', '.', 'g')
 
