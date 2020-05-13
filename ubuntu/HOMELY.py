@@ -89,7 +89,8 @@ def ubuntu_install_devilspie2():
 
     with writefile('~/.config/autostart/devilspie2.desktop') as f:
         f.write("[Desktop Entry]\n")
+        f.write("Type=Application\n")
         f.write("Name=devilspie2\n")
         f.write("Exec=/usr/bin/devilspie2\n")
-        f.write("Comment=devilspie2 - automatically pin stuff\n")
+        f.write("Comment=devilspie2 - react to gnome window events\n")
         f.write("X-GNOME-Autostart-enabled=true\n")
