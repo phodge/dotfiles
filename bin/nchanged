@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e -o pipefail
+
+if [ -n "$1" ]; then
+    other="$1"
+elif git branch -a | grep -w origin/develop > /dev/null; then
+    other="origin/develop"
+elif git branch | grep -w develop > /dev/null; then
+    other="develop"
+elif git branch -a | grep -w origin/master > /dev/null; then
+    other="origin/master"
+elif git branch | grep -w master > /dev/null; then
+    other="master"
+else
+    echo "No 'develop' or 'master' branches to diff against"
+    exit 1
+fi
+
+echo "Comparing with '$other' ..."
+nvim "+Shell git diff $other... --name-status --no-renames" "+bw 1"
