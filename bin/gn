@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 cmd1="+Shell rg -n"
 for arg in "$@"; do
-    echo A: $arg
     cmd1="$cmd1 '$arg'"
 done
 nvim "$cmd1" "+bw 1"
