@@ -18,6 +18,9 @@
 [color]
     ui = true
 
+[pull]
+    ff = only
+
 [push]
     default = simple
     # if a repo has submodules, don't allow us to push unless the related
