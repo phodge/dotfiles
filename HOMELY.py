@@ -712,6 +712,32 @@ def iterm2_prefs():
         ])
 
 
+@section
+def install_pyenv():
+    if not wantfull():
+        return
+
+    if not allowinstallingthings():
+        return
+
+    if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv?', default=None):
+        return
+
+    gitclone = InstallFromSource('https://github.com/pyenv/pyenv.git', '~/.pyenv')
+    gitclone.select_branch('master')
+    run(gitclone)
+
+    gitclone2 = InstallFromSource('https://github.com/pyenv/pyenv-virtualenv',
+                                  '~/.pyenv/plugins/pyenv-virtualenv')
+    gitclone2.select_branch('master')
+    run(gitclone2)
+
+    # NOTE: on ubuntu you'll need to install libffi-dev
+    if haveexecutable('apt'):
+        installpkg('libffi-dev', apt='libffi-dev')
+        installpkg('pkgconf', apt='pkgconf')
+
+
 # TODO: https://github.com/clvv/fasd
 
 

@@ -11,6 +11,12 @@ PATH_HIGH="/usr/local/opt/coreutils/libexec/gnubin:$PATH_HIGH"
 # this repo
 PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
 
+# do we have pyenv in ~/.pyenv
+if [ -e ~/.pyenv ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    PATH_HIGH="$PYENV_ROOT/bin:$PATH_HIGH"
+fi
+
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH
 
