@@ -101,6 +101,13 @@ if filereadable(s:plugpath)
     Plug 'phodge/spacetea.vim'
   endif
 
+  " firenvim
+  if get(g:, 'peter_want_firenvim', 0)
+    " see https://github.com/glacambre/firenvim for instructions on how to
+    " configure
+    Plug 'glacambre/firenvim'
+  endif
+
   " why not
   Plug 'editorconfig/editorconfig-vim'
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
