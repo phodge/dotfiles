@@ -246,6 +246,8 @@ if filereadable(s:plugpath)
 
   if has('nvim') && v:version >= 704
     Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
+    " this is CTRL+J by default, which we don't want
+    let g:UltiSnipsJumpForwardTrigger = '<space><C-J>'
   else
     " NOTE: we need to use the older SnipMate on vim because UltiSnips keeps
     " producing errors in vim 8.1
