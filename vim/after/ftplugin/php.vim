@@ -12,7 +12,8 @@ setlocal textwidth=120
 if ! &l:diff
   setlocal foldmethod=indent
   setlocal foldcolumn=1
-  setlocal foldlevel=1
+  " turning off temporarily
+  " setlocal foldlevel=1
 endif
 
 
