@@ -1,4 +1,6 @@
-*.pyc
+# temporarily disabling these to force myself to add them to each project's .gitignore files
+#*.pyc
+#.mypy_cache
 *.swp
 *.swo
 .DS_Store
@@ -6,7 +8,6 @@
 .vimproject
 .cache
 .gutctags
-.mypy_cache
 .tags.lock
 .tags.temp
 .tags.files

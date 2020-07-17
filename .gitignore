@@ -2,3 +2,5 @@ syntax: glob
 __pycache__
 
 *.zwc
+
+.mypy_cache
