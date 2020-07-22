@@ -13,6 +13,7 @@ def jerjerrod_install():
     inst = InstallFromSource('https://github.com/phodge/jerjerrod.git',
                              '~/src/jerjerrod.git')
     inst.select_branch('master')
+    # TODO: if you uninstall jerjerrod, this won't actually reinstalll it :-(
     inst.compile_cmd([
         # NOTE: only install jerjerrod where we've installed powerline
         ['pip3', 'install', '--user', '-e', '.'],
