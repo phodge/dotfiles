@@ -34,22 +34,22 @@ def tmux_config():
 
     # what to put in tmux config?
     wildcards = {"DOTFILES": HERE, "HOME": HOME}
-    lines = []
+    lines = ['source ~/.tmux/keybindings.conf']
     # add our dotfiles python folder to PYTHONPATH before restarting the powerline daemon
     #lines.append("set-environment PYTHONPATH '%(DOTFILES)s/python'")
-    if wantpowerline():
-        wildcards["POWERLINE"] = powerline_path()
-        lines.extend([
-            # always replace the daemon on startup, so that re-sourcing the
-            # tmux conf always loads updated python modules
-            'run-shell "powerline-daemon --replace -q"',
-            'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
-        ])
     if tmux_plugins:
         lines.append('source "%(DOTFILES)s/tmux/plugins.conf"')
         # FIXME: the only way to determine if TPM installed correctly is to
         # press `[PREFIX]`, `I` to do a plugin install
     lines.append('source "%(DOTFILES)s/tmux/tmux.conf"')
+    if wantpowerline():
+        wildcards["POWERLINE"] = powerline_path()
+        lines.extend([
+            # always replace the daemon on startup, so that re-sourcing the
+            # tmux conf always loads updated python modules
+            'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
+            'run-shell "powerline-daemon --replace -q"',
+        ])
     lines = [l % wildcards for l in lines]
     blockinfile('~/.tmux.conf',
                 lines,
@@ -235,5 +235,3 @@ def tmux_keys():
         for line in lines:
             f.write(line)
             f.write("\n")
-
-    lineinfile('~/.tmux.conf', 'source ~/.tmux/keybindings.conf', where=WHERE_TOP)
