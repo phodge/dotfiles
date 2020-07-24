@@ -168,17 +168,23 @@ def vim_install():
         execute(['vim', flagsfile], stdout="TTY")
 
     # install required libraries first
-    need_installpkg(apt=(
-        'libtool',
-        'libtool-bin',
-        'autoconf',
-        'automake',
-        'cmake',
-        'g++',
-        'pkg-config',
-        'unzip',
-        'ncurses-dev',
-    ))
+    need_installpkg(
+        apt=(
+            'libtool',
+            'libtool-bin',
+            'autoconf',
+            'automake',
+            'cmake',
+            'g++',
+            'pkg-config',
+            'unzip',
+            'ncurses-dev',
+        ),
+        brew=(
+            'cmake',
+            'libtool',
+        ),
+    )
     inst = InstallFromSource('https://github.com/vim/vim.git', '~/src/vim.git')
     inst.select_tag(VIM_TAG)
     configure = ['./configure']
