@@ -91,8 +91,12 @@ def tmux_install():
 
 
 class TmuxCustomMode(object):
-    _all = ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-            ',<.>/?:[{]}-_=+!@%^&*()`')
+    _all = (
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        ',<.>/?:[]-_=+!@%^&*()`'
+        # NOTE: these currently don't work under tmux 3
+        #'{}'
+    )
     # TODO: what about #'"~;
     _special = ['Enter', 'Left', 'Right', 'Up', 'Down', 'Space']
 
