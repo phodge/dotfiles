@@ -162,7 +162,7 @@ def tmux_keys():
     import yaml
 
     with open(HERE + '/keybindings/keys.yaml') as f:
-        document = yaml.load(f)
+        document = yaml.safe_load(f)
     regex = re.compile(r"^(C-)?(O-)?(M-)?(S-)?([ -~]|CR|BS|SPACE|ESC)$")
     if 'tmux' in document:
         static = {}
