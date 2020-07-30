@@ -522,8 +522,10 @@ if filereadable(s:plugpath)
   " Plug 'https://github.com/vim-scripts/a.vim'
 
   " nvim-colorizer: highlights #RRGGBB hex codes for these file types:
-  Plug 'https://github.com/norcalli/nvim-colorizer.lua.git', {'for': ['css', 'vim', 'html']}
-  autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; 'vim', 'html'}
+  if has('nvim-0.3.0')
+    Plug 'https://github.com/norcalli/nvim-colorizer.lua.git', {'for': ['css', 'vim', 'html']}
+    autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; 'vim', 'html'}
+  endif
 
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
