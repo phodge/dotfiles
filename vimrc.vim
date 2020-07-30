@@ -506,6 +506,9 @@ if filereadable(s:plugpath)
 
   " }}}
 
+  " use <C-X><C-U> to complete things from other tmux panes/windows
+  Plug 'wellle/tmux-complete.vim'
+
   PlugMaster 'phodge/vim-projectroot'
 
   " tell vim-projectroot that when a file is part of a git repo that is a
@@ -518,13 +521,16 @@ if filereadable(s:plugpath)
   " more powerful manipulation is required
   " Plug 'https://github.com/vim-scripts/a.vim'
 
+  " nvim-colorizer: highlights #RRGGBB hex codes for these file types:
+  Plug 'https://github.com/norcalli/nvim-colorizer.lua.git', {'for': ['css', 'vim', 'html']}
+  autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; 'vim', 'html'}
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
   " https://github.com/tpope/vim-projectionist
   " https://github.com/danro/rename.vim
   " https://github.com/shougo/deoplete.nvim
-  " https://github.com/myusuf3/numbers.vim
   " https://github.com/xolox/vim-session
   " https://github.com/vim-scripts/grep.vim
   " https://github.com/michaeljsmith/vim-indent-object
@@ -537,8 +543,6 @@ if filereadable(s:plugpath)
   " https://github.com/numirias/semshi
   " https://github.com/erikfercak/php-search-doc
   " https://github.com/beanworks/vim-phpfmt
-  " https://github.com/wellle/tmux-complete.vim
-  " https://github.com/norcalli/nvim-colorizer.lua
   " https://github.com/galooshi/vim-import-js
   " https://github.com/ruanyl/vim-sort-imports
   " https://github.com/skywind3000/vim-quickui
