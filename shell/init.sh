@@ -42,8 +42,8 @@ else
 	shopt -s histappend
 
 	# make history / history file sizes a bit more generous
-	HISTSIZE=10000
-	HISTFILESIZE=10000
+	HISTSIZE=100000
+	HISTFILESIZE=100000
 
 	# check the window size after each command and, if necessary,
 	# update the values of LINES and COLUMNS.
