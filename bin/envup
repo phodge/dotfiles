@@ -2,6 +2,7 @@
 import os.path
 import sys
 from pathlib import Path
+from subprocess import run
 
 import click
 import libtmux
@@ -98,6 +99,17 @@ def main(name):
 
     if fresh:
         old_win = session.attached_window
+
+    # run interactive command first
+    startup = data.get('startup_commands', [])
+
+    for command in startup:
+        prompt = command.get('prompt')
+        if not click.prompt(prompt, type=bool):
+            continue
+
+        print(f"Executing startup command: {command['command']}")
+        run(command['command'], check=True, cwd=os.path.expanduser(command['command_cwd']))
 
     # move all existing windows to the vacant zone
     for window in session.windows:
