@@ -215,6 +215,8 @@ if filereadable(s:plugpath)
     nnoremap <S-F5> :Dash <cword><CR>
   endif " }}}
 
+  " nginx syntax
+  Plug 'https://github.com/chr4/nginx.vim.git'
 
   Plug 'EinfachToll/DidYouMean'
   Plug 'christoomey/vim-tmux-navigator'
