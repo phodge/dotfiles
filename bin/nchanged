@@ -17,4 +17,4 @@ else
 fi
 
 echo "Comparing with '$other' ..."
-nvim "+Shell git diff $other... --name-status --no-renames" "+bw 1"
+nvim "+Shell git diff $other... --name-status --no-renames; git status --short" "+bw 1"
