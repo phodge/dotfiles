@@ -384,6 +384,17 @@ if filereadable(s:plugpath)
     Plug 'leafgarland/typescript-vim'
   endif
 
+  " javascript/typescript imports {{{
+
+    " TODO finish this
+
+    " adds :SortImport command for .js files
+    " TODO: should we use https://github.com/Galooshi/import-js project
+    " instead?
+    "Plug 'ruanyl/vim-sort-imports'
+
+  " }}}
+
   PlugMaster 'phodge/vim-python-syntax'
   PlugMaster 'phodge/vim-jsx'
   PlugMaster 'phodge/MicroRefactor'
