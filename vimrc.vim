@@ -227,7 +227,9 @@ if filereadable(s:plugpath)
   " python imports {{{
 
     " adds :ImportName and :ImportNameHere commands
-    Plug 'mgedmin/python-imports.vim'
+    " XXX: I haven't been using this and it has a big startup cost (250ms?) so
+    " am disabling for now
+    "Plug 'mgedmin/python-imports.vim'
 
   " }}}
 
