@@ -302,23 +302,34 @@ else
 endif
 
 " jedi mappings
-if exists('g:vim_peter')
-  " go to original definition of whatever is under the cursor
-  nnoremap <buffer> <SPACE>d :call jedi#goto()<CR>
-  " replace/rename whatever is under the cursor
-  nnoremap <buffer> <SPACE>r :call jedi#replace()<CR>
-  " find uses of the thing under the cursor
-  nnoremap <buffer> <SPACE>u :call jedi#usages()<CR>
-  " show documentation (help) for the thing under the cursor
-  nnoremap <buffer> <SPACE>h :call jedi#show_documentation()<CR>
-  " rename the thing under the cursor
-  nnoremap <buffer> <SPACE>r :call jedi#rename()<CR>
+if has('nvim') && get(g:, 'peter_use_lsp', 0)
+  "" TODO: adapt these to use LSP
+
+  "" go to original definition of whatever is under the cursor
+  "nnoremap <buffer> <SPACE>d :echo 'TODO: LSP JUMP'<CR>
+  """ replace/rename whatever is under the cursor
+  "nnoremap <buffer> <SPACE>r :echo 'TODO: LSP replace/rename'<CR>
+  """ find uses of the thing under the cursor
+  "nnoremap <buffer> <SPACE>u :echo 'TODO: LSP usage list'<CR>
+  """ show documentation (help) for the thing under the cursor
+  "nnoremap <buffer> <SPACE>h :echo 'TODO: LSP documentation'<CR>
+elseif exists('g:vim_peter')
+  "" go to original definition of whatever is under the cursor
+  "nnoremap <buffer> <SPACE>d :call jedi#goto()<CR>
+  "" replace/rename whatever is under the cursor
+  "nnoremap <buffer> <SPACE>r :call jedi#replace()<CR>
+  "" find uses of the thing under the cursor
+  "nnoremap <buffer> <SPACE>u :call jedi#usages()<CR>
+  "" show documentation (help) for the thing under the cursor
+  "nnoremap <buffer> <SPACE>h :call jedi#show_documentation()<CR>
+  "" rename the thing under the cursor
+  "nnoremap <buffer> <SPACE>r :call jedi#rename()<CR>
 else
-  silent! nunmap <buffer> <SPACE>d
-  silent! nunmap <buffer> <SPACE>r
-  silent! nunmap <buffer> <SPACE>u
-  silent! nunmap <buffer> <SPACE>h
-  silent! nunmap <buffer> <SPACE>r
+  "silent! nunmap <buffer> <SPACE>d
+  "silent! nunmap <buffer> <SPACE>r
+  "silent! nunmap <buffer> <SPACE>u
+  "silent! nunmap <buffer> <SPACE>h
+  "silent! nunmap <buffer> <SPACE>r
 endif
 
 " gF mapping

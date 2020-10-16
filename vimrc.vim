@@ -18,8 +18,8 @@ endif
 set confirm
 
 " when to use LSP and YCM
-let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
-let s:use_ycm = has('nvim') && get(g:, 'peter_use_ycm', 0) && !s:use_lsp
+let g:peter_lsp_mode = has('nvim') && get(g:, 'peter_use_lsp', 0) ? 'autozimu' : ''
+let s:use_ycm = has('nvim') && get(g:, 'peter_use_ycm', 0) && g:peter_lsp_mode == ''
 
 " 256-color mode for vim8/neovim
 if exists('&termguicolors')
@@ -113,7 +113,8 @@ if filereadable(s:plugpath)
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
   " the awesome Jedi library for python
-  Plug 'davidhalter/jedi-vim'
+  Plug 'davidhalter/jedi-vim', g:peter_lsp_mode == '' ? {} : {'on': []}
+
   let g:jedi#use_splits_not_buffers = "winwidth"
   " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
   " B() vim isfreezing and I don't know why
@@ -140,7 +141,7 @@ if filereadable(s:plugpath)
     let g:ale_python_mypy_executable = 'mypy-escalated-reveal-type'
     let g:ale_python_mypy_use_global = 1
 
-    if ! s:use_lsp
+    if g:peter_lsp_mode == ''
       " when not using LSP plugin, allow Ale to talk to the language server
       "let g:ale_php_langserver_use_global = 1
       "let g:ale_php_langserver_executable = $HOME.'/.config/composer/vendor/felixfbecker/language-server/bin/php-language-server.php'
@@ -154,33 +155,80 @@ if filereadable(s:plugpath)
 
   " }}}
 
-  if s:use_lsp
-    " language servers
+  " needed for ncm2
+  Plug 'roxma/nvim-yarp'
+
+  " language servers
+  if g:peter_lsp_mode == 'autozimu'
+    " ncm2 is our completions UI for language server completions
+    Plug 'ncm2/ncm2'
+
+    "let g:ncm2#auto_popup = 0
+    "et g:ncm2#manual_complete_length = [[1,0]]
+
     Plug 'autozimu/LanguageClient-neovim', {
           \ 'branch': 'next',
           \ 'do': 'bash install.sh',
           \ }
-    let g:LanguageClient_serverCommands = {'php': ['tcp://127.0.0.1:12346']}
+
+    " FIXME: use a debug build of the language client
+    let g:LanguageClient_devel = 1
+
+    " show help text in Floating Window (neovim 0.4) or Popup Window (Vim 8.2)
+    let g:LanguageClient_usePopupHover = 1
+    let g:LanguageClient_useFloatingHover = 1
+
+    " start up a language server process automatically
+    let g:LanguageClient_autoStart = 1
+
+    " tell language client where to find language server executables
+    let g:LanguageClient_serverCommands = {}
+    let g:LanguageClient_serverCommands.python = ['/home/peterh1/.local/bin/pyls']
+    "let g:LanguageClient_serverCommands.php = ['tcp://127.0.0.1:12346']
 
     " don't use language server for linting - Ale does a better job of this already
     let g:LanguageClient_diagnosticsEnable = 0
 
+    aug PeterLSP
+    au!
+    " TODO: what about <space>h ?
+    au FileType php nnoremap <buffer> <space>d :sp <BAR> call LanguageClient_textDocument_definition()<CR>
+    au FileType php nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
+    au FileType php nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
+    au FileType python call ncm2#enable_for_buffer()
+    au FileType python nnoremap <buffer> <space>d :sp <BAR> call LanguageClient_textDocument_definition()<CR>
+    au FileType python nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
+    au FileType python nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
+    au FileType python nnoremap <buffer> <space>h :call LanguageClient_textDocument_hover()<CR>
+    au FileType python inoremap <buffer> . .<c-r>=ncm2#manual_trigger('!tmuxcomplete')<CR>
+    au FileType python inoremap <buffer> <c-space> <c-r>=ncm2#manual_trigger('!tmuxcomplete')<CR>
+    aug end
+
+    " we want CoC installed, but not active (or more precisely, we don't want
+    " to uninstall it if it is active)
+    Plug 'neoclide/coc.nvim', {'on': []}
+  elseif g:peter_lsp_mode == 'coc'
+    " TODO: this is untested
+    Plug 'ncm2/ncm2', {'on': []}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'autozimu/LanguageClient-neovim', {'on': []}
+  else
+    Plug 'autozimu/LanguageClient-neovim', {'on': []}
+    Plug 'neoclide/coc.nvim', {'on': []}
+    Plug 'ncm2/ncm2', {'on': []}
+  endif
+
+  if strlen(g:peter_lsp_mode)
+    " language servers
     " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
     " \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
     " \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
     " \ 'python': ['/usr/local/bin/pyls'],
     " \ }
 
-    Plug 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins'}
+    "Plug 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins'}
 
     "Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run-script parse-stubs'}
-
-    aug PeterLSP
-    au!
-    au FileType php nnoremap <buffer> <space>d :sp <BAR> call LanguageClient_textDocument_definition()<CR>
-    au FileType php nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
-    au FileType php nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
-    aug end
   elseif s:use_ycm
     " when in neovim land, use YouCompleteMe
     Plug 'Valloric/YouCompleteMe'
@@ -629,6 +677,11 @@ colors elflord
 set autoindent
 set completeopt=menu,menuone,preview
 
+if g:peter_lsp_mode == 'autozimu'
+  " why is this necessary? See :help Ncm2PopupOpen
+  set completeopt+=noinsert,noselect
+endif
+
 set modeline modelines=2000
 set sessionoptions+=globals,localoptions
 " pretend that windows / OS X care about file name case
@@ -1071,7 +1124,15 @@ set sidescrolloff=20
     nnoremap - 4<C-W>-
     nnoremap g+ <C-W>_
 
-    inoremap <C-L> <C-X><C-F>
+    if g:peter_lsp_mode == 'autozimu'
+      " when using autozimu's LSP we don't all the completeopt settings so we
+      " need to add the <C-N> keypress to select the first completion
+      inoremap <C-L> <C-X><C-F><C-N>
+      inoremap <C-X><C-L> <C-X><C-L><C-N>
+    else
+      inoremap <C-L> <C-X><C-F>
+      iunmap <C-X><C-L> <C-X><C-L><C-N>
+    endif
 
     " <F8> should backspace word chunks
     inoremap <F8> _<SPACE><ESC>:call <SID>SuperBackspace()<CR>s
