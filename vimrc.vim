@@ -588,6 +588,16 @@ if filereadable(s:plugpath)
     autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; scss = {css = true}, 'vim', 'html'}
   endif
 
+  " Having a crack at using PDB for debugging {{{
+
+    " <leader>dp to start debugging a python program (apparently)
+    "Plug 'sakhnik/nvim-gdb'
+
+    "Plug 'puremourning/vimspector'
+
+  " }}}
+
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
@@ -1415,5 +1425,7 @@ aug TODOTXT
 au! BufReadPost TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
 aug end
 
+"let g:vimspector_enable_mappings = 'HUMAN'
+"packadd! vimspector
 
 let s:vim_entered = 1
