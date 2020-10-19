@@ -8,8 +8,9 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 from HOMELY import (HERE, HOME, allowinstallingthings, install_nvim_via_apt,
-                    jerjerrod_addline, mypips, need_installpkg, wantfull,
-                    wantjerjerrod, wantnvim, whenmissing)
+                    jerjerrod_addline, mypips, need_installpkg,
+                    want_nvim_virtualenvs, wantfull, wantjerjerrod, wantnvim,
+                    whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.4.3'
@@ -347,3 +348,19 @@ def vim_plugin_update():
             with writefile(exec_) as f:
                 f.write(template.format(what))
             os.chmod(exec_, 0o755)
+
+
+@section
+def nvim_virtualenvs():
+    if not want_nvim_virtualenvs():
+        return
+
+    venv_path = '~/.nvim/venv3'
+    expanded = os.path.expanduser(venv_path)
+
+    if not os.path.exists(os.path.expanduser(venv_path)):
+        execute(['virtualenv', '-p', 'python3', expanded])
+
+    execute([expanded + '/bin/pip', 'install', 'pynvim', 'GitPython'])
+
+    lineinfile('~/.vimrc', 'let g:python3_host_prog = {!r}'.format(expanded + '/bin/python'))

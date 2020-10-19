@@ -125,6 +125,20 @@ def wantnvim():
     return yesno('install_nvim', 'Install neovim?', wantfull())
 
 
+# install neovim?
+@memoize
+def want_nvim_virtualenvs():
+    if not wantnvim():
+        return False
+
+    return yesno(
+        'use_nvim_python3_virtualenvs',
+        'Use virtualenvs for neovim python2/3?',
+        wantfull(),
+        default=False,
+    )
+
+
 @memoize
 def install_nvim_via_apt():
     if not wantnvim():
