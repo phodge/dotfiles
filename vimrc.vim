@@ -522,7 +522,7 @@ if filereadable(s:plugpath)
   " }}}
 
   " use <C-X><C-U> to complete things from other tmux panes/windows
-  Plug 'wellle/tmux-complete.vim'
+  "Plug 'wellle/tmux-complete.vim'
 
   PlugMaster 'phodge/vim-projectroot'
 
