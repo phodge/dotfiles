@@ -565,6 +565,10 @@ if filereadable(s:plugpath)
   " https://github.com/skywind3000/vim-quickui
   " https://github.com/mg979/vim-visual-multi
   " https://github.com/nvim-treesitter/completion-treesitter
+  " https://github.com/wellle/context.vim
+  " https://github.com/romgrk/nvim-treesitter-context
+  " https://github.com/romgrk/searchReplace.vim
+  " https://github.com/romgrk/barbar.nvim
   call plug#end() " }}}
 endif
 
