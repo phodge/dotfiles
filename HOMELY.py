@@ -543,16 +543,6 @@ def hg():
         lines.append('%s = ' % name)
     blockinfile('~/.hgrc', lines, WHERE_END)
 
-    # grab a copy of crecord and put it in ~/src
-    if haveexecutable('hg'):
-        mkdir('~/src')
-        localpath = HOME + '/src/crecord'
-        if os.path.exists(localpath):
-            execute(['hg', 'pull', '--insecure'], cwd=localpath)
-        else:
-            url = 'https://bitbucket.org/edgimar/crecord'
-            execute(['hg', 'clone', '--insecure', url, localpath])
-
 
 # install nudge
 @section

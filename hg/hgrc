@@ -8,7 +8,6 @@ shelve =
 largefiles =
 histedit =
 purge =
-crecord = ~/src/crecord/crecord
 
 [pager]
 pager = LESS='FSRX' less
@@ -18,6 +17,10 @@ ignore = version, help, update, serve, record
 pager = less -niSFX
 ignore = ~/.hgignore
 
+# enable curses interface (for things like crecord)
+# See https://www.mercurial-scm.org/wiki/CrecordExtension
+interface = curses
+
 [alias]
 branchstatus = status --rev "branch('$1')"
 bs = branchstatus .
@@ -25,3 +28,6 @@ bs = branchstatus .
 st = !hg status $($HG root) $HG_ARGS
 # TODO: I'm not convinced this thing works :-(
 contains = log -r "$1" -b "$2"
+
+# See https://www.mercurial-scm.org/wiki/CrecordExtension
+crecord = commit -i
