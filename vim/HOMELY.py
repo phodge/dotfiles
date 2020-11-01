@@ -12,7 +12,10 @@ from HOMELY import (HERE, HOME, allowinstallingthings, install_nvim_via_apt,
                     wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
-NVIM_TAG = 'v0.4.3'
+
+NVIM_TAG = 'v0.4.4'
+# one of the nightly tags
+NVIM_TAG = 'ca7449db4'
 
 
 @section
