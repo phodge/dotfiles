@@ -52,7 +52,7 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
         what = apt or brew or yum
         raise Exception("Can't install {} when only doing minimal config".format(what))
 
-    if haveexecutable('apt'):
+    if haveexecutable('apt-get'):
         for name in apt or []:
             installpkg(name,            brew=False, yum=False, port=False)
     if haveexecutable('brew'):
@@ -133,7 +133,7 @@ def install_nvim_via_apt():
     if not allowinstallingthings():
         return False
 
-    if not haveexecutable('apt'):
+    if not haveexecutable('apt-get'):
         return False
 
     return yesno('install_nvim_package', 'Install nvim from apt?')
@@ -723,7 +723,7 @@ def install_pyenv():
     run(gitclone2)
 
     # NOTE: on ubuntu you'll need to install libffi-dev
-    if haveexecutable('apt'):
+    if haveexecutable('apt-get'):
         installpkg('libffi-dev', apt='libffi-dev')
         installpkg('pkgconf', apt='pkgconf')
 

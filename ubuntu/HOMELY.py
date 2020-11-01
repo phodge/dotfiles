@@ -73,7 +73,7 @@ def ubuntu_install_devilspie2():
     desktops/workspaces. This means I don't accidentally flip to another desktop/workspace when I
     go to play some music or respond to a chat message.
     """
-    if not haveexecutable('apt'):
+    if not haveexecutable('apt-get'):
         return
 
     if not wantfull():
