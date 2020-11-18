@@ -666,19 +666,24 @@ def git_install():
 
 @section
 def font_install():
-    if IS_OSX:
-        if haveexecutable('brew'):
-            fonts = [
-                'homebrew/cask-fonts/font-inconsolata',
-                'homebrew/cask-fonts/font-anonymous-pro',
-            ]
-            if wantpowerline():
-                fonts.extend([
-                    'homebrew/cask-fonts/font-inconsolata-for-powerline',
-                    'homebrew/cask-fonts/font-anonymice-powerline',
-                ])
-            # install some nicer fonts
-            execute(['brew', 'install'] + fonts)
+    if not IS_OSX:
+        return
+
+    if not haveexecutable('brew'):
+        return
+
+    fonts = [
+        'homebrew/cask-fonts/font-inconsolata',
+        'homebrew/cask-fonts/font-anonymous-pro',
+    ]
+    if wantpowerline():
+        fonts.extend([
+            'homebrew/cask-fonts/font-inconsolata-for-powerline',
+            # this one seems to require `brew install svn` which I'm maybe not prepared to do
+            # 'homebrew/cask-fonts/font-anonymice-powerline',
+        ])
+    # install some nicer fonts
+    execute(['brew', 'install'] + fonts)
 
 
 @section
