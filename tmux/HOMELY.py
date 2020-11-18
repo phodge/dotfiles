@@ -67,7 +67,7 @@ def tmux_install():
     if yesno('own_tmux', 'Compile tmux from source?', None):
         need_installpkg(
             apt=('libevent-dev', 'ncurses-dev'),
-            brew=('automake',),
+            brew=('automake', 'libevent'),
         )
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                  '~/src/tmux.git')
