@@ -182,7 +182,7 @@ def brew_install():
     if haveexecutable('brew'):
         return
 
-    if not yesno('install_homebrew', 'Install Homebrew?', default=True):
+    if yesno('install_homebrew', 'Install Homebrew?', default=True):
         install_cmd = '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
         execute(['bash', '-c', install_cmd], stdout="TTY")
 
