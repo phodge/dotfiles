@@ -484,9 +484,15 @@ def git():
                     "# end of items from phodge/dotfiles",
                     where=WHERE_TOP)
 
+    # install completion utilities for bash
     url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash'
     download(url, '~/src/git-completion.bash')
     lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
+
+    # install completion utilities for zsh
+    url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh'
+    download(url, '~/src/git-completion.zsh')
+    lineinfile('~/.zshrc', 'source $HOME/src/git-completion.zsh', where=WHERE_END)
 
     gitwip = InstallFromSource('https://github.com/phodge/git-wip.git',
                                '~/src/git-wip.git')
