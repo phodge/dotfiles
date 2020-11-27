@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+nvim "$@"
+e=$?
+sleep 0.01s
+exit $e
