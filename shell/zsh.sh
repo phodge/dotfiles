@@ -57,6 +57,12 @@ COMPLETION_WAITING_DOTS="true"
 # no I don't want shared history
 unsetopt share_history
 
+# git completion for zsh.
+# Instructions were found in git-completion.zsh itself
+zstyle ':completion:*:*:git:*' script ~/src/git-completion.bash
+fpath=(~/.zsh $fpath)
+
+
 
 # ============================================================================
 # jerjerrod: zsh hook to reset caches on git/hg commands

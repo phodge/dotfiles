@@ -2,7 +2,7 @@ import os
 import re
 
 import simplejson
-from homely.general import (WHERE_END, WHERE_TOP, blockinfile, lineinfile,
+from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download, lineinfile,
                             mkdir, run, section, symlink)
 from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
@@ -150,3 +150,16 @@ def zsh_config():
                                 '~/src/antigen.git')
     antigen.select_tag('v2.2.3')
     run(antigen)
+
+
+@section
+def git_completion():
+    # install completion utilities for bash
+    url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash'
+    download(url, '~/src/git-completion.bash')
+    lineinfile('~/.bashrc', 'source $HOME/src/git-completion.bash', where=WHERE_END)
+
+    # install completion utilities for zsh
+    url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh'
+    mkdir('~/.zsh')
+    download(url, '~/.zsh/_git')
