@@ -361,7 +361,22 @@ if filereadable(s:plugpath)
   " hit '\a' again before ale has re-linted and removed the current error.
   nnoremap \a :ALENextWrap<CR>
 
-  if 1
+  if get(g:, 'clipchamp_js', 0)
+    " just use my own javascript syntax
+    PlugMaster 'phodge/vim-javascript-syntax'
+
+    aug TypeScriptTSX
+    aug end
+    autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
+
+    "Plug 'https://github.com/HerringtonDarkholme/yats.vim'
+
+    "hi! link typescriptAssign Operator
+    "hi! link typescriptTypeAnnotation Function
+    "hi! link typescriptUnaryOp Operator
+    "hi! link typescriptBinaryOp Number
+    "hi! link typescriptDotNotation Operator
+  elseif 1
     PlugMaster 'phodge/vim-javascript-syntax'
 
     aug TypeScriptTSX
@@ -398,7 +413,6 @@ if filereadable(s:plugpath)
   " }}}
 
   PlugMaster 'phodge/vim-python-syntax'
-  PlugMaster 'phodge/vim-jsx'
   PlugMaster 'phodge/MicroRefactor'
   PlugMaster 'phodge/vim-shell-command'
   PlugMaster 'phodge/vim-syn-info'
