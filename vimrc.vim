@@ -647,7 +647,10 @@ colors elflord
 set autoindent
 set completeopt=menu,menuone,preview
 
-set modeline modelines=2000
+" I keep getting errors from options.txt helpfile, and I don't think I'm using
+" this anyway
+set nomodeline " modelines=2000
+
 set sessionoptions+=globals,localoptions
 " pretend that windows / OS X care about file name case
 if exists('&fileignorecase')
