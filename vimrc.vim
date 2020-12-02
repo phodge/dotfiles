@@ -265,6 +265,7 @@ if filereadable(s:plugpath)
   " TODO: revisit this and see if we can get some nice mappings up
   Plug 'brooth/far.vim'
 
+  let s:has_fzf = 0
   if has('nvim') && get(g:, 'want_fzf', 0)
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'
@@ -278,6 +279,8 @@ if filereadable(s:plugpath)
                 \ }
     " I just want to be able to hit enter to open a file in a new split
     let g:fzf_action['enter'] = 'split'
+
+    let s:has_fzf = 1
   else
     Plug 'ctrlpvim/ctrlp.vim'
     let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
@@ -436,6 +439,19 @@ if filereadable(s:plugpath)
   " Google Terraform syntax
   if get(g:, 'want_terraform_plugins', 0)
     Plug 'hashivim/vim-terraform'
+  endif
+
+  " Skylight
+  if has('nvim')
+    Plug 'https://github.com/voldikss/vim-skylight'
+    "nnoremap <silent>       go    :SkylightJumpTo<CR>
+    nnoremap <silent>       gp    :SkylightPreview<CR>
+    nmap <silent><expr> <C-n> skylight#float#has_scroll() ? skylight#float#scroll(1) : "\<C-n>"
+    exe 'nmap <silent><expr> <C-p> '
+          \ 'skylight#float#has_scroll() ? skylight#float#scroll(0) : '
+          \ '"' . (s:has_fzf ? ":FZF\<CR>" : ":CtrlP\<CR>") . '"'
+  else
+    nnoremap gp :echoerr 'Skylight requires neovim'
   endif
 
   " CSV plugin

@@ -31,6 +31,12 @@ hi PmenuSel      guifg=White   guibg=Blue   gui=Bold
 hi PmenuSbar                   guibg=Cyan
 hi PmenuThumb    guifg=White
 
+" use black bg for floating window to make it stand out a little
+hi! NormalFloat guibg=black
+
+" used by Skylight plugin
+hi! SkylightBorder guifg=orange guibg=None
+
 hi Title         ctermfg=None    ctermbg=Blue   cterm=Bold           guifg=NONE   guibg=DarkBlue  gui=Bold
 hi TabLine       ctermfg=None    ctermbg=Black  cterm=Reverse        guifg=White  guibg=Black     gui=Reverse
 hi TabLineSel    ctermfg=White   ctermbg=Blue   cterm=Bold,Reverse   guifg=Yellow guibg=DarkBlue  gui=Bold,Reverse
