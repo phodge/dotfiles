@@ -279,6 +279,7 @@ if filereadable(s:plugpath)
     let g:fzf_action['enter'] = 'split'
   else
     Plug 'ctrlpvim/ctrlp.vim'
+    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
   endif
 
   " git-gutter
