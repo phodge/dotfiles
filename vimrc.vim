@@ -370,6 +370,9 @@ if filereadable(s:plugpath)
     " just use my own javascript syntax
     PlugMaster 'phodge/vim-javascript-syntax'
 
+    " TODO: this doesn't always take precedence - the builtin filetype
+    " detection takes precedence for Skylight windows and the buffer ends up
+    " with builtin ft=typescript syntax
     aug TypeScriptTSX
     aug end
     autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
@@ -384,6 +387,9 @@ if filereadable(s:plugpath)
   elseif 1
     PlugMaster 'phodge/vim-javascript-syntax'
 
+    " TODO: this doesn't always take precedence - the builtin filetype
+    " detection takes precedence for Skylight windows and the buffer ends up
+    " with builtin ft=typescript syntax
     aug TypeScriptTSX
     aug end
     autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
