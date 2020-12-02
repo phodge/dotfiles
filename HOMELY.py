@@ -671,7 +671,8 @@ def font_install():
 
     fonts = [
         'homebrew/cask-fonts/font-inconsolata',
-        'homebrew/cask-fonts/font-anonymous-pro',
+	# this download doesn't seem to work any more
+        # 'homebrew/cask-fonts/font-anonymous-pro',
     ]
     if wantpowerline():
         fonts.extend([
