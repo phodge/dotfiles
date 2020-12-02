@@ -266,9 +266,22 @@ if filereadable(s:plugpath)
   Plug 'brooth/far.vim'
 
   let s:has_fzf = 0
-  if has('nvim') && get(g:, 'want_fzf', 0)
+  " homebrew will install fzf in /usr/local/opt/fzf
+  if has('nvim') && isdirectory('/usr/local/opt/fzf')
+    let s:has_fzf = 1
+
+    set rtp+=/usr/local/opt/fzf
+  elseif has('nvim') && get(g:, 'want_fzf', 0)
+    let s:has_fzf = 1
+
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'
+  else
+    Plug 'ctrlpvim/ctrlp.vim'
+    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+  endif
+
+  if s:has_fzf
     nnoremap <C-P> :FZF<CR>
     nnoremap \\ :call fzf#vim#grep('git-branch-status --short --quiet', 0)<CR>
     let g:fzf_layout = {'window': {'width': 0.8, 'height': 0.8}}
@@ -279,11 +292,6 @@ if filereadable(s:plugpath)
                 \ }
     " I just want to be able to hit enter to open a file in a new split
     let g:fzf_action['enter'] = 'split'
-
-    let s:has_fzf = 1
-  else
-    Plug 'ctrlpvim/ctrlp.vim'
-    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
   endif
 
   " git-gutter
