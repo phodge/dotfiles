@@ -1,27 +1,3 @@
-# ============================================================================
-# antigen
-source $HOME/src/antigen.git/antigen.zsh
-
-# === oh-my-zsh ===
-
-antigen use oh-my-zsh
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# === other plugins ===
-antigen bundle git
-antigen bundle mercurial
-#antigen bundle colored-man-pages
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle olivierverdier/zsh-git-prompt
-
-antigen apply
-
-
-
 # === random zsh settings ===
 
 # CTRL+U backspaces from the cursor to the start of the line, rather than destroying the entire line
@@ -61,6 +37,32 @@ unsetopt share_history
 # Instructions were found in git-completion.zsh itself
 zstyle ':completion:*:*:git:*' script ~/src/git-completion.bash
 fpath=(~/.zsh $fpath)
+
+
+# ============================================================================
+# antigen
+source $HOME/src/antigen.git/antigen.zsh
+
+# === oh-my-zsh ===
+
+antigen use oh-my-zsh
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# === other plugins ===
+antigen bundle git
+antigen bundle mercurial
+#antigen bundle colored-man-pages
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle olivierverdier/zsh-git-prompt
+
+antigen apply
+
+
+
 
 
 
