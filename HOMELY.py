@@ -693,7 +693,7 @@ def iterm2_prefs():
             'com.googlecode.iterm2.plist',
             'PrefsCustomFolder',
             '-string',
-            '~/dotfiles/iterm2',
+            HERE + '/iterm2',
         ])
         execute([
             'defaults',
