@@ -202,3 +202,10 @@ nudge-watch() {
     clear
     date
 }
+
+rmempty() {
+    find "$@" -type d -empty | while read d; do
+        echo "rmdir $d"
+        rmdir "$d"
+    done
+}
