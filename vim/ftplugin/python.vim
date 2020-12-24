@@ -73,7 +73,10 @@ fun! <SID>PyVersionChanged()
   endif
 
   " tell Ale to use our multiflake8 for the current buffer
-  let b:ale_linters = {"python": ['flake8', 'mypy']}
+  if ! exists('b:ale_linters')
+    let b:ale_linters = ['flake8', 'mypy']
+  endif
+
   let b:ale_python_flake8_executable = 'multiflake8'
   " tell ALE that we always want to use the 'multiflake8' executable - even
   " inside virtualenvs
