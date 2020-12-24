@@ -83,7 +83,7 @@ fun! <SID>PyVersionChanged()
   let b:ale_python_flake8_use_global = 1
 
   " desired line length?
-  let l:maxlen = get(s:lengths, bufnr(''), 0)
+  let l:maxlen = &l:textwidth
   if l:maxlen <= 0
     let l:maxlen = 99999
   endif
@@ -215,9 +215,6 @@ endfun " }}}
 " set up \\c mapping to toggle the line length
 nnoremap <buffer> \c :call <SID>ToggleLineLength()<CR>
 
-if ! exists('s:lengths')
-  let s:lengths = {}
-endif
 if ! exists('s:length_options')
   let s:length_options = [79, 99]
 endif
@@ -246,7 +243,6 @@ function! <SID>SetLineLength(new_length)
   else
     let l:new_length = a:new_length
   endif
-  let s:lengths[l:bufnr] = l:new_length
   let &l:textwidth = l:new_length
   let &l:colorcolumn = l:new_length ? '+2' : ''
 
@@ -265,21 +261,51 @@ function! <SID>SetLineLength(new_length)
   call <SID>PyVersionChanged()
 endfunction
 
+function! <SID>GetLengthOptions()
+  " what lengths are available for this buffer?
+  let l:lengths = get(b:, 'python_line_length_options', 0)
+  if type(l:lengths) != type([]) || !len(l:lengths)
+    return [0, 79, 99]
+  endif
+  return l:lengths
+endfun
+
+function! <SID>GetInitialLineLength()
+  " use current 'textwidth' value if its set
+  if &l:textwidth
+    return &l:textwidth
+  endif
+
+  for l:value in <SID>GetLengthOptions()
+    if l:value > 0
+      return l:value
+    endif
+  endfor
+
+  return l:lengths[0]
+endfun
+
 function! <SID>ToggleLineLength()
-  let l:bufnr = bufnr('')
-  let l:current_length = get(s:lengths, l:bufnr, 0)
-  if ! l:current_length
-    call <SID>SetLineLength(79)
-  elseif l:current_length == 79
-    call <SID>SetLineLength(99)
+  " what lengths are available for this buffer?
+  let l:lengths = <SID>GetLengthOptions()
+
+  " what length are we currently using?
+  let l:current = index(l:lengths, &l:textwidth)
+
+  if l:current == -1
+    " not found - just using the first option from the list
+    call <SID>SetLineLength(l:lengths[0])
+  elseif l:current == (len(l:lengths) - 1)
+    " we're using the last option - go back to the start
+    call <SID>SetLineLength(l:lengths[0])
   else
-    call <SID>SetLineLength(0)
+    " use the next option in the list
+    call <SID>SetLineLength(l:lengths[l:current + 1])
   endif
 endfunction
 
-
 " set the line length automatically for the current buffer
-call <SID>SetLineLength(get(s:lengths, bufnr(''), '__AUTO__'))
+call <SID>SetLineLength(<SID>GetInitialLineLength())
 
 " tell multipython to call our callback whenever the python version changes in
 " the current buffer
