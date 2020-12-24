@@ -1,3 +1,6 @@
+" stop adding linebreaks in my git commit files
+setlocal formatoptions-=tl
+
 " whenever we open a gitcommit, pull up the staged changes
 if !&previewwindow && gitmagic#loaded
   try
