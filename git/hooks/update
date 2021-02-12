@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+repohook="$PWD/.git/hooks/$(basename $0)"
+
+if [ -x "$repohook" ]; then
+    "$repohook" "$@"
+fi
