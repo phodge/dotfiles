@@ -3,3 +3,9 @@ if [ -z "$(git config user.email)" ]; then
     echo "ERROR: git config user.email is empty!" >&2
     exit 1
 fi
+
+repohook="$PWD/.git/hooks/$(basename $0)"
+
+if [ -x "$repohook" ]; then
+    "$repohook" "$@"
+fi
