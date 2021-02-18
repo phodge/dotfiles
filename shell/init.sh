@@ -109,7 +109,8 @@ alias ss=show_status_long
 alias g=edit_status
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=False'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
-alias recon='git rebase --continue'
+alias recon='git -c core.hooksPath=/no/hooks rebase --continue'
+alias rebas='git -c core.hooksPath=/no/hooks rebase'
 alias f='find *'
 
 # fuzzy-finder settings
