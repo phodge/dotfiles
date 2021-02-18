@@ -8,6 +8,7 @@ XXX: apt requirements:
 - lame
 """
 import os
+import os.path
 import shutil
 from os.path import basename
 from subprocess import check_call
@@ -23,6 +24,11 @@ import taglib
               type=click.Path(exists=True, file_okay=False),
               help="Move wma files into this folder after done")
 def main(target, trash):
+    for t in target:
+        if os.path.isdir(target):
+            raise click.UsageError(
+                "Can't use folder {} as a target".format(target))
+
     for t in target:
         convert_target(t, trash)
 
