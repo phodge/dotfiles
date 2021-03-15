@@ -308,7 +308,7 @@ if filereadable(s:plugpath)
 
     " make it disabled by default, by toggle-able by space-g
     let g:gitgutter_enabled = 0
-    nnoremap <space>g :GitGutterToggle<CR>
+    nnoremap <space>g :GitGutterToggle<CR>:echomsg 'Use ]c and [c to move between hunks'<CR>
 
     " NOTE: you can also use ]c and [c to move to next/previous hunks
 
