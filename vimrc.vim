@@ -2,6 +2,10 @@ if ! exists('g:vim_peter')
   let g:vim_peter = 1
 endif
 
+if ! exists('g:want_fast')
+  let g:want_fast = 0
+endif
+
 if ! exists('g:peter_use_builtin_php_syntax')
   let g:peter_use_builtin_php_syntax = 0
 endif
@@ -113,7 +117,9 @@ if filereadable(s:plugpath)
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
   " the awesome Jedi library for python
-  Plug 'davidhalter/jedi-vim'
+  if ! g:want_fast
+    Plug 'davidhalter/jedi-vim'
+  endif
   let g:jedi#use_splits_not_buffers = "winwidth"
   " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
   " B() vim isfreezing and I don't know why
@@ -218,11 +224,13 @@ if filereadable(s:plugpath)
   " nginx syntax
   Plug 'https://github.com/chr4/nginx.vim.git'
 
-  Plug 'EinfachToll/DidYouMean'
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'hynek/vim-python-pep8-indent'
+  if ! g:want_fast
+    Plug 'EinfachToll/DidYouMean'
+    Plug 'hynek/vim-python-pep8-indent'
+    Plug 'tmhedberg/SimpylFold'
+  endif
 
-  Plug 'tmhedberg/SimpylFold'
+  Plug 'christoomey/vim-tmux-navigator'
 
   " python imports {{{
 
