@@ -15,7 +15,7 @@ from HOMELY import (HOME, IS_OSX, allowinstallingthings, getpippaths, wantfull,
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
 zshrc = os.environ['HOME'] + '/.zshrc'
-HERE = os.path.basename(__file__)
+HERE = os.path.dirname(__file__)
 
 
 def install_completions(rcfile):
