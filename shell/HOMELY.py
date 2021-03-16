@@ -1,4 +1,5 @@
 import os
+import os.path
 import re
 
 import simplejson
@@ -14,6 +15,7 @@ from HOMELY import (HOME, IS_OSX, allowinstallingthings, getpippaths, wantfull,
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
 zshrc = os.environ['HOME'] + '/.zshrc'
+HERE = os.path.basename(__file__)
 
 
 def install_completions(rcfile):
@@ -56,7 +58,7 @@ def bash_install():
 @section
 def shellrc():
     lineinfile('~/.shellrc',
-               'source $HOME/dotfiles/shell/init.sh',
+               'source {}/init.sh'.format(HERE),
                where=WHERE_END)
 
 
