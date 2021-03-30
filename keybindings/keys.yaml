@@ -1,3 +1,19 @@
+# prefixes:
+# A- ALT
+# C- COMMAND (Alt key on keyboard)
+# O- OPTION (Windows key)
+# S- SHIFT
+# F- FN (Context menu key on keyboard)
+os:
+  C-A-S-T: __new_terminal_interactive__
+
+
+
+terminal:
+  A-N: __new_window__
+
+
+
 tmux:
   # tmux takes ownership of these two prefixes:
   # ALT-
@@ -40,3 +56,20 @@ tmux:
     CR: { static: tmux_copy_cmd }
     ESC: cancel
 
+
+# TODO:
+# I'd like to have the following keybidings
+# - move between split panes
+#   ALT+HJKL
+#   - variants: vim/tmux/iTerm/GnomeTerminal
+# - create new higher split panes
+#   ALT+SHIFT+HJKL
+#   - variants: vim/tmux/iTerm/GnomeTerminal
+# - move between higher tabs (tmux windows / terminal tabs)
+#   ALT+NP
+# - create higher tabs (tmux windows / terminal tabs)
+#   ALT+SHIFT+NP
+# - new terminal window at OS level
+#   CTRL+ALT+T (vanilla)
+#   CTRL+ALT+OPT+T (todo.txt)
+#   CTRL+ALT+SHIFT+T (interactive startup)
