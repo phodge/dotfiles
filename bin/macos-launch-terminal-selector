@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+DOTFILES="$(dirname $(dirname $(/usr/local/opt/coreutils/libexec/gnubin/realpath $0)))"
+/Applications/Alacritty.app/Contents/MacOS/alacritty \
+    --title=TLauncher \
+    --working-directory "$DOTFILES/winwin.git" \
+    -o 'font.size=26' \
+    -o 'window.decorations=buttonless' \
+    -o 'window.dimensions.columns=100' \
+    -o 'window.dimensions.lines=50' \
+    --command /bin/sh -c 'python3 -m winwin.cli present-ui || sleep 3'

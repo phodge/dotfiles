@@ -241,6 +241,11 @@ def install_winwin_shortcuts():
         '/Applications/Alacritty.app/Contents/MacOS/alacritty',
     )
 
+    _install_macos_workflow_service(
+        'Terminal Selector QA',
+        '{}/bin/macos-launch-terminal-selector'.format(HERE),
+    )
+
     needs_writing = False
 
     for key, value in (
@@ -910,6 +915,11 @@ def install_alacritty():
             key='T',
             mods='Control|Command|Shift',
             command=dict(program=HERE + '/bin/macos-launch-todos'),
+        ))
+        keybindings.append(dict(
+            key='S',
+            mods='Control|Command',
+            command=dict(program=HERE + '/bin/macos-launch-terminal-selector'),
         ))
 
         with writefile('~/.config/alacritty-keybindings.yml') as f:
