@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import os.path
 import platform
@@ -779,6 +780,24 @@ def install_alacritty():
     # FIXME: add some proper MacOS detection to homely
     if haveexecutable('defaults'):
         lines.append('  - {}/alacritty-macos.yml'.format(HERE))
+
+    if IS_OSX:
+        keybindings = []
+        keybindings.append(dict(
+            key='T',
+            mods='Control|Command',
+            command=dict(program='/Applications/Alacritty.app/Contents/MacOS/alacritty'),
+        ))
+        keybindings.append(dict(
+            key='T',
+            mods='Control|Command|Shift',
+            command=dict(program=HERE + '/bin/macos-launch-todos'),
+        ))
+
+        with writefile('~/.config/alacritty-keybindings.yml') as f:
+            json.dump({'key_bindings': keybindings}, f, indent='  ')
+
+        lines.append('  - {}/.config/alacritty-keybindings.yml'.format(HOME))
 
     blockinfile('~/.config/alacritty.yml', lines, WHERE_TOP)
 
