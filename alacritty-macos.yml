@@ -1,0 +1,33 @@
+font:
+  normal:
+    family: "Inconsolata for Powerline"
+  size: 16
+  use_thin_strokes: true
+
+key_bindings:
+  # like using ALT+.
+  - { key: Period,  mods: Command,                  chars: "\e." }
+
+  # FIXME: these could come from the keybindings/keys.yaml?
+  - { key: J,       mods: Command,                  chars: "\ej" }
+  - { key: H,       mods: Command,                  chars: "\eh" }
+  - { key: K,       mods: Command,                  chars: "\ek" }
+  - { key: L,       mods: Command,                  chars: "\el" }
+  # basically upper-case versions of the things above
+  - { key: J,       mods: Command|Shift,            chars: "\eJ" }
+  - { key: H,       mods: Command|Shift,            chars: "\eH" }
+  - { key: K,       mods: Command|Shift,            chars: "\eK" }
+  - { key: L,       mods: Command|Shift,            chars: "\eL" }
+  # tmux window navigation
+  - { key: N,       mods: Command,                  chars: "\en" }
+  - { key: P,       mods: Command,                  chars: "\ep" }
+  - { key: N,       mods: Command|Shift,            chars: "\eN" }
+  - { key: P,       mods: Command|Shift,            chars: "\eP" }
+
+  # MacOS stuff
+  # FIXME: this gives us fullscreen but with no menu bar so not great :-(
+  - { key: Return,   mods: Command,                  action: ToggleSimpleFullscreen }
+
+  # copy-paste like iTerm
+  - { key: C,   mods: Command|Shift,                 action: Copy }
+  - { key: V,   mods: Command|Shift,                 action: Paste }

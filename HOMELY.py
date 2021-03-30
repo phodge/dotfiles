@@ -772,8 +772,13 @@ def install_alacritty():
     if not yesno('want_alacritty', 'Install Alacritty?', default=None):
         return
 
+    # write an alacritty.yml config that imports the ones from this repo
     lines = ['import:']
     lines.append('  - {}/alacritty-base.yml'.format(HERE))
+
+    # FIXME: add some proper MacOS detection to homely
+    if haveexecutable('defaults'):
+        lines.append('  - {}/alacritty-macos.yml'.format(HERE))
 
     blockinfile('~/.config/alacritty.yml', lines, WHERE_TOP)
 
