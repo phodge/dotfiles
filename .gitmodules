@@ -1,0 +1,3 @@
+[submodule "winwin.git"]
+	path = winwin.git
+	url = git@github.com:phodge/winwin.git
