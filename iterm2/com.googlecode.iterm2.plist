@@ -1000,7 +1000,7 @@
 			<key>Guid</key>
 			<string>663E5B92-38DE-4367-BBDD-08571FAFABE7</string>
 			<key>Has Hotkey</key>
-			<true/>
+			<false/>
 			<key>Hide After Opening</key>
 			<false/>
 			<key>Horizontal Spacing</key>
