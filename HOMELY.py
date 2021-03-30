@@ -12,6 +12,7 @@ from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 from homely.system import execute
 from homely.ui import yesno
+from homely._ui import allowinteractive
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
@@ -150,6 +151,123 @@ def wantzsh():
 def want_unicode_fix():
     q = 'Old versions of glibc can cause render issues with GnomeTerminal>ssh>tmux>powerline. Remove Unicode chars in powerline status?'
     return yesno('want_unicode_fix', q)
+
+
+@section
+def install_winwin_shortcuts():
+    if not wantfull():
+        return
+
+    if not allowinstallingthings():
+        return
+
+    if not haveexecutable('defaults'):
+        # FIXME: get this working under Ubuntu as well
+        return
+
+    q = 'Install macOS system terminal shortcuts (requires Alacritty)?'
+    if not yesno('want_winwin_shortcuts', q):
+        return
+
+    import shutil
+    from tempfile import TemporaryDirectory
+
+    def _replace_wildcards_recursive(target, name, command):
+        # skip symlinks
+        if os.path.islink(target):
+            return
+
+        # perform wildcard replacement in ordinary files
+        if os.path.isfile(target):
+            if target.endswith('.template'):
+                dest = target[:-9]
+                with open(target, 'rb') as fp_read, open(dest, 'xb') as fp_dest:
+                    contents = fp_read.read()
+                    contents = contents.replace(b'[[[WORKFLOW_NAME]]]', name.encode('utf-8'))
+                    contents = contents.replace(b'[[[WORKFLOW_COMMAND]]]', command.encode('utf-8'))
+                    fp_dest.write(contents)
+                os.unlink(target)
+                print("Wrote wildcards to {}".format(dest))
+            return
+
+        for child in os.listdir(target):
+            if child.startswith('.'):
+                continue
+
+            _replace_wildcards_recursive(target + '/' + child, name, command)
+
+    def _install_macos_workflow_service(name, command):
+        with TemporaryDirectory() as tmpdir:
+            tmp_workflow = '{}/{}.workflow'.format(tmpdir, name)
+            shutil.copytree('{}/macos_automation/Template.workflow'.format(HERE), tmp_workflow)
+            _replace_wildcards_recursive(tmp_workflow, name, command)
+
+            # remove existing service
+            dest_workflow = '{}/Library/Services/{}.workflow'.format(HOME, name)
+            if os.path.exists(dest_workflow):
+                raise Exception("{} already exists".format(dest_workflow))
+            shutil.copytree(tmp_workflow, dest_workflow)
+
+    from subprocess import Popen, PIPE
+    import plistlib
+
+    raw = execute(['defaults', 'read', 'pbs', 'NSServicesStatus'], stdout=True)[1]
+
+    p = Popen(['plutil', '-convert', 'xml1', '-', '-o', '-'], stdin=PIPE, stdout=PIPE)
+    xml, stderr = p.communicate(raw, timeout=5.0)
+    assert stderr is None
+    assert p.returncode == 0
+
+    # now we can read the xml using plistlib
+    data = plistlib.loads(xml)
+
+    todo_launcher_data = {
+        'key_equivalent': '@^$t',
+        'presentation_modes': {'ContextMenu': '1', 'ServicesMenu': '1', 'TouchBar': '1'},
+    }
+    todo_launcher_key = '(null) - TODO Launcher QA - runWorkflowAsService'
+    _install_macos_workflow_service(
+        'TODO Launcher QA',
+        '{}/bin/macos-launch-todos'.format(HERE),
+    )
+
+    vanilla_launcher_key = '(null) - Terminal Launcher QA - runWorkflowAsService'
+    vanilla_launcher_data = {
+        'key_equivalent': '@^t',
+        'presentation_modes': {'ContextMenu': '1', 'ServicesMenu': '1', 'TouchBar': '1'},
+    }
+    _install_macos_workflow_service(
+        'Terminal Launcher QA',
+        '/Applications/Alacritty.app/Contents/MacOS/alacritty',
+    )
+
+    needs_writing = False
+
+    for key, value in (
+            (todo_launcher_key, todo_launcher_data),
+            (vanilla_launcher_key, vanilla_launcher_data),
+    ):
+        if data[key] != value:
+            needs_writing = True
+            data[key] = value
+
+    if needs_writing:
+        new_xml = plistlib.dumps(data)
+        if not allowinteractive():
+            return
+
+        print("You need to set keyboard shortcuts.")
+        print("Go to:")
+        print("  -> System Preferences")
+        print("  -> Keyboard")
+        print("  -> Shortcuts")
+        print("  -> Services")
+        print("  -> under 'General' set keyboard shortcuts for 'XXX QA' services")
+        yesno(None, "Done?")
+        if yesno(None, "Attempt automated install of keyboard shortcuts?", default=False):
+            # FIXME: this never worked - the keyboard shortcuts don't seem to
+            # activate even if the System Preferences UI does show them there
+            execute(['defaults', 'write', 'pbs', 'NSServicesStatus', new_xml.decode('utf-8')])
 
 
 def whenmissing(filename, substr):
