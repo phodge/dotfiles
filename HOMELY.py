@@ -761,6 +761,26 @@ def install_pyenv():
         installpkg('pkgconf', apt='pkgconf')
 
 
+@section
+def install_alacritty():
+    if not wantfull():
+        return
+
+    if not allowinstallingthings():
+        return
+
+    if not yesno('want_alacritty', 'Install Alacritty?', default=None):
+        return
+
+    lines = ['import:']
+    lines.append('  - {}/alacritty-base.yml'.format(HERE))
+
+    blockinfile('~/.config/alacritty.yml', lines, WHERE_TOP)
+
+    if yesno('install_alacritty_homebrew', 'Install Alacritty via Homebrew?'):
+        execute(['brew', 'install', 'alacritty'])
+
+
 # TODO: https://github.com/clvv/fasd
 
 
