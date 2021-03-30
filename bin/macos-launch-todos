@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+tmux=/Users/peter/bin/tmux
+
+if $tmux list-sessions | grep TODO &>/dev/null; then
+    echo HAVE TODO
+    run() {
+        # target existing session
+        local sessname="TODO-$RANDOM"
+        "$@" new-session -s "$sessname" -t TODO &
+        sleep 1
+        $tmux set-option -t "$sessname" detach-on-destroy on
+    }
+else
+    echo NO TODO
+    run() {
+        "$@" new-session -s TODO '/usr/local/bin/nvim /Users/peter/TODO.txt' &
+        sleep 1
+        $tmux set-option -t TODO detach-on-destroy on
+    }
+fi
+
+run /Applications/Alacritty.app/Contents/MacOS/alacritty --title=TODO.txt --command $tmux
