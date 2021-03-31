@@ -212,19 +212,6 @@ def install_winwin_shortcuts():
                 shutil.rmtree(dest_workflow)
             shutil.copytree(tmp_workflow, dest_workflow)
 
-    from subprocess import Popen, PIPE
-    import plistlib
-
-    raw = execute(['defaults', 'read', 'pbs', 'NSServicesStatus'], stdout=True)[1]
-
-    p = Popen(['plutil', '-convert', 'xml1', '-', '-o', '-'], stdin=PIPE, stdout=PIPE)
-    xml, stderr = p.communicate(raw, timeout=5.0)
-    assert stderr is None
-    assert p.returncode == 0
-
-    # now we can read the xml using plistlib
-    data = plistlib.loads(xml)
-
     todo_launcher_data = {
         'key_equivalent': '@^$t',
         'presentation_modes': {'ContextMenu': '1', 'ServicesMenu': '1', 'TouchBar': '1'},
@@ -253,6 +240,24 @@ def install_winwin_shortcuts():
         'Terminal Selector QA',
         '{}/bin/macos-launch-terminal-selector'.format(HERE),
     )
+
+    all_pbs = execute(['defaults', 'read', 'pbs'], stdout=True)[1]
+    if b'NSServicesStatus' not in all_pbs:
+        print("NSServicesStatus not found")
+        return
+
+    from subprocess import Popen, PIPE
+    import plistlib
+
+    raw = execute(['defaults', 'read', 'pbs', 'NSServicesStatus'], stdout=True)[1]
+
+    p = Popen(['plutil', '-convert', 'xml1', '-', '-o', '-'], stdin=PIPE, stdout=PIPE)
+    xml, stderr = p.communicate(raw, timeout=5.0)
+    assert stderr is None
+    assert p.returncode == 0
+
+    # now we can read the xml using plistlib
+    data = plistlib.loads(xml)
 
     needs_writing = False
 
