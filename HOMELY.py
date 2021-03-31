@@ -169,6 +169,10 @@ def install_winwin_shortcuts():
     if not yesno('want_winwin_shortcuts', q):
         return
 
+    # we need to install winwin package or the launcher won't be able to find
+    # the libs
+    execute(['pip3', 'install', '--user', '-e', '.'], cwd=HERE + '/winwin.git')
+
     import shutil
     from tempfile import TemporaryDirectory
 
