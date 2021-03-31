@@ -228,7 +228,11 @@ def install_winwin_shortcuts():
     todo_launcher_key = '(null) - TODO Launcher QA - runWorkflowAsService'
     _install_macos_workflow_service(
         'TODO Launcher QA',
-        '{}/bin/macos-launch-todos'.format(HERE),
+        # we use '/bin/bash -i ...' here because otherwise the Quick Action
+        # will launch in non-interactive mode, causing it to skip ~/.bashrc and
+        # so on, and then tmux won't load correctly because $PATH isn't set up,
+        # and other Bad Things
+        "/bin/bash -i -c '{}/bin/macos-launch-todos'".format(HERE),
     )
 
     vanilla_launcher_key = '(null) - Terminal Launcher QA - runWorkflowAsService'
