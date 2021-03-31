@@ -325,7 +325,7 @@ if filereadable(s:plugpath)
 
   if has('nvim')
     " TODO: figure out how to replace flake8 with neomake + something else
-    Plug 'neomake/neomake'
+    Plug 'neomake/neomake', g:want_fast ? {'on': []} : {}
   endif
 
   " for ansible
@@ -354,7 +354,7 @@ if filereadable(s:plugpath)
   "   Ia    select a func argument without the comma or whitespace
   "   aa    select a func argument and its comma
   "   Aa    select a func argument and delimiters on both ends?
-  Plug 'wellle/targets.vim'
+  Plug 'wellle/targets.vim', g:want_fast ? {'on': []} : {}
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_ctags_tagfile = '.tags'
@@ -373,7 +373,7 @@ if filereadable(s:plugpath)
   " use vim-projectroot to figure out the project root
   let g:gutentags_project_root_finder = 'projectroot#get'
 
-  Plug 'majutsushi/tagbar'
+  Plug 'majutsushi/tagbar', g:want_fast ? {'on': []} : {}
   nnoremap <space>n :TagbarToggle<CR>
 
   " go to next ALE error. We use :ALENextWrap instead of :ALEFirst because often I can fix a bug and
@@ -505,7 +505,7 @@ if filereadable(s:plugpath)
   Plug 'tweekmonster/helpful.vim'
 
   " show vertical lines to indicate indent level
-  Plug 'Yggdroot/indentLine'
+  Plug 'Yggdroot/indentLine', g:want_fast ? {'on': []} : {}
   " stop making JSON quotes disappear
   let g:indentLine_fileTypeExclude = ['help', 'json', 'markdown']
 
@@ -552,7 +552,7 @@ if filereadable(s:plugpath)
   endif
 
   " helps with working on neovim itself
-  Plug 'neovim/nvimdev.nvim'
+  Plug 'neovim/nvimdev.nvim', g:want_fast ? {'on': []} : {}
   " I don't need the auto-ctags feature because gutentags does this for me
   let g:nvimdev_auto_ctags = 0
 
@@ -589,7 +589,7 @@ if filereadable(s:plugpath)
   " Plug 'https://github.com/vim-scripts/a.vim'
 
   " nvim-colorizer: highlights #RRGGBB hex codes for these file types:
-  if has('nvim-0.3.0')
+  if has('nvim-0.3.0') && !g:want_fast
     Plug 'https://github.com/norcalli/nvim-colorizer.lua.git', {'for': ['css', 'scss', 'vim', 'html']}
     autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; scss = {css = true}, 'vim', 'html'}
   endif
