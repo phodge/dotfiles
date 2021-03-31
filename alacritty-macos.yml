@@ -4,6 +4,11 @@ font:
   size: 16
   use_thin_strokes: true
 
+# XXX: this doesn't seem to work inside tmux
+mouse:
+  url:
+    modifiers: Command
+
 key_bindings:
   # like using ALT+.
   - { key: Period,  mods: Command,                  chars: "\e." }

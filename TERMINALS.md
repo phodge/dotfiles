@@ -28,6 +28,7 @@ TODO
 * Full-screen mode on MacOS (SimpleFullscreen) hides the Menu Bar and Dock which is on another monitor
 * Command-~ shortcut to switch windows in the same app doesn't hop between Alacritty windows
 * System keyboard shortcuts don't work in Alacritty so you need to duplicate each one into the alacritty.yml file
+* Command-clicking a URL doesn't seem to work if the URL is inside a tmux window
 
 ## Gnome-terminal
 
