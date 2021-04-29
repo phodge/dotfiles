@@ -20,8 +20,21 @@ if [ -z "$_branch" ]; then
 fi
 
 echo "=== Looking for TODOs in branch $_branch that aren't in $_upstream ==="
+
+# this implementation suffers from the following problems:
+#   - if the TODO is spread over multiple lines you only get the first line
+#   - if the exact same TODO is repeated N times in the same file, it will be printed N-squared times
+#   - if your branch moves an existing TODO, it will be flagged as a new TODO
+
+# iterate over files changed in this branch as $f
 git diff --name-status $(git merge-base $_upstream HEAD) HEAD | cut -b 3- | while read f; do
+    # get the diff for just the file $f
+    # | use 'grep ^+' to find only lines added
+    # | filter to only lines with the word TODO
+    # | use 'cut' to strip '+ ' from the start of the diff line so we have just the original line of code
+    # | put the added line of code in $line
     git diff $_upstream HEAD -- "$f" | grep ^+ | grep -w TODO | cut -b 2- | while read line; do
+        # use grep to 'find' the exact line of code again and print it out the filename and line number
         grep -HnF --regexp="$line" "$f"
     done
 done
