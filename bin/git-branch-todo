@@ -11,17 +11,17 @@ else
 fi
 
 _fail() {
-	echo "$1" >&2
-	exit 1
+    echo "$1" >&2
+    exit 1
 }
 
 if [ -z "$_branch" ]; then
-	_fail "ERROR: Not a git repository"
+    _fail "ERROR: Not a git repository"
 fi
 
 echo "=== Looking for TODOs in branch $_branch that aren't in $_upstream ==="
 git diff --name-status $(git merge-base $_upstream HEAD) HEAD | cut -b 3- | while read f; do
-	git diff $_upstream HEAD -- "$f" | grep ^+ | grep -w TODO | cut -b 2- | while read line; do
-		grep -HnF --regexp="$line" "$f"
-	done
+    git diff $_upstream HEAD -- "$f" | grep ^+ | grep -w TODO | cut -b 2- | while read line; do
+        grep -HnF --regexp="$line" "$f"
+    done
 done
