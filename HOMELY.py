@@ -209,7 +209,7 @@ def install_winwin_shortcuts():
             # remove existing service
             dest_workflow = '{}/Library/Services/{}.workflow'.format(HOME, name)
             if os.path.exists(dest_workflow):
-                raise Exception("{} already exists".format(dest_workflow))
+                shutil.rmtree(dest_workflow)
             shutil.copytree(tmp_workflow, dest_workflow)
 
     from subprocess import Popen, PIPE
