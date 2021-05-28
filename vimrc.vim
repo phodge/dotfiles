@@ -594,6 +594,15 @@ if filereadable(s:plugpath)
     autocmd! User nvim-colorizer.lua lua require'colorizer'.setup {css = {css = true}; scss = {css = true}, 'vim', 'html'}
   endif
 
+  " vim-gh-line - open the current file/line on github/gitlab etc
+  " See also: https://github.com/tyru/open-browser-github.vi
+  " Use :GHInteractive to open the current line in github or :GBInteractive to
+  " open Blame view
+  let g:gh_line_map_default = 0
+  let g:gh_line_blame_map_default = 0
+  let g:gh_line_repo_map_default = 0
+  Plug 'https://github.com/ruanyl/vim-gh-line'
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
