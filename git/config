@@ -15,6 +15,10 @@
     ff = !git-fast-forward
     outtomaster = log --reverse -p origin/master..
 
+[fetch]
+    # like always having --prune turned on
+    prune = true
+
 [color]
     ui = true
 
