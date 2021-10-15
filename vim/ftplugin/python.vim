@@ -1,6 +1,11 @@
 setlocal formatoptions=croqlj
 setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 
+if get(g:, 'want_treesitter_python', 0)
+  setlocal foldmethod=expr
+  setlocal foldexpr=nvim_treesitter#foldexpr()
+endif
+
 " tell multipython where to find out python2/python3 binaries
 call multipython#setpy3paths(get(g:, 'my_py3_paths', []))
 call multipython#setpy2paths(get(g:, 'my_py2_paths', []))
