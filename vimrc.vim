@@ -10,6 +10,14 @@ if ! exists('g:peter_use_builtin_php_syntax')
   let g:peter_use_builtin_php_syntax = 0
 endif
 
+if ! exists('g:want_treesitter')
+  let g:want_treesitter = 0
+endif
+
+if ! exists('g:want_treesitter_python')
+  let g:want_treesitter_python = 0
+endif
+
 if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
