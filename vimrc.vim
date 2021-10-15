@@ -233,7 +233,10 @@ if filereadable(s:plugpath)
   if ! g:want_fast
     Plug 'EinfachToll/DidYouMean'
     Plug 'hynek/vim-python-pep8-indent'
-    Plug 'tmhedberg/SimpylFold'
+
+    if ! get(g:, 'want_treesitter_python', 0)
+      Plug 'tmhedberg/SimpylFold'
+    endif
   endif
 
   Plug 'christoomey/vim-tmux-navigator'
