@@ -101,6 +101,46 @@ endif
 " }}}
 
 
+
+if g:want_treesitter " {{{ tree-sitter
+
+  if ! exists('s:ts_rtp_init')
+    let s:ts_rtp_init = 1
+    let &runtimepath = &runtimepath . ',' . expand('<sfile>:h') . '/' . 'vim-packages/nvim-treesitter.git'
+    let &runtimepath = &runtimepath . ',' . expand('<sfile>:h') . '/' . 'vim-packages/nvim-treesitter-playground.git'
+  endif
+
+  aug PeterTSInit
+  aug end
+  au! FileType typescript call <SID>InitTreesitterTypescript()
+  " use e.g. "TSInstall typescript" to install a specific parser
+  lua <<EOF
+    require'nvim-treesitter.configs'.setup {
+      highlight = {
+        enable = true,
+        custom_captures = {
+        },
+        disable = {'python'},
+        additional_vim_regex_highlighting = false,
+      },
+      playground = {
+        enable = true,
+        updatetime = 25,
+        persist_queries = false,
+        keybindings = {
+        },
+      },
+    }
+EOF
+
+  fun! <SID>InitTreesitterTypescript()
+    " I think this is actually unnecessary
+    " TSBufEnable highlight
+  endfun
+
+endif " }}}
+
+
 " set up Vundle if it's present and not in &rtp yet
 let s:plugpath = $HOME.'/.vim/autoload/plug.vim'
 if filereadable(s:plugpath)
