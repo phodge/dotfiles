@@ -1,5 +1,10 @@
 if ! &l:diff
-  setlocal foldmethod=indent
+  if get(g:, 'want_treesitter', 0)
+    setlocal foldmethod=expr
+    setlocal foldexpr=nvim_treesitter#foldexpr()
+  else
+    setlocal foldmethod=indent
+  endif
   setlocal foldcolumn=1
   setlocal foldlevel=1
 endif
