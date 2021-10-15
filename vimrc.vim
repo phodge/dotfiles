@@ -449,6 +449,8 @@ if filereadable(s:plugpath)
     "hi! link typescriptUnaryOp Operator
     "hi! link typescriptBinaryOp Number
     "hi! link typescriptDotNotation Operator
+  elseif g:want_treesitter
+    " don't do anything if we are using treesitter syntax
   elseif 1
     PlugMaster 'phodge/vim-javascript-syntax'
 
