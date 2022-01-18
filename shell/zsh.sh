@@ -75,11 +75,13 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
     jerjerrod_clearcache() {
         test -n "$ZSHNOGIT" && return
 
-        jerjerrod_clearcache_now
         expanded="$3"
         if echo "$expanded" | grep '^\(git\|hg\) ' &> /dev/null; then
-            __wantclear=1
+            if ! echo "$expanded" | grep '^git rebase ' &> /dev/null; then
+                __wantclear=1
+            fi
         fi
+        jerjerrod_clearcache_now
     }
     add-zsh-hook preexec jerjerrod_clearcache
     add-zsh-hook zshexit jerjerrod_clearcache_now
