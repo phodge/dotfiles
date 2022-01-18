@@ -62,7 +62,9 @@ antigen bundle olivierverdier/zsh-git-prompt
 antigen apply
 
 
-
+zsh_no_git() {
+    ZSHNOGIT=1 zsh
+}
 
 
 
@@ -71,6 +73,8 @@ antigen apply
 if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
     __wantclear=
     jerjerrod_clearcache() {
+        test -n "$ZSHNOGIT" && return
+
         jerjerrod_clearcache_now
         expanded="$3"
         if echo "$expanded" | grep '^\(git\|hg\) ' &> /dev/null; then
@@ -81,6 +85,8 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
     add-zsh-hook zshexit jerjerrod_clearcache_now
 
     jerjerrod_clearcache_now() {
+        test -n "$ZSHNOGIT" && return
+
         if [ -n "$__wantclear" ]; then
             jerjerrod clearcache --local "$PWD"
             echo "CLEARING"

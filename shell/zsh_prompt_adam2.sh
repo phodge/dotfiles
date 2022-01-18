@@ -21,6 +21,8 @@ ZSH_THEME_GIT_PROMPT_CACHE="true"
 # [$branch|status|remote]
 
 function zsh_prompt_gitinfo() {
+    test -n "$ZSHNOGIT" && return
+
     precmd_update_git_vars
     if [ -n "$__CURRENT_GIT_STATUS" ]; then
         if [[ "$GIT_BRANCH" == "master" ]]; then
