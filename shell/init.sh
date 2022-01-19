@@ -112,6 +112,8 @@ alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
 alias recon='git -c core.hooksPath=/no/hooks rebase --continue'
 alias rebas='git -c core.hooksPath=/no/hooks rebase'
 alias f='find *'
+alias cnv='git commit --no-verify'
+alias c='git commit'
 
 # fuzzy-finder settings
 export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse --bind=change:top"
