@@ -11,8 +11,12 @@ elif git branch -a | grep -w origin/master > /dev/null; then
     other="origin/master"
 elif git branch | grep -w master > /dev/null; then
     other="master"
+elif git branch -a | grep -w origin/main > /dev/null; then
+    other="origin/main"
+elif git branch | grep -w main > /dev/null; then
+    other="main"
 else
-    echo "No 'develop' or 'master' branches to diff against"
+    echo "No 'develop', 'master' or 'main' branches to diff against"
     exit 1
 fi
 
