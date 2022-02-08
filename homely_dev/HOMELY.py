@@ -33,17 +33,26 @@ def homely_dev():
                 stdout="TTY")
 
     # create a python2 virtualenv as well
-    py2venv = join(venv, 'py2venv')
-    if not exists(join(py2venv, 'bin')):
-        execute(['virtualenv', '--python=python2.7', py2venv], stdout="TTY")
-    # create a symlink to the git repo
-    symlink(checkout, join(py2venv, 'homely.git'))
+    want_py2_venv = yesno(
+        'create_homely_venv_py2',
+        'Create a python2 virtualenv for homely?',
+        recommended=False,
+    )
+    if want_py2_venv:
+        py2venv = join(venv, 'py2venv')
+        if not exists(join(py2venv, 'bin')):
+            execute(['virtualenv', '--python=python2.7', py2venv], stdout="TTY")
+        # create a symlink to the git repo
+        symlink(checkout, join(py2venv, 'homely.git'))
 
     # need to install editable version of homely.git in both virtualenvs
     venv_pip = venv + '/bin/pip'
-    py2venv_pip = py2venv + '/bin/pip'
 
-    for pip in [venv_pip, py2venv_pip]:
+    pips = [venv_pip]
+    if want_py2_venv:
+        pips.append(py2venv + '/bin/pip')
+
+    for pip in pips:
         execute([pip, 'install', '--editable', checkout])
         mypips(pip)
         execute([pip, 'install', 'pytest'])
