@@ -89,7 +89,7 @@ show_status_long() {
 
 edit_status() {
     if in_git_repo; then
-        $EDITOR +"au VimEnter * nested Gstatus | bw 1"
+        $EDITOR +"au VimEnter * nested Git | bw 1"
     else
         $EDITOR +"Shell hg status" +"bw 1"
     fi
