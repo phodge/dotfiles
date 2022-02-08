@@ -115,6 +115,9 @@ alias f='find *'
 alias cnv='git commit --no-verify'
 alias c='git commit'
 
+# tell ripgrep where to find its RC file
+export RIPGREP_CONFIG_PATH="$DOTFILES_PATH/.ripgreprc"
+
 # fuzzy-finder settings
 export FZF_DEFAULT_OPTS="--inline-info --height 40% --reverse --bind=change:top"
 if [ -z "$FZF_DEFAULT_COMMAND" ]; then

@@ -1,0 +1,4 @@
+# this will cause ripgrep to search hidden folders like .github/ by default,
+# but not all of .git or anything excluded by .gitignore
+--hidden
+--glob=!.git
