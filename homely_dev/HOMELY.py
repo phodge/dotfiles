@@ -1,7 +1,7 @@
 from os import environ
 from os.path import exists, join
 
-from HOMELY import jerjerrod_addline, mypips, wantfull, wantjerjerrod
+from HOMELY import jerjerrod_addline, mypips, want_full, wantjerjerrod
 from homely.files import symlink
 from homely.general import mkdir, section
 from homely.system import execute
@@ -10,7 +10,7 @@ from homely.ui import yesno
 
 @section
 def homely_dev():
-    if not wantfull():
+    if not want_full:
         return
 
     if not yesno("create_homely_venv",

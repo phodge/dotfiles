@@ -42,11 +42,11 @@ except ImportError:
 # - configure tmux to use bin/C and bin/P for copy+paste
 
 
-@memoize
-def wantfull():
-    return not yesno('only_config',
-                     'Minimal install? (Config files only - nothing extra installed)',
-                     None)
+want_full = not yesno(
+    'only_config',
+    'Minimal install? (Config files only - nothing extra installed)',
+    None,
+)
 
 
 @memoize
@@ -77,7 +77,7 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
 
 @memoize
 def allowinstallingthings():
-    if not wantfull():
+    if not want_full:
         return False
 
     return yesno(
@@ -109,14 +109,14 @@ def install_fedora_copr():
 
 @memoize
 def wantjerjerrod():
-    if not wantfull():
+    if not want_full:
         return False
     return yesno('want_jerjerrod', 'Use jerjerrod for project monitoring?', True)
 
 
 @memoize
 def want_silver_searcher():
-    return yesno('install_ag', 'Install ag (required for fzf)?', wantfull())
+    return yesno('install_ag', 'Install ag (required for fzf)?', want_full)
 
 
 def jerjerrod_addline(command, path, ignore=[]):
@@ -134,7 +134,7 @@ def jerjerrod_addline(command, path, ignore=[]):
 # install neovim?
 @memoize
 def wantnvim():
-    return yesno('install_nvim', 'Install neovim?', wantfull())
+    return yesno('install_nvim', 'Install neovim?', want_full)
 
 
 @memoize
@@ -153,7 +153,7 @@ def install_nvim_via_apt():
 
 @memoize
 def wantzsh():
-    return yesno('use_zsh', 'Install zsh config?', wantfull())
+    return yesno('use_zsh', 'Install zsh config?', want_full)
 
 
 @memoize
@@ -164,7 +164,7 @@ def want_unicode_fix():
 
 @section
 def install_winwin_shortcuts():
-    if not wantfull():
+    if not want_full:
         return
 
     if not allowinstallingthings():
@@ -323,7 +323,7 @@ def my_settings():
 
 @section
 def brew_install():
-    if not (IS_OSX and wantfull()):
+    if not (IS_OSX and want_full):
         return
 
     if haveexecutable('brew'):
@@ -400,14 +400,14 @@ def tools():
             yum = 'ripgrep'
         installpkg('ripgrep', yum=yum)
 
-    if yesno('install_with', 'Install `with` utility?', wantfull()):
+    if yesno('install_with', 'Install `with` utility?', want_full):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
         withutil.symlink('with', '~/bin/with')
         withutil.select_branch('master')
         run(withutil)
 
-    if yesno('install_universal_ctags', 'Install Universal Ctags?', wantfull()):
+    if yesno('install_universal_ctags', 'Install Universal Ctags?', want_full):
         need_installpkg(apt=('autoconf', 'g++'))
         mkdir('~/bin')
         if haveexecutable('brew'):
@@ -425,18 +425,18 @@ def tools():
             ])
             uc.symlink('ctags', '~/bin/ctags')
             run(uc)
-    elif allowinstallingthings() and yesno('install_ctags', 'Install `ctags`?', wantfull()):
+    elif allowinstallingthings() and yesno('install_ctags', 'Install `ctags`?', want_full):
         installpkg('ctags')
-    if allowinstallingthings() and yesno('install_patch', 'Install patch?', wantfull()):
+    if allowinstallingthings() and yesno('install_patch', 'Install patch?', want_full):
         installpkg('patch')
 
-    if allowinstallingthings() and yesno('install_tidy', 'Install tidy cli tool?', wantfull()):
+    if allowinstallingthings() and yesno('install_tidy', 'Install tidy cli tool?', want_full):
         installpkg('tidy')
 
     # on OSX we want to install gnu utils (brew install coreutils findutils)
     # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
     if IS_OSX and haveexecutable('brew') and allowinstallingthings():
-        if yesno('brew_install_coreutils', 'Install gnu utils?', default=wantfull()):
+        if yesno('brew_install_coreutils', 'Install gnu utils?', default=want_full):
             brew_list = set(execute(['brew', 'list'], stdout=True)[1].decode('utf-8').splitlines())
             install = [
                 pkg
@@ -449,7 +449,7 @@ def tools():
 
 @section
 def fzf_install():
-    if not yesno('install_fzf', 'Install fzf?', wantfull()):
+    if not yesno('install_fzf', 'Install fzf?', want_full):
         return
 
     if haveexecutable('brew'):
@@ -530,7 +530,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
     if venv_pip is None:
         pipinstall('virtualenv')
 
-    theworks = wantfull() or venv_pip
+    theworks = want_full or venv_pip
 
     # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
     # present. They're needed for development.
@@ -718,7 +718,7 @@ def hg():
 # install nudge
 @section
 def nudge():
-    if yesno('install_nudge', 'Install nudge?', wantfull()):
+    if yesno('install_nudge', 'Install nudge?', want_full):
         nudge = InstallFromSource('https://github.com/toomuchphp/nudge.git',
                                   '~/src/nudge.git')
         nudge.select_branch('master')
@@ -738,7 +738,7 @@ def zsh_config():
 
 @section
 def legacypl():
-    if yesno('install_legacypl', 'Create clone of legacy-pl?', wantfull()):
+    if yesno('install_legacypl', 'Create clone of legacy-pl?', want_full):
         mkdir('~/playground-6')
         legacy = InstallFromSource('ssh://git@github.com/phodge/legacy-pl.git',
                                    '~/playground-6/legacy-pl.git')
@@ -758,7 +758,7 @@ def yapf():
 
 @memoize
 def wantpowerline():
-    return yesno('use_powerline', 'Use powerline for tmux/vim?', wantfull())
+    return yesno('use_powerline', 'Use powerline for tmux/vim?', want_full)
 
 
 @memoize
@@ -771,7 +771,7 @@ def powerline_path():
 @section
 def pypirc():
     rc = HOME + '/.pypirc'
-    if not yesno('write_pypirc', 'Write a .pypirc file?', wantfull()):
+    if not yesno('write_pypirc', 'Write a .pypirc file?', want_full):
         return
     if not os.path.exists(rc):
         with open(rc, 'w') as f:
@@ -824,7 +824,7 @@ def git_install():
     if not allowinstallingthings():
         return
 
-    if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=wantfull()):
+    if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=want_full):
         return
 
     for cmd in [
@@ -881,7 +881,7 @@ def iterm2_prefs():
 
 @section
 def install_pyenv():
-    if not wantfull():
+    if not want_full:
         return
 
     if not allowinstallingthings():
@@ -907,7 +907,7 @@ def install_pyenv():
 
 @section
 def install_alacritty():
-    if not wantfull():
+    if not want_full:
         return
 
     if not allowinstallingthings():

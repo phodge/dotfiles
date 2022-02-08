@@ -3,12 +3,12 @@ from homely.install import installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
-from HOMELY import wantfull
+from HOMELY import want_full
 
 
 @section
 def ubuntu_swap_caps_escape():
-    if not wantfull():
+    if not want_full:
         return
 
     if not yesno('ubuntu_swap_caps_escape', 'Ubuntu: Swap caps/escape using dconf-editor?'):
@@ -30,7 +30,7 @@ def ubuntu_swap_caps_escape():
 
 @section
 def ubuntu_key_repeat_rate():
-    if not wantfull():
+    if not want_full:
         return
 
     if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?'):
@@ -46,7 +46,7 @@ def ubuntu_key_repeat_rate():
 
 @section
 def ubuntu_app_switcher_current_workspace():
-    if not wantfull():
+    if not want_full:
         return
 
     if not yesno(
@@ -76,7 +76,7 @@ def ubuntu_install_devilspie2():
     if not haveexecutable('apt-get'):
         return
 
-    if not wantfull():
+    if not want_full:
         return
 
     question = 'Install devilspie2 to manage window sticky bits?'

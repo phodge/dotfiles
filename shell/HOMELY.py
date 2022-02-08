@@ -9,7 +9,7 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, allowpull, note, warn, yesno
 
-from HOMELY import (HOME, IS_OSX, allowinstallingthings, getpippaths, wantfull,
+from HOMELY import (HOME, IS_OSX, allowinstallingthings, getpippaths,
                     wantjerjerrod)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'

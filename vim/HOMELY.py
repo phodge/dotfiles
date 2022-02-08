@@ -8,7 +8,7 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 from HOMELY import (HERE, HOME, allowinstallingthings, install_nvim_via_apt,
-                    jerjerrod_addline, mypips, need_installpkg, wantfull,
+                    jerjerrod_addline, mypips, need_installpkg, want_full,
                     wantjerjerrod, wantnvim, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
@@ -142,7 +142,7 @@ def vim_install():
 
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
-    if not yesno('compile_vim', 'Compile vim from source?', wantfull()):
+    if not yesno('compile_vim', 'Compile vim from source?', want_full):
         return
 
     local = HOME + '/src/vim.git'

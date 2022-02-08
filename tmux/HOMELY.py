@@ -7,12 +7,12 @@ from homely.system import haveexecutable
 from homely.ui import warn, yesno
 
 from HOMELY import (HERE, HOME, lineinfile, memoize, mypipinstall,
-                    need_installpkg, powerline_path, wantfull, wantpowerline)
+                    need_installpkg, powerline_path, want_full, wantpowerline)
 
 
 @memoize
 def _wanttmux():
-    return yesno('install_tmux', 'Install tmux?', wantfull())
+    return yesno('install_tmux', 'Install tmux?', want_full)
 
 
 @section
@@ -22,7 +22,7 @@ def tmux_config():
 
     tmux_plugins = yesno('install_tmux_plugins',
                          'Install TPM and use tmux plugins?',
-                         wantfull())
+                         want_full)
 
     if tmux_plugins:
         mkdir('~/.tmux')
