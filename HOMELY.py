@@ -679,20 +679,10 @@ def pipx_install():
 
 @section
 def gitlost():
-    # 1) create a clone of git-lost in ~/playground-6?
-    quest = 'Create a clone of git-lost.git in ~/playground-6?'
-    if wantfull() and yesno('create_git_lost_dev', quest, default=False):
-        mkdir('~/playground-6')
-        gitlost = InstallFromSource('ssh://git@github.com/phodge/git-lost.git',
-                                    '~/playground-6/git-lost.git')
-        gitlost.select_branch('master')
-        run(gitlost)
+    if not get_pipx_installer():
+        return
 
-    # 2) Download git-lost bin script and chuck it in ~/bin?
-    if wantfull():
-        dest = HOME + '/bin/git-lost'
-        download('https://raw.githubusercontent.com/phodge/git-lost/master/git-lost', dest)
-        os.chmod(dest, 0o755)
+    execute(['pipx', 'install', 'git+https://github.com/phodge/git-lost.git'])
 
 
 @section
