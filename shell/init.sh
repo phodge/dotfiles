@@ -12,8 +12,10 @@ else
 fi
 
 # PATH modifications
-# homebrew
-PATH_HIGH="/usr/local/opt/coreutils/libexec/gnubin:$PATH_HIGH"
+if [[ $IS_MACOS ]]; then
+    # homebrew
+    PATH_HIGH="/usr/local/opt/coreutils/libexec/gnubin:$PATH_HIGH"
+fi
 # this repo
 PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
 
