@@ -5,6 +5,12 @@ else
     DOTFILES_PATH="$(dirname $(dirname ${(%):-%N}))"
 fi
 
+if echo $HOME | grep -q ^/Users/; then
+    export IS_MACOS=1
+else
+    export IS_MACOS=
+fi
+
 # PATH modifications
 # homebrew
 PATH_HIGH="/usr/local/opt/coreutils/libexec/gnubin:$PATH_HIGH"
