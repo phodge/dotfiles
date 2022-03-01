@@ -50,6 +50,15 @@ def wantfull():
 
 
 @memoize
+def get_pipx_installer():
+    if not wantfull:
+        return
+
+    if IS_OSX:
+        return lambda: installpkg('pipx', brew='pipx')
+
+
+@memoize
 def need_installpkg(*, apt=None, brew=None, yum=None):
     if not allowinstallingthings():
         what = apt or brew or yum
@@ -658,6 +667,14 @@ def git():
     gitwip.symlink('bin/git-unwip', '~/bin/git-unwip')
     gitwip.select_branch('master')
     run(gitwip)
+
+
+@section
+def pipx_install():
+    installer = get_pipx_installer()
+
+    if installer:
+        installer()
 
 
 @section
