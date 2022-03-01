@@ -19,6 +19,11 @@ fi
 # this repo
 PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
 
+# have pipx install stuff directly into $HOME/bin on macos
+if [[ $IS_MACOS ]]; then
+    export PIPX_BIN_DIR="$HOME/bin"
+fi
+
 # do we have pyenv in ~/.pyenv
 if [ -e ~/.pyenv ]; then
     export PYENV_ROOT="$HOME/.pyenv"
