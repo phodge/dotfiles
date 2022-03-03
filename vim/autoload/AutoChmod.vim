@@ -5,6 +5,12 @@ fun! <SID>Verbose(message)
 endfun
 
 fun! AutoChmod#PostWrite()
+  " skip rust files as the syntax overlaps
+  if &l:filetype == 'rust'
+    call <SID>Verbose(printf("Skipped - buftype is '%s'", &l:filetype))
+    return
+  endif
+
   " if the first line of the file doesn't start with #! then there's nothing
   " for us to do
   if getline(1) !~ '^#!'
