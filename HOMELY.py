@@ -952,6 +952,23 @@ def install_alacritty():
     if yesno('install_alacritty_homebrew', 'Install Alacritty via Homebrew?'):
         execute(['brew', 'install', 'alacritty'])
 
+        # XXX:
+        # There is an issue where upstream libraries used by alacritty handle
+        # CMD+H and hide the alacritty window, preventing our own CMD+H key
+        # binding from working. The only workaround right now is to override
+        # the shortcut at OS level
+        #
+        # See https://github.com/alacritty/alacritty/issues/5923
+        execute([
+            'defaults',
+            'write',
+            'io.alacritty',
+            'NSUserKeyEquivalents',
+            '-dict-add',
+            'Hide alacritty',
+            '@^~$h',
+        ])
+
 
 # TODO: https://github.com/clvv/fasd
 
