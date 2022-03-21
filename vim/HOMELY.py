@@ -18,7 +18,7 @@ NVIM_TAG = 'v0.4.4'
 NVIM_TAG = 'ca7449db4'
 
 
-@section
+@section(quick=True)
 def vim_config():
     # install vim-plug into ~/.vim
     mkdir('~/.vim')
