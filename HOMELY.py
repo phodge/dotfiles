@@ -182,6 +182,12 @@ def install_winwin_shortcuts():
     # the libs
     execute(['pip3', 'install', '--user', '-e', '.'], cwd=HERE + '/winwin.git')
 
+    # XXX: for some reason on later versions of macOS I had to also install
+    # winwin into this python/pip as well as this was the only one available to
+    # the automation tool
+    if IS_OSX and haveexecutable('/usr/bin/pip3'):
+        execute(['/usr/bin/pip3', 'install', '--user', '-e', '.'], cwd=HERE + '/winwin.git')
+
     import shutil
     from tempfile import TemporaryDirectory
 
