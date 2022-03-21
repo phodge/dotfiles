@@ -56,6 +56,19 @@ def vim_config():
     # chuck in a reference to our shiny new vimrc.vim (this will end up below the rtp magic block)
     lineinfile('~/.vimrc', 'source %s/vimrc.vim' % HERE, where=WHERE_TOP)
 
+    # do we want a debugger plugin in vim?
+    want_a_debugger = yesno(
+        'vim_install_debugger_plugin',
+        'Vim: install a debugger plugin?',
+    )
+    lineinfile(
+        '~/.vim/prefs.vim',
+        'let g:peter_give_me_a_debugger = {}  " set by phodge\'s dotfiles'.format(
+            '1' if want_a_debugger else '0'
+        ),
+        where=WHERE_TOP,
+    )
+
     # put our magic &rtp block at the top of our vimrc
     blockinfile('~/.vimrc',
                 [

@@ -509,6 +509,12 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
 
+  " Debugger
+  if g:peter_give_me_a_debugger
+    Plug 'sakhnik/nvim-gdb', {'do': '!./install.sh'}
+    "Plug 'puremourning/vimspector'
+  endif
+
   " Google Terraform syntax
   if get(g:, 'want_terraform_plugins', 0)
     Plug 'hashivim/vim-terraform'
