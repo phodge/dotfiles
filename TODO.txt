@@ -1,3 +1,5 @@
+- https://github.com/romkatv/gitstatus
+
 EditRealPath into a github plugin
 
 homely.lineinfile/blockinfile:
