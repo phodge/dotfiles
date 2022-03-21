@@ -51,7 +51,7 @@ want_full = not yesno(
 
 @memoize
 def get_pipx_installer():
-    if not wantfull:
+    if not want_full:
         return
 
     if IS_OSX:
