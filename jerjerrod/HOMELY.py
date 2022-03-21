@@ -1,4 +1,4 @@
-from homely.general import run, section, WHERE_TOP
+from homely.general import run, section, haveexecutable, WHERE_TOP
 from homely.files import lineinfile
 from homely.install import InstallFromSource
 from homely.ui import yesno
@@ -43,15 +43,22 @@ def jerjerrod_install():
     if not wantjerjerrod():
         return
 
+    # NOTE: only install jerjerrod where we've installed powerline
+    install_commands = [
+        ['pip3', 'install', '--user', '-e', '.'],
+    ]
+
+    if IS_OSX and haveexecutable('/usr/bin/pip3'):
+        install_commands.append(
+            ['/usr/bin/pip3', 'install', '--user', '-e', '.'],
+        )
+
     # install from source!
     inst = InstallFromSource('https://github.com/phodge/jerjerrod.git',
                              '~/src/jerjerrod.git')
     inst.select_branch('master')
     # TODO: if you uninstall jerjerrod, this won't actually reinstalll it :-(
-    inst.compile_cmd([
-        # NOTE: only install jerjerrod where we've installed powerline
-        ['pip3', 'install', '--user', '-e', '.'],
-    ])
+    inst.compile_cmd(install_commands)
     run(inst)
 
     jerjerrod_addline('PROJECT', '~/src/*.git')
