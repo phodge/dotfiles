@@ -1399,13 +1399,20 @@ autocmd! PowerlineCFG BufRead powerline/**/*.json setlocal sts=2 sw=2 ts=2 et
 " TODO: move this into a plugin once I have a good system for doing so
 augroup Jerjerrod
 augroup end
-au! Jerjerrod BufWritePost * call <SID>JerjerrodInit()
+if g:jerjerrod_cache_clearing
+  au! Jerjerrod BufWritePost * call <SID>JerjerrodInit()
+endif
 
 fun! <SID>JerjerrodInit()
   " replace or remove the autocommand
   au! Jerjerrod
   if executable('jerjerrod')
+    " reinstall the autocmd here - we don't want to do this when vim starts up
+    " because the call to executable() may be expensive
     au! Jerjerrod BufWritePost * call <SID>JerjerrodClearCache()
+
+    " make sure we clear the cache right now, since this init was triggered by
+    " a BufWritePost
     call <SID>JerjerrodClearCache()
   endif
 endfunction

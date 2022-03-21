@@ -90,8 +90,10 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
         test -n "$ZSHNOGIT" && return
 
         if [ -n "$__wantclear" ]; then
-            jerjerrod clearcache --local "$PWD"
-            echo "CLEARING"
+            if [ -n "$JERJERROD_CLEAR_CACHE_IN_SHELL" ]; then
+                echo "jerjerrod: Clearing cache now"
+                jerjerrod clearcache --local "$PWD"
+            fi
             __wantclear=
         fi
     }
