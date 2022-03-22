@@ -752,12 +752,12 @@ def legacypl():
         run(legacy)
 
 
-@section
+@section(quick=True)
 def ackrc():
     symlink('.ackrc')
 
 
-@section
+@section(quick=True)
 def yapf():
     symlink('.style.yapf')
 
@@ -796,7 +796,7 @@ def pypirc():
     execute(['chmod', '600', rc])
 
 
-@section
+@section(quick=True)
 def osx():
     if haveexecutable('defaults'):
         execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
@@ -813,7 +813,7 @@ def docker_utils():
     execute(['chmod', '755', dest])
 
 
-@section
+@section(quick=True)
 def ctags():
     ctagsdir = HOME + '/.ctags.d'
     mkdir(ctagsdir)
@@ -864,7 +864,7 @@ def font_install():
     execute(['brew', 'install'] + fonts)
 
 
-@section
+@section(quick=True)
 def iterm2_prefs():
     if IS_OSX and yesno('use_iterm2_prefs', 'Use custom iterm2 prefs?', default=True):
         execute([
