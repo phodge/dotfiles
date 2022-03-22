@@ -799,12 +799,11 @@ def pypirc():
     execute(['chmod', '600', rc])
 
 
-@section(quick=True)
+@section_macos(quick=True)
 def osx():
-    if haveexecutable('defaults'):
-        execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
-        # KeyRepeat < 1.0 doesn't work :-(
-        execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
+    execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
+    # KeyRepeat < 1.0 doesn't work :-(
+    execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
 
 
 @section(quick=True)
