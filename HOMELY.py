@@ -5,6 +5,7 @@ import os.path
 import platform
 import re
 
+from homely._ui import allowinteractive
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             haveexecutable, include, lineinfile, mkdir, run,
                             section, symlink, writefile)
@@ -12,7 +13,6 @@ from homely.install import InstallFromSource, installpkg
 from homely.pipinstall import pipinstall
 from homely.system import execute
 from homely.ui import yesno
-from homely._ui import allowinteractive
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
@@ -273,8 +273,8 @@ def install_winwin_shortcuts():
         print("NSServicesStatus not found")
         return
 
-    from subprocess import Popen, PIPE
     import plistlib
+    from subprocess import PIPE, Popen
 
     raw = execute(['defaults', 'read', 'pbs', 'NSServicesStatus'], stdout=True)[1]
 
@@ -674,13 +674,12 @@ def git():
 
     # put our standard ignore stuff into ~/.gitignore
     with open('%s/git/ignore' % HERE, 'r') as f:
-        lines = [l.rstrip('\r\n') for l in f.readlines()]
+        lines = [l.rstrip('\r\n') for l in f.readlines()]  # noqa: E741
         blockinfile('~/.gitignore',
                     lines,
                     "# exclude items from phodge/dotfiles",
                     "# end of items from phodge/dotfiles",
                     where=WHERE_TOP)
-
 
     gitwip = InstallFromSource('https://github.com/phodge/git-wip.git',
                                '~/src/git-wip.git')

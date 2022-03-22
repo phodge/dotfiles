@@ -50,7 +50,7 @@ def tmux_config():
             'source "%(POWERLINE)s/bindings/tmux/powerline.conf"',
             'run-shell "powerline-daemon --replace -q"',
         ])
-    lines = [l % wildcards for l in lines]
+    lines = [l % wildcards for l in lines]  # noqa: E741
     blockinfile('~/.tmux.conf',
                 lines,
                 '# start of automated tmux config',
