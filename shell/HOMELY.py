@@ -3,14 +3,13 @@ import os.path
 import re
 
 import simplejson
-from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download, lineinfile,
-                            mkdir, run, section, symlink)
+from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
+                            lineinfile, mkdir, run, section)
 from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
-from homely.ui import allowinteractive, allowpull, note, warn, yesno
+from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import (HOME, IS_OSX, allowinstallingthings, getpippaths,
-                    wantjerjerrod)
+from HOMELY import IS_OSX, allowinstallingthings, getpippaths, wantjerjerrod
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'

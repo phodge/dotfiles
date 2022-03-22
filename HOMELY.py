@@ -792,7 +792,7 @@ def pypirc():
             f.write('password = PASSWORD\n')
     with open(rc) as f:
         if 'TODO' in f.read() and yesno(None, "Edit %s now?" % rc, True, noprompt=False):
-                execute(['vim', rc], stdout="TTY")
+            execute(['vim', rc], stdout="TTY")
     execute(['chmod', '600', rc])
 
 
