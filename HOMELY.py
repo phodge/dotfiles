@@ -747,16 +747,6 @@ def nudge():
         run(nudge)
 
 
-# zsh
-@section
-def zsh_config():
-    if wantzsh():
-        antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
-                                    '~/src/antigen.git')
-        antigen.select_branch('master')
-        run(antigen)
-
-
 @section
 def legacypl():
     if yesno('install_legacypl', 'Create clone of legacy-pl?', want_full):
