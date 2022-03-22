@@ -6,7 +6,7 @@ from homely.ui import yesno
 from HOMELY import want_full
 
 
-@section
+@section(quick=True)
 def ubuntu_swap_caps_escape():
     if not want_full:
         return
@@ -44,7 +44,7 @@ def ubuntu_key_repeat_rate():
         execute(['gsettings', 'set', 'org.gnome.desktop.peripherals.keyboard', key, value])
 
 
-@section
+@section(quick=True)
 def ubuntu_app_switcher_current_workspace():
     if not want_full:
         return

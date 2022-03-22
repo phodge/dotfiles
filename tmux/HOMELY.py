@@ -151,7 +151,7 @@ class TmuxCustomMode(object):
         yield 'bind-key -T {table} Escape display-message "Exiting ..."'.format(table=self._table)
 
 
-@section
+@section(quick=True)
 def tmux_keys():
     if not _wanttmux():
         return

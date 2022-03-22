@@ -352,7 +352,7 @@ def brew_install():
         execute(['bash', '-c', install_cmd], stdout="TTY")
 
 
-@section
+@section(quick=True)
 def gnuscreen():
     symlink('.screenrc')
 
@@ -368,7 +368,7 @@ mkdir('~/man/man1')
 # TODO: need to ensure ~/bin is in our $PATH
 
 
-@section
+@section(quick=True)
 def pythonpath():
     """
     Add ~/dotfiles/python/ to our ~/.local/python[2/3]/site-packages dirs
@@ -615,7 +615,7 @@ def pipfavourites():
     mypips(write_dev_reqs=True)
 
 
-@section
+@section(quick=True)
 def envup_install():
     pipinstall('libtmux', trypips=['pip3'])
     symlink('bin/envup', '~/bin/envup')
@@ -627,7 +627,7 @@ def envup_install():
     symlink('envup/p90-resume-bg.json', '~/.envup/p90-resume-bg.json')
 
 
-@section
+@section(quick=True)
 def git():
     hooksdir = HOME + '/.githooks'
     mkdir(hooksdir)
@@ -809,7 +809,7 @@ def osx():
         execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
 
 
-@section
+@section(quick=True)
 def docker_utils():
     """Install google's container-diff for docker."""
     url = 'https://storage.googleapis.com/container-diff/latest/container-diff-darwin-amd64'

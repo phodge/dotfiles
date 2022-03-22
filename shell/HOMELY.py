@@ -55,14 +55,14 @@ def bash_install():
         execute(['sudo', 'chpass', '-s', bash_exec, USER], stdout="TTY")
 
 
-@section
+@section(quick=True)
 def shellrc():
     lineinfile('~/.shellrc',
                'source {}/init.sh'.format(HERE),
                where=WHERE_END)
 
 
-@section
+@section(quick=True)
 def shell_path():
     pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
 
@@ -110,7 +110,7 @@ def shell_path():
                 '# end of PATH modifications')
 
 
-@section
+@section(quick=True)
 def bash_config():
 
     def _bashprofile():
@@ -160,7 +160,7 @@ def zsh_config():
     run(antigen)
 
 
-@section
+@section(quick=True)
 def git_completion():
     # install completion utilities for bash
     url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash'

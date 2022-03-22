@@ -9,7 +9,7 @@ from HOMELY import (HERE, HOME, allowinstallingthings, mypipinstall,
                     wantpowerline)
 
 
-@section
+@section(quick=True)
 def powerline():
     if not wantpowerline():
         return
@@ -104,7 +104,7 @@ def powerline():
         f.write(dumped)
 
 
-@section
+@section(quick=True)
 def powerline_theme():
     if not wantpowerline():
         return
