@@ -19,10 +19,15 @@ HERE = os.path.dirname(__file__)
 
 
 IS_OSX = os.getenv('HOME').startswith('/Users/')
+IS_UBUNTU = os.path.exists('/etc/lsb-release')
 
 
 def section_macos(*, enabled=True, **kwargs):
     return section(enabled=enabled and IS_OSX, **kwargs)
+
+
+def section_ubuntu(*, enabled=True, **kwargs):
+    return section(enabled=enabled and IS_UBUNTU, **kwargs)
 
 
 try:
@@ -820,11 +825,8 @@ def ctags():
         symlink(orig, ctagsdir + '/' + basename)
 
 
-@section(enabled=allowinstallingthings())
+@section_ubuntu(enabled=allowinstallingthings())
 def git_install():
-    if not haveexecutable('apt-get'):
-        return
-
     if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=want_full):
         return
 

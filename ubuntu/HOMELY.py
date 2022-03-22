@@ -1,12 +1,12 @@
-from homely.general import section, symlink, writefile
+from homely.general import symlink, writefile
 from homely.install import installpkg
-from homely.system import execute, haveexecutable
+from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import want_full
+from HOMELY import section_ubuntu, want_full
 
 
-@section(enabled=want_full, quick=True)
+@section_ubuntu(enabled=want_full, quick=True)
 def ubuntu_swap_caps_escape():
     if not yesno('ubuntu_swap_caps_escape', 'Ubuntu: Swap caps/escape using dconf-editor?'):
         return
@@ -25,7 +25,7 @@ def ubuntu_swap_caps_escape():
     execute(['dconf', 'write', '/org/gnome/desktop/input-sources/xkb-options', new_value])
 
 
-@section(enabled=want_full)
+@section_ubuntu(enabled=want_full)
 def ubuntu_key_repeat_rate():
     if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?'):
         return
@@ -38,7 +38,7 @@ def ubuntu_key_repeat_rate():
         execute(['gsettings', 'set', 'org.gnome.desktop.peripherals.keyboard', key, value])
 
 
-@section(enabled=want_full, quick=True)
+@section_ubuntu(enabled=want_full, quick=True)
 def ubuntu_app_switcher_current_workspace():
     if not yesno(
         'ubuntu_set_app_switcher_current_workspace',
@@ -55,7 +55,7 @@ def ubuntu_app_switcher_current_workspace():
     ])
 
 
-@section(enabled=want_full)
+@section_ubuntu(enabled=want_full)
 def ubuntu_install_devilspie2():
     """
     Install devilspie2 under Ubuntu.
@@ -64,9 +64,6 @@ def ubuntu_install_devilspie2():
     desktops/workspaces. This means I don't accidentally flip to another desktop/workspace when I
     go to play some music or respond to a chat message.
     """
-    if not haveexecutable('apt-get'):
-        return
-
     question = 'Install devilspie2 to manage window sticky bits?'
     if not yesno('want_devilspie2', question, default=True):
         return
