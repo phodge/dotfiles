@@ -5,6 +5,8 @@ from homely.general import mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
+from HOMELY import want_php_anything
+
 INIT_DONE = False
 HOME = os.getenv('HOME')
 
@@ -27,7 +29,7 @@ def init_composer():
     INIT_DONE = True
 
 
-@section
+@section(enabled=want_php_anything)
 def install_php_language_server():
     if not yesno('want_php_langserver', 'Install PHP Language Server?'):
         return
@@ -43,7 +45,7 @@ def install_php_language_server():
     )
 
 
-@section
+@section(enabled=want_php_anything)
 def install_php_cs_fixer():
     if not yesno('want_php_cs_fixer', 'Install php-cs-fixer?'):
         return

@@ -54,6 +54,12 @@ want_python2_anything = yesno(
     False,
 )
 
+want_php_anything = yesno(
+    'want_php_anything',
+    'Bother with anything PHP-related?',
+    False,
+)
+
 
 @memoize
 def get_pipx_installer():
