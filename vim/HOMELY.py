@@ -351,3 +351,10 @@ def vim_plugin_update():
             with writefile(exec_) as f:
                 f.write(template.format(what))
             os.chmod(exec_, 0o755)
+
+
+@section(interval='2w')
+def vim_submodule_update():
+    from HOMELY import pull_submodules
+
+    pull_submodules('vim-packages')

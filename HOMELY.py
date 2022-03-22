@@ -955,6 +955,24 @@ def install_alacritty():
         ])
 
 
+def pull_submodules(filter_path):
+    from homely.ui import head
+    head("Pulling latest submodules under {}/".format(filter_path))
+
+    # git a list of git submodules
+    _, stdout, _ = execute(['git', 'submodule', 'status', filter_path], cwd=HERE, stdout=True)
+    for line in stdout.decode('utf-8').splitlines():
+        parts = line[1:].split(' ')
+        path = parts[1]
+        execute(['git', 'pull'], cwd=HERE + '/' + path)
+
+    # check whether submodules are changed
+    _, stdout, _ = execute(['git', 'status', '--short', filter_path], cwd=HERE, stdout=True)
+    if stdout.strip():
+        execute(['git', 'add', filter_path], cwd=HERE)
+        execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
+
+
 # TODO: https://github.com/clvv/fasd
 
 
