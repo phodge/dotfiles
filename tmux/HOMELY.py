@@ -6,20 +6,19 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import haveexecutable
 from homely.ui import warn, yesno
 
-from HOMELY import (HERE, HOME, lineinfile, memoize, mypipinstall,
-                    need_installpkg, powerline_path, want_full, wantpowerline)
+from HOMELY import (HERE, HOME, allowinstallingthings, lineinfile, memoize,
+                    mypipinstall, need_installpkg, powerline_path, want_full,
+                    wantpowerline)
+
+want_tmux = allowinstallingthings() and yesno(
+    'install_tmux',
+    'Install tmux?',
+    want_full,
+)
 
 
-@memoize
-def _wanttmux():
-    return yesno('install_tmux', 'Install tmux?', want_full)
-
-
-@section
+@section(enabled=want_tmux)
 def tmux_config():
-    if not _wanttmux():
-        return
-
     tmux_plugins = yesno('install_tmux_plugins',
                          'Install TPM and use tmux plugins?',
                          want_full)
@@ -59,11 +58,8 @@ def tmux_config():
 
 
 # install or compile tmux
-@section
+@section(enabled=want_tmux)
 def tmux_install():
-    if not _wanttmux():
-        return
-
     if yesno('own_tmux', 'Compile tmux from source?', None):
         need_installpkg(
             apt=('libevent-dev', 'ncurses-dev'),
@@ -151,11 +147,8 @@ class TmuxCustomMode(object):
         yield 'bind-key -T {table} Escape display-message "Exiting ..."'.format(table=self._table)
 
 
-@section(quick=True)
+@section(enabled=want_tmux, quick=True)
 def tmux_keys():
-    if not _wanttmux():
-        return
-
     import re
 
     lines = []
