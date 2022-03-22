@@ -347,7 +347,7 @@ def neovim_python_devel():
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
 
 
-@section
+@section(interval='2w')
 def vim_plugin_update():
     if allowinteractive():
         execute(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
