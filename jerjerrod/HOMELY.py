@@ -24,7 +24,7 @@ def jerjerrod_system_flags():
     """Control how zsh/vim will manage jerjerrod's cache."""
     lineinfile(
         '~/.shellrc',
-        'export JERJERROD_CLEAR_CACHE_IN_SHELL='.format(
+        'export JERJERROD_CLEAR_CACHE_IN_SHELL={}'.format(
             '1' if jerjerrod_clear_cache_in_shell else ''
         ),
     )
