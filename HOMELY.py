@@ -60,6 +60,12 @@ want_php_anything = yesno(
     False,
 )
 
+want_mercurial = yesno(
+    'want_mercurial',
+    'Bother with anything mercurial-related?',
+    False,
+)
+
 
 @memoize
 def get_pipx_installer():
@@ -698,7 +704,7 @@ def gitlost():
     execute(['pipx', 'install', 'git+https://github.com/phodge/git-lost.git'])
 
 
-@section
+@section(enabled=want_mercurial)
 def hg():
     ext = []
 
