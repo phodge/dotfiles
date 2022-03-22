@@ -9,7 +9,7 @@ from homely._ui import allowinteractive
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             haveexecutable, include, lineinfile, mkdir, run,
                             section, symlink, writefile)
-from homely.install import InstallFromSource, installpkg
+from homely.install import InstallFromSource, installpkg, setallowinstall
 from homely.pipinstall import pipinstall
 from homely.system import execute
 from homely.ui import yesno
@@ -97,6 +97,9 @@ def allowinstallingthings():
         'Allow installing of packages using yum/apt or `sudo make install` etc?',
         None
     )
+
+
+setallowinstall(allowinstallingthings())
 
 
 @memoize
@@ -327,16 +330,6 @@ def whenmissing(filename, substr):
     # since we know the substr isn't in the file, we return a decorator that
     # will immediately call the decorated function
     return lambda fn: fn()
-
-
-@section
-def my_settings():
-    try:
-        from homely.install import setallowinstall
-    except ImportError:
-        raise Exception('setallowinstall() not importable - please upgrade homely')
-
-    setallowinstall(allowinstallingthings())
 
 
 @section
