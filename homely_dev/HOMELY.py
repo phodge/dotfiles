@@ -6,7 +6,8 @@ from homely.general import mkdir, section
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import jerjerrod_addline, mypips, want_full, wantjerjerrod
+from HOMELY import (jerjerrod_addline, mypips, want_full,
+                    want_python2_anything, wantjerjerrod)
 
 
 @section
@@ -34,7 +35,7 @@ def homely_dev():
                 stdout="TTY")
 
     # create a python2 virtualenv as well
-    want_py2_venv = yesno(
+    want_py2_venv = want_python2_anything and yesno(
         'create_homely_venv_py2',
         'Create a python2 virtualenv for homely?',
         recommended=False,

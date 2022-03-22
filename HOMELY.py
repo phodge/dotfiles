@@ -48,6 +48,12 @@ want_full = not yesno(
     None,
 )
 
+want_python2_anything = yesno(
+    'want_python2_anything',
+    'Bother with anything python2?',
+    False,
+)
+
 
 @memoize
 def get_pipx_installer():
@@ -380,10 +386,8 @@ def pythonpath():
         raise Exception("Didn't add %s anywhere" % pypath)
 
 
-@section
-def install_pip():
-    if not allowinstallingthings():
-        return
+@section(enabled=want_python2_anything and allowinstallingthings())
+def install_python2_pip():
     import subprocess
     if not haveexecutable('pip2'):
         if yesno('global_pip2', 'Install pip2 systemwide?', None):
@@ -573,11 +577,16 @@ def mypips(venv_pip=None, write_dev_reqs=False):
             for p in packages:
                 f.write(p + '\n')
 
+    if want_python2_anything:
+        trypips = ['pip2', 'pip3']
+    else:
+        trypips = ['pip3']
+
     for package in packages:
         if venv_pip:
             venv_exec(venv_pip, ['pip', 'install', package])
         else:
-            mypipinstall(package, trypips=['pip2', 'pip3'])
+            mypipinstall(package, trypips=trypips)
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
@@ -585,12 +594,12 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         venv_exec(venv_pip, ['pip', 'install', 'flake8'])
     else:
         # always install simplejson globally as we need it for other parts of our homely install
-        mypipinstall('simplejson', trypips=['pip2', 'pip3'])
+        mypipinstall('simplejson', trypips=trypips)
 
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
             mypipinstall('flake8', ['pip3'])
-        if yesno('install_flake8_python2', 'Install flake8 for python2?'):
+        if want_python2_anything and yesno('install_flake8_python2', 'Install flake8 for python2?'):
             mypipinstall('flake8', ['pip2'])
 
 

@@ -9,7 +9,8 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import IS_OSX, allowinstallingthings, getpippaths, wantjerjerrod
+from HOMELY import (IS_OSX, allowinstallingthings, getpippaths,
+                    want_python2_anything, wantjerjerrod)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -84,16 +85,22 @@ def shell_path():
                 continue
             yield 'PATH_HIGH="{}:$PATH_HIGH"'.format(binpath)
 
-    if haveexecutable('python2'):
+    if want_python2_anything and haveexecutable('python2'):
         lines += list(_findpybin('python2'))
     if haveexecutable('python3') and haveexecutable('pip3'):
         lines += list(_findpybin('python3'))
 
     # if we are installing pip modules into separate bin paths, add them to our $PATH now
     pippaths = getpippaths()
-    for path in [pippaths.get("pip2"), pippaths.get("pip3")]:
-        if path:
-            lines.append('PATH_HIGH="%s:$PATH_HIGH"' % path)
+    try:
+        lines.append('PATH_HIGH="%s:$PATH_HIGH"' % pippaths['pip3'])
+    except KeyError:
+        pass
+    try:
+        if want_python2_anything:
+            lines.append('PATH_HIGH="%s:$PATH_HIGH"' % pippaths['pip2'])
+    except KeyError:
+        pass
 
     lines.append('PATH_HIGH="$HOME/bin:$PATH_HIGH"')
 
