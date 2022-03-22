@@ -9,7 +9,7 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import (IS_OSX, allowinstallingthings, getpippaths,
+from HOMELY import (allowinstallingthings, getpippaths, section_macos,
                     want_python2_anything, wantjerjerrod, wantzsh)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
@@ -24,11 +24,8 @@ def install_completions(rcfile):
         lineinfile(rcfile, 'want_click_completion jerjerrod')
 
 
-@section(enabled=allowinstallingthings())
+@section_macos(enabled=allowinstallingthings() and haveexecutable('brew'))
 def bash_install():
-    if not (IS_OSX and haveexecutable('brew')):
-        return
-
     if not yesno('upgrade_bash', 'Upgrade bash?', default=False):
         return
 

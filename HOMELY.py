@@ -21,6 +21,10 @@ HERE = os.path.dirname(__file__)
 IS_OSX = os.getenv('HOME').startswith('/Users/')
 
 
+def section_macos(*, enabled=True, **kwargs):
+    return section(enabled=enabled and IS_OSX, **kwargs)
+
+
 try:
     # try and build a memoize decorator from the one in functools
     from functools import lru_cache
@@ -332,11 +336,8 @@ def whenmissing(filename, substr):
     return lambda fn: fn()
 
 
-@section(enabled=want_full)
+@section_macos(enabled=want_full)
 def brew_install():
-    if not IS_OSX:
-        return
-
     if haveexecutable('brew'):
         return
 
@@ -835,14 +836,8 @@ def git_install():
         execute(cmd, stdout="TTY")
 
 
-@section
+@section_macos(enabled=haveexecutable('brew'))
 def font_install():
-    if not IS_OSX:
-        return
-
-    if not haveexecutable('brew'):
-        return
-
     fonts = [
         'homebrew/cask-fonts/font-inconsolata',
         # this download doesn't seem to work any more
@@ -858,9 +853,9 @@ def font_install():
     execute(['brew', 'install'] + fonts)
 
 
-@section(quick=True)
+@section_macos(quick=True)
 def iterm2_prefs():
-    if IS_OSX and yesno('use_iterm2_prefs', 'Use custom iterm2 prefs?', default=True):
+    if yesno('use_iterm2_prefs', 'Use custom iterm2 prefs?', default=True):
         execute([
             'defaults',
             'write',
