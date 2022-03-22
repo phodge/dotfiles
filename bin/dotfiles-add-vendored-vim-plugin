@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+fail() { local z="$?"; echo -e "\033[01;31m[$(date +'%H:%M:%S%P')] FAIL[$z]: $@\033[0m" >&2; exit 1; }
+win() { echo -e "\033[01;32m[$(date +'%H:%M:%S%P')] $@\033[0m" >&2; }
+say() { echo -e "\033[01;35m[$(date +'%H:%M:%S%P')] $@\033[0m" >&2; }
+
+name=$1
+shift
+
+
+test -n "$name" || fail "NAME is required"
+which realpath &>/dev/null || fail "realpath util is required"
+which dirname &>/dev/null || fail "realpath util is required"
+which basename &>/dev/null || fail "basename util is required"
+
+base=$(basename $name)
+
+repo_root=$(realpath $(dirname $(dirname $0)))
+cd $repo_root
+where=vim-packages/$base.git
+git submodule add --name $base.git https://github.com/$name.git $where || fail 'did not add git submodule'
+git submodule init $where || fail 'did not init submodule'
+git submodule update $where || fail 'did not update submodule'

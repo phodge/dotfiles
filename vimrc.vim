@@ -27,6 +27,8 @@ if &compatible
   setglobal nocompatible
 endif
 
+let s:dotfiles_root = expand('<sfile>:p:h')
+
 set confirm
 
 " when to use LSP and YCM
@@ -101,14 +103,18 @@ endif
 " }}}
 
 
+fun! <SID>VendoredPlug(path)
+  if g:allow_rtp_modify
+    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/' . a:path
+  endif
+endfun
+
+
 
 if g:want_treesitter " {{{ tree-sitter
 
-  if ! exists('s:ts_rtp_init')
-    let s:ts_rtp_init = 1
-    let &runtimepath = &runtimepath . ',' . expand('<sfile>:h') . '/' . 'vim-packages/nvim-treesitter.git'
-    let &runtimepath = &runtimepath . ',' . expand('<sfile>:h') . '/' . 'vim-packages/nvim-treesitter-playground.git'
-  endif
+  call <SID>VendoredPlug('vim-packages/nvim-treesitter.git')
+  call <SID>VendoredPlug('vim-packages/nvim-treesitter-playground.git')
 
   aug PeterTSInit
   aug end
@@ -1433,7 +1439,7 @@ fun! <SID>JerjerrodClearCache()
 endfunction
 
 
-let s:skeletons_dir = expand('<sfile>:h:p').'/vim/skeletons'
+let s:skeletons_dir = s:dotfiles_root.'/vim/skeletons'
 aug Skeletons
 au!
 au BufNewFile *.tsx call <SID>NamedSkeleton('component.tsx', expand('<afile>'))
