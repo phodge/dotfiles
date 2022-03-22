@@ -617,7 +617,10 @@ if filereadable(s:plugpath)
   endif
 
   " helps with working on neovim itself
-  Plug 'neovim/nvimdev.nvim', g:want_fast ? {'on': []} : {}
+  if ! g:want_fast
+    call <SID>VendoredPlug('vim-packages/nvimdev.nvim')
+  endif
+
   " I don't need the auto-ctags feature because gutentags does this for me
   let g:nvimdev_auto_ctags = 0
 

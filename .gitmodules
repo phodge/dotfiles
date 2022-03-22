@@ -8,3 +8,6 @@
 [submodule "nvim-treesitter-playground.git"]
 	path = vim-packages/nvim-treesitter-playground.git
 	url = git@github.com:nvim-treesitter/playground.git
+[submodule "nvimdev.nvim.git"]
+	path = vim-packages/nvimdev.nvim.git
+	url = https://github.com/neovim/nvimdev.nvim.git
