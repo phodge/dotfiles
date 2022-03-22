@@ -156,6 +156,7 @@ def zsh_config():
 
 @section(quick=True)
 def git_completion():
+    # TODO: would be good to use git submodules for these so we get pinned/stable versions
     # install completion utilities for bash
     url = 'https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash'
     download(url, '~/src/git-completion.bash')
