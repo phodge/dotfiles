@@ -175,7 +175,7 @@ def install_nvim_via_apt():
     if not allowinstallingthings():
         return False
 
-    if not haveexecutable('apt-get'):
+    if not IS_UBUNTU:
         return False
 
     return yesno('install_nvim_package', 'Install nvim from apt?')
@@ -194,7 +194,7 @@ def want_unicode_fix():
 
 @section(enabled=want_full and allowinstallingthings())
 def install_winwin_shortcuts():
-    if not haveexecutable('defaults'):
+    if not IS_OSX:
         # FIXME: get this working under Ubuntu as well
         return
 
@@ -891,7 +891,7 @@ def install_pyenv():
     run(gitclone2)
 
     # NOTE: on ubuntu you'll need to install libffi-dev
-    if haveexecutable('apt-get'):
+    if IS_UBUNTU:
         installpkg('libffi-dev', apt='libffi-dev')
         installpkg('pkgconf', apt='pkgconf')
 
@@ -906,10 +906,9 @@ def install_alacritty():
     lines.append('  - {}/alacritty-base.yml'.format(HERE))
 
     # FIXME: add some proper MacOS detection to homely
-    if haveexecutable('defaults'):
+    if IS_OSX:
         lines.append('  - {}/alacritty-macos.yml'.format(HERE))
 
-    if IS_OSX:
         keybindings = []
         keybindings.append(dict(
             key='T',

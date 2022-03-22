@@ -4,7 +4,7 @@ from homely.general import WHERE_END, blockinfile, mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
-from HOMELY import (HERE, HOME, allowinstallingthings, mypipinstall,
+from HOMELY import (HERE, HOME, IS_UBUNTU, allowinstallingthings, mypipinstall,
                     powerline_path, want_unicode_fix, wantjerjerrod,
                     wantpowerline)
 
@@ -21,7 +21,7 @@ def powerline():
         "%s/.config/powerline" % HOME,
     ]
 
-    if not haveexecutable('brew') and allowinstallingthings():
+    if allowinstallingthings() and IS_UBUNTU:
         msg = 'Install fonts-powerline package for this OS? (Works on Ubuntu)'
         if yesno('powerline_fonts', msg, False, noprompt=False):
             execute(['sudo', 'apt-get', 'install', 'fonts-powerline'], stdout="TTY")
