@@ -10,11 +10,8 @@ from HOMELY import (jerjerrod_addline, mypips, want_full,
                     want_python2_anything, wantjerjerrod)
 
 
-@section
+@section(enabled=want_full)
 def homely_dev():
-    if not want_full:
-        return
-
     if not yesno("create_homely_venv",
                  "Create ~/playground-homely virtualenv?", False):
         return

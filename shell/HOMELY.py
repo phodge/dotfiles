@@ -10,7 +10,7 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
 from HOMELY import (IS_OSX, allowinstallingthings, getpippaths,
-                    want_python2_anything, wantjerjerrod)
+                    want_python2_anything, wantjerjerrod, wantzsh)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -24,12 +24,9 @@ def install_completions(rcfile):
         lineinfile(rcfile, 'want_click_completion jerjerrod')
 
 
-@section
+@section(enabled=allowinstallingthings())
 def bash_install():
     if not (IS_OSX and haveexecutable('brew')):
-        return
-
-    if not allowinstallingthings():
         return
 
     if not yesno('upgrade_bash', 'Upgrade bash?', default=False):
@@ -149,7 +146,7 @@ def bash_config():
         _bashrc()
 
 
-@section
+@section(enabled=wantzsh())
 def zsh_config():
     lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
     install_completions('~/.zshrc')

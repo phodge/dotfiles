@@ -9,11 +9,8 @@ from HOMELY import (HERE, HOME, allowinstallingthings, mypipinstall,
                     wantpowerline)
 
 
-@section(quick=True)
+@section(enabled=wantpowerline(), quick=True)
 def powerline():
-    if not wantpowerline():
-        return
-
     mypipinstall('powerline-status', ['pip3'])
 
     mkdir('~/.config')
@@ -104,11 +101,8 @@ def powerline():
         f.write(dumped)
 
 
-@section(quick=True)
+@section(enabled=wantpowerline(), quick=True)
 def powerline_theme():
-    if not wantpowerline():
-        return
-
     right = [
         {"function": "todonext.powerline.firstitem"},
     ]

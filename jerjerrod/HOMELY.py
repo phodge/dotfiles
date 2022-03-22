@@ -38,11 +38,8 @@ def jerjerrod_system_flags():
     )
 
 
-@section
+@section(enabled=wantjerjerrod())
 def jerjerrod_install():
-    if not wantjerjerrod():
-        return
-
     # NOTE: only install jerjerrod where we've installed powerline
     install_commands = [
         ['pip3', 'install', '--user', '-e', '.'],

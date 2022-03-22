@@ -183,14 +183,8 @@ def want_unicode_fix():
     return yesno('want_unicode_fix', q)
 
 
-@section
+@section(enabled=want_full and allowinstallingthings())
 def install_winwin_shortcuts():
-    if not want_full:
-        return
-
-    if not allowinstallingthings():
-        return
-
     if not haveexecutable('defaults'):
         # FIXME: get this working under Ubuntu as well
         return
@@ -338,9 +332,9 @@ def whenmissing(filename, substr):
     return lambda fn: fn()
 
 
-@section
+@section(enabled=want_full)
 def brew_install():
-    if not (IS_OSX and want_full):
+    if not IS_OSX:
         return
 
     if haveexecutable('brew'):
@@ -825,12 +819,9 @@ def ctags():
         symlink(orig, ctagsdir + '/' + basename)
 
 
-@section
+@section(enabled=allowinstallingthings())
 def git_install():
     if not haveexecutable('apt-get'):
-        return
-
-    if not allowinstallingthings():
         return
 
     if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=want_full):
@@ -888,14 +879,8 @@ def iterm2_prefs():
         ])
 
 
-@section
+@section(enabled=want_full and allowinstallingthings())
 def install_pyenv():
-    if not want_full:
-        return
-
-    if not allowinstallingthings():
-        return
-
     if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv?', default=None):
         return
 
@@ -914,14 +899,8 @@ def install_pyenv():
         installpkg('pkgconf', apt='pkgconf')
 
 
-@section
+@section(enabled=want_full and allowinstallingthings())
 def install_alacritty():
-    if not want_full:
-        return
-
-    if not allowinstallingthings():
-        return
-
     if not yesno('want_alacritty', 'Install Alacritty?', default=None):
         return
 

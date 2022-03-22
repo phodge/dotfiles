@@ -148,11 +148,8 @@ def vim_config():
         run(est)
 
 
-@section
+@section(enabled=allowinstallingthings())
 def vim_install():
-    if not allowinstallingthings():
-        return
-
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
     if not yesno('compile_vim', 'Compile vim from source?', want_full):
@@ -217,11 +214,8 @@ def vim_install():
     run(inst)
 
 
-@section
+@section(enabled=wantnvim())
 def nvim_install():
-    if not wantnvim():
-        return
-
     if install_nvim_via_apt():
         installpkg('neovim')
         installpkg('python-neovim')
@@ -265,11 +259,8 @@ def nvim_install():
     run(n)
 
 
-@section
+@section(enabled=wantnvim())
 def nvim_devel():
-    if not wantnvim():
-        return
-
     if not yesno('install_nvim_devel', 'Put a dev version of neovim in playground-6?', False):
         return
 
@@ -292,11 +283,8 @@ def nvim_devel():
     symlink(HERE + '/vimproject/neovim', dest + '/.vimproject')
 
 
-@section
+@section(enabled=wantnvim())
 def neovim_python_devel():
-    if not wantnvim():
-        return
-
     playground = 'playground-neovim-python'
     venv = HOME + '/' + playground
 

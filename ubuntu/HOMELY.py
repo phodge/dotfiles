@@ -6,11 +6,8 @@ from homely.ui import yesno
 from HOMELY import want_full
 
 
-@section(quick=True)
+@section(enabled=want_full, quick=True)
 def ubuntu_swap_caps_escape():
-    if not want_full:
-        return
-
     if not yesno('ubuntu_swap_caps_escape', 'Ubuntu: Swap caps/escape using dconf-editor?'):
         return
 
@@ -28,11 +25,8 @@ def ubuntu_swap_caps_escape():
     execute(['dconf', 'write', '/org/gnome/desktop/input-sources/xkb-options', new_value])
 
 
-@section
+@section(enabled=want_full)
 def ubuntu_key_repeat_rate():
-    if not want_full:
-        return
-
     if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?'):
         return
 
@@ -44,11 +38,8 @@ def ubuntu_key_repeat_rate():
         execute(['gsettings', 'set', 'org.gnome.desktop.peripherals.keyboard', key, value])
 
 
-@section(quick=True)
+@section(enabled=want_full, quick=True)
 def ubuntu_app_switcher_current_workspace():
-    if not want_full:
-        return
-
     if not yesno(
         'ubuntu_set_app_switcher_current_workspace',
         'Ubuntu: Set alt-tab to only use current workspace?',
@@ -64,7 +55,7 @@ def ubuntu_app_switcher_current_workspace():
     ])
 
 
-@section
+@section(enabled=want_full)
 def ubuntu_install_devilspie2():
     """
     Install devilspie2 under Ubuntu.
@@ -74,9 +65,6 @@ def ubuntu_install_devilspie2():
     go to play some music or respond to a chat message.
     """
     if not haveexecutable('apt-get'):
-        return
-
-    if not want_full:
         return
 
     question = 'Install devilspie2 to manage window sticky bits?'
