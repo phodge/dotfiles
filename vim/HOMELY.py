@@ -66,7 +66,7 @@ def vim_config():
         'let g:peter_give_me_a_debugger = {}  " set by phodge\'s dotfiles'.format(
             '1' if want_a_debugger else '0'
         ),
-        where=WHERE_TOP,
+        where=WHERE_END,
     )
 
     # put our magic &rtp block at the top of our vimrc
