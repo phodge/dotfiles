@@ -156,22 +156,22 @@ if filereadable(s:plugpath)
   call plugmaster#begin('~/src/plugedit', '~/src', s:plugins) " {{{
 
   if g:tmux_session == 'SPACETEA-DEV'
-    Plug 'phodge/spacetea.vim'
+    call <SID>VendoredPlug('phodge/spacetea.vim')
   endif
 
   " firenvim
   if get(g:, 'peter_want_firenvim', 0)
     " see https://github.com/glacambre/firenvim for instructions on how to
     " configure
-    Plug 'glacambre/firenvim'
+    call <SID>VendoredPlug('glacambre/firenvim')
   endif
 
   " why not
-  Plug 'editorconfig/editorconfig-vim'
+  call <SID>VendoredPlug('editorconfig/editorconfig-vim')
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
   " the awesome Jedi library for python
-  Plug 'davidhalter/jedi-vim'
+  call <SID>VendoredPlug('davidhalter/jedi-vim')
   let g:jedi#use_splits_not_buffers = "winwidth"
   " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
   " B() vim isfreezing and I don't know why
@@ -181,7 +181,7 @@ if filereadable(s:plugpath)
 
   " ALE setup {{{
 
-    Plug 'w0rp/ale'
+    call <SID>VendoredPlug('w0rp/ale')
 
     let g:ale_linters = get(g:, 'ale_linters', {})
     let g:ale_linters.php = ['php', 'phan', 'phpcs', 'psalm']
@@ -241,7 +241,7 @@ if filereadable(s:plugpath)
     aug end
   elseif s:use_ycm
     " when in neovim land, use YouCompleteMe
-    Plug 'Valloric/YouCompleteMe'
+    call <SID>VendoredPlug('Valloric/YouCompleteMe')
 
     " when jumping to definitions, do so in a new split
     let g:ycm_goto_buffer_command = 'horizontal-split'
@@ -262,7 +262,7 @@ if filereadable(s:plugpath)
 
   " ArgWrap {{{ 
 
-    Plug 'FooSoft/vim-argwrap'
+    call <SID>VendoredPlug('FooSoft/vim-argwrap')
     let g:argwrap_tail_comma = 1
     nnoremap <space>a :ArgWrap<CR>
 
@@ -274,14 +274,14 @@ if filereadable(s:plugpath)
   endif " }}}
 
   " nginx syntax
-  Plug 'https://github.com/chr4/nginx.vim.git'
+  call <SID>VendoredPlug('chr4/nginx.vim')
 
   if ! g:want_fast
-    Plug 'EinfachToll/DidYouMean'
-    Plug 'hynek/vim-python-pep8-indent'
+    call <SID>VendoredPlug('EinfachToll/DidYouMean')
+    call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
 
     if ! get(g:, 'want_treesitter_python', 0)
-      Plug 'tmhedberg/SimpylFold'
+      call <SID>VendoredPlug('tmhedberg/SimpylFold')
     endif
   endif
 
