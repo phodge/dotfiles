@@ -171,7 +171,9 @@ if filereadable(s:plugpath)
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
   " the awesome Jedi library for python
-  call <SID>VendoredPlug('davidhalter/jedi-vim')
+  " XXX: we manage this with vim-plug because vim-plug takes care of
+  " initialising jedi's own submodules
+  Plug 'davidhalter/jedi-vim'
   let g:jedi#use_splits_not_buffers = "winwidth"
   " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
   " B() vim isfreezing and I don't know why
