@@ -104,8 +104,10 @@ endif
 
 
 fun! <SID>VendoredPlug(path)
+  let l:parts = split(a:path, '/')
+  let l:name = l:parts[1]
   if g:allow_rtp_modify
-    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/' . a:path
+    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/vim-packages/' . l:parts[1] . '.git'
   endif
 endfun
 
@@ -113,8 +115,8 @@ endfun
 
 if g:want_treesitter " {{{ tree-sitter
 
-  call <SID>VendoredPlug('vim-packages/nvim-treesitter.git')
-  call <SID>VendoredPlug('vim-packages/nvim-treesitter-playground.git')
+  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter.git')
+  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground.git')
 
   aug PeterTSInit
   aug end
@@ -620,7 +622,7 @@ if filereadable(s:plugpath)
 
   " helps with working on neovim itself
   if ! g:want_fast
-    call <SID>VendoredPlug('vim-packages/nvimdev.nvim')
+    call <SID>VendoredPlug('neovim/nvimdev.nvim')
   endif
 
   " I don't need the auto-ctags feature because gutentags does this for me
