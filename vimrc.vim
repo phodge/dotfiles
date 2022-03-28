@@ -115,8 +115,8 @@ endfun
 
 if g:want_treesitter " {{{ tree-sitter
 
-  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter.git')
-  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground.git')
+  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
+  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
 
   aug PeterTSInit
   aug end
