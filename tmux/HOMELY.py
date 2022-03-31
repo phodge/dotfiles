@@ -6,9 +6,8 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import haveexecutable
 from homely.ui import warn, yesno
 
-from HOMELY import (HERE, HOME, allowinstallingthings, lineinfile, memoize,
-                    mypipinstall, need_installpkg, powerline_path, want_full,
-                    wantpowerline)
+from HOMELY import (HERE, HOME, allowinstallingthings, mypipinstall,
+                    need_installpkg, powerline_path, want_full, wantpowerline)
 
 want_tmux = allowinstallingthings() and yesno(
     'install_tmux',
@@ -123,25 +122,25 @@ class TmuxCustomMode(object):
 
         for key in self._rootkeys:
             seen.add(key)
-            line = 'bind-key -n {key} switch-client -T {table} \; display-message "{safeprompt}"'
+            line = 'bind-key -n {key} switch-client -T {table} \\; display-message "{safeprompt}"'
             yield line.format(table=self._table, key=key, safeprompt=safeprompt)
 
         for key in self._prefixkeys:
-            line = 'bind-key {key} switch-client -T {table} \; display-message "{safeprompt}"'
+            line = 'bind-key {key} switch-client -T {table} \\; display-message "{safeprompt}"'
             yield line.format(table=self._table, key=key, safeprompt=safeprompt)
 
         for key, command in self._bindings:
             seen.add(key)
-            line = 'bind-key -T {table} {key} {command} \; switch-client -T {table} \; display-message "{safeprompt}"'
+            line = 'bind-key -T {table} {key} {command} \\; switch-client -T {table} \\; display-message "{safeprompt}"'
             yield line.format(table=self._table, key=key, command=command, safeprompt=safeprompt)
         # set up bindings for any keys that haven't been seen
         for key in self._all:
             if key not in seen:
-                line = 'bind-key -T {table} {key} switch-client -T {table} \; display-message "INVALID KEY {key}! {safeprompt}"'
+                line = 'bind-key -T {table} {key} switch-client -T {table} \\; display-message "INVALID KEY {key}! {safeprompt}"'
                 yield line.format(table=self._table, key=key, safeprompt=safeprompt)
         for key in self._special:
             if key not in seen:
-                line = 'bind-key -T {table} {key} switch-client -T {table} \; display-message "INVALID KEY {key}! {safeprompt}"'
+                line = 'bind-key -T {table} {key} switch-client -T {table} \\; display-message "INVALID KEY {key}! {safeprompt}"'
                 yield line.format(table=self._table, key=key, safeprompt=safeprompt)
 
         yield 'bind-key -T {table} Escape display-message "Exiting ..."'.format(table=self._table)
