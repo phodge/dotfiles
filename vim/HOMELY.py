@@ -7,7 +7,7 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
-from HOMELY import (HERE, HOME, allowinstallingthings, install_nvim_via_apt,
+from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_apt,
                     jerjerrod_addline, mypips, need_installpkg, want_full,
                     wantjerjerrod, wantnvim, whenmissing)
 
@@ -148,7 +148,7 @@ def vim_config():
         run(est)
 
 
-@section(enabled=allowinstallingthings())
+@section(enabled=allow_installing_stuff)
 def vim_install():
     # TODO: prompt to install a better version of vim?
     # - yum install vim-enhanced
@@ -221,7 +221,7 @@ def nvim_install():
         installpkg('python-neovim')
         return
 
-    if (allowinstallingthings() and
+    if (allow_installing_stuff and
             haveexecutable('brew') and
             yesno('install_nvim_package', 'Install nvim from apt/brew?')):
         installpkg('neovim')
@@ -229,7 +229,7 @@ def nvim_install():
 
     the_hard_way = yesno('compile_nvim',
                          'Compile/install nvim from source?',
-                         recommended=allowinstallingthings()
+                         recommended=allow_installing_stuff
                          )
     if not the_hard_way:
         raise Exception('No way to install neovim')

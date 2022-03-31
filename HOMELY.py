@@ -57,6 +57,16 @@ want_full = not yesno(
     None,
 )
 
+
+allow_installing_stuff = want_full and yesno(
+    'allow_install',
+    'Allow installing of packages using yum/apt or `sudo make install` etc?',
+    None
+)
+
+setallowinstall(allow_installing_stuff)
+
+
 want_python2_anything = yesno(
     'want_python2_anything',
     'Bother with anything python2?',
@@ -84,7 +94,7 @@ if want_full and IS_OSX:
 
 @memoize
 def need_installpkg(*, apt=None, brew=None, yum=None):
-    if not allowinstallingthings():
+    if not allow_installing_stuff:
         what = apt or brew or yum
         raise Exception("Can't install {} when only doing minimal config".format(what))
 
@@ -100,23 +110,8 @@ def need_installpkg(*, apt=None, brew=None, yum=None):
 
 
 @memoize
-def allowinstallingthings():
-    if not want_full:
-        return False
-
-    return yesno(
-        'allow_install',
-        'Allow installing of packages using yum/apt or `sudo make install` etc?',
-        None
-    )
-
-
-setallowinstall(allowinstallingthings())
-
-
-@memoize
 def install_fedora_copr():
-    if not allowinstallingthings():
+    if not allow_installing_stuff:
         return False
 
     if not haveexecutable('yum'):
@@ -169,7 +164,7 @@ def install_nvim_via_apt():
     if not wantnvim():
         return False
 
-    if not allowinstallingthings():
+    if not allow_installing_stuff:
         return False
 
     if not IS_UBUNTU:
@@ -189,7 +184,7 @@ def want_unicode_fix():
     return yesno('want_unicode_fix', q)
 
 
-@section(enabled=want_full and allowinstallingthings())
+@section(enabled=allow_installing_stuff)
 def install_winwin_shortcuts():
     if not IS_OSX:
         # FIXME: get this working under Ubuntu as well
@@ -388,7 +383,7 @@ def pythonpath():
         raise Exception("Didn't add %s anywhere" % pypath)
 
 
-@section(enabled=want_python2_anything and allowinstallingthings())
+@section(enabled=want_python2_anything and allow_installing_stuff)
 def install_python2_pip():
     import subprocess
     if not haveexecutable('pip2'):
@@ -400,13 +395,13 @@ def install_python2_pip():
 # my favourite developer tools
 @section
 def tools():
-    if allowinstallingthings() and yesno('install_ack', 'Install ack?', False):
+    if allow_installing_stuff and yesno('install_ack', 'Install ack?', False):
         installpkg('ack', apt='ack-grep')
-    if allowinstallingthings() and want_silver_searcher():
+    if allow_installing_stuff and want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
                    apt='silversearcher-ag')
-    if allowinstallingthings() and yesno('install_ripgrep', 'Install ripgrep?', True):
+    if allow_installing_stuff and yesno('install_ripgrep', 'Install ripgrep?', True):
         yum = False
         if haveexecutable('yum') and install_fedora_copr():
             yum = 'ripgrep'
@@ -437,17 +432,17 @@ def tools():
             ])
             uc.symlink('ctags', '~/bin/ctags')
             run(uc)
-    elif allowinstallingthings() and yesno('install_ctags', 'Install `ctags`?', want_full):
+    elif allow_installing_stuff and yesno('install_ctags', 'Install `ctags`?', want_full):
         installpkg('ctags')
-    if allowinstallingthings() and yesno('install_patch', 'Install patch?', want_full):
+    if allow_installing_stuff and yesno('install_patch', 'Install patch?', want_full):
         installpkg('patch')
 
-    if allowinstallingthings() and yesno('install_tidy', 'Install tidy cli tool?', want_full):
+    if allow_installing_stuff and yesno('install_tidy', 'Install tidy cli tool?', want_full):
         installpkg('tidy')
 
     # on OSX we want to install gnu utils (brew install coreutils findutils)
     # and put /usr/local/opt/coreutils/libexec/gnubin in PATH
-    if IS_OSX and haveexecutable('brew') and allowinstallingthings():
+    if IS_OSX and haveexecutable('brew') and allow_installing_stuff:
         if yesno('brew_install_coreutils', 'Install gnu utils?', default=want_full):
             brew_list = set(execute(['brew', 'list'], stdout=True)[1].decode('utf-8').splitlines())
             install = [
@@ -815,7 +810,7 @@ def ctags():
         symlink(orig, ctagsdir + '/' + basename)
 
 
-@section_ubuntu(enabled=allowinstallingthings())
+@section_ubuntu(enabled=allow_installing_stuff)
 def git_install():
     if not yesno('upgrade_git', 'Install latest git from ppa:git-core/ppa?', default=want_full):
         return
@@ -866,7 +861,7 @@ def iterm2_prefs():
         ])
 
 
-@section(enabled=want_full and allowinstallingthings())
+@section(enabled=allow_installing_stuff)
 def install_pyenv():
     if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv?', default=None):
         return
@@ -886,7 +881,7 @@ def install_pyenv():
         installpkg('pkgconf', apt='pkgconf')
 
 
-@section(enabled=want_full and allowinstallingthings())
+@section(enabled=allow_installing_stuff)
 def install_alacritty():
     if not yesno('want_alacritty', 'Install Alacritty?', default=None):
         return
