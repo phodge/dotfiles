@@ -76,13 +76,10 @@ want_mercurial = yesno(
 )
 
 
-@memoize
-def get_pipx_installer():
-    if not want_full:
-        return
+pipx_install_fn = None
 
-    if IS_OSX:
-        return lambda: installpkg('pipx', brew='pipx')
+if want_full and IS_OSX:
+    pipx_install_fn = lambda: installpkg('pipx', brew='pipx')  # noqa: E731
 
 
 @memoize
@@ -688,19 +685,13 @@ def git():
     run(gitwip)
 
 
-@section
+@section(enabled=bool(pipx_install_fn))
 def pipx_install():
-    installer = get_pipx_installer()
-
-    if installer:
-        installer()
+    pipx_install_fn()
 
 
-@section
+@section(enabled=bool(pipx_install_fn))
 def gitlost():
-    if not get_pipx_installer():
-        return
-
     execute(['pipx', 'install', 'git+https://github.com/phodge/git-lost.git'])
 
 
