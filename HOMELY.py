@@ -392,21 +392,26 @@ def install_python2_pip():
             subprocess.check_call(cmd, shell=True)
 
 
-# my favourite developer tools
-@section
-def tools():
-    if allow_installing_stuff and yesno('install_ack', 'Install ack?', False):
+@section(enabled=allow_installing_stuff)
+def search_tools():
+    if yesno('install_ack', 'Install ack?', False):
         installpkg('ack', apt='ack-grep')
-    if allow_installing_stuff and want_silver_searcher():
+
+    if want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
                    apt='silversearcher-ag')
-    if allow_installing_stuff and yesno('install_ripgrep', 'Install ripgrep?', True):
+
+    if yesno('install_ripgrep', 'Install ripgrep?', True):
         yum = False
         if haveexecutable('yum') and install_fedora_copr():
             yum = 'ripgrep'
         installpkg('ripgrep', yum=yum)
 
+
+# more of my favourite developer tools
+@section
+def tools():
     if yesno('install_with', 'Install `with` utility?', want_full):
         withutil = InstallFromSource('https://github.com/mchav/with',
                                      '~/src/with.git')
