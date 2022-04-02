@@ -464,7 +464,7 @@ def fzf_install():
     if not yesno('install_fzf', 'Install fzf?', want_full):
         return
 
-    if haveexecutable('brew'):
+    if haveexecutable('brew') and allow_installing_stuff:
         installpkg('fzf')
         fzf_path = '/usr/local/opt/fzf'
     else:
