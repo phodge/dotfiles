@@ -1,13 +1,11 @@
 from os import environ
 from os.path import exists, join
 
-from homely.files import symlink
 from homely.general import mkdir, section
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import (jerjerrod_addline, mypips, want_full,
-                    want_python2_anything, wantjerjerrod)
+from HOMELY import jerjerrod_addline, mypips, want_full, wantjerjerrod
 
 
 @section(enabled=want_full)
@@ -31,39 +29,18 @@ def homely_dev():
         execute(['git', 'clone', 'git@github.com:phodge/homely.git', checkout],
                 stdout="TTY")
 
-    # create a python2 virtualenv as well
-    want_py2_venv = want_python2_anything and yesno(
-        'create_homely_venv_py2',
-        'Create a python2 virtualenv for homely?',
-        recommended=False,
-    )
-    if want_py2_venv:
-        py2venv = join(venv, 'py2venv')
-        if not exists(join(py2venv, 'bin')):
-            execute(['virtualenv', '--python=python2.7', py2venv], stdout="TTY")
-        # create a symlink to the git repo
-        symlink(checkout, join(py2venv, 'homely.git'))
-
     # need to install editable version of homely.git in both virtualenvs
     venv_pip = venv + '/bin/pip'
 
-    pips = [venv_pip]
-    if want_py2_venv:
-        pips.append(py2venv + '/bin/pip')
+    execute([venv_pip, 'install', '--editable', checkout])
+    mypips(venv_pip)
 
-    for pip in pips:
-        execute([pip, 'install', '--editable', checkout])
-        mypips(pip)
-        execute([pip, 'install', 'pytest'])
-
-    # install build/packaging tools just in the python3 version
-    execute([venv_pip, 'install', 'Sphinx', 'sphinx-autobuild', 'twine'])
+    # install all dev requirements
+    execute([venv_pip, 'install', '-r', join(checkout, 'requirements_dev.txt')])
 
     if wantjerjerrod():
         # register the playground with jerjerrod
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
-
-    execute([venv_pip, 'install', 'Sphinx', 'sphinx-autobuild', 'pytest', 'twine'])
 
     # we may want to install pandoc to make the slides, but
     if yesno('homley_want_pandoc', 'Install pandoc to create slides?', recommended=True):
