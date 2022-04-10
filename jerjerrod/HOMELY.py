@@ -46,8 +46,11 @@ def jerjerrod_install():
     ]
 
     if IS_OSX and haveexecutable('/usr/bin/pip3'):
+        # XXX: this version of pip3 is too old to understand how to install in
+        # ---editable mode with just a pyproject.toml, so we need to just
+        # install it as-is
         install_commands.append(
-            ['/usr/bin/pip3', 'install', '--user', '-e', '.'],
+            ['/usr/bin/pip3', 'install', '--user', '.'],
         )
 
     # install from source!
