@@ -18,7 +18,7 @@ HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
 
 
-IS_OSX = os.getenv('HOME').startswith('/Users/')
+IS_OSX = platform.system() == "Darwin"
 IS_UBUNTU = os.path.exists('/etc/lsb-release')
 
 
@@ -491,7 +491,7 @@ def fzf_install():
 
 @memoize
 def getpippaths():
-    if platform.system() == "Darwin":
+    if IS_OSX:
         return {}
 
     # do we need to out a pip config such that py2/py3 binaries don't clobber each other?
