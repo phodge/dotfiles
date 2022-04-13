@@ -7,15 +7,25 @@ from homely.install import InstallFromSource, installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
+import HOMELY
 from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_apt,
-                    jerjerrod_addline, mypips, need_installpkg, want_full,
-                    wantjerjerrod, wantnvim, whenmissing)
+                    jerjerrod_addline, memoize, mypips, need_installpkg,
+                    want_full, wantjerjerrod, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 
 NVIM_TAG = 'v0.4.4'
 # one of the nightly tags
 NVIM_TAG = 'ca7449db4'
+
+
+@memoize
+def want_nvim_devel() -> bool:
+    return HOMELY.wantnvim() and yesno(
+        'install_nvim_devel',
+        'Put a dev version of neovim in playground-6?',
+        False,
+    )
 
 
 @section(quick=True)
@@ -214,7 +224,7 @@ def vim_install():
     run(inst)
 
 
-@section(enabled=wantnvim())
+@section(enabled=HOMELY.wantnvim())
 def nvim_install():
     if install_nvim_via_apt():
         installpkg('neovim')
@@ -259,11 +269,8 @@ def nvim_install():
     run(n)
 
 
-@section(enabled=wantnvim())
+@section(enabled=want_nvim_devel())
 def nvim_devel():
-    if not yesno('install_nvim_devel', 'Put a dev version of neovim in playground-6?', False):
-        return
-
     # my fork of the neovim project
     origin = 'ssh://git@github.com/phodge/neovim.git'
     # the main neovim repo - for pulling
@@ -283,7 +290,7 @@ def nvim_devel():
     symlink(HERE + '/vimproject/neovim', dest + '/.vimproject')
 
 
-@section(enabled=wantnvim())
+@section(enabled=want_nvim_devel())
 def neovim_python_devel():
     playground = 'playground-neovim-python'
     venv = HOME + '/' + playground
@@ -339,7 +346,7 @@ def neovim_python_devel():
 def vim_plugin_update():
     if allowinteractive():
         execute(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
-        if wantnvim():
+        if HOMELY.wantnvim():
             execute(['nvim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
         return
 
