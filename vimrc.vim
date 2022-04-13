@@ -6,18 +6,6 @@ if ! exists('g:want_fast')
   let g:want_fast = 0
 endif
 
-if ! exists('g:peter_use_builtin_php_syntax')
-  let g:peter_use_builtin_php_syntax = 0
-endif
-
-if ! exists('g:want_treesitter')
-  let g:want_treesitter = 0
-endif
-
-if ! exists('g:want_treesitter_python')
-  let g:want_treesitter_python = 0
-endif
-
 if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
@@ -113,7 +101,7 @@ endfun
 
 
 
-if g:want_treesitter " {{{ tree-sitter
+if g:peter_want_treesitter " {{{ tree-sitter
 
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
@@ -284,7 +272,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('EinfachToll/DidYouMean')
     call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
 
-    if ! get(g:, 'want_treesitter_python', 0)
+    if ! g:peter_want_treesitter_python
       call <SID>VendoredPlug('tmhedberg/SimpylFold')
     endif
   endif
@@ -459,7 +447,7 @@ if filereadable(s:plugpath)
     "hi! link typescriptUnaryOp Operator
     "hi! link typescriptBinaryOp Number
     "hi! link typescriptDotNotation Operator
-  elseif g:want_treesitter
+  elseif g:peter_want_treesitter
     " don't do anything if we are using treesitter syntax
   elseif 1
     PlugMaster 'phodge/vim-javascript-syntax'
@@ -526,7 +514,7 @@ if filereadable(s:plugpath)
   endif
 
   " Google Terraform syntax
-  if get(g:, 'want_terraform_plugins', 0)
+  if g:peter_want_terraform_plugins
     Plug 'hashivim/vim-terraform'
   endif
 
@@ -581,9 +569,12 @@ if filereadable(s:plugpath)
   " TODO: also try 'nathanaelkane/vim-indent-guides'
 
   " cool rust stuff
-  Plug 'rust-lang/rust.vim'
-  " let rust automatically reformat my code on save
-  let g:rustfmt_autosave = 1
+  if g:peter_want_rust_plugins
+    Plug 'rust-lang/rust.vim'
+    " let rust automatically reformat my code on save
+    let g:rustfmt_autosave = 1
+  endif
+
   " we also need this for the Cargo.toml files
   call <SID>VendoredPlug('cespare/vim-toml')
 
@@ -596,7 +587,7 @@ if filereadable(s:plugpath)
   Plug 'vim-scripts/AfterColors.vim'
 
   " php - insert/sort Use statements automatically {{{
-
+  if g:peter_want_php_plugins
     Plug 'arnaud-lb/vim-php-namespace'
 
     aug PHPStuff
@@ -605,12 +596,13 @@ if filereadable(s:plugpath)
     au FileType php nnoremap <buffer> <space>e :call PhpExpandClass()<CR>
     au FileType php com! -buffer SortUseStatements call PhpSortUse()<CR>
     aug end
+  endif
 
   " }}}
 
   " custom PHP syntax - causes problems when g:php_show_semicolon_error is
   " turned on though
-  if ! g:peter_use_builtin_php_syntax
+  if g:peter_want_php_plugins && ! g:peter_use_builtin_php_syntax
     PlugMaster 'phodge/php-syntax.vim'
     let g:php_show_semicolon_error = 0
     let g:php_alt_construct_parents = 1
@@ -621,7 +613,7 @@ if filereadable(s:plugpath)
   endif
 
   " helps with working on neovim itself
-  if ! g:want_fast
+  if g:peter_want_nvimdev_plugin
     call <SID>VendoredPlug('neovim/nvimdev.nvim')
   endif
 

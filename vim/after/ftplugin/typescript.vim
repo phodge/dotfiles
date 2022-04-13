@@ -1,5 +1,5 @@
 if ! &l:diff
-  if get(g:, 'want_treesitter', 0)
+  if g:peter_want_treesitter
     setlocal foldmethod=expr
     setlocal foldexpr=nvim_treesitter#foldexpr()
   else

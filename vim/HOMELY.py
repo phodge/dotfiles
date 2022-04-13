@@ -28,6 +28,45 @@ def want_nvim_devel() -> bool:
     )
 
 
+@memoize
+def get_vim_options() -> dict[str, bool]:
+    ret = {}
+
+    # vim
+    ret['g:peter_give_me_a_debugger'] = yesno(
+        'vim_install_debugger_plugin',
+        'Vim: install a debugger plugin?',
+    )
+
+    ret['g:peter_use_builtin_php_syntax'] = (not HOMELY.want_php_anything) or yesno(
+        'vim_use_builtin_php_syntax',
+        'Vim: use builtin php syntax?',
+    )
+
+    # neovim
+    ret['g:peter_want_nvimdev_plugin'] = want_nvim_devel() and yesno(
+        'neovim_want_nvimdev_plugin',
+        'Neovim: install nvimdev.nvim plugin for neovim development?',
+    )
+
+    use_treesitter = HOMELY.wantnvim() and yesno(
+        'neovim_use_treesitter',
+        'Neovim: use treesitter for syntax highlighting?',
+    )
+    ret['g:peter_want_treesitter'] = use_treesitter
+    ret['g:peter_want_treesitter_python'] = use_treesitter and yesno(
+        'neovim_use_treesitter_for_python',
+        'Neovim: use treesitter for PYTHON syntax highlighting?',
+    )
+
+    # other technologies
+    ret['g:peter_want_terraform_plugins'] = HOMELY.want_terraform_anything
+    ret['g:peter_want_rust_plugins'] = HOMELY.want_rust_anything
+    ret['g:peter_want_php_plugins'] = HOMELY.want_php_anything
+
+    return ret
+
+
 @section(quick=True)
 def vim_config():
     # install vim-plug into ~/.vim
@@ -67,17 +106,15 @@ def vim_config():
     lineinfile('~/.vimrc', 'source %s/vimrc.vim' % HERE, where=WHERE_TOP)
 
     # do we want a debugger plugin in vim?
-    want_a_debugger = yesno(
-        'vim_install_debugger_plugin',
-        'Vim: install a debugger plugin?',
-    )
-    lineinfile(
-        '~/.vim/prefs.vim',
-        'let g:peter_give_me_a_debugger = {}  " set by phodge\'s dotfiles'.format(
-            '1' if want_a_debugger else '0'
-        ),
-        where=WHERE_END,
-    )
+    for varname, varval in get_vim_options().items():
+        lineinfile(
+            '~/.vim/prefs.vim',
+            f'let {varname} = {"1" if varval else "0"}  " set by phodge\'s dotfiles'.format(
+                varname,
+                '1' if varval else '0'
+            ),
+            where=WHERE_END,
+        )
 
     # put our magic &rtp block at the top of our vimrc
     blockinfile('~/.vimrc',

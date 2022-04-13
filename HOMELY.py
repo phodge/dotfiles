@@ -79,6 +79,16 @@ want_php_anything = yesno(
     False,
 )
 
+want_terraform_anything = yesno(
+    'want_terraform_anything',
+    'Bother with anything Terraform-related?',
+)
+
+want_rust_anything = yesno(
+    'want_rust_anything',
+    'Bother with anything Rust-related?',
+)
+
 want_mercurial = yesno(
     'want_mercurial',
     'Bother with anything mercurial-related?',
