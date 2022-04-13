@@ -585,7 +585,7 @@ if filereadable(s:plugpath)
   " let rust automatically reformat my code on save
   let g:rustfmt_autosave = 1
   " we also need this for the Cargo.toml files
-  Plug 'cespare/vim-toml'
+  call <SID>VendoredPlug('cespare/vim-toml')
 
   let g:dispatch_quickfix_height = 10
   Plug 'tpope/vim-dispatch'
