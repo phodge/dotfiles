@@ -101,7 +101,7 @@ endfun
 
 
 
-if g:peter_want_treesitter " {{{ tree-sitter
+if has('nvim') && g:peter_want_treesitter " {{{ tree-sitter
 
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
