@@ -252,7 +252,7 @@ if filereadable(s:plugpath)
     let g:jedi#completions_enabled = 0
   endif
 
-  " ArgWrap {{{ 
+  " ArgWrap {{{
 
     call <SID>VendoredPlug('FooSoft/vim-argwrap')
     let g:argwrap_tail_comma = 1
