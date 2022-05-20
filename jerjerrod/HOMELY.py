@@ -12,12 +12,6 @@ jerjerrod_clear_cache_in_shell = wantjerjerrod() and yesno(
     recommended=True,
 )
 
-jerjerrod_clear_cache_in_vim = wantjerjerrod() and yesno(
-    'jerjerrod_clear_cache_in_vim',
-    'Jerjerrod: automatic cache clearing in Vim using BufWritePost?',
-    recommended=True,
-)
-
 
 @section(quick=True)
 def jerjerrod_system_flags():
@@ -27,14 +21,6 @@ def jerjerrod_system_flags():
         'export JERJERROD_CLEAR_CACHE_IN_SHELL={}'.format(
             '1' if jerjerrod_clear_cache_in_shell else ''
         ),
-    )
-
-    lineinfile(
-        '~/.vim/prefs.vim',
-        'let g:jerjerrod_cache_clearing = {}  " set by phodge\'s dotfiles'.format(
-            '1' if jerjerrod_clear_cache_in_vim else '0'
-        ),
-        where=WHERE_TOP,
     )
 
 

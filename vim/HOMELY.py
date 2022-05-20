@@ -43,6 +43,12 @@ def get_vim_options() -> dict[str, bool]:
         'Vim: use builtin php syntax?',
     )
 
+    ret['g:jerjerrod_cache_clearing'] = HOMELY.wantjerjerrod() and yesno(
+        'jerjerrod_clear_cache_in_vim',
+        'Jerjerrod: automatic cache clearing in Vim using BufWritePost?',
+        recommended=True,
+    )
+
     # neovim
     ret['g:peter_want_nvimdev_plugin'] = want_nvim_devel() and yesno(
         'neovim_want_nvimdev_plugin',
