@@ -548,9 +548,15 @@ def venv_exec(venv_pip, cmd, **kwargs):
 
 
 def mypips(venv_pip=None, write_dev_reqs=False):
+    # if we're on macos then we need to tell homely.pipinstall to use 'pip3' instead of 'pip'
+    if IS_OSX:
+        pips = ['pip3']
+    else:
+        pips = None
+
     # of course we probably want virtualenv!
     if venv_pip is None:
-        pipinstall('virtualenv')
+        pipinstall('virtualenv', pips=pips)
 
     theworks = want_full or venv_pip
 
