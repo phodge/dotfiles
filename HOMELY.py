@@ -477,7 +477,17 @@ def fzf_install():
     if haveexecutable('brew') and allow_installing_stuff:
         installpkg('fzf')
         brewpath = execute(['brew', '--prefix'], stdout=True)[1].decode('utf-8').strip()
-        fzf_path = brewpath + '/bin/fzf'
+        if brewpath == '/opt/homebrew':
+            # brew puts the fzf files into versioned folders, so all we can do
+            # is glob and sort (which isn't perfect because it would need to be
+            # a semver-compatible sort) and pick the first one
+            fzf_path = execute(
+                ['bash', '-c', f'echo {brewpath}/Cellar/fzf/* | sort -r | head -n 1'],
+                stdout=True,
+            )[1].decode('utf-8').strip()
+        else:
+            # this is how it was on my old mac
+            fzf_path = brewpath + '/opt/fzf'
     else:
         # do it the long way
         import os.path
