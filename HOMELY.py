@@ -476,7 +476,8 @@ def fzf_install():
 
     if haveexecutable('brew') and allow_installing_stuff:
         installpkg('fzf')
-        fzf_path = '/usr/local/opt/fzf'
+        brewpath = execute(['brew', '--prefix'], stdout=True)[1].decode('utf-8').strip()
+        fzf_path = brewpath + '/bin/fzf'
     else:
         # do it the long way
         import os.path
