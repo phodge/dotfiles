@@ -990,6 +990,13 @@ def pull_submodules(filter_path):
         execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
 
 
+@section_macos()
+def bettersnaptool_config():
+    mkdir('~/Library')
+    mkdir('~/Library/Preferences')
+    symlink('com.hegenberg.BetterSnapTool.plist', '~/Library/Preferences/com.hegenberg.BetterSnapTool.plist')
+
+
 # TODO: https://github.com/clvv/fasd
 
 
