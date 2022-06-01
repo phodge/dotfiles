@@ -3,7 +3,8 @@
 
 [alias]
     st = status
-    b = branch -va
+    b = branch -v
+    ba = branch -va
     l  = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn'
     l2  = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' -30
     ls = log --graph --format='%C(yellow)%h %Cred%ci%Cgreen%d %Creset%s %Cblue%cn' --all --simplify-by-decoration
