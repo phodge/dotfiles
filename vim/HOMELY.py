@@ -385,6 +385,16 @@ def neovim_python_devel():
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
 
 
+@section(enabled=HOMELY.wantnvim())
+def nvim_ls_ts():
+    execute(['npm', 'install'], cwd=HERE + '/nvim_ts')
+    # We need these two to be available globally as they probably won't exist in project packages.
+    # The language server will also need 'prettier', 'typescript' and 'eslint'
+    # packages, however those are more likely to be added to the project directly.
+    symlink('nvim_ts/node_modules/.bin/typescript-language-server', '~/bin/typescript-language-server')
+    symlink('nvim_ts/node_modules/.bin/eslint_d', '~/bin/eslint_d')
+
+
 @section(interval='2w')
 def vim_plugin_update():
     if allowinteractive():
