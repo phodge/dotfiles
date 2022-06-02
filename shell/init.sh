@@ -125,8 +125,10 @@ alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
 alias recon='git -c core.hooksPath=/no/hooks rebase --continue'
 alias rebas='git -c core.hooksPath=/no/hooks rebase'
 alias f='find *'
-alias cnv='git commit --no-verify'
 alias c='git commit'
+alias ca='git commit --amend'
+alias cnv='git commit --no-verify'
+alias canv='git commit --amend --no-verify'
 
 # tell ripgrep where to find its RC file
 export RIPGREP_CONFIG_PATH="$DOTFILES_PATH/.ripgreprc"
