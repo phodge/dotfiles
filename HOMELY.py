@@ -977,9 +977,11 @@ def pull_submodules(filter_path):
 
     # git a list of git submodules
     _, stdout, _ = execute(['git', 'submodule', 'status', filter_path], cwd=HERE, stdout=True)
-    for line in stdout.decode('utf-8').splitlines():
-        parts = line[1:].split(' ')
-        path = parts[1]
+    paths = [
+        line[1:].split(' ')[1]
+        for line in stdout.decode('utf-8').splitlines()
+    ]
+    for path in paths:
         cmd = ['git', 'submodule', 'update', '--remote', '--recursive', '--', path]
         execute(cmd, cwd=HERE)
 
@@ -988,6 +990,13 @@ def pull_submodules(filter_path):
     if stdout.strip():
         execute(['git', 'add', filter_path], cwd=HERE)
         execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
+
+    # then we need to follow up with a 'git submodule update --recursive' in
+    # case the submodules have their own submodules that we accidentally
+    # fast-forwarded
+    for path in paths:
+        cmd = ['git', 'submodule', 'update', '--recursive', '--', path]
+        execute(cmd, cwd=HERE)
 
 
 # TODO: https://github.com/clvv/fasd
