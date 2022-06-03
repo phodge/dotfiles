@@ -734,6 +734,26 @@ fun! <SID>InitLSPBuffer()
   " recommended using 'npm install -g prettier' however I'm keen to avoid
   " having a global version that gets stale / differs between machines
   nnoremap <buffer> \f       :lua vim.lsp.buf.formatting()<CR>
+  nnoremap <buffer> \F       :call <SID>ToggleAutoFormatting()<CR>
+  command! -nargs=0 -buffer Format lua vim.lsp.buf.formatting()
+
+  " TODO: tidy this up so we're *not* using ALE namespace vars
+  let b:ale_fix_on_save = 0
+  aug PeterLSPAutoFormat
+  au! BufWritePre <buffer> exe b:ale_fix_on_save ? 'lua vim.lsp.buf.formatting_sync()' : ''
+  aug end
+endfun
+
+fun! <SID>ToggleAutoFormatting()
+  if b:ale_fix_on_save
+    let b:ale_fix_on_save = 0
+  else
+    let b:ale_fix_on_save = 1
+  endif
+  echohl WarningMsg
+  echo printf('b:ale_fix_on_save = %s', b:ale_fix_on_save)
+  echohl None
+endfun
 
 fun! <SID>ToggleDiagnostic()
   if get(b:, 'peter_show_diagnostic', 0)
