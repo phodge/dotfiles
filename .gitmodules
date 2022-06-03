@@ -44,3 +44,15 @@
 [submodule "vim-toml.git"]
 	path = vim-packages/vim-toml.git
 	url = https://github.com/cespare/vim-toml.git
+[submodule "nvim-lspconfig.git"]
+	path = vim-packages/nvim-lspconfig.git
+	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule "plenary.nvim.git"]
+	path = vim-packages/plenary.nvim.git
+	url = https://github.com/nvim-lua/plenary.nvim.git
+[submodule "nvim-lsp-ts-utils.git"]
+	path = vim-packages/nvim-lsp-ts-utils.git
+	url = https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils.git
+[submodule "null-ls.nvim.git"]
+	path = vim-packages/null-ls.nvim.git
+	url = https://github.com/jose-elias-alvarez/null-ls.nvim.git
