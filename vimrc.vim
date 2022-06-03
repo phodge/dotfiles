@@ -710,19 +710,41 @@ if filereadable(s:plugpath)
   call plug#end() " }}}
 endif
 
+" configure diagnostics globally
+if has('nvim')
+  lua vim.diagnostic.config({
+        \ virtual_text=false,
+        \ })
+endif
 
 fun! <SID>InitLSPBuffer()
   " turn off ALE
   ALEDisableBuffer
 
+  " hide diagnostics by default
+  lua vim.diagnostic.hide()
+
   nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
   nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
+  nnoremap <buffer> \a       :lua vim.diagnostic.goto_next()<CR>
+  nnoremap <buffer> \A       :call <SID>ToggleDiagnostic()<CR>
 
   " XXX: if formatting doesn't seem to do anything it probably means you need
   " to install 'prettier' into your project. The guide I based this on
   " recommended using 'npm install -g prettier' however I'm keen to avoid
   " having a global version that gets stale / differs between machines
   nnoremap <buffer> \f       :lua vim.lsp.buf.formatting()<CR>
+
+fun! <SID>ToggleDiagnostic()
+  if get(b:, 'peter_show_diagnostic', 0)
+    lua vim.diagnostic.show()
+    let b:peter_show_diagnostic = 0
+  else
+    lua vim.diagnostic.hide()
+    let b:peter_show_diagnostic = 1
+  endif
+endfun
+
 if s:ts_lsp
   aug PeterLSPInit
   au!
