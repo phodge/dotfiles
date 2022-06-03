@@ -724,6 +724,18 @@ fun! <SID>InitLSPBuffer()
   " hide diagnostics by default
   lua vim.diagnostic.hide()
 
+  " XXX: I'm using vim.lsp.buf.code_action() here instead of
+  " :TSLspImportCurrent because sometimes there are multiple sources to import
+  " from
+  " XXX: I wanted this to do the code_action _and_ then format the buffer;
+  " however code_action() seems to actually be async and so the prompt ends up
+  " appearing _after_ the buffer has been formatted :facepalm:
+  nnoremap <buffer> <space>i :lua vim.lsp.buf.code_action()<CR>
+  if &l:filetype == 'typescript'
+    nnoremap <buffer> <space>I :TSLspOrganize<CR>
+  else
+    nnoremap <buffer> <space>I :echoerr 'No "\<space>I" import organizer is defined for this filetype'
+  endif
   nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
   nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
   nnoremap <buffer> \a       :lua vim.diagnostic.goto_next()<CR>
