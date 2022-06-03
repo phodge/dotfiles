@@ -738,6 +738,7 @@ fun! <SID>InitLSPBuffer()
   endif
   nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
   nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
+  nnoremap <buffer> <space>f :lua vim.lsp.buf.incoming_calls()<CR>
   nnoremap <buffer> \a       :lua vim.diagnostic.goto_next()<CR>
   nnoremap <buffer> \A       :call <SID>ToggleDiagnostic()<CR>
 
