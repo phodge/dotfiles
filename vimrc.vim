@@ -710,7 +710,25 @@ if filereadable(s:plugpath)
   call plug#end() " }}}
 endif
 
+
+fun! <SID>InitLSPBuffer()
+  " turn off ALE
+  ALEDisableBuffer
+
+  nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
+  nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
+
+  " XXX: if formatting doesn't seem to do anything it probably means you need
+  " to install 'prettier' into your project. The guide I based this on
+  " recommended using 'npm install -g prettier' however I'm keen to avoid
+  " having a global version that gets stale / differs between machines
+  nnoremap <buffer> \f       :lua vim.lsp.buf.formatting()<CR>
 if s:ts_lsp
+  aug PeterLSPInit
+  au!
+  au FileType typescript call <SID>InitLSPBuffer()
+  aug end
+
   exe printf('source %s/vim_lsp_config.lua', s:dotfiles_root)
 endif
 
