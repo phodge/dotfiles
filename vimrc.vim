@@ -10,6 +10,8 @@ if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
 
+let s:ts_lsp = has('nvim') && strlen($NVIM_TS_LSP)
+
 " sensible defaults to start with
 if &compatible
   setglobal nocompatible
@@ -154,6 +156,17 @@ if filereadable(s:plugpath)
     " see https://github.com/glacambre/firenvim for instructions on how to
     " configure
     call <SID>VendoredPlug('glacambre/firenvim')
+  endif
+
+  if s:ts_lsp
+    call <SID>VendoredPlug('neovim/nvim-lspconfig')
+    call <SID>VendoredPlug('jose-elias-alvarez/null-ls.nvim')
+
+    " provides :TSLspImportCurrent, TSLspRenameFile, TSLspOrganize
+    call <SID>VendoredPlug('jose-elias-alvarez/nvim-lsp-ts-utils')
+
+    " XXX: plenary.nvim is required for the nvim-lsp-ts-utils plugin
+    call <SID>VendoredPlug('nvim-lua/plenary.nvim')
   endif
 
   " why not
@@ -697,6 +710,9 @@ if filereadable(s:plugpath)
   call plug#end() " }}}
 endif
 
+if s:ts_lsp
+  exe printf('source %s/vim_lsp_config.lua', s:dotfiles_root)
+endif
 
 " vim/tmux navigator keybindings {{{
 
