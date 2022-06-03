@@ -22,6 +22,7 @@ let s:dotfiles_root = expand('<sfile>:p:h')
 set confirm
 
 " when to use LSP and YCM
+" TODO: probably get rid of these in favour of s:ts_lsp above
 let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
 let s:use_ycm = has('nvim') && get(g:, 'peter_use_ycm', 0) && !s:use_lsp
 
@@ -211,6 +212,8 @@ if filereadable(s:plugpath)
 
       if ! s:use_ycm
         " when neither LSP or YCM is enabled, ALE will perform these things:
+        " NOTE: this is a global mapping, so might still be overwritten by a
+        " buffer-local mapping when a LS is in use for the current buffer
         nnoremap <space>d :ALEGoToDefinition<CR>
       endif
     endif
@@ -267,6 +270,7 @@ if filereadable(s:plugpath)
 
   " ArgWrap {{{
 
+    " TODO: would be good if we could outsource this to the LS
     call <SID>VendoredPlug('FooSoft/vim-argwrap')
     let g:argwrap_tail_comma = 1
     nnoremap <space>a :ArgWrap<CR>
