@@ -231,3 +231,16 @@ rmempty() {
         rmdir "$d"
     done
 }
+
+pushthis() {
+    ref="$1";
+    shift
+
+    if [ -z "$PUSHTO" ]; then
+        echo -n "Dest branch: "
+        read PUSHTO
+    fi
+
+    echo "$ git push origin '${ref}:refs/heads/$PUSHTO' '$@'"
+    git push origin "${ref}:refs/heads/$PUSHTO" "$@"
+}
