@@ -8,7 +8,13 @@ ZSH_THEME_GIT_PROMPT_BRANCH="%{$fg_bold[green]%}"
 ZSH_THEME_GIT_PROMPT_MASTER="%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg[green]%}%{●%G%}"
 ZSH_THEME_GIT_PROMPT_CONFLICTS="%{$fg[red]%}%{≠%G%}"
-ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}%{⚡%G%}"
+# XXX: the "⚡" doesn't work on my new M1 mac because it's 2-characters wide,
+# the "✎" doesn't work because it's *visually* wider than 1-character so covers
+# the digits that follow. And if I don't have exactly one character here, then
+# the prompt display gets stuffed around.
+#
+#   ZSH_THEME_GIT_CHANGED_SYMBOL="⚡"
+ZSH_THEME_GIT_PROMPT_CHANGED="%{$fg[red]%}%{${ZSH_THEME_GIT_CHANGED_SYMBOL}%G%}"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[red]↓%G%}"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[green]↑%G%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[yellow]…%G%}"

@@ -51,6 +51,21 @@ def bash_install():
 
 @section(quick=True)
 def shellrc():
+    # this is to prevent a problem where the U+26A1 lightning character would
+    # take up 2 characters of display width in Alacritty>zsh on my MSFT M1 mac,
+    # screwing up the LHS prompt when it was visible.
+    lightning_ok = yesno(
+        'alacritty_unicode_lightning_width_issues',
+        'OK to use "⚡" in zsh prompt?',
+        recommended=True,
+    )
+    symbol = '⚡' if lightning_ok else 'e'
+    lineinfile(
+            '~/.shellrc',
+            f'ZSH_THEME_GIT_CHANGED_SYMBOL="{symbol}"',
+            where=WHERE_TOP,
+    )
+
     lineinfile('~/.shellrc',
                'source {}/init.sh'.format(HERE),
                where=WHERE_END)
