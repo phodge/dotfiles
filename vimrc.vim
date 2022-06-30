@@ -1595,4 +1595,7 @@ au! BufReadPost TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
 aug end
 
 
+com! -nargs=0 NChanged Shell git diff origin/master... --name-status --no-renames; git status --short
+
+
 let s:vim_entered = 1
