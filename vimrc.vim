@@ -786,7 +786,7 @@ endfun
 if s:ts_lsp
   aug PeterLSPInit
   au!
-  au FileType typescript call <SID>InitLSPBuffer()
+  au FileType typescript,typescriptreact,javascript call <SID>InitLSPBuffer()
   aug end
 
   exe printf('source %s/vim_lsp_config.lua', s:dotfiles_root)
