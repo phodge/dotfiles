@@ -112,6 +112,7 @@ if has('nvim') && g:peter_want_treesitter " {{{ tree-sitter
   aug PeterTSInit
   aug end
   au! FileType typescript call <SID>InitTreesitterTypescript()
+  au! FileType typescriptreact call <SID>InitTreesitterTypescript()
   " use e.g. "TSInstall typescript" to install a specific parser
   lua <<EOF
     require'nvim-treesitter.configs'.setup {
