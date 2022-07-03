@@ -95,6 +95,12 @@ want_mercurial = yesno(
     False,
 )
 
+want_poetry = yesno(
+    'want_python_poetry',
+    'Install poetry in $HOME?',
+    False,
+)
+
 
 pipx_install_fn = None
 
@@ -997,6 +1003,14 @@ def pull_submodules(filter_path):
     for path in paths:
         cmd = ['git', 'submodule', 'update', '--recursive', '--', path]
         execute(cmd, cwd=HERE)
+
+
+@section(enabled=want_poetry)
+def poetry_install():
+    execute(
+        ['sh', '-c', 'curl -sSL https://install.python-poetry.org | python3 -'],
+        stdout="TTY",
+    )
 
 
 # TODO: https://github.com/clvv/fasd
