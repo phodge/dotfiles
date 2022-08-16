@@ -75,7 +75,7 @@ fun! <SID>PyVersionChanged()
 
   " toggle python2/3 syntax compatibility
   let b:python_py2_compat = 0
-  let b:python_py3_compat = l
+  let b:python_py3_compat = 1
   syn clear
   set syntax=python
 
