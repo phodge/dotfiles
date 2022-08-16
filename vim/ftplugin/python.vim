@@ -6,18 +6,10 @@ if g:peter_want_treesitter_python
   setlocal foldexpr=nvim_treesitter#foldexpr()
 endif
 
-" tell multipython where to find out python2/python3 binaries
-call multipython#setpy3paths(get(g:, 'my_py3_paths', []))
-call multipython#setpy2paths(get(g:, 'my_py2_paths', []))
-
 " these two options are now set using the SetLineLength() function below
 "setlocal textwidth=79 " just for comments
 "setlocal colorcolumn=+2
 
-nnoremap <buffer> \2 :call multipython#togglepy2()<CR>
-nnoremap <buffer> \3 :call multipython#togglepy3()<CR>
-nnoremap <buffer> <space>2 :call multipython#printversions()<CR>
-nnoremap <buffer> <space>3 :call multipython#printversions()<CR>
 nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
 
 command! -bang -nargs=+ -bar -buffer Flake8Ignore call <SID>Ignore('<bang>' == '!', <f-args>)
@@ -63,37 +55,13 @@ if !exists('b:isort_flags')
 endif
 
 fun! <SID>PyVersionChanged()
-  let l:want2 = multipython#wantpy2()
-  let l:want3 = multipython#wantpy3()
-
-  let l:flakes = []
-
-  " grab whichever version of yapf is available
-  if l:want3
-    call add(l:flakes, 3)
-  endif
-
-  if l:want2
-    call add(l:flakes, 2)
-  endif
-
-  " tell Ale to use our multiflake8 for the current buffer
-  if ! exists('b:ale_linters')
-    let b:ale_linters = ['flake8', 'mypy']
-  endif
-
-  let b:ale_python_flake8_executable = 'multiflake8'
-  " tell ALE that we always want to use the 'multiflake8' executable - even
-  " inside virtualenvs
-  let b:ale_python_flake8_use_global = 1
-
   " desired line length?
   let l:maxlen = &l:textwidth
   if l:maxlen <= 0
     let l:maxlen = 99999
   endif
 
-  " work out the arguments needed for multiflake8
+  " work out the arguments needed for flake8
   let l:args = ['--filename=*', '--max-line-length='.l:maxlen]
 
   " let flake8 know what the name of the file from stdin is so that it can
@@ -104,18 +72,12 @@ fun! <SID>PyVersionChanged()
   let l:ignore = get(b:, 'flake8_ignore', []) + s:flake8_default_ignore
   call add(l:args, '--extend-ignore='.join(l:ignore, ','))
 
-  for l:major in l:flakes
-    " Tell multiflake8 exactly where to find the flake8 for this python version.
-    let l:flake = multipython#getpythoncmd(l:major, 'flake8', 1, 1)
-    call add(l:args, '--use-this-checker='.l:flake)
-  endfor
-
   " put the finalised args where ale will find them
   let b:ale_python_flake8_options = join(map(l:args, 'shellescape(v:val)'), ' ')
 
   " toggle python2/3 syntax compatibility
-  let b:python_py2_compat = l:want2 ? 1 : 0
-  let b:python_py3_compat = l:want3 ? 1 : 0
+  let b:python_py2_compat = 0
+  let b:python_py3_compat = l
   syn clear
   set syntax=python
 
@@ -127,7 +89,7 @@ endfun
 
 fun! <SID>FormatFile()
   let l:oldpos = getpos('.')
-  let l:prog = multipython#getpythoncmd(0, 'yapf', 1, 0)
+  let l:prog = 'yapf'
   try
     exe printf("1,$!%s --style=/Users/phodge7/.style.yapf", l:prog)
   finally
@@ -150,8 +112,7 @@ fun! <SID>DoSort(line1, line2)
     return
   endif
 
-  " ask multipython where to find isort for the current python version
-  let l:isort = multipython#getpythoncmd(0, 'isort', 1, 1)
+  let l:isort = 'isort'
 
   " do we have any options CLI options for isort?
   let l:options = get(b:, 'isort_flags', {})
@@ -311,22 +272,6 @@ endfunction
 
 " set the line length automatically for the current buffer
 call <SID>SetLineLength(<SID>GetInitialLineLength())
-
-" tell multipython to call our callback whenever the python version changes in
-" the current buffer
-call multipython#addcallback(function("<SID>PyVersionChanged"))
-
-" if detect current python versions if it hasn't been done yet
-if ! multipython#versionsdetected()
-  " HOMELY.py scripts always get python3 and nothing else
-  if expand('%:t') == 'HOMELY.py'
-    call multipython#setpy3(1, "HOMELY.py is always py3")
-  elseif ! multipython#detectversions()
-    " if automatic detection doesn't work, fall back to 3.4/2.7 combo
-    call multipython#setpy3(1, "phodge's default", 0)
-    call multipython#setpy2(1, "phodge's default")
-  endif
-endif
 
 " add a TODO exception quickly
 if exists('g:vim_peter')
