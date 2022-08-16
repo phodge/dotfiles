@@ -10,8 +10,6 @@ endif
 "setlocal textwidth=79 " just for comments
 "setlocal colorcolumn=+2
 
-nnoremap <buffer> <space>f :call <SID>FormatFile()<CR>
-
 command! -bang -nargs=+ -bar -buffer Flake8Ignore call <SID>Ignore('<bang>' == '!', <f-args>)
 
 " This is the default flake8 ignore list. See
@@ -84,19 +82,6 @@ fun! <SID>PyVersionChanged()
   " redo ALE errors if necessary
   if exists(':ALELint')
     ALELint
-  endif
-endfun
-
-fun! <SID>FormatFile()
-  let l:oldpos = getpos('.')
-  let l:prog = 'yapf'
-  try
-    exe printf("1,$!%s --style=/Users/phodge7/.style.yapf", l:prog)
-  finally
-    call setpos('.', l:oldpos)
-  endtry
-  if &l:diff
-    diffup
   endif
 endfun
 
