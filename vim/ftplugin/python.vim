@@ -74,6 +74,7 @@ fun! <SID>PyVersionChanged()
   let b:ale_python_flake8_options = join(map(l:args, 'shellescape(v:val)'), ' ')
 
   " toggle python2/3 syntax compatibility
+  " TODO: are these needed for my syntax file?
   let b:python_py2_compat = 0
   let b:python_py3_compat = 1
   syn clear
