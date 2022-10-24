@@ -4,7 +4,7 @@
 [submodule "nvim-treesitter.git"]
 	path = vim-packages/nvim-treesitter.git
 	url = git@github.com:nvim-treesitter/nvim-treesitter.git
-	branch = 0.5-compat
+	branch = master
 [submodule "nvim-treesitter-playground.git"]
 	path = vim-packages/nvim-treesitter-playground.git
 	url = git@github.com:nvim-treesitter/playground.git
