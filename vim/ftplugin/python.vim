@@ -60,6 +60,8 @@ fun! <SID>PyVersionChanged()
   endif
 
   " work out the arguments needed for flake8
+  " TODO: I'm not sure why we have to manually set --filename and
+  " --stdin-display-name in our plugin here
   let l:args = ['--filename=*', '--max-line-length='.l:maxlen]
 
   " let flake8 know what the name of the file from stdin is so that it can
