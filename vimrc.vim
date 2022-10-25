@@ -306,6 +306,9 @@ if filereadable(s:plugpath)
 
   " }}}
 
+  " python requirements.txt syntax highlighting
+  call <SID>VendoredPlug('raimon49/requirements.txt.vim')
+
   " python code formatting via Black
   " XXX: I've had to uninstall this because it doesn't set up the virtualenv
   " correctly for nvim

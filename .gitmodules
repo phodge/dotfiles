@@ -61,3 +61,6 @@
 [submodule "null-ls.nvim.git"]
 	path = vim-packages/null-ls.nvim.git
 	url = https://github.com/jose-elias-alvarez/null-ls.nvim.git
+[submodule "requirements.txt.vim.git"]
+	path = vim-packages/requirements.txt.vim.git
+	url = https://github.com/raimon49/requirements.txt.vim.git
