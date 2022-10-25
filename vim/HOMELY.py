@@ -414,7 +414,7 @@ def vim_plugin_update():
             os.chmod(exec_, 0o755)
 
 
-@section(interval='2w')
+@section(interval=None if allowinteractive() else '2w', quick=False)
 def vim_submodule_update():
     from HOMELY import pull_submodules
 
