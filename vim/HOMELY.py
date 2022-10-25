@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section, symlink,
@@ -418,3 +419,12 @@ def vim_submodule_update():
     from HOMELY import pull_submodules
 
     pull_submodules('vim-packages')
+
+    # now we need to run 'helptags' for each of these submodules
+    commands = []
+    for subdir in (Path(HERE) / 'vim-packages').iterdir():
+        docsdir = subdir / 'doc'
+        if docsdir.is_dir():
+            commands.append(f'+helptags {docsdir}')
+    if commands:
+        execute(['vim'] + commands, stdout="TTY")
