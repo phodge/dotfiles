@@ -4,6 +4,10 @@ if has('nvim')
 endif
 hi NonText ctermfg=White ctermbg=blue cterm=None guifg=#888888 guibg=#1A1A1A
 
+" XXX: this seemed to be necessary for neovim 0.8.0 because EndOfBuffer had no
+" hl information whatsoever
+hi! link EndOfBuffer NonText
+
 hi! SpecialChar	ctermfg=Red cterm=None
 hi! SpecialChar	guifg=#FFBB00
 hi! link Tag SpecialChar
@@ -49,8 +53,10 @@ hi Folded ctermbg=Black ctermfg=Yellow cterm=Bold
 hi Folded guibg=black guifg=yellow gui=Bold
 hi FoldColumn guifg=Yellow guibg=#1A1A1A ctermfg=Yellow ctermbg=Black
 
-hi! StatusLineNC                  ctermbg=Black  cterm=Reverse		            guibg=Black gui=Reverse
-hi! StatusLine    ctermfg=White   ctermbg=Blue   cterm=Reverse,Bold	guifg=White guibg=DarkBlue gui=Reverse,Bold
+hi! StatusLineNC                  ctermbg=Black  cterm=Reverse      guifg=Grey  guibg=Black gui=Reverse
+hi! StatusLine    ctermfg=White   ctermbg=Blue   cterm=Reverse,Bold guifg=White guibg=DarkBlue gui=Reverse,Bold
+" NOTE: added for neovim 0.8.0
+hi VertSplit      ctermfg=Grey    ctermbg=Black                     guifg=Grey  guibg=None
 
 " the sign column should have a black bg
 hi SignColumn   ctermbg=black guibg=black
@@ -58,9 +64,9 @@ hi SignColumn   ctermbg=black guibg=black
 hi! IncSearch     ctermfg=White     ctermbg=Magenta cterm=Bold         guifg=Red   guibg=Yellow gui=Bold
 
 " Diff colors need to be more readable
-hi DiffAdd	guibg=#333377
+hi DiffAdd	  guibg=#333377
 hi DiffChange	guibg=#884488
-hi DiffText	guibg=#440000
+hi DiffText	  guibg=#440000
 hi DiffDelete	guibg=#000022 guifg=#333377
 
 " for the 'colorcolumn' option
