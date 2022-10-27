@@ -384,6 +384,8 @@ fun! <SID>SmartImportUI() " {{{
         \ "check_call": "subprocess",
         \ "check_output": "subprocess",
         \ "Popen": "subprocess",
+        \ "PIPE": "subprocess",
+        \ "DEVNULL": "subprocess",
         \ "namedtuple": "collections",
         \ "OrderedDict": "collections",
         \ "defaultdict": "collections",
@@ -401,13 +403,8 @@ fun! <SID>SmartImportUI() " {{{
         \ "TYPE_CHECKING": "typing",
         \ "Type": "typing",
         \ "Union": "typing",
-        \ "Literal": "typing_extensions",
-        \ "or_": "sqlalchemy",
-        \ "in_": "sqlalchemy",
-        \ "notin_": "sqlalchemy",
         \ "Boolean": "sqlalchemy",
         \ "Column": "sqlalchemy",
-        \ "Enum": "sqlalchemy",
         \ "ForeignKey": "sqlalchemy",
         \ "Integer": "sqlalchemy",
         \ "String": "sqlalchemy",
@@ -419,27 +416,38 @@ fun! <SID>SmartImportUI() " {{{
         \ "desc": "sqlalchemy",
         \ "func": "sqlalchemy.sql",
         \ "declarative_base": "sqlalchemy.ext.declarative",
+        \ "TemporaryDirectory": "tempfile",
+        \ "Path": "pathlib",
+        \ "dedent": "textwrap",
+        \ "dataclass": "dataclasses",
         \ }
 
   " these words instantly trigger adding an import for a top-level module
   let l:always_modules = split(
         \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
-        \ .' contextlib tempfile neovim dataclasses typing decimal'
+        \ .' contextlib tempfile neovim dataclasses typing decimal abc'
         \ )
 
   " these names are suggested when the identifiers are encountered
   let l:typical = {
-        \ "Path": "pathlib",
         \ "b64encode": "base64",
         \ "b64decode": "base64",
         \ "Href": "werkzeug",
         \ "datetime": "datetime",
         \ "date": "datetime",
         \ "time": "time",
-        \ "TemporaryDirectory": "tempfile",
         \ "Gitlab": "gitlab",
         \ "run": "subprocess",
+        \ "dirname": "os.path",
+        \ "realpath": "os.path",
+        \ "exists": "os.path",
+        \ "or_": "sqlalchemy",
+        \ "in_": "sqlalchemy",
+        \ "notin_": "sqlalchemy",
+        \ "Enum": "sqlalchemy",
+        \ "Literal": "typing",
+        \ "chain": "itertools",
         \ }
 
   let l:module = get(l:vocabulary, l:word, "")
