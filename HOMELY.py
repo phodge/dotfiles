@@ -988,7 +988,7 @@ def pull_submodules(filter_path):
         for line in stdout.decode('utf-8').splitlines()
     ]
     for path in paths:
-        cmd = ['git', 'submodule', 'update', '--remote', '--recursive', '--', path]
+        cmd = ['git', 'submodule', 'update', '--init', '--remote', '--recursive', '--', path]
         execute(cmd, cwd=HERE)
 
     # check whether submodules are changed
