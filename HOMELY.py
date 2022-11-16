@@ -991,18 +991,18 @@ def pull_submodules(filter_path):
         cmd = ['git', 'submodule', 'update', '--init', '--remote', '--recursive', '--', path]
         execute(cmd, cwd=HERE)
 
-    # check whether submodules are changed
-    _, stdout, _ = execute(['git', 'status', '--short', filter_path], cwd=HERE, stdout=True)
-    if stdout.strip():
-        execute(['git', 'add', filter_path], cwd=HERE)
-        execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
-
     # then we need to follow up with a 'git submodule update --recursive' in
     # case the submodules have their own submodules that we accidentally
     # fast-forwarded
     for path in paths:
         cmd = ['git', 'submodule', 'update', '--recursive', '--', path]
         execute(cmd, cwd=HERE)
+
+    # check whether submodules are changed
+    _, stdout, _ = execute(['git', 'status', '--short', filter_path], cwd=HERE, stdout=True)
+    if stdout.strip():
+        execute(['git', 'add', filter_path], cwd=HERE)
+        execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
 
 
 @section(enabled=want_poetry)
