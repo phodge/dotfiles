@@ -582,10 +582,13 @@ if filereadable(s:plugpath)
   " :HelpfulVersion PATTERN for version info about features matching PATTERN
   Plug 'tweekmonster/helpful.vim'
 
-  " show vertical lines to indicate indent level
-  call <SID>VendoredPlug('Yggdroot/indentLine')
-  " stop making JSON quotes disappear
-  let g:indentLine_fileTypeExclude = ['help', 'json', 'markdown']
+  if has('conceal') && !g:want_fast
+    " show vertical lines to indicate indent level
+    call <SID>VendoredPlug('Yggdroot/indentLine')
+
+    " stop making JSON quotes disappear
+    let g:indentLine_fileTypeExclude = ['help', 'json', 'markdown']
+  endif
 
   " TODO: also try 'nathanaelkane/vim-indent-guides'
 
