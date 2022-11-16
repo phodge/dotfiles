@@ -334,6 +334,10 @@ if filereadable(s:plugpath)
     Plug 'MarcWeber/vim-addon-mw-utils'
     Plug 'tomtom/tlib_vim'
     Plug 'garbas/vim-snipmate'
+
+    " required to get rid of the SnipMate-deprecate warning on startup
+    " (See :help SnipMate-deprecate)
+    let g:snipMate = { 'snippet_version': 1 }
   endif
   Plug 'sjl/Clam.vim'
   Plug 'tmux-plugins/vim-tmux'
