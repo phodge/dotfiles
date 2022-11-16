@@ -583,7 +583,7 @@ if filereadable(s:plugpath)
   Plug 'tweekmonster/helpful.vim'
 
   " show vertical lines to indicate indent level
-  Plug 'Yggdroot/indentLine', g:want_fast ? {'on': []} : {}
+  call <SID>VendoredPlug('Yggdroot/indentLine')
   " stop making JSON quotes disappear
   let g:indentLine_fileTypeExclude = ['help', 'json', 'markdown']
 
