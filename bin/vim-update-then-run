@@ -5,9 +5,13 @@ rm -f ~/bin/vim
 rm -f ~/bin/nvim
 
 # NOTE: use vim and nvim to run the real vim/neovim, not an alias
-vim '+normal IUpdate mode! Check updates have been successful, then exit.' '+au VimEnter * PlugClean' '+au VimEnter * PlugUpdate'
+vim '+normal IUpdate mode! Check updates have been successful, then exit.' \
+    '+au VimEnter * PlugClean' \
+    '+au VimEnter * PlugUpdate'
 if which nvim &>/dev/null; then
-    nvim '+normal IUpdate mode! Check updates have been successful, then exit.' '+au VimEnter * PlugClean' '+au VimEnter * PlugUpdate'
+    nvim '+normal IUpdate mode! Check updates have been successful, then exit.' \
+        '+au VimEnter * PlugClean' \
+        '+au VimEnter * PlugUpdate'
 fi
 command=$1
 shift
