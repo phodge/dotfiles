@@ -421,7 +421,7 @@ def vim_plugin_update():
     _install_vim_selfupdater()
 
 
-@section(interval=None if allowinteractive() else '2w', quick=False)
+@section(interval='2w')
 def vim_submodule_update():
     from HOMELY import pull_submodules
 
