@@ -7,10 +7,12 @@ rm -f ~/bin/nvim
 # NOTE: use vim and nvim to run the real vim/neovim, not an alias
 if [ -e ~/.vim-self-update-plugins ]; then
     vim '+normal IUpdate mode! Check updates have been successful, then exit.' \
+        '+setlocal buftype=nofile' \
         '+au VimEnter * PlugClean' \
         '+au VimEnter * PlugUpdate'
     if which nvim &>/dev/null; then
-        nvim '+normal IUpdate mode! Check updates have been successful, then exit.' \
+        vim '+normal IUpdate mode! Check updates have been successful, then exit.' \
+            '+setlocal buftype=nofile' \
             '+au VimEnter * PlugClean' \
             '+au VimEnter * PlugUpdate'
     fi
