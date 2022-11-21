@@ -4,6 +4,11 @@
 rm -f ~/bin/vim
 rm -f ~/bin/nvim
 
+if [ -e ~/.vim-self-update-docs ]; then
+    ~/.vim-self-update-docs
+    rm -f ~/.vim-self-update-docs
+fi
+
 # NOTE: use vim and nvim to run the real vim/neovim, not an alias
 if [ -e ~/.vim-self-update-plugins ]; then
     vim '+normal IUpdate mode! Check updates have been successful, then exit.' \

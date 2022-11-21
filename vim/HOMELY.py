@@ -1,4 +1,5 @@
 import os
+import shlex
 from pathlib import Path
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
@@ -427,11 +428,31 @@ def vim_submodule_update():
 
     pull_submodules('vim-packages')
 
-    # now we need to run 'helptags' for each of these submodules
-    commands = []
+    # because vim has a limit to how many CLI args it can accept, we need to
+    # process these 'helptags ...' commands in blocks of 3
+    helptags_groups: List[List[str]] = []
+    group = []
     for subdir in (Path(HERE) / 'vim-packages').iterdir():
         docsdir = subdir / 'doc'
         if docsdir.is_dir():
-            commands.append(f'+helptags {docsdir}')
-    if commands:
-        execute(['vim'] + commands, stdout="TTY")
+            group.append(f'+helptags {docsdir}')
+        if len(group) >= 3:
+            helptags_groups.append(group)
+            group = []
+    if group:
+        helptags_groups.append(group)
+
+    docs_script = Path(os.path.expanduser('~/.vim-self-update-docs'))
+
+    if helptags_groups:
+        with docs_script.open('w') as f:
+            f.write("#!/usr/bin/env bash\n")
+            for group in helptags_groups:
+                command = ['vim'] + group + ['+qa']
+                f.write(' \\\n  '.join(map(shlex.quote, command)))
+                f.write("\n")
+        docs_script.chmod(0o755)
+
+        _install_vim_selfupdater()
+    else:
+        docs_script.unlink(missing_ok=True)
