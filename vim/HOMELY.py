@@ -396,22 +396,29 @@ def nvim_ls_ts():
     symlink('nvim_ts/node_modules/.bin/eslint_d', '~/bin/eslint_d')
 
 
+def _install_vim_selfupdater() -> None:
+    template = '#!/usr/bin/env bash\nvim-update-then-run {} "$@"\n'
+    for what in ('vim', 'nvim'):
+        exec_ = HOME + '/bin/' + what
+        with writefile(exec_) as f:
+            f.write(template.format(what))
+        os.chmod(exec_, 0o755)
+
+
 @section(interval='2w')
 def vim_plugin_update():
+    triggerfile = Path(os.path.expanduser('~/.vim-self-update-plugins'))
     if allowinteractive():
         execute(['vim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
         if HOMELY.wantnvim():
             execute(['nvim', '+PlugClean', '+PlugUpdate'], stdout="TTY")
+        # remove trigger file so wrappers don't try to run plugin updates
+        triggerfile.unlink(missing_ok=True)
         return
 
-    # install the self-updating plugins now
-    if True:
-        template = '#!/usr/bin/env bash\nvim-update-then-run {} "$@"\n'
-        for what in ('vim', 'nvim'):
-            exec_ = HOME + '/bin/' + what
-            with writefile(exec_) as f:
-                f.write(template.format(what))
-            os.chmod(exec_, 0o755)
+    # install the self-update wrappers now
+    triggerfile.touch()
+    _install_vim_selfupdater()
 
 
 @section(interval=None if allowinteractive() else '2w', quick=False)
