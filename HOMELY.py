@@ -628,9 +628,6 @@ def mypips(venv_pip=None, write_dev_reqs=False):
     if venv_pip:
         venv_exec(venv_pip, ['pip', 'install', 'flake8'])
     else:
-        # always install simplejson globally as we need it for other parts of our homely install
-        mypipinstall('simplejson', trypips=trypips)
-
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
             mypipinstall('flake8', ['pip3'])

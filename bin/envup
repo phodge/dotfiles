@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import os.path
 import sys
 from pathlib import Path
@@ -6,7 +7,6 @@ from subprocess import run
 
 import click
 import libtmux
-import simplejson
 
 CONFIG_DIR = Path(os.path.expanduser('~/.envup'))
 END_ZONE_START = 20
@@ -89,7 +89,7 @@ def main(name):
             "envup config {!r} doesn't exist".format(name))
 
     with TARGET_FILE.open('r') as f:
-        data = simplejson.load(f)
+        data = json.load(f)
 
     default_cwd = data['default_cwd']
 

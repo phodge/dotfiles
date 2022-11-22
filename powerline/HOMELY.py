@@ -1,3 +1,4 @@
+import json
 import os
 
 from homely.general import WHERE_END, blockinfile, mkdir, section, writefile
@@ -51,8 +52,7 @@ def powerline():
         if yesno(None, 'Select base colours now?', True, noprompt=False):
             # load available colours from colors.json
             with open("%s/config_files/colors.json" % powerline_path()) as f:
-                import simplejson
-                colors = simplejson.load(f)
+                colors = json.load(f)
             with open(colourfile, 'w') as f:
                 f.write("# Set the 3 variables using colour names from below.\n")
                 f.write("# WARNING! If you misspell a colour your powerline may not work!\n")
@@ -95,8 +95,7 @@ def powerline():
     mkdir('~/.config/powerline')
     mkdir('~/.config/powerline/colorschemes')
     mkdir('~/.config/powerline/colorschemes/tmux')
-    import simplejson
-    dumped = simplejson.dumps(data)
+    dumped = json.dumps(data)
     with writefile('~/.config/powerline/colorschemes/tmux/default.json') as f:
         f.write(dumped)
 
@@ -147,8 +146,7 @@ def powerline_theme():
     if want_unicode_fix():
         config["segment_data"] = {"time": {"before": ""}}
 
-    import simplejson
-    dumped = simplejson.dumps(config)
+    dumped = json.dumps(config)
     mkdir('~/.config')
     mkdir('~/.config/powerline')
     mkdir('~/.config/powerline/themes')

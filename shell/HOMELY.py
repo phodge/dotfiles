@@ -1,8 +1,8 @@
+import json
 import os
 import os.path
 import re
 
-import simplejson
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section)
 from homely.install import InstallFromSource
@@ -78,9 +78,9 @@ def shell_path():
     lines = []
 
     def _findpybin(pycmd):
-        code = 'import sys, simplejson; print(simplejson.dumps(sys.path))'
+        code = 'import sys, json; print(json.dumps(sys.path))'
         raw = execute([pycmd, '-c', code], stdout=True)[1].decode('utf-8')
-        paths = simplejson.loads(raw)
+        paths = json.loads(raw)
         for path in paths:
             if not path.startswith(os.environ['HOME']):
                 continue

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
+import json
 import os
-import simplejson
-
 
 CFG = os.environ['HOME'] + '/.karabiner.d/configuration/karabiner.json'
 
 
 def main():
     with open(CFG) as f:
-        data = simplejson.loads(f.read())
+        data = json.loads(f.read())
 
     # modify the first profile
     profileid = 0
@@ -30,7 +29,7 @@ def main():
         mods['right_option'] = 'right_command'
 
     data["profiles"][profileid]['simple_modifications'] = mods
-    jsondata = simplejson.dumps(data)
+    jsondata = json.dumps(data)
     with open(CFG, 'w') as f:
         f.write(jsondata)
 
