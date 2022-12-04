@@ -1002,12 +1002,15 @@ def pull_submodules(filter_path):
         execute(['git', 'commit', '-m', 'Automated update of submodules under {}'.format(filter_path)], cwd=HERE)
 
 
-@section(enabled=want_poetry)
+@section(enabled=want_poetry, interval='4w')
 def poetry_install():
-    execute(
-        ['sh', '-c', 'curl -sSL https://install.python-poetry.org | python3 -'],
-        stdout="TTY",
-    )
+    if haveexecutable('poetry'):
+        execute(['poetry', 'self', 'update'], stdout="TTY")
+    else:
+        execute(
+            ['sh', '-c', 'curl -sSL https://install.python-poetry.org | python3 -'],
+            stdout="TTY",
+        )
 
 
 # TODO: https://github.com/clvv/fasd
