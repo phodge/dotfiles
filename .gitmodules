@@ -3,11 +3,11 @@
 	url = git@github.com:phodge/winwin.git
 [submodule "nvim-treesitter.git"]
 	path = vim-packages/nvim-treesitter.git
-	url = git@github.com:nvim-treesitter/nvim-treesitter.git
+	url = https://github.com/nvim-treesitter/nvim-treesitter.git
 	branch = master
 [submodule "nvim-treesitter-playground.git"]
 	path = vim-packages/nvim-treesitter-playground.git
-	url = git@github.com:nvim-treesitter/playground.git
+	url = https://github.com/nvim-treesitter/playground.git
 [submodule "nvimdev.nvim.git"]
 	path = vim-packages/nvimdev.nvim.git
 	url = https://github.com/neovim/nvimdev.nvim.git
