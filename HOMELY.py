@@ -963,15 +963,16 @@ def install_alacritty():
         # the shortcut at OS level
         #
         # See https://github.com/alacritty/alacritty/issues/5923
-        execute([
-            'defaults',
-            'write',
-            'io.alacritty',
-            'NSUserKeyEquivalents',
-            '-dict-add',
-            'Hide alacritty',
-            '@^~$h',
-        ])
+        for scope in ['io.alacritty', 'org.alacritty']:
+            execute([
+                'defaults',
+                'write',
+                scope,
+                'NSUserKeyEquivalents',
+                '-dict-add',
+                'Hide alacritty',
+                '@^~$h',
+            ])
 
 
 def pull_submodules(filter_path):
