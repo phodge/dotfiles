@@ -50,28 +50,10 @@ def powerline():
     )
     if not os.path.exists(colourfile):
         if yesno(None, 'Select base colours now?', True, noprompt=False):
-            # load available colours from colors.json
-            with open("%s/config_files/colors.json" % powerline_path()) as f:
-                colors = json.load(f)
-            with open(colourfile, 'w') as f:
-                f.write("# Set the 3 variables using colour names from below.\n")
-                f.write("# WARNING! If you misspell a colour your powerline may not work!\n")
-                f.write("#\n")
-                f.write("# primary background colour\n")
-                f.write("bg=%(bg)s\n" % defaults)
-                f.write("# foreground colour for highlighted tab\n")
-                f.write("fg1=%(fg1)s\n" % defaults)
-                f.write("# foreground colour for other tabs\n")
-                f.write("fg2=%(fg2)s\n" % defaults)
-                f.write("# possible colours:\n")
-                for name in sorted(colors.get("colors", {})):
-                    f.write("#   %s\n" % name)
-            execute(['vim', colourfile], stdout="TTY")
+            execute([HERE + '/bin/mydots-select-colours'], stdout="TTY")
             load = True
     else:
         load = True
-        if yesno(None, 'Select base colours now?', False, noprompt=False):
-            execute(['vim', colourfile], stdout="TTY")
 
     colourset = defaults
     if load:
