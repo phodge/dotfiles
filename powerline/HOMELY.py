@@ -60,8 +60,6 @@ def powerline():
         with open(colourfile, 'r') as f:
             for line in [l.rstrip() for l in f]:  # noqa: E741
                 if len(line) and not line.startswith('#'):
-                    import pprint
-                    print('line = ' + pprint.pformat(line))  # noqa TODO
                     name, val = line.split('=')
                     colourset[name] = val
     data = {}
