@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+
+def main():
+    print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
+    # TODO: what package?
+    print("  - Make sure your project's package.json includes TypeScript")
+    print("  - Launch sure you launch neovim with the 'n2' shell alias")
+
+
+if __name__ == "__main__":
+    main()
