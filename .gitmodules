@@ -68,3 +68,6 @@
 	path = vim-packages/indentLine.git
 	url = https://github.com/Yggdroot/indentLine.git
     ignore = untracked
+[submodule "copilot.vim.git"]
+	path = vim-packages/copilot.vim.git
+	url = https://github.com/github/copilot.vim.git
