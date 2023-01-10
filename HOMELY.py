@@ -200,6 +200,11 @@ def want_unicode_fix():
     return yesno('want_unicode_fix', q)
 
 
+@section(quick=True)
+def run_mydots_configure():
+    execute(['mydots-configure', '--automatic'])
+
+
 @section(enabled=allow_installing_stuff)
 def install_winwin_shortcuts():
     if not IS_OSX:
