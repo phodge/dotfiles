@@ -1,3 +1,7 @@
+if filereadable(expand('~/.vim/settings.vim'))
+  source ~/.vim/settings.vim
+endif
+
 if ! exists('g:vim_peter')
   let g:vim_peter = 1
 endif
@@ -102,6 +106,10 @@ fun! <SID>VendoredPlug(path)
   endif
 endfun
 
+
+if has('nvim') && g:want_copilot
+  call <SID>VendoredPlug('github/copilot.vim')
+endif
 
 
 if has('nvim') && g:peter_want_treesitter " {{{ tree-sitter

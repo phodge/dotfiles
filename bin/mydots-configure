@@ -1,12 +1,149 @@
 #!/usr/bin/env python3
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+from subprocess import run
+from typing import Dict
+
+SETTINGS_PATH = Path("~/.vim/settings.vim").expanduser()
+STATE_PATH = Path("~/.vim/settings.state.json").expanduser()
+
+VIM_GLOBAL_RE = re.compile(r"^\s*let\s+g:(\w+)\s*=\s*(\d+)$")
 
 
-def main():
-    print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
-    # TODO: what package?
-    print("  - Make sure your project's package.json includes TypeScript")
-    print("  - Launch sure you launch neovim with the 'n2' shell alias")
+def read_settings() -> Dict[str, int]:
+    """
+    Function to read existing config file ~/.vim/config
+    and return the vim global variables from that file as a dictionary of
+    name:value pairs.
+    """
+    if not SETTINGS_PATH.exists():
+        return {}
+
+    settings: Dict[str, int] = {}
+
+    with SETTINGS_PATH.open('r') as f:
+        for idx, line in enumerate(f.readlines()):
+            line = line.strip()
+            if line.startswith('"'):
+                continue
+
+            m = VIM_GLOBAL_RE.match(line)
+            if not m:
+                err(f"settings.vim:{idx+1}: Invalid line: {line}")
+                continue
+            settings[m.group(1)] = int(m.group(2))
+
+    return settings
+
+
+def write_settings(settings: Dict[str, int]) -> None:
+    """
+    Write the settings to the settings.vim file.
+    """
+    with SETTINGS_PATH.open('w') as f:
+        for name, value in settings.items():
+            f.write(f"let g:{name} = {int(value)}\n")
+
+
+def read_state() -> Dict[str, int]:
+    if not STATE_PATH.exists():
+        return {}
+
+    state: Dict[str, int] = {}
+
+    with STATE_PATH.open('r') as f:
+        data = json.load(f)
+        for name, value in data.items():
+            if not isinstance(value, int):
+                err(f"{STATE_PATH.name}: Non-integer value for {name!r}")
+                continue
+            state[name] = value
+
+    return state
+
+
+def update_state(currentstate: Dict[str, int], name: str, value: int) -> None:
+    currentstate[name] = value
+    with STATE_PATH.open('w') as f:
+        json.dump(currentstate, f, indent=2)
+
+
+def yesno(prompt: str, *, default: bool, automatic: bool) -> bool:
+    if automatic:
+        return default
+    y = 'Y' if default else 'y'
+    n = 'n' if default else 'N'
+
+    while True:
+        sys.stderr.write(prompt)
+        sys.stderr.write(f' [{y}/{n}]: ')
+        sys.stderr.flush()
+        answer = sys.stdin.readline().strip().lower()
+        if answer == '':
+            return default
+        if answer in ('Y', 'y', 'yes', '1'):
+            return True
+        if answer in ('N', 'n', 'no', '0'):
+            return False
+        sys.stderr.write("ERROR: Please answer with 'y' or 'n'\n")
+
+
+# TODO: it would be nice to only ask about this when I have specified Y to using neovim during
+# Homely installation
+def setup_copilot(
+    *,
+    state: Dict[str, int],
+    settings: Dict[str, int],
+    automatic: bool,
+) -> None:
+    settings['want_copilot'] = yesno(
+        'Use GitHub Copilot in Neovim?',
+        default=bool(settings.get('want_copilot', 0)),
+        automatic=automatic,
+    )
+
+    write_settings(settings)
+
+    # prompt to run ':Copilot setup' if this hasn't been done yet
+    if settings['want_copilot'] \
+            and not automatic \
+            and not state.get('copilot_installed', 0):
+        if yesno(
+            'Run :Copilot setup now?',
+            default=True,
+            automatic=False,
+        ):
+            cmd = [
+                'nvim',
+                '+Copilot setup',
+                #'+qall',
+            ]
+            run(cmd, check=True)
+            update_state(state, 'copilot_installed', 1)
+
+
+def main(automatic: bool) -> None:
+    settings = read_settings()
+    state = read_state()
+
+    setup_copilot(settings=settings, state=state, automatic=automatic)
+
+    if not automatic:
+        print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
+        # TODO: what packages?
+        print("  - Make sure your project's package.json includes TypeScript")
+        print("  - Launch neovim with the 'n2' shell alias")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--automatic',
+        action='store_true',
+        help="Fill out any config settings that are missing",
+    )
+    args = parser.parse_args()
+    main(automatic=args.automatic)
