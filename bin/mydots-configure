@@ -134,7 +134,9 @@ def main(automatic: bool) -> None:
     if not automatic:
         print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
         # TODO: what packages?
-        print("  - Make sure your project's package.json includes TypeScript")
+        print("  - Make sure your project's package.json includes TypeScript for type checking")
+        print("  - Make sure your project's package.json includes an .eslintrc file")
+        print("  - Make sure your project's package.json includes prettier for code formatting")
         print("  - Launch neovim with the 'n2' shell alias")
 
 
