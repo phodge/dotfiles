@@ -7,73 +7,75 @@ from pathlib import Path
 from subprocess import run
 from typing import Dict
 
-SETTINGS_PATH = Path("~/.vim/settings.vim").expanduser()
-STATE_PATH = Path("~/.vim/settings.state.json").expanduser()
+SETTINGS_PATH_VIM = Path("~/.vim/settings.vim").expanduser()
+STATE_PATH = Path("~/.config/mydots.json").expanduser()
 
 VIM_GLOBAL_RE = re.compile(r"^\s*let\s+g:(\w+)\s*=\s*(\d+)$")
 
 
-def read_settings() -> Dict[str, int]:
-    """
-    Function to read existing config file ~/.vim/config
-    and return the vim global variables from that file as a dictionary of
-    name:value pairs.
-    """
-    if not SETTINGS_PATH.exists():
-        return {}
-
-    settings: Dict[str, int] = {}
-
-    with SETTINGS_PATH.open('r') as f:
-        for idx, line in enumerate(f.readlines()):
-            line = line.strip()
-            if line.startswith('"'):
-                continue
-
-            m = VIM_GLOBAL_RE.match(line)
-            if not m:
-                err(f"settings.vim:{idx+1}: Invalid line: {line}")
-                continue
-            settings[m.group(1)] = int(m.group(2))
-
-    return settings
+SETTINGS_NAMES = {
+    'want_copilot',
+}
 
 
-def write_settings(settings: Dict[str, int]) -> None:
-    """
-    Write the settings to the settings.vim file.
-    """
-    with SETTINGS_PATH.open('w') as f:
-        for name, value in settings.items():
-            f.write(f"let g:{name} = {int(value)}\n")
+class State:
+    def __init__(self) -> None:
+        self._state = self._read_state()
 
+    def asdict(self) -> Dict[str, int]:
+        return self._state
 
-def read_state() -> Dict[str, int]:
-    if not STATE_PATH.exists():
-        return {}
+    def get_setting(self, name: str, default: int) -> int:
+        assert name in SETTINGS_NAMES
+        return self._state.get(name, default)
 
-    state: Dict[str, int] = {}
+    def update_setting(self, name: str, value: int) -> None:
+        assert name in SETTINGS_NAMES
+        self._state[name] = value
+        self._write_state()
+        self._write_settings_vim()
 
-    with STATE_PATH.open('r') as f:
-        data = json.load(f)
-        for name, value in data.items():
-            if not isinstance(value, int):
-                err(f"{STATE_PATH.name}: Non-integer value for {name!r}")
-                continue
-            state[name] = value
+    def get_state(self, name: str, default: int) -> int:
+        assert name not in SETTINGS_NAMES
+        return self._state.get(name, default)
 
-    return state
+    def update_state(self, name: str, value: int) -> None:
+        assert name not in SETTINGS_NAMES
+        self._state[name] = value
+        self._write_state()
 
+    def _read_state(self) -> Dict[str, int]:
+        if not STATE_PATH.exists():
+            return {}
 
-def update_state(currentstate: Dict[str, int], name: str, value: int) -> None:
-    currentstate[name] = value
-    with STATE_PATH.open('w') as f:
-        json.dump(currentstate, f, indent=2)
+        state: Dict[str, int] = {}
+
+        with STATE_PATH.open('r') as f:
+            data = json.load(f)
+            for name, value in data.items():
+                if not isinstance(value, int):
+                    err(f"{STATE_PATH.name}: Non-integer value for {name!r}")
+                    continue
+                state[name] = value
+
+        return state
+
+    def _write_state(self) -> None:
+        STATE_PATH.parent.mkdir(exist_ok=True)
+        with STATE_PATH.open('w') as f:
+            json.dump(self._state, f, indent=2, sort_keys=True)
+
+    def _write_settings_vim(self) -> None:
+        with SETTINGS_PATH_VIM.open('w') as f:
+            for name, value in self._state.items():
+                if name in SETTINGS_NAMES:
+                    f.write(f"let g:{name} = {int(value)}\n")
 
 
 def yesno(prompt: str, *, default: bool, automatic: bool) -> bool:
     if automatic:
         return default
+
     y = 'Y' if default else 'y'
     n = 'n' if default else 'N'
 
@@ -95,22 +97,21 @@ def yesno(prompt: str, *, default: bool, automatic: bool) -> bool:
 # Homely installation
 def setup_copilot(
     *,
-    state: Dict[str, int],
-    settings: Dict[str, int],
+    state: State,
     automatic: bool,
 ) -> None:
-    settings['want_copilot'] = yesno(
+    want_copilot = yesno(
         'Use GitHub Copilot in Neovim?',
-        default=bool(settings.get('want_copilot', 0)),
+        default=bool(state.get_setting('want_copilot', 0)),
         automatic=automatic,
     )
 
-    write_settings(settings)
+    state.update_setting('want_copilot', want_copilot)
 
     # prompt to run ':Copilot setup' if this hasn't been done yet
-    if settings['want_copilot'] \
+    if want_copilot \
             and not automatic \
-            and not state.get('copilot_installed', 0):
+            and not state.get_state('copilot_installed', 0):
         if yesno(
             'Run :Copilot setup now?',
             default=True,
@@ -122,14 +123,13 @@ def setup_copilot(
                 #'+qall',
             ]
             run(cmd, check=True)
-            update_state(state, 'copilot_installed', 1)
+            state.update_state('copilot_installed', 1)
 
 
 def main(automatic: bool) -> None:
-    settings = read_settings()
-    state = read_state()
+    state = State()
 
-    setup_copilot(settings=settings, state=state, automatic=automatic)
+    setup_copilot(state=state, automatic=automatic)
 
     if not automatic:
         print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
