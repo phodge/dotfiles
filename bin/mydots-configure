@@ -72,7 +72,7 @@ class State:
                     f.write(f"let g:{name} = {int(value)}\n")
 
 
-def yesno(prompt: str, *, default: bool, automatic: bool) -> bool:
+def yesno(prompt: str, *, default: int, automatic: bool) -> int:
     if automatic:
         return default
 
@@ -87,10 +87,27 @@ def yesno(prompt: str, *, default: bool, automatic: bool) -> bool:
         if answer == '':
             return default
         if answer in ('Y', 'y', 'yes', '1'):
-            return True
+            return 1
         if answer in ('N', 'n', 'no', '0'):
-            return False
+            return 0
         sys.stderr.write("ERROR: Please answer with 'y' or 'n'\n")
+
+
+def yesno_setting(
+    prompt: str,
+    name: str,
+    *,
+    state: State,
+    default: int,
+    automatic: bool,
+) -> int:
+    new_value = yesno(
+        prompt,
+        default=state.get_setting(name, default),
+        automatic=automatic,
+    )
+    state.update_setting(name, int(new_value))
+    return new_value
 
 
 # TODO: it would be nice to only ask about this when I have specified Y to using neovim during
@@ -100,21 +117,21 @@ def setup_copilot(
     state: State,
     automatic: bool,
 ) -> None:
-    want_copilot = yesno(
+    want_copilot = yesno_setting(
         'Use GitHub Copilot in Neovim?',
-        default=bool(state.get_setting('want_copilot', 0)),
+        'want_copilot',
+        default=0,
+        state=state,
         automatic=automatic,
     )
-
-    state.update_setting('want_copilot', want_copilot)
 
     # prompt to run ':Copilot setup' if this hasn't been done yet
     if want_copilot \
             and not automatic \
             and not state.get_state('copilot_installed', 0):
         if yesno(
-            'Run :Copilot setup now?',
-            default=True,
+            'Run ":Copilot setup" now?',
+            default=1,
             automatic=False,
         ):
             cmd = [
