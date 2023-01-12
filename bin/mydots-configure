@@ -126,10 +126,14 @@ def setup_copilot(
             state.update_state('copilot_installed', 1)
 
 
-def main(automatic: bool) -> None:
+def main(automatic: bool, print_json: bool) -> None:
     state = State()
 
-    setup_copilot(state=state, automatic=automatic)
+    setup_copilot(state=state, automatic=automatic or print_json)
+
+    if print_json:
+        json.dump(state.asdict(), sys.stdout, indent=2, sort_keys=True)
+        sys.exit(0)
 
     if not automatic:
         print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
@@ -147,5 +151,10 @@ if __name__ == "__main__":
         action='store_true',
         help="Fill out any config settings that are missing",
     )
+    parser.add_argument(
+        '--print-json',
+        action='store_true',
+        help="Instead of being interactive, just print out the current settings values",
+    )
     args = parser.parse_args()
-    main(automatic=args.automatic)
+    main(automatic=args.automatic, print_json=args.print_json)
