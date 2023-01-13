@@ -1,7 +1,7 @@
 import os
 import shlex
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section, symlink,
@@ -30,7 +30,7 @@ def want_nvim_devel() -> bool:
 
 
 @memoize
-def get_vim_options() -> dict[str, bool]:
+def get_vim_options() -> Dict[str, bool]:
     ret = {}
 
     # vim
