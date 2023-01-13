@@ -83,6 +83,7 @@ def powerline():
     # symlink a bunch of executables from the powerline virtualenv into ~/bin
     symlink(POWERLINE_VENV + '/bin/powerline-daemon', '~/bin/powerline-daemon')
     symlink(POWERLINE_VENV + '/bin/powerline-config', '~/bin/powerline-config')
+    symlink(POWERLINE_VENV + '/bin/powerline-render', '~/bin/powerline-render')
 
 
 @section(enabled=wantpowerline(), quick=True)
