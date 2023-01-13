@@ -5,7 +5,8 @@ from homely.general import mkdir, section
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import jerjerrod_addline, mypips, want_full, wantjerjerrod
+from HOMELY import (jerjerrod_addline, mypips, venv_exec, want_full,
+                    wantjerjerrod, POWERLINE_VENV)
 
 
 @section(enabled=want_full)
@@ -31,12 +32,15 @@ def homely_dev():
 
     # need to install editable version of homely.git in both virtualenvs
     venv_pip = venv + '/bin/pip'
+    venv_exec(venv_pip, ['pip', 'install', '--editable', checkout])
 
-    execute([venv_pip, 'install', '--editable', checkout])
+    # also need to install editable version into the powerline virtualenv
+    venv_exec(POWERLINE_VENV + '/bin/pip', ['pip', 'install', '--editable', checkout])
+
     mypips(venv_pip)
 
     # install all dev requirements
-    execute([venv_pip, 'install', '-r', join(checkout, 'requirements_dev.txt')])
+    venv_exec(venv_pip, ['pip', 'install', '-r', join(checkout, 'requirements_dev.txt')])
 
     if wantjerjerrod():
         # register the playground with jerjerrod

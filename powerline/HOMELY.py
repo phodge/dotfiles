@@ -1,18 +1,19 @@
 import json
 import os
 
+from homely.files import symlink
 from homely.general import WHERE_END, blockinfile, mkdir, section, writefile
 from homely.system import execute, haveexecutable
 from homely.ui import yesno
 
-from HOMELY import (HERE, HOME, IS_UBUNTU, allow_installing_stuff,
-                    mypipinstall, powerline_path, want_unicode_fix,
+from HOMELY import (HERE, HOME, IS_UBUNTU, POWERLINE_VENV,
+                    allow_installing_stuff, powerline_path, want_unicode_fix,
                     wantjerjerrod, wantpowerline)
 
 
 @section(enabled=wantpowerline(), quick=True)
 def powerline():
-    mypipinstall('powerline-status', ['pip3'])
+    execute([POWERLINE_VENV + '/bin/pip', 'install', 'powerline-status'])
 
     mkdir('~/.config')
     mkdir('~/.config/powerline')
@@ -78,6 +79,10 @@ def powerline():
     dumped = json.dumps(data)
     with writefile('~/.config/powerline/colorschemes/tmux/default.json') as f:
         f.write(dumped)
+
+    # symlink a bunch of executables from the powerline virtualenv into ~/bin
+    symlink(POWERLINE_VENV + '/bin/powerline-daemon', '~/bin/powerline-daemon')
+    symlink(POWERLINE_VENV + '/bin/powerline-config', '~/bin/powerline-config')
 
 
 @section(enabled=wantpowerline(), quick=True)

@@ -21,6 +21,10 @@ HERE = os.path.dirname(__file__)
 IS_OSX = platform.system() == "Darwin"
 IS_UBUNTU = os.path.exists('/etc/lsb-release')
 
+# folder for virtualenvs
+mkdir('~/.venv')
+POWERLINE_VENV = HOME + '/.venv/powerline'
+
 
 def section_macos(*, enabled=True, **kwargs):
     return section(enabled=enabled and IS_OSX, **kwargs)
@@ -203,6 +207,21 @@ def want_unicode_fix():
 @section(quick=True)
 def run_mydots_configure():
     execute(['mydots-configure', '--automatic'])
+
+
+def maintain_virtualenv(path: str) -> None:
+    if not os.path.exists(path):
+        # create the virtualenv
+        execute(['python3', '-m', 'venv', path])
+
+    # make sure we also upgrade build tools inside the virtualenv
+    upgrade_packages = ['setuptools', 'pip']
+    execute([path + '/bin/pip', 'install', '--upgrade'] + upgrade_packages)
+
+
+@section()
+def create_powerline_venv():
+    maintain_virtualenv(POWERLINE_VENV)
 
 
 @section(enabled=allow_installing_stuff)
@@ -393,7 +412,10 @@ def pythonpath():
         '~/.local/lib/python*/site-packages',
         # OS X
         '~/Library/Python/*/lib/python/site-packages',
+        # also the powerline virtualenv needs these modules
+        POWERLINE_VENV + '/lib/python3.*/site-packages',
     ]
+
     # try each of the glob patterns and see if we find any matches
     matches = []
     for pattern in globs:
@@ -803,7 +825,7 @@ def wantpowerline():
 
 @memoize
 def powerline_path():
-    cmd = ['python3', '-c', 'import powerline; print(powerline.__file__)']
+    cmd = [POWERLINE_VENV + '/bin/python', '-c', 'import powerline; print(powerline.__file__)']
     powerline_file = execute(cmd, stdout=True)[1]
     return os.path.dirname(powerline_file.strip().decode('utf-8'))
 
