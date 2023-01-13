@@ -84,6 +84,8 @@ def powerline():
     symlink(POWERLINE_VENV + '/bin/powerline-daemon', '~/bin/powerline-daemon')
     symlink(POWERLINE_VENV + '/bin/powerline-config', '~/bin/powerline-config')
     symlink(POWERLINE_VENV + '/bin/powerline-render', '~/bin/powerline-render')
+    symlink(POWERLINE_VENV + '/bin/powerline-lint', '~/bin/powerline-lint')
+    symlink(POWERLINE_VENV + '/bin/powerline', '~/bin/powerline')
 
 
 @section(enabled=wantpowerline(), quick=True)
