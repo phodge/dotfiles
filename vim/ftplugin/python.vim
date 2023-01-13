@@ -1,7 +1,7 @@
 setlocal formatoptions=croqlj
 setlocal list listchars=tab:^_,trail:.,extends:>,precedes:\<,nbsp:.
 
-if g:peter_want_treesitter_python
+if has('nvim') && g:want_neovim_treesitter_python
   setlocal foldmethod=expr
   setlocal foldexpr=nvim_treesitter#foldexpr()
 endif

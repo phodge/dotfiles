@@ -1,5 +1,5 @@
 if ! &l:diff
-  if g:peter_want_treesitter
+  if has('nvim') && g:want_neovim_treesitter
     setlocal foldmethod=expr
     setlocal foldexpr=nvim_treesitter#foldexpr()
   else

@@ -58,16 +58,6 @@ def get_vim_options() -> Dict[str, Union[bool, str]]:
         'Neovim: install nvimdev.nvim plugin for neovim development?',
     )
 
-    use_treesitter = HOMELY.wantnvim() and yesno(
-        'neovim_use_treesitter',
-        'Neovim: use treesitter for syntax highlighting?',
-    )
-    ret['g:peter_want_treesitter'] = use_treesitter
-    ret['g:peter_want_treesitter_python'] = use_treesitter and yesno(
-        'neovim_use_treesitter_for_python',
-        'Neovim: use treesitter for PYTHON syntax highlighting?',
-    )
-
     # other technologies
     ret['g:peter_want_terraform_plugins'] = HOMELY.want_terraform_anything
     ret['g:peter_want_rust_plugins'] = HOMELY.want_rust_anything

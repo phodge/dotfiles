@@ -112,23 +112,23 @@ if has('nvim') && g:want_copilot
 endif
 
 
-if has('nvim') && g:peter_want_treesitter " {{{ tree-sitter
+if has('nvim') && g:want_neovim_treesitter " {{{ tree-sitter
 
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
   call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
 
-  aug PeterTSInit
-  aug end
-  au! FileType typescript call <SID>InitTreesitterTypescript()
-  au! FileType typescriptreact call <SID>InitTreesitterTypescript()
-  " use e.g. "TSInstall typescript" to install a specific parser
+  let g:peter_ts_disable = []
+  if ! g:want_neovim_treesitter_python
+    call add(g:peter_ts_disable, 'python')
+  endif
+
   lua <<EOF
     require'nvim-treesitter.configs'.setup {
       highlight = {
         enable = true,
         custom_captures = {
         },
-        disable = {'python'},
+        disable = vim.g.peter_ts_disable,
         additional_vim_regex_highlighting = false,
       },
       playground = {
@@ -141,10 +141,12 @@ if has('nvim') && g:peter_want_treesitter " {{{ tree-sitter
     }
 EOF
 
-  fun! <SID>InitTreesitterTypescript()
-    " I think this is actually unnecessary
-    " TSBufEnable highlight
-  endfun
+  " NOTE: so if you want treesitter to work you also need to run ...
+  " :TSInstall typescript
+  " :TSInstall tsx
+  " :TSInstall javascript
+  " :TSInstall python
+  " use e.g. "TSInstall typescript" to install a specific parser
 
 endif " }}}
 
@@ -298,7 +300,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('EinfachToll/DidYouMean')
     call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
 
-    if ! g:peter_want_treesitter_python
+    if ! g:want_neovim_treesitter_python
       call <SID>VendoredPlug('tmhedberg/SimpylFold')
     endif
   endif
@@ -480,7 +482,7 @@ if filereadable(s:plugpath)
     "hi! link typescriptUnaryOp Operator
     "hi! link typescriptBinaryOp Number
     "hi! link typescriptDotNotation Operator
-  elseif g:peter_want_treesitter
+  elseif has('nvim') && g:want_neovim_treesitter
     " don't do anything if we are using treesitter syntax
   elseif 1
     PlugMaster 'phodge/vim-javascript-syntax'
