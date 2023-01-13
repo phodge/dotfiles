@@ -5,4 +5,4 @@
     -o 'window.decorations=buttonless' \
     -o 'window.dimensions.columns=100' \
     -o 'window.dimensions.lines=50' \
-    --command /bin/sh -c '~/.venv/winwin/bin/python -m winwin.cli present-ui || sleep 10'
+    --command /bin/sh -c '~/.venv/winwin/bin/python -m winwin.cli present-ui || sleep 3'
