@@ -1023,6 +1023,9 @@ def poetry_install():
             stdout="TTY",
         )
 
+    mkdir('~/bin')
+    symlink('~/.local/bin/poetry', '~/bin/poetry')
+
 
 # TODO: https://github.com/clvv/fasd
 
