@@ -17,9 +17,7 @@ from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_apt,
 
 VIM_TAG = 'v8.1.0264'
 
-NVIM_TAG = 'v0.4.4'
-# one of the nightly tags
-NVIM_TAG = 'ca7449db4'
+NVIM_TAG = 'v0.8.2'
 
 
 @memoize
