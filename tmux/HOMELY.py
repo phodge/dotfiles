@@ -32,14 +32,18 @@ def tmux_config():
 
     # what to put in tmux config?
     wildcards = {"DOTFILES": HERE, "HOME": HOME}
-    lines = ['source ~/.tmux/keybindings.conf']
+    lines = []
+
     # add our dotfiles python folder to PYTHONPATH before restarting the powerline daemon
     #lines.append("set-environment PYTHONPATH '%(DOTFILES)s/python'")
     if tmux_plugins:
         lines.append('source "%(DOTFILES)s/tmux/plugins.conf"')
         # FIXME: the only way to determine if TPM installed correctly is to
         # press `[PREFIX]`, `I` to do a plugin install
+
     lines.append('source "%(DOTFILES)s/tmux/tmux.conf"')
+    lines.append('source ~/.tmux/keybindings.conf')
+
     if wantpowerline():
         wildcards["POWERLINE"] = powerline_path()
         lines.extend([
