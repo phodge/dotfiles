@@ -15,6 +15,8 @@ VIM_GLOBAL_RE = re.compile(r"^\s*let\s+g:(\w+)\s*=\s*(\d+)$")
 
 SETTINGS_NAMES = {
     'want_copilot',
+    'want_neovim_treesitter',
+    'want_neovim_treesitter_python',
 }
 
 
@@ -143,10 +145,55 @@ def setup_copilot(
             state.update_state('copilot_installed', 1)
 
 
+def setup_treesitter(
+    *,
+    state: State,
+    automatic: bool,
+) -> None:
+    # TODO: would be good to only ask this when neovim is wanted
+    want_treesitter = yesno_setting(
+        'Use Treesitter in Neovim?',
+        'want_neovim_treesitter',
+        default=0,
+        state=state,
+        automatic=automatic,
+    )
+
+    if want_treesitter:
+        yesno_setting(
+            'Use Treesitter for PYTHON in Neovim?',
+            'want_neovim_treesitter_python',
+            default=1,
+            state=state,
+            automatic=automatic,
+        )
+    else:
+        state.update_setting('want_neovim_treesitter_python', 0)
+
+    # prompt to run ':TSInstall ...' commands if they haven't been done yet
+    if want_treesitter \
+            and not automatic \
+            and not state.get_state('treesitter_installed', 0):
+        if yesno(
+            'Install treesitter parsers now?',
+            default=1,
+            automatic=False,
+        ):
+            for command in [
+                'TSInstall typescript',
+                'TSInstall tsx',
+                'TSInstall javascript',
+                'TSInstall python',
+            ]:
+                run(['nvim', '+' + command], check=True)
+            state.update_state('treesitter_installed', 1)
+
+
 def main(automatic: bool, print_json: bool) -> None:
     state = State()
 
     setup_copilot(state=state, automatic=automatic or print_json)
+    setup_treesitter(state=state, automatic=automatic or print_json)
 
     if print_json:
         json.dump(state.asdict(), sys.stdout, indent=2, sort_keys=True)
