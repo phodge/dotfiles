@@ -1,23 +1,20 @@
+import argparse
 import re
 from pathlib import Path
 from subprocess import check_output
-
-import click
-import git
 from typing import Optional
 
 import neovim
 
+import git
+
 LINE_RE = re.compile(r'^(?:\w+)\s+([0-9a-f]+)\s')
 
 
-@click.command()
-@click.argument('bufnr')
-@click.argument('commitsha')
-def main(bufnr, commitsha):
+def main(bufnr: int, commitsha: str):
     nvim = neovim.attach('stdio')
 
-    buf = nvim.buffers[int(bufnr)]
+    buf = nvim.buffers[bufnr]
     repo = git.Repo(buf.name, search_parent_directories=True)
 
     files = get_files_from_ref(repo, commitsha)
@@ -98,5 +95,9 @@ def hl_add(nvim, group, ref):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('bufnr', type=int)
+    parser.add_argument('commitsha')
+    args = parser.parse_args()
     # make a list of all files in that sha
-    main()
+    main(int(args.bufnr), args.commitsha)

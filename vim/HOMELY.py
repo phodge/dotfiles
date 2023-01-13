@@ -1,7 +1,7 @@
 import os
 import shlex
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section, symlink,
@@ -30,7 +30,7 @@ def want_nvim_devel() -> bool:
 
 
 @memoize
-def get_vim_options() -> Dict[str, bool]:
+def get_vim_options() -> Dict[str, Union[bool, str]]:
     ret = {}
 
     # vim
@@ -51,6 +51,8 @@ def get_vim_options() -> Dict[str, bool]:
     )
 
     # neovim
+    if HOMELY.use_neovim_virtualenv():
+        ret['g:python3_host_prog'] = HOMELY.NEOVIM_VENV + '/bin/python'
     ret['g:peter_want_nvimdev_plugin'] = want_nvim_devel() and yesno(
         'neovim_want_nvimdev_plugin',
         'Neovim: install nvimdev.nvim plugin for neovim development?',
@@ -114,12 +116,16 @@ def vim_config():
 
     # do we want a debugger plugin in vim?
     for varname, varval in get_vim_options().items():
+        if isinstance(varval, str):
+            vimval = repr(varval)
+        elif varval:
+            vimval = '1'
+        else:
+            vimval = '0'
+        vimval
         lineinfile(
             '~/.vim/prefs.vim',
-            f'let {varname} = {"1" if varval else "0"}  " set by phodge\'s dotfiles'.format(
-                varname,
-                '1' if varval else '0'
-            ),
+            f'let {varname} = {vimval}  " set by phodge\'s dotfiles',
             where=WHERE_END,
         )
 

@@ -15,7 +15,8 @@ fun! <SID>ShowRev()
 
   " kick off our python script to add marks
   if has('nvim')
-    let l:cmd = ['python3', s:rebase_py, bufnr(''), l:ref]
+    let l:python3 = get(g:, 'python3_host_prog', 'python3')
+    let l:cmd = [l:python3, s:rebase_py, bufnr(''), l:ref]
     call jobstart(l:cmd, {'rpc': v:true, 'on_stderr': funcref('<SID>OutputHandler')})
   endif
 

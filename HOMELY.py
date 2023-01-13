@@ -4,6 +4,7 @@ import os
 import os.path
 import platform
 import re
+from typing import List
 
 from homely._ui import allowinteractive
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
@@ -24,6 +25,7 @@ IS_UBUNTU = os.path.exists('/etc/lsb-release')
 # folder for virtualenvs
 mkdir('~/.venv')
 POWERLINE_VENV = HOME + '/.venv/powerline'
+NEOVIM_VENV = HOME + '/.venv/neovim'
 
 
 def section_macos(*, enabled=True, **kwargs):
@@ -180,6 +182,15 @@ def wantnvim():
 
 
 @memoize
+def use_neovim_virtualenv():
+    return wantnvim() and yesno(
+        'use_neovim_virtualenv',
+        'Use a dedicated virtualenv for neovim?',
+        recommended=True,
+    )
+
+
+@memoize
 def install_nvim_via_apt():
     if not wantnvim():
         return False
@@ -209,19 +220,48 @@ def run_mydots_configure():
     execute(['mydots-configure', '--automatic'])
 
 
-def maintain_virtualenv(path: str) -> None:
+def venv_exec(venv_pip, cmd, **kwargs):
+    import shlex
+    env = kwargs.pop('env', None)
+    if env is None:
+        env = os.environ
+    env.pop('__PYVENV_LAUNCHER__', None)
+    activate = os.path.dirname(venv_pip) + '/activate'
+    cmd = ['bash', '-c', 'source {} && {}'.format(activate, " ".join(map(shlex.quote, cmd)))]
+    return execute(cmd, env=env, **kwargs)
+
+
+def maintain_virtualenv(path: str, core_packages: List[str]) -> None:
     if not os.path.exists(path):
         # create the virtualenv
         execute(['python3', '-m', 'venv', path])
 
     # make sure we also upgrade build tools inside the virtualenv
     upgrade_packages = ['setuptools', 'pip']
-    execute([path + '/bin/pip', 'install', '--upgrade'] + upgrade_packages)
+    pip_exe = path + '/bin/pip'
+    venv_exec(pip_exe, [pip_exe, 'install', '--upgrade'] + upgrade_packages)
+
+    # make sure we also install/upgrade core packages in the virtualenv
+    if core_packages:
+        venv_exec(pip_exe, [pip_exe, 'install', '--upgrade'] + core_packages)
+
+
+@section(
+    enabled=use_neovim_virtualenv(),
+    # if virtualenv already exists, just upgrade it monthly
+    interval='4w' if os.path.exists(NEOVIM_VENV) else None,
+)
+def create_neovim_venv():
+    core_packages = [
+        'pynvim',
+        'GitPython',
+    ]
+    maintain_virtualenv(NEOVIM_VENV, core_packages)
 
 
 @section()
 def create_powerline_venv():
-    maintain_virtualenv(POWERLINE_VENV)
+    maintain_virtualenv(POWERLINE_VENV, [])
 
 
 @section(enabled=allow_installing_stuff)
@@ -580,17 +620,6 @@ def mypipinstall(*args, **kwargs):
     return pipinstall(*args, scripts=getpippaths(), **kwargs)
 
 
-def venv_exec(venv_pip, cmd, **kwargs):
-    import shlex
-    env = kwargs.pop('env', None)
-    if env is None:
-        env = os.environ
-    env.pop('__PYVENV_LAUNCHER__', None)
-    activate = os.path.dirname(venv_pip) + '/activate'
-    cmd = ['bash', '-c', 'source {} && {}'.format(activate, " ".join(map(shlex.quote, cmd)))]
-    return execute(cmd, env=env, **kwargs)
-
-
 @memoize
 def want_ptpython():
     return yesno('want_any_ptpython', 'Is PTPython wanted anywhere?', False)
@@ -615,13 +644,15 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         'jedi',
         'yapf',
         'isort',
-        # needed for `git rebase -i` commit comparisons
-        'GitPython',
     ]
 
-    if wantnvim() and not install_nvim_via_apt():
-        # if we want nvim then we probably need the pynvim package
-        packages.append('pynvim')
+    if wantnvim() and not use_neovim_virtualenv():
+        # needed for `git rebase -i` commit comparisons in neovim
+        packages.append('GitPython')
+
+        if not install_nvim_via_apt():
+            # if we want nvim then we probably need the pynvim package
+            packages.append('pynvim')
 
     # a nice python repl
     if theworks and want_ptpython():
