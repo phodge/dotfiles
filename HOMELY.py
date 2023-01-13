@@ -569,6 +569,11 @@ def venv_exec(venv_pip, cmd, **kwargs):
     return execute(cmd, env=env, **kwargs)
 
 
+@memoize
+def want_ptpython():
+    return yesno('want_any_ptpython', 'Is PTPython wanted anywhere?', False)
+
+
 def mypips(venv_pip=None, write_dev_reqs=False):
     # if we're on macos then we need to tell homely.pipinstall to use 'pip3' instead of 'pip'
     if IS_OSX:
@@ -597,7 +602,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         packages.append('pynvim')
 
     # a nice python repl
-    if theworks or yesno('install_ptpython', 'PIP Install ptpython?', True):
+    if theworks and want_ptpython():
         packages.append('ptpython')
 
     # another nice python repl
