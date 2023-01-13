@@ -26,6 +26,7 @@ IS_UBUNTU = os.path.exists('/etc/lsb-release')
 mkdir('~/.venv')
 POWERLINE_VENV = HOME + '/.venv/powerline'
 NEOVIM_VENV = HOME + '/.venv/neovim'
+WINWIN_VENV = HOME + '/.venv/winwin'
 
 
 def section_macos(*, enabled=True, **kwargs):
@@ -264,6 +265,14 @@ def create_powerline_venv():
     maintain_virtualenv(POWERLINE_VENV, [])
 
 
+@section(
+    enabled=allow_installing_stuff,
+    interval='4w' if os.path.exists(WINWIN_VENV) else None,
+)
+def create_winwin_venv():
+    maintain_virtualenv(WINWIN_VENV, [])
+
+
 @section(enabled=allow_installing_stuff)
 def install_winwin_shortcuts():
     if not IS_OSX:
@@ -276,12 +285,12 @@ def install_winwin_shortcuts():
 
     # we need to install winwin package or the launcher won't be able to find
     # the libs
-    execute(['pip3', 'install', '--user', '-e', '.'], cwd=HERE + '/winwin.git')
+    venv_exec(WINWIN_VENV + '/bin/pip', ['pip', 'install', '-e', HERE + '/winwin.git'])
 
     # XXX: for some reason on later versions of macOS I had to also install
     # winwin into this python/pip as well as this was the only one available to
     # the automation tool
-    if IS_OSX and haveexecutable('/usr/bin/pip3'):
+    if False and IS_OSX and haveexecutable('/usr/bin/pip3'):
         execute(['/usr/bin/pip3', 'install', '--user', '-e', '.'], cwd=HERE + '/winwin.git')
 
     import shutil

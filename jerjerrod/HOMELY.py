@@ -6,8 +6,8 @@ from homely.install import InstallFromSource
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import (HERE, IS_OSX, POWERLINE_VENV, jerjerrod_addline,
-                    wantjerjerrod)
+from HOMELY import (HERE, IS_OSX, POWERLINE_VENV, WINWIN_VENV,
+                    jerjerrod_addline, venv_exec, wantjerjerrod)
 
 # TODO: this could be moved to mydots-configure
 jerjerrod_clear_cache_in_shell = wantjerjerrod() and yesno(
@@ -48,12 +48,15 @@ def jerjerrod_clone():
 @section(enabled=wantjerjerrod())
 def jerjerrod_install():
     # install jerjerrod into powerline's virtualenv
-    execute([POWERLINE_VENV + '/bin/pip', 'install', '-e', '.'], cwd=str(REPO_PATH))
+    venv_exec(POWERLINE_VENV + '/bin/pip', ['pip', 'install', '-e', str(REPO_PATH)])
 
     # make a symlink in ~/bin
     # XXX: this is largely because on macOS, the jerjerrod package's pyproject.toml can't be
     # installed in --editable mode by the builtin python3.8 pip
     symlink(POWERLINE_VENV + '/bin/jerjerrod', '~/bin/jerjerrod')
+
+    # also need to install jerjerrod into winwin's virtualenv
+    venv_exec(WINWIN_VENV + '/bin/pip', ['pip', 'install', '-e', str(REPO_PATH)])
 
     # install jerjerrod libs for winwin, which is installed using /usr/bin/pip3
     # so that it has necessary permissions on later version of macOS
