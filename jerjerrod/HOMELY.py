@@ -8,6 +8,7 @@ from homely.ui import yesno
 
 from HOMELY import HERE, IS_OSX, jerjerrod_addline, wantjerjerrod
 
+# TODO: this could be moved to mydots-configure
 jerjerrod_clear_cache_in_shell = wantjerjerrod() and yesno(
     'jerjerrod_clear_cache_in_shell',
     'Jerjerrod: automatic cache clearing in zsh shells?',
