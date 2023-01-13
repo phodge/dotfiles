@@ -102,7 +102,7 @@ fun! <SID>VendoredPlug(path)
   let l:parts = split(a:path, '/')
   let l:name = l:parts[1]
   if g:allow_rtp_modify
-    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/vim-packages/' . l:parts[1] . '.git'
+    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/vim-packages/' . l:name . '.git'
   endif
 endfun
 
@@ -148,6 +148,16 @@ EOF
   " :TSInstall python
   " use e.g. "TSInstall typescript" to install a specific parser
 
+  " also set up ts-node-action while we're here
+  call <SID>VendoredPlug('CKolkey/ts-node-action')
+
+  lua vim.keymap.set({"n"}, "\\x", require("ts-node-action").node_action, { desc = "Trigger Node Action" })
+
+  lua <<EOF
+    local actions = require('ts-node-action.actions')
+    require'ts-node-action'.setup {
+    }
+EOF
 endif " }}}
 
 

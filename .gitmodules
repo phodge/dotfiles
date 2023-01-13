@@ -71,3 +71,6 @@
 [submodule "copilot.vim.git"]
 	path = vim-packages/copilot.vim.git
 	url = https://github.com/github/copilot.vim.git
+[submodule "ts-node-action.git"]
+	path = vim-packages/ts-node-action.git
+	url = https://github.com/CKolkey/ts-node-action.git
