@@ -311,7 +311,6 @@ def install_winwin_shortcuts():
                     contents = contents.replace(b'[[[WORKFLOW_COMMAND]]]', command.encode('utf-8'))
                     fp_dest.write(contents)
                 os.unlink(target)
-                print("Wrote wildcards to {}".format(dest))
             return
 
         for child in os.listdir(target):
