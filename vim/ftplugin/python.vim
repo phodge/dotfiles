@@ -13,7 +13,7 @@ endif
 command! -bang -nargs=+ -bar -buffer Flake8Ignore call <SID>Ignore('<bang>' == '!', <f-args>)
 
 " This is the default flake8 ignore list. See
-let s:flake8_default_ignore = split('E121 E123 E126 E226 E24 E704')
+let s:flake8_default_ignore = ['E704']
 
 function! <SID>Ignore(reset, ...)
   if a:reset
