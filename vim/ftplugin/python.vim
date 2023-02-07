@@ -445,7 +445,10 @@ fun! <SID>SmartImportUI() " {{{
         \ "or_": "sqlalchemy",
         \ "in_": "sqlalchemy",
         \ "notin_": "sqlalchemy",
-        \ "Enum": "sqlalchemy",
+        \ "select": "sqlalchemy",
+        \ "Mapped": "sqlalchemy.orm",
+        \ "mapped_column": "sqlalchemy.orm",
+        \ "Enum": "enum",
         \ "Literal": "typing",
         \ "chain": "itertools",
         \ }
