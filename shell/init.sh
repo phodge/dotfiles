@@ -235,10 +235,20 @@ rmempty() {
 pushthis() {
     ref="$1";
     shift
+    local choice=
 
     if [ -z "$PUSHTO" ]; then
-        echo -n "Dest branch: "
-        read PUSHTO
+        while [ -z "$choice" ]; do
+            echo -n "Dest branch: "
+            read choice
+        done
+        PUSHTO="$choice"
+    else
+        echo -n "Dest branch [$PUSHTO]: "
+        read choice
+        if [ -n "$choice" ]; then
+            PUSHTO="$choice"
+        fi
     fi
 
     echo "$ git push origin '${ref}:refs/heads/$PUSHTO' '$@'"
