@@ -130,6 +130,8 @@ alias c='git commit'
 alias ca='git commit --amend'
 alias cnv='git commit --no-verify'
 alias canv='git commit --amend --no-verify'
+alias co='git checkout'
+alias dc='docker-compose'
 
 # tell ripgrep where to find its RC file
 export RIPGREP_CONFIG_PATH="$DOTFILES_PATH/.ripgreprc"
