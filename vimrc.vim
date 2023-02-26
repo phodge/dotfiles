@@ -366,11 +366,15 @@ if filereadable(s:plugpath)
   Plug 'brooth/far.vim'
 
   let s:has_fzf = 0
-  " homebrew will install fzf in /usr/local/opt/fzf
+  " homebrew will install fzf in /opt/homebrew/bin/fzf
+  " (or in older versions of homebrew /usr/local/opt/fzf)
   if has('nvim') && isdirectory('/usr/local/opt/fzf')
     let s:has_fzf = 1
-
+    " use vim plugin provided by fzf homebrew package
     set rtp+=/usr/local/opt/fzf
+  elseif has('nvim') && executable('fzf')
+    let s:has_fzf = 1
+    let &rtp .= ',' . expand('/opt/homebrew/Cellar/fzf/*')
   elseif has('nvim') && get(g:, 'want_fzf', 0)
     let s:has_fzf = 1
 
