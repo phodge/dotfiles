@@ -426,7 +426,7 @@ fun! <SID>SmartImportUI() " {{{
   let l:always_modules = split(
         \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
-        \ .' contextlib tempfile neovim dataclasses typing decimal abc'
+        \ .' contextlib tempfile neovim dataclasses typing decimal abc pytest'
         \ )
 
   " these names are suggested when the identifiers are encountered
