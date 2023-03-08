@@ -102,7 +102,7 @@ want_mercurial = yesno(
     False,
 )
 
-want_poetry = yesno(
+want_poetry = allow_installing_stuff and yesno(
     'want_python_poetry',
     'Install poetry in $HOME?',
     False,
@@ -1076,6 +1076,10 @@ def pull_submodules(filter_path):
 
 @section(enabled=want_poetry, interval='4w')
 def poetry_install():
+    if IS_OSX:
+        installpkg('poetry', brew='poetry')
+        return
+
     if haveexecutable('poetry'):
         execute(['poetry', 'self', 'update'], stdout="TTY")
     else:
