@@ -345,6 +345,9 @@ if filereadable(s:plugpath)
   Plug 'TaDaa/vimade', get(g:, 'want_vimade', 0) ? {} : {'on': []}
 
   if has('nvim') && g:want_neovim_snippy
+    " NOTE: you can find links to more snippets plugins here:
+    " https://github.com/honza/vim-snippets
+
     call <SID>VendoredPlug('dcampos/nvim-snippy')
 
     imap <expr> <Tab> snippy#can_expand_or_advance() ? '<Plug>(snippy-expand-or-advance)' : '<Tab>'
