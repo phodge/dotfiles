@@ -17,6 +17,7 @@ SETTINGS_NAMES = {
     'want_copilot',
     'want_neovim_treesitter',
     'want_neovim_treesitter_python',
+    'want_neovim_snippy',
 }
 
 
@@ -194,6 +195,13 @@ def main(automatic: bool, print_json: bool) -> None:
 
     setup_copilot(state=state, automatic=automatic or print_json)
     setup_treesitter(state=state, automatic=automatic or print_json)
+    yesno_setting(
+        'Use dcampos/nvim-snippy for snippets in Neovim?',
+        'want_neovim_snippy',
+        default=0,
+        state=state,
+        automatic=automatic or print_json,
+    )
 
     if print_json:
         json.dump(state.asdict(), sys.stdout, indent=2, sort_keys=True)

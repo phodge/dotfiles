@@ -344,7 +344,15 @@ if filereadable(s:plugpath)
   let g:vimade.basebg = '#000000'
   Plug 'TaDaa/vimade', get(g:, 'want_vimade', 0) ? {} : {'on': []}
 
-  if has('nvim') && v:version >= 704
+  if has('nvim') && g:want_neovim_snippy
+    call <SID>VendoredPlug('dcampos/nvim-snippy')
+
+    imap <expr> <Tab> snippy#can_expand_or_advance() ? '<Plug>(snippy-expand-or-advance)' : '<Tab>'
+    imap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
+    smap <expr> <Tab> snippy#can_jump(1) ? '<Plug>(snippy-next)' : '<Tab>'
+    smap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
+    xmap <Tab> <Plug>(snippy-cut-text)
+  elseif has('nvim') && v:version >= 704
     Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
     " this is CTRL+J by default, which we don't want
     let g:UltiSnipsJumpForwardTrigger = '<space><C-J>'

@@ -74,3 +74,6 @@
 [submodule "ts-node-action.git"]
 	path = vim-packages/ts-node-action.git
 	url = https://github.com/CKolkey/ts-node-action.git
+[submodule "nvim-snippy.git"]
+	path = vim-packages/nvim-snippy.git
+	url = https://github.com/dcampos/nvim-snippy.git
