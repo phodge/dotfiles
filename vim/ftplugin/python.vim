@@ -6,6 +6,24 @@ if has('nvim') && g:want_neovim_treesitter_python
   setlocal foldexpr=nvim_treesitter#foldexpr()
 endif
 
+" ninja mapping for visual 'gq' that temporarily sets tw=79 while it is working
+vnoremap gq <ESC>:call <SID>GQ(1)<CR>
+
+function! <SID>GQ(isvisual)
+  let l:old_tw = &l:textwidth
+  try
+    setlocal tw=79
+    if a:isvisual
+      normal! gvgq
+    else
+      normal! gq
+    endif
+  finally
+    let &l:textwidth = l:old_tw
+  endtry
+endfun
+
+
 " these two options are now set using the SetLineLength() function below
 "setlocal textwidth=79 " just for comments
 "setlocal colorcolumn=+2
