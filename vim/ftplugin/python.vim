@@ -454,6 +454,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Href": "werkzeug",
         \ "datetime": "datetime",
         \ "date": "datetime",
+        \ "timedelta": "datetime",
         \ "time": "time",
         \ "Gitlab": "gitlab",
         \ "run": "subprocess",
@@ -466,8 +467,10 @@ fun! <SID>SmartImportUI() " {{{
         \ "select": "sqlalchemy",
         \ "Mapped": "sqlalchemy.orm",
         \ "mapped_column": "sqlalchemy.orm",
+        \ "make_transient": "sqlalchemy.orm",
         \ "Enum": "enum",
         \ "Literal": "typing",
+        \ "ContextManager": "typing",
         \ "chain": "itertools",
         \ }
 
