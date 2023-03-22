@@ -466,6 +466,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "notin_": "sqlalchemy",
         \ "select": "sqlalchemy",
         \ "Mapped": "sqlalchemy.orm",
+        \ "Session": "sqlalchemy.orm",
         \ "mapped_column": "sqlalchemy.orm",
         \ "make_transient": "sqlalchemy.orm",
         \ "Enum": "enum",
