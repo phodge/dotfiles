@@ -315,7 +315,7 @@ if filereadable(s:plugpath)
     endif
   endif
 
-  Plug 'christoomey/vim-tmux-navigator'
+  call <SID>VendoredPlug('christoomey/vim-tmux-navigator')
 
   " python imports {{{
 

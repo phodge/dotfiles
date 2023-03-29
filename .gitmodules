@@ -77,3 +77,6 @@
 [submodule "nvim-snippy.git"]
 	path = vim-packages/nvim-snippy.git
 	url = https://github.com/dcampos/nvim-snippy.git
+[submodule "vim-tmux-navigator.git"]
+	path = vim-packages/vim-tmux-navigator.git
+	url = https://github.com/christoomey/vim-tmux-navigator.git
