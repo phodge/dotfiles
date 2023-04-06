@@ -967,6 +967,23 @@ def iterm2_prefs():
         ])
 
 
+@section_macos(enabled=haveexecutable('brew') and allow_installing_stuff)
+def install_alt_tab():
+    # https://github.com/lwouis/alt-tab-macos
+    if not yesno('install_alt_tab', 'Install alt-tab app-switcher for MacOS?'):
+        return
+
+    execute(['brew', 'install', '--cask', 'alt-tab'])
+
+    print("You need to open AltTab app and grant permissions for it to work")
+    yesno('alt_tab_setup_done', 'Have you opened AltTab app at least once?', noprompt=False)
+
+    # NOTE: the config file for this app is at
+    # ~/Library/Preferences/com.lwouis.alt-tab-macos.plist but there doesn't
+    # seem to be a way to move the file into the repo the app recreates the
+    # file when it saves changes
+
+
 @section(enabled=allow_installing_stuff)
 def install_pyenv():
     if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv?', default=None):
