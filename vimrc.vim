@@ -1118,6 +1118,11 @@ set nolist
 set listchars=tab:\|_,trail:@
 set showbreak=...
 
+if has('nvim-0.9.0')
+  " supposedly this improves the quality of diffs
+  set diffopt+=linematch:60
+endif
+
 " don't add an EOL if one wasn't present
 if exists("&fixeol")
   set nofixeol
