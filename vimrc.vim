@@ -519,7 +519,12 @@ if filereadable(s:plugpath)
     " with builtin ft=typescript syntax
     aug TypeScriptTSX
     aug end
-    autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
+    " XXX: this messes with the language server stuff so we need to scrap it
+    if s:ts_lsp
+      autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set syntax=javascript
+    else
+      autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
+    endif
 
     " typescript support
     Plug 'leafgarland/typescript-vim', {'on': []}
