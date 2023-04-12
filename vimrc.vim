@@ -154,7 +154,7 @@ EOF
   lua vim.keymap.set({"n"}, "\\x", require("ts-node-action").node_action, { desc = "Trigger Node Action" })
 
   lua <<EOF
-    local actions = require('ts-node-action.actions')
+    local actions = require 'ts-node-action.actions'
     require'ts-node-action'.setup {
     }
 EOF
