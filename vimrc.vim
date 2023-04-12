@@ -191,9 +191,11 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('nvim-lua/plenary.nvim')
   endif
 
-  " why not
-  call <SID>VendoredPlug('editorconfig/editorconfig-vim')
-  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+  if ! has('nvim-0.9.0')
+    " this is built into neovim from v0.9 onwards
+    call <SID>VendoredPlug('editorconfig/editorconfig-vim')
+    let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+  endif
 
   " the awesome Jedi library for python
   " XXX: we manage this with vim-plug because vim-plug takes care of
