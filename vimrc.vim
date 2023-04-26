@@ -793,6 +793,7 @@ fun! <SID>InitLSPBuffer()
   else
     nnoremap <buffer> <space>I :echoerr 'No "\<space>I" import organizer is defined for this filetype'
   endif
+  nnoremap <buffer> <F7>     :sp <BAR> lua vim.lsp.buf.references()<CR>
   nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
   nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
   nnoremap <buffer> <space>f :lua vim.lsp.buf.incoming_calls()<CR>
