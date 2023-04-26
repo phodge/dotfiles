@@ -1117,6 +1117,9 @@ set nolist
 "set listchars=tab:\|_,trail:@,precedes:<,extends:>
 set listchars=tab:\|_,trail:@
 set showbreak=...
+" have the quickfix window open below the current window instead of hijacking
+" another open window
+set switchbuf=split
 
 if has('nvim-0.9.0')
   " supposedly this improves the quality of diffs
