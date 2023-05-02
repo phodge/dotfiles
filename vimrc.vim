@@ -783,7 +783,7 @@ fun! <SID>InitLSPBuffer()
   " however code_action() seems to actually be async and so the prompt ends up
   " appearing _after_ the buffer has been formatted :facepalm:
   nnoremap <buffer> <space>i :lua vim.lsp.buf.code_action()<CR>
-  if &l:filetype == 'typescript'
+  if &l:filetype == 'typescript' || &l:filetype == 'typescriptreact'
     nnoremap <buffer> <space>I :TSLspOrganize<CR>
   else
     nnoremap <buffer> <space>I :echoerr 'No "\<space>I" import organizer is defined for this filetype'
