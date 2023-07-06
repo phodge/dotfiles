@@ -816,7 +816,7 @@ fun! <SID>InitLSPBuffer()
 endfun
 
 fun! <SID>ToggleAutoFormatting()
-  if b:ale_fix_on_save
+  if get(b:, 'ale_fix_on_save', 0)
     let b:ale_fix_on_save = 0
   else
     let b:ale_fix_on_save = 1
