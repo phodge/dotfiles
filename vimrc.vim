@@ -804,14 +804,14 @@ fun! <SID>InitLSPBuffer()
   " to install 'prettier' into your project. The guide I based this on
   " recommended using 'npm install -g prettier' however I'm keen to avoid
   " having a global version that gets stale / differs between machines
-  nnoremap <buffer> \f       :lua vim.lsp.buf.formatting()<CR>
+  nnoremap <buffer> \f       :lua vim.lsp.buf.format()<CR>
   nnoremap <buffer> \F       :call <SID>ToggleAutoFormatting()<CR>
-  command! -nargs=0 -buffer Format lua vim.lsp.buf.formatting()
+  command! -nargs=0 -buffer Format lua vim.lsp.buf.format()
 
   " TODO: tidy this up so we're *not* using ALE namespace vars
   let b:ale_fix_on_save = 0
   aug PeterLSPAutoFormat
-  au! BufWritePre <buffer> exe b:ale_fix_on_save ? 'lua vim.lsp.buf.formatting_sync()' : ''
+  au! BufWritePre <buffer> exe b:ale_fix_on_save ? 'lua vim.lsp.buf.format()' : ''
   aug end
 endfun
 
