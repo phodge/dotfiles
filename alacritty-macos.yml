@@ -1,3 +1,6 @@
+# XXX? this is to replace the old alt_send_esc
+option_as_alt: true
+
 font:
   normal:
     family: "Inconsolata for Powerline"
