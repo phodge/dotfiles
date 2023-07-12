@@ -109,6 +109,13 @@ endfun
 
 if has('nvim') && g:want_copilot
   call <SID>VendoredPlug('github/copilot.vim')
+
+  " the default mapping for Copilot is <tab>, to change it see
+  " :help copilot-maps
+
+  aug PeterCopilot
+  au! BufReadPost,BufNewFile *.txt,*.md,*.csv let b:copilot_enabled = 0
+  aug end
 endif
 
 
