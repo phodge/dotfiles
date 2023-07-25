@@ -1,3 +1,10 @@
+vim:
+- LSP on-hover docstrings: try one of these:
+  - https://github.com/lewis6991/hover.nvim
+  - https://github.com/Fildo7525/pretty_hover
+
+- https://github.com/marlonrichert/zsh-autocomplete
+
 - https://github.com/romkatv/gitstatus
 
 EditRealPath into a github plugin
