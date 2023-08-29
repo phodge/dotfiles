@@ -145,6 +145,15 @@ if has('nvim') && g:want_neovim_treesitter " {{{ tree-sitter
         keybindings = {
         },
       },
+      ensure_installed={
+        "typescript",
+        "tsx",
+        "javascript",
+        "python",
+        "vim",
+        "vimdoc",
+        "lua",
+      },
     }
 EOF
 
