@@ -13,7 +13,7 @@
 	url = https://github.com/neovim/nvimdev.nvim.git
 [submodule "spacetea.vim.git"]
 	path = vim-packages/spacetea.vim.git
-	url = https://github.com/phodge/spacetea.vim.git
+	url = git@gitlab.com:peterhodge/spacetea.vim.git
 [submodule "firenvim.git"]
 	path = vim-packages/firenvim.git
 	url = https://github.com/glacambre/firenvim.git
