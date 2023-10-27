@@ -28,7 +28,6 @@ set confirm
 " when to use LSP and YCM
 " TODO: probably get rid of these in favour of s:ts_lsp above
 let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
-let s:use_ycm = has('nvim') && get(g:, 'peter_use_ycm', 0) && !s:use_lsp
 
 " 256-color mode for vim8/neovim
 if exists('&termguicolors')
@@ -249,12 +248,10 @@ if filereadable(s:plugpath)
       "let g:ale_php_langserver_executable = $HOME.'/.config/composer/vendor/felixfbecker/language-server/bin/php-language-server.php'
       "call add(g:ale_linters.php, 'langserver')
 
-      if ! s:use_ycm
-        " when neither LSP or YCM is enabled, ALE will perform these things:
-        " NOTE: this is a global mapping, so might still be overwritten by a
-        " buffer-local mapping when a LS is in use for the current buffer
-        nnoremap <space>d :ALEGoToDefinition<CR>
-      endif
+      " when LSP isn't enabled, ALE will perform these things:
+      " NOTE: this is a global mapping, so might still be overwritten by a
+      " buffer-local mapping when a LS is in use for the current buffer
+      nnoremap <space>d :ALEGoToDefinition<CR>
     endif
 
   " }}}
@@ -286,25 +283,6 @@ if filereadable(s:plugpath)
     au FileType php nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
     au FileType php nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
     aug end
-  elseif s:use_ycm
-    " when in neovim land, use YouCompleteMe
-    call <SID>VendoredPlug('Valloric/YouCompleteMe')
-
-    " when jumping to definitions, do so in a new split
-    let g:ycm_goto_buffer_command = 'horizontal-split'
-
-    " don't map <tab> key, it interferes with UltiSnips
-    let g:ycm_key_list_select_completion = []
-
-    let g:ycm_min_num_of_chars_for_completion = 99
-    let g:ycm_min_num_identifier_candidate_chars = 99
-
-    nnoremap gd :split<CR>:YcmCompleter GoTo<CR>
-    nnoremap <space>r :YcmCompleter RefactorRename <C-R><C-W>
-    nnoremap <space>t :YcmCompleter GetType<CR>
-
-    " don't use jedi completions if we have YCM enabled
-    let g:jedi#completions_enabled = 0
   endif
 
   " ArgWrap {{{

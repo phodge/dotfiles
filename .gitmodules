@@ -24,10 +24,6 @@
 	path = vim-packages/ale.git
 	url = https://github.com/w0rp/ale.git
 	ignore = untracked
-[submodule "YouCompleteMe.git"]
-	path = vim-packages/YouCompleteMe.git
-	url = https://github.com/Valloric/YouCompleteMe.git
-	ignore = untracked
 [submodule "vim-argwrap.git"]
 	path = vim-packages/vim-argwrap.git
 	url = https://github.com/FooSoft/vim-argwrap.git
