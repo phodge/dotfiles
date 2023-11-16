@@ -26,6 +26,8 @@ highlight Normal guifg=#888888
 
 highlight PreProc  guifg=#5555FF
 
+hi! link Constant Identifier
+
 hi Pmenu         ctermfg=Cyan    ctermbg=Blue   cterm=NONE
 hi PmenuSel      ctermfg=White   ctermbg=Blue   cterm=Bold
 hi PmenuSbar                     ctermbg=Cyan
@@ -80,3 +82,69 @@ hi Priority   guifg=Blue   guibg=Cyan cterm=Bold
 hi Note ctermfg=Blue ctermbg=Black cterm=Bold
 hi Note guifg=White guibg=Black gui=Bold
 hi Dodgey ctermfg=Black ctermbg=White cterm=Bold
+
+" treesitter overrides
+if has('nvim')
+  " see :help treesitter-highlight-groups
+
+  "  @text.literal      Comment
+  "  @text.reference    Identifier
+  "  @text.title        Title
+  "  @text.uri          Underlined
+  "  @text.underline    Underlined
+  "  @text.todo         Todo
+
+  hi! link @comment Comment
+  "  @punctuation       Delimiter
+
+  hi! link @constant.builtin  Function
+  "  @constant.macro    Define
+  "  @define            Define
+  "  @macro             Macro
+  "  @string            String
+  "  @string.escape     SpecialChar
+  "  @string.special    SpecialChar
+  "  @character         Character
+  "  @character.special SpecialChar
+  "  @number            Number
+  "  @float             Float
+
+  "  @function          Function
+  "  @function.builtin  Special
+  "  @function.macro    Macro
+  "  @parameter         Identifier
+  "  @method            Function
+  "  @field             Identifier
+  "  @property          Identifier
+  "  @constructor       Special
+
+  "  @conditional       Conditional
+  "  @repeat            Repeat
+  "  @label             Label
+  "  @operator          Operator
+  "  @keyword           Keyword
+  "  @exception         Exception
+
+  "  @type              Type
+  "  @type.definition   Typedef
+  "  @storageclass      StorageClass
+  "  @structure         Structure
+  "  @namespace         Identifier
+  "  @include           Include
+  "  @preproc           PreProc
+  "  @debug             Debug
+  "  @tag               Tag
+  
+  " slightly more specific overrides
+  hi! link @boolean Type
+  hi! link @keyword Statement
+  hi! link @keyword.function Macro
+  hi! link @keyword.Operator Operator
+  hi! link @method.call Normal
+  hi! link @function.call Normal
+  
+  " python-specific overrides
+  hi! link @variable.python Normal
+  hi! link @field.python Normal
+  hi! link @keyword Statement
+endif
