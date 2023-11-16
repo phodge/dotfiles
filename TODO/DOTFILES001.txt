@@ -1,0 +1,18 @@
+DOTFILES001 TreeSitter experimentation
+
+vim/after/after_colors/elflord.vim
+- add definitions for everything at `:help treesitter-highlight-groups`
+- use `:source $VIMRUNTIME/syntax/hitest.vim` to check colors
+- also use `:Inspect` to see treesitter import names
+  - see also vim-packages/nvim-treesitter.git/queries/python/highlights.scm
+
+vim-packages/python-treesitter-overrides.nvim.git/after/queries/python/highlights.scm
+- how to add highlights for missing things noted in ex-machinae.txt
+  - e.g. stdlib names
+
+make treesitter the default for python?
+- first need to resolve some disadvantages noted in mydots-configure
+
+ex-machinae
+- review use of latin
+- See vim-packages/python-treesitter-overrides.nvim.git/ex-machinae.txt
