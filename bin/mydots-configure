@@ -161,6 +161,14 @@ def setup_treesitter(
     )
 
     if want_treesitter:
+        print("Use Treesitter for PYTHON in Neovim?")
+        print("Advantages:")
+        print("- better automatic folds")
+        print("Disadvantages:")
+        print("- no highlighting of stdlib")
+        print("- no differentation of comparisons vs assignments")
+        print("- many highlight groups not correct")
+        print("- doesn't yet colorise braces/parenthesis")
         yesno_setting(
             'Use Treesitter for PYTHON in Neovim?',
             'want_neovim_treesitter_python',
