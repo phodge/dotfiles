@@ -57,18 +57,19 @@ class State:
             data = json.load(f)
             for name, value in data.items():
                 if not isinstance(value, int):
-                    err(f"{STATE_PATH.name}: Non-integer value for {name!r}")
+                    print(f"ERROR: {STATE_PATH.name}: Non-integer value for {name!r}", f=sys.stderr)
                     continue
                 state[name] = value
 
         return state
 
     def _write_state(self) -> None:
-        STATE_PATH.parent.mkdir(exist_ok=True)
+        STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
         with STATE_PATH.open('w') as f:
             json.dump(self._state, f, indent=2, sort_keys=True)
 
     def _write_settings_vim(self) -> None:
+        SETTINGS_PATH_VIM.parent.mkdir(parents=True, exist_ok=True)
         with SETTINGS_PATH_VIM.open('w') as f:
             for name, value in self._state.items():
                 if name in SETTINGS_NAMES:
