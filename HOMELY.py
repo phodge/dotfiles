@@ -218,7 +218,10 @@ def want_unicode_fix():
 
 @section(quick=True)
 def run_mydots_configure():
-    execute(['mydots-configure', '--automatic'])
+    execute([
+        HERE + '/bin/mydots-configure',
+        '--automatic',
+    ])
 
 
 def venv_exec(venv_pip, cmd, **kwargs):
