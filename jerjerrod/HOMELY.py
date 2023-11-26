@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from homely.files import lineinfile, mkdir, symlink
-from homely.general import haveexecutable, run, section
-from homely.install import InstallFromSource
+from homely.files import lineinfile, symlink
+from homely.general import haveexecutable, section
 from homely.system import execute
 from homely.ui import yesno
 
