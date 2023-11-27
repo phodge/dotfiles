@@ -382,7 +382,7 @@ def neovim_python_devel():
         jerjerrod_addline('WORKSPACE', venv, ignore=["py2venv"])
 
 
-@section(enabled=HOMELY.wantnvim())
+@section(enabled=HOMELY.wantnvim() and haveexecutable('npm'))
 def nvim_ls_ts():
     execute(['npm', 'install'], cwd=HERE + '/nvim_ts')
     # We need these two to be available globally as they probably won't exist in project packages.
