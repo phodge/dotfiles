@@ -899,6 +899,9 @@ def osx():
     execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
     # KeyRepeat < 1.0 doesn't work :-(
     execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])
+    # prevent Accessibility controls overriding key repeat rate - seems to be
+    # needed for Sonoma and above?
+    execute(['defaults', 'write', 'com.apple.Accessibility', 'KeyRepeatEnabled', '-int', '0'])
 
 
 @section(quick=True)
