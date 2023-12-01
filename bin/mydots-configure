@@ -18,6 +18,7 @@ SETTINGS_NAMES = {
     'want_neovim_treesitter',
     'want_neovim_treesitter_python',
     'want_neovim_snippy',
+    'use_vendored_fzf',
 }
 
 
@@ -207,6 +208,14 @@ def main(automatic: bool, print_json: bool) -> None:
     yesno_setting(
         'Use dcampos/nvim-snippy for snippets in Neovim?',
         'want_neovim_snippy',
+        default=0,
+        state=state,
+        automatic=automatic or print_json,
+    )
+
+    yesno_setting(
+        'Use vendored FZF for CTRL+P in Neovim?',
+        'use_vendored_fzf',
         default=0,
         state=state,
         automatic=automatic or print_json,

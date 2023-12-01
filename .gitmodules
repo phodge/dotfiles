@@ -76,3 +76,6 @@
 [submodule "vim-tmux-navigator.git"]
 	path = vim-packages/vim-tmux-navigator.git
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule "fzf.git"]
+	path = vim-packages/fzf.git
+	url = https://github.com/junegunn/fzf.git
