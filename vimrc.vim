@@ -100,8 +100,10 @@ endif
 fun! <SID>VendoredPlug(path)
   let l:parts = split(a:path, '/')
   let l:name = l:parts[1]
+  let l:newpath = s:dotfiles_root . '/vim-packages/' . l:name . '.git'
+
   if g:allow_rtp_modify
-    let &runtimepath = &runtimepath . ',' . s:dotfiles_root . '/vim-packages/' . l:name . '.git'
+    let &runtimepath = l:newpath . ',' . &runtimepath . ',' . l:newpath . '/after'
   endif
 endfun
 
