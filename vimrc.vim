@@ -539,7 +539,7 @@ if filereadable(s:plugpath)
 
   " }}}
 
-  PlugMaster 'phodge/vim-python-syntax'
+  call <SID>VendoredPlug('phodge/vim-python-syntax')
   PlugMaster 'phodge/MicroRefactor'
   PlugMaster 'phodge/vim-shell-command'
   PlugMaster 'phodge/vim-syn-info'

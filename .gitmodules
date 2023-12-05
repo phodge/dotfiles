@@ -79,3 +79,6 @@
 [submodule "fzf.git"]
 	path = vim-packages/fzf.git
 	url = https://github.com/junegunn/fzf.git
+[submodule "vim-python-syntax.git"]
+	path = vim-packages/vim-python-syntax.git
+	url = https://github.com/phodge/vim-python-syntax.git
