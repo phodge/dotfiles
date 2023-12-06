@@ -2,3 +2,5 @@
 # but not all of .git or anything excluded by .gitignore
 --hidden
 --glob=!.git
+# explicitly ignore .tags in case it isn't mentioned in a repo's .gitignore file
+--glob=!.tags
