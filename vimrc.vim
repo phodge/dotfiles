@@ -237,13 +237,6 @@ if filereadable(s:plugpath)
     let g:ale_fixers = get(g:, 'ale_fixers', {})
     let g:ale_fixers.php = ['php_cs_fixer']
 
-    " XXX: Workaround for: https://github.com/dense-analysis/ale/issues/2704
-    " Because mypy since 0.710 outputs reveal_type() at "note" level, Ale
-    " ignores it. The executable script here uses regex to replace the "note"
-    " with "error" so that Ale will show the output from reveal_type()
-    let g:ale_python_mypy_executable = 'mypy-escalated-reveal-type'
-    let g:ale_python_mypy_use_global = 1
-
     if ! s:use_lsp
       " when not using LSP plugin, allow Ale to talk to the language server
       "let g:ale_php_langserver_use_global = 1
