@@ -13,3 +13,9 @@
 .tags.files
 # This is probably not a great idea, but they get it my way so often it's infuriating
 /doc/tags
+
+# I create these files regularly
+.retest
+retest.sh
+.rebuild
+rebuild.sh
