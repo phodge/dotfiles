@@ -82,3 +82,6 @@
 [submodule "vim-python-syntax.git"]
 	path = vim-packages/vim-python-syntax.git
 	url = https://github.com/phodge/vim-python-syntax.git
+[submodule "vimade.git"]
+	path = vim-packages/vimade.git
+	url = https://github.com/TaDaa/vimade.git

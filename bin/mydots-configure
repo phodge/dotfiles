@@ -18,6 +18,7 @@ SETTINGS_NAMES = {
     'want_neovim_treesitter',
     'want_neovim_treesitter_python',
     'want_neovim_snippy',
+    'want_vimade',
     'use_vendored_fzf',
 }
 
@@ -200,6 +201,34 @@ def setup_treesitter(
             state.update_state('treesitter_installed', 1)
 
 
+def _yesno_setting_big(
+    prompt: str,
+    name: str,
+    *,
+    default: int,
+    state: State,
+    automatic: bool,
+    advantages: Iterable[str] = [],
+    disadvantages: Iterable[str] = [],
+) -> int:
+    print(f"\n=== {prompt} ===")
+    if advantages:
+        print("Advantages:")
+        for adv in advantages:
+            print(f"- {adv}")
+    if disadvantages:
+        print("Disadvantages:")
+        for dis in disadvantages:
+            print(f"- {dis}")
+    return yesno_setting(
+        prompt,
+        name,
+        default=default,
+        state=state,
+        automatic=automatic,
+    )
+
+
 def main(automatic: bool, print_json: bool) -> None:
     state = State()
 
@@ -219,6 +248,20 @@ def main(automatic: bool, print_json: bool) -> None:
         default=0,
         state=state,
         automatic=automatic or print_json,
+    )
+
+    _yesno_setting_big(
+        'Use Vimade for dimming inactive windows in Vim/Neovim?',
+        'want_vimade',
+        default=1,
+        state=state,
+        automatic=automatic or print_json,
+        advantages=[
+            'Highlight the current active window',
+        ],
+        disadvantages=[
+            'Can be slow with many buffers open',
+        ],
     )
 
     if print_json:

@@ -333,7 +333,9 @@ if filereadable(s:plugpath)
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
   let g:vimade.basebg = '#000000'
-  Plug 'TaDaa/vimade', get(g:, 'want_vimade', 0) ? {} : {'on': []}
+  if get(g:, 'want_vimade', 0)
+    call <SID>VendoredPlug('TaDaa/vimade')
+  endif
 
   if has('nvim') && g:want_neovim_snippy
     " NOTE: you can find links to more snippets plugins here:
