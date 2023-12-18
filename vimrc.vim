@@ -423,11 +423,6 @@ if filereadable(s:plugpath)
 
   "Plug 'justinmk/vim-sneak'
 
-  if has('nvim')
-    " TODO: figure out how to replace flake8 with neomake + something else
-    Plug 'neomake/neomake', g:want_fast ? {'on': []} : {}
-  endif
-
   " for ansible
   Plug 'pearofducks/ansible-vim'
 
@@ -556,8 +551,6 @@ if filereadable(s:plugpath)
 
   Plug 'lumiliet/vim-twig'
 
-  "Plug 'python-rope/ropevim'
-  "Plug 'ternjs/tern_for_vim'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
   Plug 'tpope/vim-repeat'
