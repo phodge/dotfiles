@@ -85,3 +85,9 @@
 [submodule "vimade.git"]
 	path = vim-packages/vimade.git
 	url = https://github.com/TaDaa/vimade.git
+[submodule "tmux-complete.vim.git"]
+	path = vim-packages/tmux-complete.vim.git
+	url = https://github.com/wellle/tmux-complete.vim.git
+[submodule "vim-projectroot.git"]
+	path = vim-packages/vim-projectroot.git
+	url = https://github.com/phodge/vim-projectroot.git

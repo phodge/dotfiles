@@ -692,9 +692,10 @@ if filereadable(s:plugpath)
   " }}}
 
   " use <C-X><C-U> to complete things from other tmux panes/windows
-  Plug 'wellle/tmux-complete.vim'
+  call <SID>VendoredPlug('wellle/tmux-complete.vim')
 
-  PlugMaster 'phodge/vim-projectroot'
+  " vim-projectroot is used for Gutentags config below
+  call <SID>VendoredPlug('phodge/vim-projectroot')
 
   " tell vim-projectroot that when a file is part of a git repo that is a
   " submodule of another git repo, the parent git repo should be considerd the
