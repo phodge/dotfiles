@@ -337,7 +337,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('TaDaa/vimade')
   endif
 
-  if has('nvim') && g:want_neovim_snippy
+  if has('nvim') && get(g:, 'want_neovim_snippy', 0)
     " NOTE: you can find links to more snippets plugins here:
     " https://github.com/honza/vim-snippets
 
