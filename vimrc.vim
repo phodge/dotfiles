@@ -403,6 +403,10 @@ if filereadable(s:plugpath)
     let g:fzf_action['enter'] = 'split'
   endif
 
+  " Use `:DiffviewFileHistory %` to get a history of the current buffer
+  " See `:h diffview` for other git history commands
+  Plug 'sindrets/diffview.nvim'
+
   " git-gutter
   if has('signs') && v:version >= 704
     Plug 'airblade/vim-gitgutter'
