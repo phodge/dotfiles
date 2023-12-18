@@ -11,8 +11,12 @@ vnoremap gq <ESC>:call <SID>GQ(1)<CR>
 
 function! <SID>GQ(isvisual)
   let l:old_tw = &l:textwidth
+  let l:old_fex = &l:formatexpr
   try
     setlocal tw=79
+    " also reset formatexpr so that formatting isn't delegated to the language
+    " server (it won't respect our 'textwidth' setting)
+    setlocal formatexpr=
     if a:isvisual
       normal! gvgq
     else
@@ -20,6 +24,7 @@ function! <SID>GQ(isvisual)
     endif
   finally
     let &l:textwidth = l:old_tw
+    let &l:formatexpr = l:old_fex
   endtry
 endfun
 
