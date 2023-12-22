@@ -108,6 +108,12 @@ want_poetry = allow_installing_stuff and yesno(
     False,
 )
 
+create_homely_venv = want_full and yesno(
+    "create_homely_venv",
+    "Create ~/playground-homely virtualenv?",
+    False,
+)
+
 
 pipx_install_fn = None
 
@@ -265,7 +271,12 @@ def create_neovim_venv():
 
 @section()
 def create_powerline_venv():
-    maintain_virtualenv(POWERLINE_VENV, [])
+    core_packages = []
+    if not create_homely_venv:
+        # need to install homely for powerline from pypi if not developing
+        # locally
+        core_packages.append('homely')
+    maintain_virtualenv(POWERLINE_VENV, core_packages)
 
 
 @section(

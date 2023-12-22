@@ -1,20 +1,15 @@
 from os import environ
 from os.path import exists, join
 
+from HOMELY import (POWERLINE_VENV, create_homely_venv, jerjerrod_addline,
+                    mypips, venv_exec, wantjerjerrod)
 from homely.general import mkdir, section
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import (jerjerrod_addline, mypips, venv_exec, want_full,
-                    wantjerjerrod, POWERLINE_VENV)
 
-
-@section(enabled=want_full)
+@section(enabled=create_homely_venv)
 def homely_dev():
-    if not yesno("create_homely_venv",
-                 "Create ~/playground-homely virtualenv?", False):
-        return
-
     venv = environ['HOME'] + '/playground-homely'
 
     # create container dir
