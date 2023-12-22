@@ -9,14 +9,20 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import (IS_UBUNTU, allow_installing_stuff, getpippaths,
-                    section_macos, want_python2_anything, wantjerjerrod,
-                    want_full)
+from HOMELY import (IS_OSX, IS_UBUNTU, allow_installing_stuff, getpippaths,
+                    section_macos, want_full, want_python2_anything,
+                    wantjerjerrod)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
 zshrc = os.environ['HOME'] + '/.zshrc'
 HERE = os.path.dirname(__file__)
+
+upgrade_bash = IS_OSX and allow_installing_stuff and haveexecutable('brew') and yesno(
+    'upgrade_bash',
+    'Upgrade bash?',
+    default=False,
+)
 
 
 def install_completions(rcfile):
@@ -25,21 +31,20 @@ def install_completions(rcfile):
         lineinfile(rcfile, 'want_click_completion jerjerrod')
 
 
-@section_macos(enabled=allow_installing_stuff and haveexecutable('brew'))
-def bash_install():
-    if not yesno('upgrade_bash', 'Upgrade bash?', default=False):
-        return
+def _get_bash_executable():
+    for candidate in ['/opt/homebrew/bin/bash', '/usr/local/bin/bash']:
+        if os.path.exists(candidate):
+            return candidate
 
+    raise Exception("Bash executable not found")
+
+
+@section_macos(enabled=upgrade_bash)
+def bash_install():
     # install newer version of bash using homebrew or some other mechanism
     execute(['brew', 'install', 'bash'])
 
-    # XXX: actually it appears to now be in /opt/homebrew/bin/bash
-    for candidate in ['/opt/homebrew/bin/bash', '/usr/local/bin/bash']:
-        if os.path.exists(candidate):
-            bash_exec = candidate
-            break
-    else:
-        raise Exception("Bash executable not found")
+    bash_exec = _get_bash_executable()
 
     # how to add /usr/local/bin/bash to /etc/shells?
     for line in open('/etc/shells').readlines():
@@ -51,9 +56,33 @@ def bash_install():
             ['sudo', 'bash', '-c', 'echo {} >> /etc/shells'.format(bash_exec)],
             stdout="TTY")
 
-    if os.getenv('SHELL') != bash_exec:
+    # update the user's shell if it is currently the builtin bash
+    current_shell = os.getenv('SHELL')
+    if current_shell != bash_exec and not current_shell.endswith('/zsh'):
         USER = os.getenv('USER')
         execute(['sudo', 'chpass', '-s', bash_exec, USER], stdout="TTY")
+
+
+def _get_current_shell():
+    result = execute(['/bin/bash', '-c', 'dscl . -read ~/ UserShell'], stdout=True)[1].decode('utf-8').strip()
+    assert result.startswith('UserShell: ')
+    return result[11:]
+
+
+@section_macos(enabled=allow_installing_stuff)
+def set_user_default_shell():
+    use_zsh = yesno('use_zsh_default_shell', 'Use zsh as default shell?', recommended=True)
+
+    if use_zsh:
+        desired_shell = '/bin/zsh'
+    elif upgrade_bash:
+        desired_shell = _get_bash_executable()
+    else:
+        return
+
+    if _get_current_shell() != desired_shell:
+        USER = os.getenv('USER')
+        execute(['sudo', 'chpass', '-s', desired_shell, USER], stdout="TTY")
 
 
 @section(quick=True)
