@@ -32,7 +32,13 @@ def bash_install():
     # install newer version of bash using homebrew or some other mechanism
     execute(['brew', 'install', 'bash'])
 
-    bash_exec = '/usr/local/bin/bash'
+    # XXX: actually it appears to now be in /opt/homebrew/bin/bash
+    for candidate in ['/opt/homebrew/bin/bash', '/usr/local/bin/bash']:
+        if os.path.exists(candidate):
+            bash_exec = candidate
+            break
+    else:
+        raise Exception("Bash executable not found")
 
     # how to add /usr/local/bin/bash to /etc/shells?
     for line in open('/etc/shells').readlines():

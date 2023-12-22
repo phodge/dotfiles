@@ -4,6 +4,7 @@ import os
 import os.path
 import platform
 import re
+from pathlib import Path
 from typing import List
 
 from homely._ui import allowinteractive
@@ -73,6 +74,18 @@ allow_installing_stuff = want_full and yesno(
 
 setallowinstall(allow_installing_stuff)
 
+
+want_alacritty = allow_installing_stuff and yesno(
+    'want_alacritty',
+    'Install Alacritty?',
+    default=None,
+)
+
+install_alacritty_homebrew = want_alacritty and IS_OSX and yesno(
+    'install_alacritty_homebrew',
+    'Install Alacritty via Homebrew?',
+    recommended=True,
+)
 
 want_python2_anything = yesno(
     'want_python2_anything',
@@ -288,6 +301,25 @@ def create_winwin_venv():
 
 
 @section(enabled=allow_installing_stuff)
+def create_winwin_config():
+    winwincfg = Path(HOME) / '.config/winwin.json'
+
+    config = json.loads(winwincfg.read_text())
+
+    config['force_platform'] = config.get('force_platform', 'terminal/tmux')
+
+    # if we're on macos, we need to configure winwin to use Alacritty as our
+    # terminal
+    if IS_OSX and want_alacritty:
+        config['terminal_app'] = config.get('terminal_app', 'alacritty')
+        if install_alacritty_homebrew and os.path.exists('/opt/homebrew/bin'):
+            config['alacritty_path'] = config.get('alacritty_path', '/opt/homebrew/bin/alacritty')
+
+    winwincfg.parent.mkdir(exist_ok=True)
+    winwincfg.write_text(json.dumps(config, indent=2, sort_keys=True))
+
+
+@section(enabled=allow_installing_stuff)
 def install_winwin_shortcuts():
     if not IS_OSX:
         # FIXME: get this working under Ubuntu as well
@@ -371,7 +403,11 @@ def install_winwin_shortcuts():
 
     _install_macos_workflow_service(
         'Terminal Selector QA',
-        '{}/bin/macos-launch-terminal-selector'.format(HERE),
+        # we use '/bin/bash -i ...' here because otherwise the Quick Action
+        # will launch in non-interactive mode, causing it to skip ~/.bashrc and
+        # so on, and then tmux won't load correctly because $PATH isn't set up,
+        # and other Bad Things
+        "/bin/bash -i -c '{}/bin/macos-launch-terminal-selector'".format(HERE),
     )
 
     all_pbs = execute(['defaults', 'read', 'pbs'], stdout=True)[1]
@@ -398,7 +434,7 @@ def install_winwin_shortcuts():
             (todo_launcher_key, todo_launcher_data),
             (vanilla_launcher_key, vanilla_launcher_data),
     ):
-        if data[key] != value:
+        if data.get(key) != value:
             needs_writing = True
             data[key] = value
 
@@ -419,6 +455,12 @@ def install_winwin_shortcuts():
             # FIXME: this never worked - the keyboard shortcuts don't seem to
             # activate even if the System Preferences UI does show them there
             execute(['defaults', 'write', 'pbs', 'NSServicesStatus', new_xml.decode('utf-8')])
+
+    # XXX: this hack is for macos where the terminal launcher shortcuts launch
+    # without a proper $PATH and then don't have access to
+    # /opt/homebrew/bin/tmux
+    if IS_OSX:
+        symlink('/opt/homebrew/bin/tmux', '~/bin/tmux')
 
 
 def whenmissing(filename, substr):
@@ -1021,11 +1063,8 @@ def install_pyenv():
         installpkg('pkgconf', apt='pkgconf')
 
 
-@section(enabled=allow_installing_stuff)
+@section(enabled=want_alacritty)
 def install_alacritty():
-    if not yesno('want_alacritty', 'Install Alacritty?', default=None):
-        return
-
     # write an alacritty.yml config that imports the ones from this repo
     lines = ['import:']
     lines.append('  - {}/alacritty-base.yml'.format(HERE))
@@ -1058,7 +1097,7 @@ def install_alacritty():
 
     blockinfile('~/.config/alacritty.yml', lines, WHERE_TOP)
 
-    if yesno('install_alacritty_homebrew', 'Install Alacritty via Homebrew?'):
+    if install_alacritty_homebrew:
         execute(['brew', 'install', 'alacritty'])
 
         # XXX:
