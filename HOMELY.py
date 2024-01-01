@@ -65,6 +65,11 @@ want_full = not yesno(
     None,
 )
 
+not_work_machine = not yesno(
+    'is_work_machine',
+    'Work computer?',
+    None,
+)
 
 allow_installing_stuff = want_full and yesno(
     'allow_install',
@@ -121,7 +126,7 @@ want_poetry = allow_installing_stuff and yesno(
     False,
 )
 
-create_homely_venv = want_full and yesno(
+create_homely_venv = want_full and not_work_machine and yesno(
     "create_homely_venv",
     "Create ~/playground-homely virtualenv?",
     False,
@@ -896,9 +901,9 @@ def nudge():
         run(nudge)
 
 
-@section
+@section(enabled=want_full and not_work_machine)
 def legacypl():
-    if yesno('install_legacypl', 'Create clone of legacy-pl?', want_full):
+    if yesno('install_legacypl', 'Create clone of legacy-pl?'):
         mkdir('~/playground-6')
         legacy = InstallFromSource('ssh://git@github.com/phodge/legacy-pl.git',
                                    '~/playground-6/legacy-pl.git')
@@ -928,7 +933,7 @@ def powerline_path():
     return os.path.dirname(powerline_file.strip().decode('utf-8'))
 
 
-@section
+@section(enabled=not_work_machine)
 def pypirc():
     rc = HOME + '/.pypirc'
     if not yesno('write_pypirc', 'Write a .pypirc file?', want_full):

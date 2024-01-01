@@ -13,7 +13,7 @@ from homely.ui import allowinteractive, yesno
 import HOMELY
 from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_snap,
                     jerjerrod_addline, memoize, mypips, need_installpkg,
-                    want_full, wantjerjerrod, whenmissing)
+                    not_work_machine, want_full, wantjerjerrod, whenmissing)
 
 VIM_TAG = 'v8.1.0264'
 
@@ -22,7 +22,7 @@ NVIM_TAG = 'v0.8.2'
 
 @memoize
 def want_nvim_devel() -> bool:
-    return HOMELY.wantnvim() and yesno(
+    return HOMELY.wantnvim() and not_work_machine and yesno(
         'install_nvim_devel',
         'Put a dev version of neovim in playground-6?',
         False,
@@ -53,7 +53,8 @@ def get_vim_options() -> Dict[str, Union[bool, str]]:
     # neovim
     if HOMELY.use_neovim_virtualenv():
         ret['g:python3_host_prog'] = HOMELY.NEOVIM_VENV + '/bin/python'
-    ret['g:peter_want_nvimdev_plugin'] = want_nvim_devel() and yesno(
+
+    ret['g:peter_want_nvimdev_plugin'] = want_nvim_devel() and not_work_machine and yesno(
         'neovim_want_nvimdev_plugin',
         'Neovim: install nvimdev.nvim plugin for neovim development?',
     )
@@ -190,7 +191,7 @@ def vim_config():
 
     # <est> utility
     hasphp = haveexecutable('php')
-    if yesno('install_est_utility', 'Install <vim-est>?', hasphp):
+    if not_work_machine and yesno('install_est_utility', 'Install <vim-est>?', hasphp):
         est = InstallFromSource('https://github.com/phodge/vim-est.git',
                                 '~/src/vim-est.git')
         est.select_branch('master')
