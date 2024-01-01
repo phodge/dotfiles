@@ -888,14 +888,9 @@ def hg():
 
 
 # install nudge
-@section
+@section(quick=True)
 def nudge():
-    if yesno('install_nudge', 'Install nudge?', want_full):
-        nudge = InstallFromSource('https://github.com/toomuchphp/nudge.git',
-                                  '~/src/nudge.git')
-        nudge.select_branch('master')
-        nudge.symlink('bin/nudge', '~/bin/nudge')
-        run(nudge)
+    symlink('nudge.git/bin/nudge', '~/bin/nudge')
 
 
 @section(enabled=want_full and not_work_machine)

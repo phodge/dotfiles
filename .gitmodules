@@ -1,6 +1,9 @@
 [submodule "winwin.git"]
 	path = winwin.git
 	url = git@github.com:phodge/winwin.git
+[submodule "nudge.git"]
+	path = nudge.git
+	url = git@github.com:phodge/nudge.git
 [submodule "nvim-treesitter.git"]
 	path = vim-packages/nvim-treesitter.git
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
