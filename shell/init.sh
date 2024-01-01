@@ -42,7 +42,11 @@ if [ -e /etc/lsb-release ]; then
 fi
 
 # add our SSH key to ssh agent
-test -z "$TMUX" && ssh-add -K ~/.ssh/id_rsa 2>/dev/null || :
+# XXX: on ubuntu 22.04 this adds a 'Enter PIN for authenticator' prompt to
+# shell startup so maybe we don't want this?
+if [[ $IS_MACOS ]]; then
+    test -z "$TMUX" && test -e ~/.ssh/id_rsa && ssh-add -K ~/.ssh/id_rsa 2>/dev/null || :
+fi
 
 if [ -n "$ZSH_NAME" ]; then
     source $DOTFILES_PATH/shell/zsh.sh
