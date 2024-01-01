@@ -5,7 +5,7 @@ import re
 import sys
 from pathlib import Path
 from subprocess import run
-from typing import Dict
+from typing import Dict, Iterable
 
 SETTINGS_PATH_VIM = Path("~/.vim/settings.vim").expanduser()
 STATE_PATH = Path("~/.config/mydots.json").expanduser()
