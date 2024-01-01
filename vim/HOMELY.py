@@ -11,7 +11,7 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 import HOMELY
-from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_apt,
+from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_snap,
                     jerjerrod_addline, memoize, mypips, need_installpkg,
                     want_full, wantjerjerrod, whenmissing)
 
@@ -266,9 +266,11 @@ def vim_install():
 
 @section(enabled=HOMELY.wantnvim())
 def nvim_install():
-    if install_nvim_via_apt():
-        installpkg('neovim')
-        installpkg('python-neovim')
+    if install_nvim_via_snap():
+        execute(
+            ['sudo', 'snap', 'install', '--classic', 'nvim'],
+            stdout="TTY",
+        )
         return
 
     if (allow_installing_stuff and

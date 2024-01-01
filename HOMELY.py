@@ -211,7 +211,7 @@ def use_neovim_virtualenv():
 
 
 @memoize
-def install_nvim_via_apt():
+def install_nvim_via_snap():
     if not wantnvim():
         return False
 
@@ -221,7 +221,7 @@ def install_nvim_via_apt():
     if not IS_UBUNTU:
         return False
 
-    return yesno('install_nvim_package', 'Install nvim from apt?')
+    return yesno('install_nvim_package', 'Install nvim from snap?')
 
 
 @memoize
@@ -717,7 +717,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         # needed for `git rebase -i` commit comparisons in neovim
         packages.append('GitPython')
 
-        if not install_nvim_via_apt():
+        if not install_nvim_via_snap():
             # if we want nvim then we probably need the pynvim package
             packages.append('pynvim')
 
