@@ -1,4 +1,4 @@
-from homely.general import symlink, writefile
+from homely.general import symlink, writefile, mkdir
 from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
@@ -64,9 +64,12 @@ def ubuntu_install_devilspie2():
     desktops/workspaces. This means I don't accidentally flip to another desktop/workspace when I
     go to play some music or respond to a chat message.
     """
-    question = 'Install devilspie2 to manage window sticky bits?'
+    question = 'Install devilspie2 to manage window sticky bits (share apps across all desktops)?'
     if not yesno('want_devilspie2', question, default=True):
         return
+
+    mkdir('~/.config')
+    mkdir('~/.config/autostart')
 
     installpkg('devilspie2', apt='devilspie2', brew=None)
 
