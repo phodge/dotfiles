@@ -304,7 +304,10 @@ def create_winwin_venv():
 def create_winwin_config():
     winwincfg = Path(HOME) / '.config/winwin.json'
 
-    config = json.loads(winwincfg.read_text())
+    try:
+        config = json.loads(winwincfg.read_text())
+    except FileNotFoundError:
+        config = {}
 
     config['force_platform'] = config.get('force_platform', 'terminal/tmux')
 
