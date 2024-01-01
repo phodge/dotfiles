@@ -17,7 +17,7 @@ def ubuntu_swap_caps_escape():
         # already done
         return
 
-    if current == b'' or current == b'[]':
+    if current == b'' or current == b'[]' or current == b'@as []':
         new_value = "['caps:swapescape']"
     else:
         raise Exception("TODO: don't know how to modify xkb-options value")  # noqa
