@@ -549,9 +549,6 @@ def install_python2_pip():
 
 @section(enabled=allow_installing_stuff)
 def search_tools():
-    if yesno('install_ack', 'Install ack?', False):
-        installpkg('ack', apt='ack-grep')
-
     if want_silver_searcher():
         installpkg('ag',
                    yum='the_silver_searcher',
