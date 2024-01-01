@@ -9,8 +9,9 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import (allow_installing_stuff, getpippaths, section_macos,
-                    want_python2_anything, wantjerjerrod, want_full)
+from HOMELY import (IS_UBUNTU, allow_installing_stuff, getpippaths,
+                    section_macos, want_python2_anything, wantjerjerrod,
+                    want_full)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -82,6 +83,9 @@ def shell_path():
     pathregex = re.compile(r'\bpython[/\-]?\d\.\d+\b', re.IGNORECASE)
 
     lines = []
+
+    if IS_UBUNTU:
+        lines.append(f'PATH_HIGH="{os.environ["HOME"]}/.local/bin:$PATH_HIGH"')
 
     def _findpybin(pycmd):
         code = 'import sys, json; print(json.dumps(sys.path))'
