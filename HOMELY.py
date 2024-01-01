@@ -650,9 +650,9 @@ def fzf_install():
 
     lineinfile('~/.bashrc', 'source {}/shell/completion.bash'.format(fzf_path))
     lineinfile('~/.bashrc', 'source {}/shell/key-bindings.bash'.format(fzf_path))
-    if wantzsh():
-        lineinfile('~/.zshrc', 'source {}/shell/completion.zsh'.format(fzf_path))
-        lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_path))
+
+    lineinfile('~/.zshrc', 'source {}/shell/completion.zsh'.format(fzf_path))
+    lineinfile('~/.zshrc', 'source {}/shell/key-bindings.zsh'.format(fzf_path))
 
 
 @memoize

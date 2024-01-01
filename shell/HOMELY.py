@@ -10,7 +10,7 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
 from HOMELY import (allow_installing_stuff, getpippaths, section_macos,
-                    want_python2_anything, wantjerjerrod, wantzsh)
+                    want_python2_anything, wantjerjerrod, want_full)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -164,7 +164,7 @@ def bash_config():
         _bashrc()
 
 
-@section(enabled=wantzsh())
+@section(enabled=want_full)
 def zsh_config():
     lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
     install_completions('~/.zshrc')
