@@ -77,6 +77,12 @@ allow_installing_stuff = want_full and yesno(
     None
 )
 
+any_ancient_things = not_work_machine and yesno(
+    'any_ancient_things',
+    'Ask about installing ancient/legacy support tools?',
+    None,
+)
+
 setallowinstall(allow_installing_stuff)
 
 
@@ -92,13 +98,13 @@ install_alacritty_homebrew = want_alacritty and IS_OSX and yesno(
     recommended=True,
 )
 
-want_python2_anything = yesno(
+want_python2_anything = any_ancient_things and yesno(
     'want_python2_anything',
     'Bother with anything python2?',
     False,
 )
 
-want_php_anything = yesno(
+want_php_anything = any_ancient_things and yesno(
     'want_php_anything',
     'Bother with anything PHP-related?',
     False,
@@ -114,7 +120,7 @@ want_rust_anything = yesno(
     'Bother with anything Rust-related?',
 )
 
-want_mercurial = yesno(
+want_mercurial = any_ancient_things and yesno(
     'want_mercurial',
     'Bother with anything mercurial-related?',
     False,

@@ -183,7 +183,7 @@ def vim_config():
         lineinfile('~/.config/jerjerrod/jerjerrod.conf', 'PROJECT ~/src/plugedit/*.git ALWAYSFLAG')
 
     # icinga syntax/filetype
-    if yesno('want_vim_icinga_stuff', 'Install vim icinga2 syntax/ftplugin?', default=False):
+    if HOMELY.any_ancient_things and yesno('want_vim_icinga_stuff', 'Install vim icinga2 syntax/ftplugin?', default=False):
         files = ['syntax/icinga2.vim', 'ftdetect/icinga2.vim']
         for name in files:
             url = 'https://raw.githubusercontent.com/Icinga/icinga2/master/tools/syntax/vim/{}'
@@ -191,7 +191,7 @@ def vim_config():
 
     # <est> utility
     hasphp = haveexecutable('php')
-    if not_work_machine and yesno('install_est_utility', 'Install <vim-est>?', hasphp):
+    if not_work_machine and HOMELY.any_ancient_things and yesno('install_est_utility', 'Install <vim-est>?', hasphp):
         est = InstallFromSource('https://github.com/phodge/vim-est.git',
                                 '~/src/vim-est.git')
         est.select_branch('master')
