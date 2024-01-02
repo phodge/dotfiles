@@ -15,7 +15,7 @@ Universal
 
 1) Install homely:
 
-    pip3 install homely
+    pip3 install --user homely
 
 2) Clone this repo locally:
 
