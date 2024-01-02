@@ -280,6 +280,12 @@ def maintain_virtualenv(path: str, core_packages: List[str]) -> None:
         venv_exec(pip_exe, [pip_exe, 'install', '--upgrade'] + core_packages)
 
 
+@section_ubuntu(enabled=allow_installing_stuff)
+def install_python3_base_packages():
+    installpkg('python3-venv')
+    installpkg('python3-pip')
+
+
 @section(
     enabled=use_neovim_virtualenv(),
     # if virtualenv already exists, just upgrade it monthly
