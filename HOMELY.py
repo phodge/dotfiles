@@ -919,7 +919,8 @@ def yapf():
 
 @memoize
 def wantpowerline():
-    return yesno('use_powerline', 'Use powerline for tmux/vim?', want_full)
+    # FIXME: we can remove this helper
+    return want_full
 
 
 @memoize
