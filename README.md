@@ -4,15 +4,10 @@ INSTALLATION INSTRUCTIONS
 Ubuntu
 ------
 
-First, make life easier on yourself:
+Run the following commands in a shell:
 
     export PATH=$HOME/.local/bin
-
-Next, `python3-pip` seems to install an old version of pip3 that segfaults, and
-`ensurepip` doesn't seem to be installed. So you can use:
-
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-	python3 get-pip.py --user && pip3 --version && rm -i get-pip.py
+    sudo apt-get install python3 python3-pip
 
 
 Universal
