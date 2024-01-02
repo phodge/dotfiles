@@ -566,11 +566,10 @@ def search_tools():
                    yum='the_silver_searcher',
                    apt='silversearcher-ag')
 
-    if yesno('install_ripgrep', 'Install ripgrep?', True):
-        yum = False
-        if haveexecutable('yum') and install_fedora_copr():
-            yum = 'ripgrep'
-        installpkg('ripgrep', yum=yum)
+    yum = False
+    if haveexecutable('yum') and install_fedora_copr():
+        yum = 'ripgrep'
+    installpkg('ripgrep', yum=yum)
 
 
 # more of my favourite developer tools
