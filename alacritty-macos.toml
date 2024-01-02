@@ -1,0 +1,55 @@
+[window]
+# XXX? this is to replace the old alt_send_esc
+option_as_alt = "Both"
+
+[font]
+size = 16
+
+[font.normal]
+family = "Inconsolata for Powerline"
+
+[[hints.enabled]]
+command = "open"
+post_processing = true
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\u0000-\u001F\u007F-<>\"\\s{-}\\^⟨⟩`]+"
+
+[hints.enabled.mouse]
+enabled = true
+mods = "Command"
+
+# XXX: this doesn't seem to work inside tmux
+#[mouse.url]
+#modifiers = "Command"
+
+
+[keyboard]
+bindings = [
+    # like using ALT+.
+    { key = "Period", mods = "Command",       chars = "\u001B." },
+
+    # FIXME: these could come from the keybindings/keys.yaml?
+    { key = "J",      mods = "Command",       chars = "\u001Bj" },
+    { key = "H",      mods = "Command",       chars = "\u001Bh" },
+    { key = "K",      mods = "Command",       chars = "\u001Bk" },
+    { key = "L",      mods = "Command",       chars = "\u001Bl" },
+
+    # basically upper-case versions of the things above
+    { key = "J",      mods = "Command|Shift", chars = "\u001BJ" },
+    { key = "H",      mods = "Command|Shift", chars = "\u001BH" },
+    { key = "K",      mods = "Command|Shift", chars = "\u001BK" },
+    { key = "L",      mods = "Command|Shift", chars = "\u001BL" },
+
+    # tmux window navigation
+    { key = "N",      mods = "Command",       chars = "\u001Bn" },
+    { key = "P",      mods = "Command",       chars = "\u001Bp" },
+    { key = "N",      mods = "Command|Shift", chars = "\u001BN" },
+    { key = "P",      mods = "Command|Shift", chars = "\u001BP" },
+
+    # MacOS stuff
+    # FIXME: this gives us fullscreen but with no menu bar so not great :-(
+    { key = "Return", mods = "Command",       action = "ToggleSimpleFullscreen" },
+
+    # copy-paste like iTerm
+    { key = "C",      mods = "Command|Shift", action = "Copy" },
+    { key = "V",      mods = "Command|Shift", action = "Paste" },
+]

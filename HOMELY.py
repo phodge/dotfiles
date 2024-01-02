@@ -1076,12 +1076,23 @@ def install_pyenv():
 @section(enabled=want_alacritty)
 def install_alacritty():
     # write an alacritty.yml config that imports the ones from this repo
-    lines = ['import:']
-    lines.append('  - {}/alacritty-base.yml'.format(HERE))
+    imports = [f'{HERE}/alacritty-base.toml']
 
     # FIXME: add some proper MacOS detection to homely
     if IS_OSX:
-        lines.append('  - {}/alacritty-macos.yml'.format(HERE))
+        imports.append(f'{HERE}/alacritty-macos.toml')
+
+        def _export(d: dict):
+            inner = []
+            for k, v in d.items():
+                if isinstance(v, (str, int)):
+                    safe = repr(v)
+                elif isinstance(v, dict):
+                    safe = _export(v)
+                else:
+                    raise Exception("TODO: bork")  # noqa
+                inner.append(k + ' = ' + safe)
+            return '{ ' + ', '.join(inner) + ' }'
 
         keybindings = []
         keybindings.append(dict(
@@ -1100,12 +1111,20 @@ def install_alacritty():
             command=dict(program=HERE + '/bin/macos-launch-terminal-selector'),
         ))
 
-        with writefile('~/.config/alacritty-keybindings.yml') as f:
-            json.dump({'key_bindings': keybindings}, f, indent='  ')
+        with writefile('~/.config/alacritty-keybindings.toml') as f:
+            f.write('[keyboard]\n')
+            f.write('bindings = [\n')
+            for bind in keybindings:
+                f.write('    ' + _export(bind) + ',\n')
+            f.write(']\n')
 
-        lines.append('  - {}/.config/alacritty-keybindings.yml'.format(HOME))
+        imports.append(f'{HOME}/.config/alacritty-keybindings.toml')
 
-    blockinfile('~/.config/alacritty.yml', lines, WHERE_TOP)
+    blockinfile(
+        '~/.config/alacritty.toml',
+        ['import = ['] + [f'  "{path}",' for path in imports] + [']'],
+        WHERE_TOP,
+    )
 
     if install_alacritty_homebrew:
         execute(['brew', 'install', 'alacritty'])
