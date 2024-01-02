@@ -575,13 +575,6 @@ def search_tools():
 # more of my favourite developer tools
 @section
 def tools():
-    if yesno('install_with', 'Install `with` utility?', want_full):
-        withutil = InstallFromSource('https://github.com/mchav/with',
-                                     '~/src/with.git')
-        withutil.symlink('with', '~/bin/with')
-        withutil.select_branch('master')
-        run(withutil)
-
     if yesno('install_universal_ctags', 'Install Universal Ctags?', want_full):
         need_installpkg(apt=('autoconf', 'g++', 'pkg-config'))
         mkdir('~/bin')
