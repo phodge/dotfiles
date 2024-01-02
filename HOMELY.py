@@ -993,7 +993,7 @@ def git_install():
         execute(cmd, stdout="TTY")
 
 
-@section_macos(enabled=haveexecutable('brew'))
+@section_macos(enabled=allow_installing_stuff and haveexecutable('brew'))
 def font_install():
     fonts = [
         'homebrew/cask-fonts/font-inconsolata',
