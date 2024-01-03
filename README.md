@@ -6,7 +6,7 @@ Ubuntu
 
 Run the following commands in a shell:
 
-    export PATH=$HOME/.local/bin
+    export PATH=$PATH:$HOME/.local/bin
     sudo apt-get install python3 python3-pip
 
 
