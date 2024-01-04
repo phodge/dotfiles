@@ -1149,6 +1149,8 @@ set sidescrolloff=20
       silent! nunmap N
     endif
 
+    " make sure CTRL+A to go to start of line works in :command mode, too
+    cnoremap <C-A> <Home>
 
     " backspace hides the popup menu
     if exists('*pumvisible')
