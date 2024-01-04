@@ -230,26 +230,6 @@ if filereadable(s:plugpath)
 
     call <SID>VendoredPlug('w0rp/ale')
 
-    let g:ale_linters = get(g:, 'ale_linters', {})
-    let g:ale_linters.php = ['php', 'phan', 'phpcs', 'psalm']
-
-    let g:ale_php_cs_fixer_use_global = 1
-    let g:ale_php_cs_fixer_executable = $HOME.'/.config/composer/vendor/bin/php-cs-fixer'
-    let g:ale_fixers = get(g:, 'ale_fixers', {})
-    let g:ale_fixers.php = ['php_cs_fixer']
-
-    if ! s:use_lsp
-      " when not using LSP plugin, allow Ale to talk to the language server
-      "let g:ale_php_langserver_use_global = 1
-      "let g:ale_php_langserver_executable = $HOME.'/.config/composer/vendor/felixfbecker/language-server/bin/php-language-server.php'
-      "call add(g:ale_linters.php, 'langserver')
-
-      " when LSP isn't enabled, ALE will perform these things:
-      " NOTE: this is a global mapping, so might still be overwritten by a
-      " buffer-local mapping when a LS is in use for the current buffer
-      nnoremap <space>d :ALEGoToDefinition<CR>
-    endif
-
   " }}}
 
   if s:use_lsp
