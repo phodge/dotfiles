@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 repohook="$PWD/.git/hooks/$(basename $0)"
 
-if [ -n "$GIT_HOOKS_SKIP_POST_COMMIT_ON_REBASE" ]; then
-    if echo "$GIT_REFLOG_ACTION" | grep '^rebase\b' &>/dev/null; then
-        # skip post-commit hook on git rebase because the clipchamp repo is using the
-        # git lfs post-commit hook and it slows down a big rebase
-        exit
-    fi
-fi
-
 if [ -x "$repohook" ]; then
     "$repohook" "$@"
 fi
