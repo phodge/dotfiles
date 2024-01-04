@@ -1645,5 +1645,8 @@ aug end
 
 com! -nargs=0 NChanged Shell git diff origin/master... --name-status --no-renames; git status --short
 
+" have had to add this as git commit hooks wreak havoc with my open buffers if
+" they reformat them
+setglobal noautoread
 
 let s:vim_entered = 1
