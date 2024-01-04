@@ -20,6 +20,7 @@ SETTINGS_NAMES = {
     'want_neovim_snippy',
     'want_vimade',
     'use_vendored_fzf',
+    'use_ale_dmypy',
 }
 
 
@@ -248,6 +249,22 @@ def main(automatic: bool, print_json: bool) -> None:
         default=0,
         state=state,
         automatic=automatic or print_json,
+    )
+
+    _yesno_setting_big(
+        'Use dmypy under ALE for faster mypy checking?',
+        'use_ale_dmypy',
+        default=0,
+        state=state,
+        automatic=automatic or print_json,
+        advantages=[
+            "fast linting on massive codebases",
+        ],
+        disadvantages=[
+            "doesn't seem to be built corretly into ALE and might not work",
+            "often silently fails due to: [Errno 61] Connection refused",
+            "often not faster due to: Restarting: configuration changed",
+        ],
     )
 
     _yesno_setting_big(

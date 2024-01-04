@@ -230,6 +230,14 @@ if filereadable(s:plugpath)
 
     call <SID>VendoredPlug('w0rp/ale')
 
+    if get(g:, 'use_ale_dmypy')
+      " tell ale to use dmypy instead of mypy
+      " WARNING: see notes in mydots-configure
+      let g:ale_python_mypy_use_global = 1
+      let g:ale_python_mypy_executable = 'dmypy'
+      let g:ale_python_mypy_options = 'run -- '
+    endif
+
   " }}}
 
   if s:use_lsp
