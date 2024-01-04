@@ -3,6 +3,9 @@ com! -nargs=0 -buffer RebaseAddSeparator call <SID>AddSeparator()
 
 let s:rebase_py = expand('<sfile>:p:h') . '/gitrebase.py'
 
+" jump down to "REVIEW BELOW" line if it is present
+call search('REVIEW BELOW', 'c')
+
 fun! <SID>ShowRev()
   " what rev do we want
   let l:line = getline('.')
