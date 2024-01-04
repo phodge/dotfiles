@@ -440,8 +440,18 @@ if filereadable(s:plugpath)
 
   " skip gutentags when there is no ctags executable installed
   let g:gutentags_ctags_tagfile = '.tags'
-  let g:gutentags_ctags_exclude = ['.mypy_cache']
+  let g:gutentags_ctags_exclude = [
+        \ '.mypy_cache',
+        \ '*.min.js',
+        \ '*-min.js',
+        \ '*.map.js',
+        \ '*-map.js',
+        \ ]
   let g:gutentags_generate_on_empty_buffer = 1
+  " disable file types that add noise to the tag file
+  let g:gutentags_ctags_extra_args = [
+        \ '--languages=-html,svg,markdown,json,sql,css',
+        \ ]
   Plug 'ludovicchabant/vim-gutentags', executable('ctags') && v:version >= 704 ? {} : {'on': []}
 
   " configure gutenttags to use git ls-files to find files ... I don't know why this isn't the
