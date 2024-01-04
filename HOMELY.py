@@ -332,7 +332,12 @@ def create_winwin_config():
     # terminal
     if IS_OSX and want_alacritty:
         config['terminal_app'] = config.get('terminal_app', 'alacritty')
-        if install_alacritty_homebrew and os.path.exists('/opt/homebrew/bin'):
+        if yesno(
+            'alacritty_ctrl_h_glitch',
+            'Are you experiencing the Alacritty CMD+H glitch when it is launched via terminal launcher?',
+        ):
+            config['alacritty_path'] = '/Applications/Alacritty.app/Contents/MacOS/alacritty'
+        elif install_alacritty_homebrew and os.path.exists('/opt/homebrew/bin'):
             config['alacritty_path'] = config.get('alacritty_path', '/opt/homebrew/bin/alacritty')
 
     winwincfg.parent.mkdir(exist_ok=True)
