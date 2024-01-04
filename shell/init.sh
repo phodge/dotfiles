@@ -180,6 +180,18 @@ unset PATH_MODIFIED
 
 # this function should be the last thing in your .bashrc/.zshrc
 shell_init_done() {
+    # modify PATH now if it hasn't been done yet
+    if [ -z "$PATH_MODIFIED" ]; then
+        export PATH_MODIFIED=1
+        PATH="$PATH_HIGH""$PATH"
+    fi
+
+    shell_init_completions
+
+    shell_post_init
+}
+
+shell_init_completions() {
     completions_zsh="$HOME/.completions.zsh.sh"
     completions_bash="$HOME/.completions.bash.sh"
 
@@ -187,12 +199,6 @@ shell_init_done() {
         completions="$completions_zsh"
     else
         completions="$completions_bash"
-    fi
-
-    # modify PATH now if it hasn't been done yet
-    if [ -z "$PATH_MODIFIED" ]; then
-        export PATH_MODIFIED=1
-        PATH="$PATH_HIGH""$PATH"
     fi
 
     # is the file is present and less than 4 hours old, use it
@@ -259,4 +265,12 @@ pushthis() {
 
     echo "$ git push origin '${ref}:refs/heads/$PUSHTO' '$@'"
     git push origin "${ref}:refs/heads/$PUSHTO" "$@"
+}
+
+shell_post_init() {
+    for fn in $(echo $DOTFILES_POST_INIT); do
+        $fn || echo "dotfiles init.sh POST-INIT ERROR: $fn() failed" >&2
+        unset -f $fn 2>/dev/null || :
+    done
+    unset -f shell_post_init
 }
