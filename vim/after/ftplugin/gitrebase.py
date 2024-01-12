@@ -18,7 +18,6 @@ def main(bufnr: int, commitsha: str):
     repo = git.Repo(buf.name, search_parent_directories=True)
 
     files = get_files_from_ref(repo, commitsha)
-    packages = get_packages_from_files(files)
 
     # add highlighting for the current commit
     hl_init(nvim)
@@ -38,10 +37,6 @@ def main(bufnr: int, commitsha: str):
                 hl_add(nvim, 'gitrebaseSameFiles', ref)
             elif otherfiles & files:
                 hl_add(nvim, 'gitrebaseCommonFiles', ref)
-            else:
-                otherpackages = get_packages_from_files(otherfiles)
-                if otherpackages & packages:
-                    hl_add(nvim, 'gitrebaseCommonPackages', ref)
 
 
 def get_files_from_ref(repo, ref):
@@ -57,35 +52,15 @@ def get_files_from_ref(repo, ref):
     return set(lines)
 
 
-def get_packages_from_files(files):
-    packages = set()
-    for examine in map(Path, files):
-        pkg = get_package_from_path(examine)
-        if pkg:
-            packages.add(str(pkg))
-    return packages
-
-
-def get_package_from_path(examine: Path) -> Optional[Path]:
-    while len(examine.parts):
-        for ini in ('setup.py', 'setup.cfg', 'flit.ini'):
-            if (examine / ini).exists():
-                return examine
-        examine = examine.parent
-    return None
-
-
 def hl_init(nvim):
     # link highlight groups
     nvim.command('hi! link gitrebaseSameFiles Typedef')
     nvim.command('hi! link gitrebaseCommonFiles Operator')
-    nvim.command('hi! link gitrebaseCommonPackages Macro')
     nvim.command('hi! link gitrebaseCurrent Function')
 
     # clear highlight groups
     nvim.command('syn clear gitrebaseSameFiles')
     nvim.command('syn clear gitrebaseCommonFiles')
-    nvim.command('syn clear gitrebaseCommonPackages')
     nvim.command('syn clear gitrebaseCurrent')
 
 
