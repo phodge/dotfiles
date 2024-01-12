@@ -68,11 +68,18 @@ fun! <SID>AddSeparator()
       let l:newline = 'exec touch %s && git add %s && git commit -m "===== SEPARATOR ====="'
       call setpos('.', l:curpos)
       call append(line('.'), printf(l:newline, l:char, l:char))
+
+      " now jump ahead to the newly added separator
+      call search('SEPARATOR', 'sW')
+      normal! vE
+      let l:curpos = v:null  " dont move cursor later
       return
     endfor
 
     echoerr 'No separator file available'
   finally
-    call setpos('.', l:curpos)
+    if l:curpos isnot v:null
+      call setpos('.', l:curpos)
+    endif
   endtry
 endfun
