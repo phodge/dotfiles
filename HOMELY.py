@@ -71,6 +71,12 @@ not_work_machine = not yesno(
     None,
 )
 
+github_ssh_hack = yesno(
+    'use_github_ssh_key_hack',
+    'Use phodge.github.com git URL rewriting hack?',
+    recommended=not not_work_machine,
+)
+
 allow_installing_stuff = want_full and yesno(
     'allow_install',
     'Allow installing of packages using yum/apt or `sudo make install` etc?',
@@ -284,6 +290,25 @@ def maintain_virtualenv(path: str, core_packages: List[str]) -> None:
 def install_python3_base_packages():
     installpkg('python3-venv')
     installpkg('python3-pip')
+
+
+@section(enabled=github_ssh_hack)
+def ssh_config_hack():
+    mkdir('~/.ssh')
+    execute(['chmod', '700', HOME + '/.ssh'])
+    keyfile = HOME + '/.ssh/id_ed25519_phodge'
+
+    if not os.path.exists(keyfile):
+        execute(['ssh-keygen', '-t', 'id_ed25519', '-f', keyfile], stdout="TTY")
+        yesno(None, f'You must now upload {keyfile}.pub to github.com and gitlab.com')
+
+    lines = [
+        'Host phodge.github.com',
+        '\tHostName github.com',
+        '\tIdentityFile ~/.ssh/id_ed25519_phodge',
+    ]
+    blockinfile('~/.ssh/config', lines, WHERE_TOP)
+    execute(['chmod', '600', HOME + '/.ssh/config'])
 
 
 @section(
@@ -837,6 +862,13 @@ def git():
         # because git config files don't support ENV vars, we need to tell it where to find our hooks
         "[core] hooksPath = %s/.githooks" % HOME,
     ]
+
+    if github_ssh_hack:
+        lines.extend([
+            '[url "git@phodge.github.com:phodge/"] insteadof = https://github.com/phodge/',
+            '[url "git@phodge.github.com:phodge/"] insteadof = git@github.com:phodge/',
+        ])
+
     blockinfile('~/.gitconfig', lines, WHERE_TOP)
 
     # put our standard ignore stuff into ~/.gitignore
