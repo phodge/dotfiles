@@ -1,4 +1,6 @@
-from homely.general import symlink, writefile, mkdir
+import os
+
+from homely.general import mkdir, symlink, writefile
 from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
@@ -82,3 +84,42 @@ def ubuntu_install_devilspie2():
         f.write("Exec=/usr/bin/devilspie2\n")
         f.write("Comment=devilspie2 - react to gnome window events\n")
         f.write("X-GNOME-Autostart-enabled=true\n")
+
+
+@section_ubuntu(enabled=want_full and yesno('install_docker', 'Install docker?'))
+def install_docker_engine():
+    def _sudo(cmd, *args, **kwargs):
+        return execute(['sudo'] + cmd, *args, stdout="TTY", **kwargs)
+
+    # Add Docker's official GPG key:
+    installpkg('ca-certificates')
+    installpkg('curl')
+    installpkg('gnupg')
+
+    if not os.path.exists('/etc/apt/keyrings/docker.gpg'):
+        _sudo(['install', '-m', '0755', '-d', '/etc/apt/keyrings'])
+        curl = 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg'
+        gpg = 'gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
+        execute(['bash', '-c', f'{curl} | sudo {gpg}'], stdout="TTY")
+
+    _sudo(['chmod', 'a+r', '/etc/apt/keyrings/docker.gpg'])
+
+    # Add the repository to Apt sources:
+    VERSION_CODENAME = execute(
+        ['bash', '-c', '. /etc/os-release && echo "$VERSION_CODENAME"'],
+        stdout=True,
+    )[1].strip().decode('utf-8')
+    arch = execute(['dpkg', '--print-architecture'], stdout=True)[1].strip().decode('utf-8')
+
+    cfg = f"deb [arch={arch} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {VERSION_CODENAME} stable"
+    _sudo(['bash', '-c', f'echo "{cfg}" > /etc/apt/sources.list.d/docker.list'])
+
+    # finally - install the various docker packages
+    for pkg in [
+            'docker-ce',
+            'docker-ce-cli',
+            'containerd.io',
+            'docker-buildx-plugin',
+            'docker-compose-plugin',
+    ]:
+        installpkg(pkg)
