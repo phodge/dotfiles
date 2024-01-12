@@ -94,3 +94,6 @@
 [submodule "vim-projectroot.git"]
 	path = vim-packages/vim-projectroot.git
 	url = https://github.com/phodge/vim-projectroot.git
+[submodule "vim-project-config.git"]
+	path = vim-packages/vim-project-config.git
+	url = https://github.com/phodge/vim-project-config.git
