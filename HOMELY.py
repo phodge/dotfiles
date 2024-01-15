@@ -299,7 +299,7 @@ def ssh_config_hack():
     keyfile = HOME + '/.ssh/id_ed25519_phodge'
 
     if not os.path.exists(keyfile):
-        execute(['ssh-keygen', '-t', 'id_ed25519', '-f', keyfile], stdout="TTY")
+        execute(['ssh-keygen', '-t', 'ed25519', '-f', keyfile], stdout="TTY")
         yesno(None, f'You must now upload {keyfile}.pub to github.com and gitlab.com')
 
     lines = [
