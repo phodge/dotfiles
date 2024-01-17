@@ -40,6 +40,15 @@ def ubuntu_key_repeat_rate():
     _gsettings_set('org.gnome.desktop.peripherals.keyboard', 'delay',           'uint32 210')
 
 
+@section_ubuntu(enabled=want_full)
+def ubuntu_mouse_speed():
+    if not yesno('ubuntu_set_mouse_speed', 'Ubuntu: Set mouse speed / acceleration?', recommended=True):
+        return
+
+    _gsettings_set('org.gnome.desktop.peripherals.mouse', 'accel-profile', 'flat')
+    _gsettings_set('org.gnome.desktop.peripherals.mouse', 'speed',         '0.0')
+
+
 @section_ubuntu(enabled=want_full, quick=True)
 def ubuntu_app_switcher_current_workspace():
     if not yesno(
