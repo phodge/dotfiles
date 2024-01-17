@@ -41,6 +41,18 @@ def ubuntu_key_repeat_rate():
 
 
 @section_ubuntu(enabled=want_full)
+def ubuntu_os_key_bindings():
+    if not yesno('ubuntu_set_os_keybindings', 'Ubuntu: Install OS keybindings (maximize windows, etc)?', recommended=True):
+        return
+
+    _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-fullscreen',     "['<Alt>Return']")
+    _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-maximized',      "['<Shift><Super>Down']")
+    _gsettings_set('org.gnome.desktop.wm.keybindings', 'maximize',              "@as []")
+    # XXX: this is untested as I only have one display attached to this machine right now
+    _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
+
+
+@section_ubuntu(enabled=want_full)
 def ubuntu_mouse_speed():
     if not yesno('ubuntu_set_mouse_speed', 'Ubuntu: Set mouse speed / acceleration?', recommended=True):
         return
