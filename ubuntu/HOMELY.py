@@ -27,17 +27,17 @@ def ubuntu_swap_caps_escape():
     execute(['dconf', 'write', '/org/gnome/desktop/input-sources/xkb-options', new_value])
 
 
+def _gsettings_set(area, key, value):
+    execute(['gsettings', 'set', area, key, value])
+
+
 @section_ubuntu(enabled=want_full)
 def ubuntu_key_repeat_rate():
-    if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?'):
+    if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?', recommended=True):
         return
 
-    new_values = [
-        ('repeat-interval', 'uint32 15'),
-        ('delay',           'uint32 210'),
-    ]
-    for key, value in new_values:
-        execute(['gsettings', 'set', 'org.gnome.desktop.peripherals.keyboard', key, value])
+    _gsettings_set('org.gnome.desktop.peripherals.keyboard', 'repeat-interval', 'uint32 15')
+    _gsettings_set('org.gnome.desktop.peripherals.keyboard', 'delay',           'uint32 210')
 
 
 @section_ubuntu(enabled=want_full, quick=True)
