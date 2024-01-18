@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+import re
+import subprocess
+from functools import partial
+
+_check_output = partial(subprocess.check_output, encoding='utf-8')
+
+
+def _get_last_10k_commits():
+    cmd = ['git', 'log', '-10000', '--format=%ce %H']
+    output = _check_output(cmd)
+    for line in output.splitlines():
+        # skip blank lines
+        if line == '':
+            continue
+
+        email, sha = line.split(' ')
+        assert '@' in email
+        assert sha.isalnum()
+        yield email, sha
+
+
+def _get_my_email_addresses():
+    output = _check_output(['git', 'config', 'user.email']).strip()
+    assert len(output)
+    return {output}
+
+
+def _get_my_commits(limit):
+    done = 0
+    my_emails = _get_my_email_addresses()
+    for email, sha in _get_last_10k_commits():
+        if email in my_emails:
+            yield sha
+            done += 1
+            if done >= limit:
+                return
+
+
+def _get_commit_changed_files(sha):
+    cmd = ['git', 'show', sha, '--format=%H', '--name-status']
+    lines = _check_output(cmd).splitlines()
+    assert lines[0] == sha
+    assert lines[1] == ''
+
+    for line in lines[2:]:
+        parts = line.split('\t', 1)
+        if parts[0] == 'M':
+            yield parts[1]
+            continue
+
+        raise Exception(f"TODO: handle line {line!r}")
+
+
+def main():
+    # get last 100 commits by me, out of the last 10000 commits
+    last100 = _get_my_commits(limit=100)
+
+    # use a dict for de-duplication and to preserve ordering
+    recent_files = {}
+
+    for sha in last100:
+        sha_files = _get_commit_changed_files(sha)
+
+        # TODO: ignore commits that change >50 files as these are probably big
+        # refactorings
+
+        for filename in sha_files:
+            recent_files.setdefault(filename, []).append(sha)
+
+    # now print the list of files
+    fwidth = max(map(len, recent_files.keys()))
+    for filename, shas in recent_files.items():
+        shastr = ' '.join([sha[:8] for sha in shas])
+        print(f"{filename:<{fwidth}} {shastr}")
+
+
+if __name__ == "__main__":
+    main()
