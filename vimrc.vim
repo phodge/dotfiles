@@ -76,6 +76,17 @@ endif
       let &runtimepath = '~/.vim,' . &runtimepath . ',~/.vim/after'
     endif
 
+    " for backwards compatibility
+    if get(g:, 'use_edit_real_path', 0)
+      " TODO: convert this to its own project
+      let g:editrealpath#strategy = 'enew'
+      augroup EditRealPath
+      augroup end
+      " Note: this can't be BufReadPre because otherwise E201 is raised for
+      " changing the current buffer
+      autocmd! EditRealPath BufReadPost * nested call editrealpath#EditRealPath()
+    endif
+
     " add our own vim/ and vim-multi-python/ folders to runtimepath
     let s:specials = ['vim', 'vim-multi-python', 'vim-git-magic']
     for s:name in s:specials
@@ -1525,37 +1536,6 @@ endif
 
 
 command! -nargs=+ Man ConqueTermVSplit man <q-args>
-
-
-function! EditRealPath()
-  let l:filename = expand('%:p')
-  let l:realpath = resolve(l:filename)
-
-  " if we are editing the real file, don't try and open it up
-  if l:realpath == l:filename
-    return
-  endif
-
-  " if the realpath file doesn't exist, don't try and edit it
-  if ! filereadable(l:realpath)
-    return
-  endif
-
-  " remember local options/settings?
-  let l:oldbufnr = bufnr("")
-  " edit a new empty file (this will copy options/cwd etc from the buffer)
-  enew
-  " wipe out the old buffer
-  execute 'bwipeout' l:oldbufnr
-  " re-edit the old file again but with the real path
-  " NOTE: because we use :edit with the new empty buffer opened, we get all
-  " our local options back
-  execute 'edit' l:realpath
-endfunction
-
-augroup EditRealPath
-augroup end
-autocmd! EditRealPath BufReadPost * nested if exists('g:edit_real_path') && g:edit_real_path | call EditRealPath() | endif
 
 " open python wheels like zip files
 au BufReadCmd *.whl call zip#Browse(expand("<amatch>"))

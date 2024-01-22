@@ -21,6 +21,7 @@ SETTINGS_NAMES = {
     'want_vimade',
     'use_vendored_fzf',
     'use_ale_dmypy',
+    'use_edit_real_path',
 }
 
 
@@ -278,6 +279,20 @@ def main(automatic: bool, print_json: bool) -> None:
         ],
         disadvantages=[
             'Can be slow with many buffers open',
+        ],
+    )
+
+    _yesno_setting_big(
+        'Use EditRealPath mini-plugin for Vim?',
+        'use_edit_real_path',
+        default=1,
+        state=state,
+        automatic=automatic or print_json,
+        advantages=[
+            'Edit the real file instead of symlink',
+        ],
+        disadvantages=[
+            'May confuse other plugins?',
         ],
     )
 
