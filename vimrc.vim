@@ -111,11 +111,12 @@ endfun
 
 " per-project config
 call <SID>VendoredPlug('phodge/vim-project-config')
+let s:config_dirs = get(g:, 'mydots_additional_project_config_paths', {})
+let s:config_dirs.Personal = s:dotfiles_root . '/vimproject'
 call vimprojectconfig#initialise({
-      \ 'project_config_dirs': {
-      \   'Personal': s:dotfiles_root . '/vimproject',
-      \   },
+      \ 'project_config_dirs': s:config_dirs,
       \ })
+unlet s:config_dirs
 
 if has('nvim') && g:want_copilot
   call <SID>VendoredPlug('github/copilot.vim')
