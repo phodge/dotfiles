@@ -42,6 +42,7 @@ fun! <SID>ShowGitLog(gitcmd)
 
   " make a new window for viewing the file contents
   let l:oldwin = win_getid()
+  let l:oldcurpos = getcurpos()
   rightbelow vnew
   let s:previewwindows[l:mainbuf] = win_getid()
   try
@@ -61,5 +62,6 @@ fun! <SID>ShowGitLog(gitcmd)
   finally
     " jump back to the original window
     call win_gotoid(l:oldwin)
+    call setpos('.', l:oldcurpos)
   endtry
 endfun
