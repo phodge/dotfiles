@@ -109,6 +109,14 @@ fun! <SID>VendoredPlug(path)
 endfun
 
 
+" per-project config
+call <SID>VendoredPlug('phodge/vim-project-config')
+call vimprojectconfig#initialise({
+      \ 'project_config_dirs': {
+      \   'Personal': s:dotfiles_root . '/vimproject',
+      \   },
+      \ })
+
 if has('nvim') && g:want_copilot
   call <SID>VendoredPlug('github/copilot.vim')
 
