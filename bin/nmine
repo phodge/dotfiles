@@ -45,8 +45,12 @@ def _get_commit_changed_files(sha):
 
     for line in lines[2:]:
         parts = line.split('\t', 1)
-        if parts[0] == 'M':
+        if parts[0] in ('M', 'A'):
             yield parts[1]
+            continue
+
+        # skip deleted files
+        if parts[0] == 'D':
             continue
 
         raise Exception(f"TODO: handle line {line!r}")
@@ -71,7 +75,7 @@ def main():
     # now print the list of files
     fwidth = max(map(len, recent_files.keys()))
     for filename, shas in recent_files.items():
-        shastr = ' '.join([sha[:8] for sha in shas])
+        shastr = ' '.join([sha[:8] for sha in shas[:6]])
         print(f"{filename:<{fwidth}} {shastr}")
 
 
