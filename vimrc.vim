@@ -1535,7 +1535,10 @@ if has('osx')
 endif
 
 
-command! -nargs=+ Man ConqueTermVSplit man <q-args>
+if ! has('nvim')
+  " this is builtin for Neovim
+  command! -nargs=+ Man terminal ++close man <q-args>
+endif
 
 " open python wheels like zip files
 au BufReadCmd *.whl call zip#Browse(expand("<amatch>"))
