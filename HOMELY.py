@@ -147,8 +147,30 @@ create_homely_venv = want_full and not_work_machine and yesno(
 
 pipx_install_fn = None
 
-if want_full and IS_OSX:
-    pipx_install_fn = lambda: installpkg('pipx', brew='pipx')  # noqa: E731
+# figure out our Ubuntu version
+if IS_UBUNTU:
+    LSB_RELEASE = {
+        key: val
+        for line in Path('/etc/lsb-release').read_text().splitlines()
+        for key, val in [line.split('=')]
+    }
+    UBUNTU_MAJOR = int(LSB_RELEASE['DISTRIB_RELEASE'].split('.')[0])
+
+if want_full:
+    if IS_OSX:
+        pipx_install_fn = lambda: installpkg('pipx', brew='pipx')  # noqa: E731
+    elif IS_UBUNTU:
+        def pipx_install_fn():
+            if UBUNTU_MAJOR >= 2023:
+                installpkg('pipx', apt='pipx')
+                # TODO: not sure if this step from the official docs will be
+                # required since I already add ~/.local/bin to $PATH
+                # execute(['pipx', 'ensurepath'])
+            else:
+                execute(['python3', '-m', 'pip', 'install', '--user', 'pipx'])
+                # NOTE: the docs ask for this but it seems to be unnecessary
+                # for my Ubuntu 22.04 installs
+                # execute(['python3', '-m', 'pipx', 'ensurepath'])
 
 
 @memoize
