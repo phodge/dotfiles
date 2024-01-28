@@ -1,12 +1,21 @@
 -- See https://github.com/nanotee/nvim-lua-guide for tips
 
 require("lspconfig").tsserver.setup({
+    init_options = {
+        preferences = {
+            -- this is for fudgemoney
+            -- TODO: DOTFILES002: how to configure this per-project?
+            importModuleSpecifierPreference = 'relative',
+        },
+    },
     on_attach = function(client, bufnr)
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
         local ts_utils = require("nvim-lsp-ts-utils")
         ts_utils.setup({})
         ts_utils.setup_client(client)
+
+	-- TODO: DOTFILES002: set per-buffer or per-project config settings here
     end,
 })
 
