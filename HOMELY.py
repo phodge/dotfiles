@@ -1245,9 +1245,6 @@ def poetry_install():
         )
 
 
-# TODO: https://github.com/clvv/fasd
-
-
 # note that these need to be carried out in order of dependency
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
