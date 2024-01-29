@@ -1390,6 +1390,10 @@ set sidescrolloff=20
     vnoremap <F3> mt:Align =><CR>`t
     vnoremap <F4> mt:Align! p0 :<CR>gv:s/\(\s\+\):/:\1/g<CR>`t
 
+    " map <F4> and <S-F4> to open repo todos
+    nnoremap <F4> :RepoTodoList<CR>
+    nnoremap <S-F4> :RepoTodoAdd<CR>
+
     " use c" to swap quote types {{{
 
       nnoremap <silent> c" :call <SID>SwapQuotes()<CR>
