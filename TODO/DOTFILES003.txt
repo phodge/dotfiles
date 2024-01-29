@@ -1,0 +1,7 @@
+DOTFILES003 Incorporate Starship.rs
+
+- tmux powerline
+- (neo)vim statusline / tabline
+- zsh/bash prompts
+
+May need Nerd Fonts (See DOTFILES004)
