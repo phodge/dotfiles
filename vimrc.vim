@@ -565,7 +565,11 @@ if filereadable(s:plugpath)
   " }}}
 
   call <SID>VendoredPlug('phodge/vim-python-syntax')
+
+  " don't escape '$' because it will break grep '...$' end-of-line matching
+  let g:shell_command_escape_chars = '%#!'
   call <SID>VendoredPlug('phodge/vim-shell-command')
+
   PlugMaster 'phodge/MicroRefactor'
   PlugMaster 'phodge/vim-syn-info'
   PlugMaster 'phodge/vim-split-search'
