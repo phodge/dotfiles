@@ -1394,6 +1394,11 @@ set sidescrolloff=20
     nnoremap <F4> :RepoTodoList<CR>
     nnoremap <S-F4> :RepoTodoAdd<CR>
 
+    " for mac
+    if has('macunix')
+      map <F16> <S-F4>
+    endif
+
     " use c" to swap quote types {{{
 
       nnoremap <silent> c" :call <SID>SwapQuotes()<CR>
