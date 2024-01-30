@@ -2,4 +2,5 @@
 # m  class members
 # I  name referring a module defined in other file [off]
 # Y  name referring a class/variable/function/module defined in other module [off]
---kinds-python=-IYm
+# Note: we need to include kind 'm' because that includes class methods
+--kinds-python=-IY
