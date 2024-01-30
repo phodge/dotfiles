@@ -1,0 +1,8 @@
+DOTFILES009 Investigate using Fauxpilot for as free copilot substitute
+
+https://github.com/fauxpilot/fauxpilot
+https://news.ycombinator.com/item?id=35264725
+
+Alternatively, see also:
+
+https://github.com/jart/emacs-copilot
