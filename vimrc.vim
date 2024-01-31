@@ -135,9 +135,13 @@ if has('nvim') && g:want_copilot
   " the default mapping for Copilot is <tab>, to change it see
   " :help copilot-maps
 
+  " disable copilot for certain filetypes
   aug PeterCopilot
   au! BufReadPost,BufNewFile *.txt,*.md,*.csv let b:copilot_enabled = 0
   aug end
+
+  " NOTE: you may need to set g:copilot_node_command if you have an old
+  " version of node set as default
 endif
 
 
