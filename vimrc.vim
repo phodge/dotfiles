@@ -1667,3 +1667,74 @@ com! -nargs=0 NChanged Shell git diff origin/master... --name-status --no-rename
 setglobal noautoread
 
 let s:vim_entered = 1
+
+com! -bang -nargs=1 InTmuxWindow call InTmuxWindow(<q-args>, {'switch_to': '<bang>' == '!'})
+
+fun! InTmuxWindow(cmd, opt)
+  let l:switch_to = get(a:opt, 'switch', v:true)
+  let l:winname = get(a:opt, 'name', 'InTmuxWindow')
+  let l:capfile = get(a:opt, 'saveto', '')
+  let l:autoclose = get(a:opt, 'autoclose', v:false)
+
+  " TODO: DOTFILES011: implement this somehow - the desired behaviour is to
+  " kill any "Please wait" prompt hanging around in existing window and
+  " recreate the window.
+  "
+  " NOTE for future self:
+  "
+  "     tmux new-window -n NAME -S ...
+  "
+  " If the window NAME already exists, then tmux will switch to that window
+  " but won't execute further commands. This isn't particularly helpful when
+  " the desired behaviour would be to reuse that window but open a new pane
+  " within it.
+  let l:reuse_window = get(a:opt, 'reuse', v:false)
+
+  let l:cmd_spawn = 'tmux new-window -c ' . shellescape(getcwd())
+  let l:cmd_spawn .= ' -n ' . shellescape(l:winname)
+  if ! l:switch_to
+    let l:cmd_spawn .= ' -d'
+  endif
+
+  " -P prints infomration about the new window after it has been created. The
+  "  format can be modified by using -F. This is probably not useful as we run
+  "  with :silent so all output is invisible.
+  " let l:cmd_spawn .= ' -P'
+  
+  " We spawn through a bash subshell so that we can run multiple commands in
+  " sequence
+  " First step is to run the original command and decorate with a 'FAIL ...'
+  " message if it doesn't work
+  let l:bash_cmds = [printf('{ %s || echo "FAILED[$?]:" %s; }', a:cmd, shellescape(a:cmd))]
+
+  if len(l:capfile)
+    "     capture-pane -b somebuf -S 10000; save-buffer -b somebuf /tmp/q
+    call add(l:bash_cmds, 'tmux capture-pane -b - -S - \; save-buffer -b - ' . shellescape(l:capfile))
+  endif
+
+  if ! l:autoclose
+    call add(l:bash_cmds, 'read -p "Press any key to close" -n 1')
+  endif
+
+  let l:cmd_wrapped = 'bash -c ' . shellescape(join(l:bash_cmds, '; '))
+
+  " NOTE: on ubuntu, this command copies the pane contents to "* register
+  "     capture-pane -b - [ -S -1000]
+  "
+  " On ubuntu, you can print the */+ registers like this:
+  "     xsel     # print "*" register
+  "     xsel -b  # print "+" register
+  "     <middle-mouse>  # paste "*" register
+  "     <CTRL+SHIFT+V>  # paste "+" register
+  "
+  " NOTE: you can dump the contents of a tmux buffer into a file like this
+  "
+  "     save-buffer -b - /tmp/q
+  "
+  " Therefore: you can capture and dump the entire buffer contents in one go with
+  " this command:
+  "     capture-pane -b somebuf -S 10000; save-buffer -b somebuf /tmp/q
+
+
+  silent exe printf('!%s %s', l:cmd_spawn, shellescape(l:cmd_wrapped))
+endfun
