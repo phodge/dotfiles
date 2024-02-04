@@ -1,0 +1,6 @@
+DOTFILES012 Add ALE error summary to vim statusline and/or tabline
+
+May make use of:
+
+- ale#statusline#FirstProblem()
+- ale#statusline#Count()
