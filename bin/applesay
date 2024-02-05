@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+import argparse
+import random
+from subprocess import run
+
+VOICES = {
+    "robot": ["trinoids", "zarvox"],
+    "female": ["karen", "tessa"],
+    "male": ["fred", "daniel"],
+    "instrumental": ["cellos", "bells", "organ"],
+    "novelty": ["boing", "jester", "whisper", "wobble"],
+}
+SHORTCUTS = {k[0]: k for k in VOICES.keys()} | {k: k for k in VOICES.keys()}
+
+
+def main(category: str, message: str, verbose: bool, slow: bool) -> None:
+    voices = VOICES[category]
+    voice = voices[random.randint(0, len(voices)-1)]
+    if verbose:
+        print(f"[Using voice {voice}]")
+
+    rate = 120 if slow else 200
+    run(['say', f'--rate={rate}', '-v', voice, message], check=True)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('category', choices=SHORTCUTS)
+    parser.add_argument('message')
+    parser.add_argument('--verbose', '-v', action="store_true", default=False)
+    parser.add_argument('--slow', action="store_true", default=False)
+    args = parser.parse_args()
+    main(
+        category=SHORTCUTS[args.category],
+        message=args.message,
+        verbose=args.verbose,
+        slow=args.slow,
+    )
+
