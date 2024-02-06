@@ -502,7 +502,10 @@ if filereadable(s:plugpath)
 
   " go to next ALE error. We use :ALENextWrap instead of :ALEFirst because often I can fix a bug and
   " hit '\a' again before ale has re-linted and removed the current error.
-  nnoremap \a :ALENextWrap<CR>
+  " TODO: DOTFILES013: would be good to have this call :ALENextWrap and then
+  " use vim.diagnostic.goto_next() if the cursor doesn't move - in case we are
+  " using multiple linting engines
+  nnoremap \a :exe (get(b:, 'ale_enabled', 1) ? 'ALENextWrap' : 'lua vim.diagnostic.goto_next()')<CR>
 
   if get(g:, 'clipchamp_js', 0)
     " just use my own javascript syntax
@@ -817,7 +820,6 @@ fun! <SID>InitLSPBuffer()
   nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
   nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
   nnoremap <buffer> <space>f :lua vim.lsp.buf.incoming_calls()<CR>
-  nnoremap <buffer> \a       :lua vim.diagnostic.goto_next()<CR>
   nnoremap <buffer> \A       :call <SID>ToggleDiagnostic()<CR>
 
   " XXX: if formatting doesn't seem to do anything it probably means you need

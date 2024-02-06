@@ -1,0 +1,1 @@
+DOTFILES013 If possible the \a mapping should combine ALE + Vim diagnostics commands
