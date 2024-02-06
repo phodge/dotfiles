@@ -1718,7 +1718,10 @@ fun! InTmuxWindow(cmd, opt)
     call add(l:bash_cmds, 'read -p "Press any key to close" -n 1')
   endif
 
-  let l:cmd_wrapped = 'bash -c ' . shellescape(join(l:bash_cmds, '; '))
+  " TODO: should this be using $SHELL?
+  " Note we use '-i' so that the user's .bashrc is sourced and aliases are
+  " available
+  let l:cmd_wrapped = 'bash -i -c ' . shellescape(join(l:bash_cmds, '; '))
 
   " NOTE: on ubuntu, this command copies the pane contents to "* register
   "     capture-pane -b - [ -S -1000]
