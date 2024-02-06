@@ -1710,6 +1710,8 @@ fun! InTmuxWindow(cmd, opt)
   let l:bash_cmds = [printf('{ %s || echo "FAILED[$?]:" %s; }', a:cmd, shellescape(a:cmd))]
 
   if len(l:capfile)
+    " TODO: DOTFILES014: this captures the wrong pain - it captures the active
+    " pane instead of the pane containing the command output
     "     capture-pane -b somebuf -S 10000; save-buffer -b somebuf /tmp/q
     call add(l:bash_cmds, 'tmux capture-pane -b - -S - \; save-buffer -b - ' . shellescape(l:capfile))
   endif
