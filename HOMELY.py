@@ -1245,6 +1245,27 @@ def poetry_install():
         )
 
 
+@section_macos(enabled=want_full and yesno('install_fnm', 'Install fnm?'))
+def install_fnm():
+    """https://github.com/Schniz/fnm"""
+    # NOTE: this is currently mac-os only because I don't have a quick
+    # one-liner to install on Ubuntu yet
+    # TODO: DOTFILES015 install on ubuntu
+    installpkg('fnm', brew='fnm')
+
+    # bash setup
+    lineinfile('~/.bashrc', 'eval "$(fnm completions --shell bash)"')
+    lineinfile('~/.bashrc', 'eval $(fnm env)')
+
+    if wantzsh():
+        # setup for zsh
+        lineinfile('~/.zshrc', 'eval $(fnm env)  # initialise fnm')
+        mkdir('~/.zsh')
+        zsh_completion = execute(['fnm', 'completions', '--shell', 'zsh'], stdout=True)[1]
+        with writefile('~/.zsh/_fnm') as f:
+            f.write(zsh_completion.decode('utf-8'))
+
+
 # note that these need to be carried out in order of dependency
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
