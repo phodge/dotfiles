@@ -103,3 +103,6 @@
 [submodule "vim-shell-command.git"]
 	path = vim-packages/vim-shell-command.git
 	url = https://github.com/phodge/vim-shell-command.git
+[submodule "vim-myschema.git"]
+	path = vim-packages/vim-myschema.git
+	url = https://github.com/phodge/vim-myschema.git

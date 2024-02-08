@@ -577,12 +577,16 @@ if filereadable(s:plugpath)
   let g:shell_command_escape_chars = '%#!'
   call <SID>VendoredPlug('phodge/vim-shell-command')
 
+  " MySchema
+  nnoremap gss :call MySchema#GetSchema(expand('<cword>'))<CR>
+  command! -nargs=0 SQLWindow call MySchema#SQLWindow()
+  call <SID>VendoredPlug('phodge/vim-myschema')
+
   PlugMaster 'phodge/MicroRefactor'
   PlugMaster 'phodge/vim-syn-info'
   PlugMaster 'phodge/vim-split-search'
   PlugMaster 'phodge/vim-auto-spell'
   PlugMaster 'phodge/vim-vimui'
-  PlugMaster 'phodge/vim-myschema'
   PlugMaster 'phodge/vim-vcs'
 
   Plug 'lumiliet/vim-twig'
@@ -1057,10 +1061,6 @@ endif
 
 nnoremap <space>m :<C-R>=(exists(':Make')==2?'Make':'make')<CR><CR>
 
-if version >= 700 && g:vim_peter
-  nnoremap gss :call MySchema#GetSchema(expand('<cword>'))<CR>
-endif
-
 " use <ENTER> to activate CleverEdit in visual mode
 if g:vim_peter
   if version >= 700
@@ -1524,8 +1524,6 @@ set sidescrolloff=20
 command! -nargs=0 GitOlder call VCS#GitNavigateHistory(1)
 command! -nargs=0 GitNewer call VCS#GitNavigateHistory(0)
 
-" command for starting an SQL window
-command! -nargs=0 SQLWindow call MySchema#SQLWindow()
 
 " don't like this plugin
 let g:loaded_matchparen = 1
