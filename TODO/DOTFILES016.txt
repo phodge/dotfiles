@@ -1,0 +1,6 @@
+DOTFILES016 MySchema variables
+
+- rework variables
+  - g:MySchema_default_user should be engine-specific so we stop using 'root' as the default for postgres
+  - consistent use of g: and b: variables to allow forcing settings on a global or per-buffer basis
+  - preserve b: variables inside SQL and result windows so that they reuse settings
