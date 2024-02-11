@@ -1696,6 +1696,10 @@ fun! InTmuxWindow(cmd, opt)
     let l:cmd_spawn .= ' -d'
   endif
 
+  for l:varname in get(a:opt, 'copy_env_vars', [])
+      let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(getenv(l:varname)))
+  endfor
+
   " -P prints infomration about the new window after it has been created. The
   "  format can be modified by using -F. This is probably not useful as we run
   "  with :silent so all output is invisible.
