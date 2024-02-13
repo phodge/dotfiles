@@ -238,10 +238,19 @@ nudge-watch() {
 }
 
 rmempty() {
+    local removed_some=0
     find "$@" -type d -empty | while read d; do
         echo "rmdir $d"
         rmdir "$d"
+        removed_some=1
     done
+
+    if [ $removed_some -eq 1 ]; then
+        for arg in "$@"; do
+            # try again for any arg that still exists
+            test -d "$arg" && rmempty "$arg"
+        done
+    fi
 }
 
 pushthis() {
