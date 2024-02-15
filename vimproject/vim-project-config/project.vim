@@ -3,4 +3,5 @@
 
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'PC'
+  nmap <buffer> <space>t :call InTmuxWindow('./retest.sh', {'saveto': 'retest.out', 'name': 'retest.sh'})<CR>
 endfun
