@@ -11,6 +11,6 @@ branch="$1"
 test -e .git || fail "Not in a git repo?"
 test -n "$branch" || fail "Usage: $0 <branch>"
 
-git config --unset "remote.$remote.fetch" "\\+refs/heads/${branch}:refs/remotes/$remote/{$branch}"
+git config --unset "remote.$remote.fetch" "\\+refs/heads/${branch}:refs/remotes/$remote/${branch}"
 # also delete the branch local ref
 rm -f .git/refs/remotes/$remote/$branch
