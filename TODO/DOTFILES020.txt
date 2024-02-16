@@ -1,0 +1,15 @@
+DOTFILES020 standardise OS keyboard shortcuts and script their installation
+
+- show all application windows (for this Desktop)
+  - cmd+option+up
+- move to next/prev Desktop
+  - cmd+option+right
+  - cmd+option+left
+
+
+TODO: script this
+- ask if MacOS keyboard shortcuts have been set
+  - only ask once per system
+- prompt to open System Preferences -> ... [where?]
+  - prompt to add each keyboard shortcut
+  - ask if was successful
