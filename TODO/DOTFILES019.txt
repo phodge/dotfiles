@@ -1,0 +1,13 @@
+DOTFILES019 unify how we set filetype-related options
+
+We have the following tasks to run per-buffer
+
+- import-sort
+- formatting (including import-sort)
+- add missing import
+- automatic fixers
+- run linters and show errors in buffer, gutter, statusline, etc
+- intelligent completion
+- show method signature while editing
+- jump to definition
+- show references
