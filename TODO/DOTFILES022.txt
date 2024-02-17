@@ -1,0 +1,3 @@
+DOTFILES022 check out list of useful CLI tools like hyperfine
+
+https://jvns.ca/blog/2022/04/12/a-list-of-new-ish--command-line-tools/

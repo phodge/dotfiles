@@ -1,0 +1,5 @@
+DOTFILES021 review git config options like includeIf
+
+https://jvns.ca/blog/2024/02/16/popular-git-config-options/
+
+In particular, includeIf looks very useful
