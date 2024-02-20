@@ -364,6 +364,18 @@ def create_winwin_venv():
     maintain_virtualenv(WINWIN_VENV, [])
 
 
+@section(
+    # if virtualenv already exists, just upgrade it monthly
+    interval='4w' if os.path.exists(NEOVIM_VENV) else None,
+)
+def create_neovim_python_tools_venv():
+    core_packages = [
+        'flake8',
+        'mypy',
+    ]
+    maintain_virtualenv(HOME + '/.venv/vim-python-tools', core_packages)
+
+
 @section(enabled=allow_installing_stuff)
 def create_winwin_config():
     winwincfg = Path(HOME) / '.config/winwin.json'
