@@ -254,6 +254,10 @@ if filereadable(s:plugpath)
 
     call <SID>VendoredPlug('w0rp/ale')
 
+    " default behaviour is to use flake8/mypy from our virtualenv
+    let g:ale_python_flake8_executable = expand('~/.venv/vim-python-tools/bin/flake8')
+    let g:ale_python_mypy_executable = expand('~/.venv/vim-python-tools/bin/mypy')
+
     if get(g:, 'use_ale_dmypy')
       " tell ale to use dmypy instead of mypy
       " WARNING: see notes in mydots-configure

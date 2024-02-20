@@ -826,6 +826,8 @@ def mypips(venv_pip=None, write_dev_reqs=False):
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
     if venv_pip:
+        # TODO: stop installing flake8 everywhere now that we have
+        # ~/.venv/vim-python-tools
         venv_exec(venv_pip, ['pip', 'install', 'flake8'])
     else:
         have_pip3 = haveexecutable('pip3')
