@@ -1187,6 +1187,10 @@ def install_alacritty():
             f.write(']\n')
 
         imports.append(f'{HOME}/.config/alacritty-keybindings.toml')
+    elif IS_UBUNTU:
+        # TODO: DOTFILES023: this version of alacritty is too old (needs to be
+        # at least 0.13 so that it uses toml files for configuration)
+        execute(['sudo', 'snap', 'install', '--classic', 'alacritty'], stdout="TTY")
 
     blockinfile(
         '~/.config/alacritty.toml',
