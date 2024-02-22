@@ -5,3 +5,5 @@ DOTFILES003 Incorporate Starship.rs
 - zsh/bash prompts
 
 May need Nerd Fonts (See DOTFILES004)
+
+See also https://github.com/romkatv/powerlevel10k for zsh
