@@ -138,6 +138,13 @@ create_homely_venv = want_full and not_work_machine and yesno(
     False,
 )
 
+want_ripgrep = allow_installing_stuff and (IS_UBUNTU or yesno(
+    'want_ripgrep',
+    'Install ripgrep?',
+    default=True,
+    recommended=True,
+    noprompt=True,
+))
 
 pipx_install_fn = None
 
@@ -615,10 +622,11 @@ def search_tools():
                    yum='the_silver_searcher',
                    apt='silversearcher-ag')
 
-    yum = False
-    if haveexecutable('yum') and install_fedora_copr():
-        yum = 'ripgrep'
-    installpkg('ripgrep', yum=yum)
+    if want_ripgrep:
+        yum = False
+        if haveexecutable('yum') and install_fedora_copr():
+            yum = 'ripgrep'
+        installpkg('ripgrep', yum=yum)
 
 
 # more of my favourite developer tools
