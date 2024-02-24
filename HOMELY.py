@@ -104,12 +104,6 @@ install_alacritty_homebrew = want_alacritty and IS_OSX and yesno(
     recommended=True,
 )
 
-want_python2_anything = any_ancient_things and yesno(
-    'want_python2_anything',
-    'Bother with anything python2?',
-    False,
-)
-
 want_php_anything = any_ancient_things and yesno(
     'want_php_anything',
     'Bother with anything PHP-related?',
@@ -614,15 +608,6 @@ def pythonpath():
         raise Exception("Didn't add %s anywhere" % pypath)
 
 
-@section(enabled=want_python2_anything and allow_installing_stuff)
-def install_python2_pip():
-    import subprocess
-    if not haveexecutable('pip2'):
-        if yesno('global_pip2', 'Install pip2 systemwide?', None):
-            cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python2'
-            subprocess.check_call(cmd, shell=True)
-
-
 @section(enabled=allow_installing_stuff)
 def search_tools():
     if want_silver_searcher():
@@ -812,10 +797,7 @@ def mypips(venv_pip=None, write_dev_reqs=False):
             for p in packages:
                 f.write(p + '\n')
 
-    if want_python2_anything:
-        trypips = ['pip2', 'pip3']
-    else:
-        trypips = ['pip3']
+    trypips = ['pip3']
 
     for package in packages:
         if venv_pip:
@@ -833,8 +815,6 @@ def mypips(venv_pip=None, write_dev_reqs=False):
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
             mypipinstall('flake8', ['pip3'])
-        if want_python2_anything and yesno('install_flake8_python2', 'Install flake8 for python2?'):
-            mypipinstall('flake8', ['pip2'])
 
 
 @section
