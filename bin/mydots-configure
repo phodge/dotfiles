@@ -8,6 +8,7 @@ from subprocess import run
 from typing import Dict, Iterable
 
 SETTINGS_PATH_VIM = Path("~/.vim/settings.vim").expanduser()
+SETTINGS_PATH_SHELL = Path("~/.config/shell_settings.sh").expanduser()
 STATE_PATH = Path("~/.config/mydots.json").expanduser()
 
 VIM_GLOBAL_RE = re.compile(r"^\s*let\s+g:(\w+)\s*=\s*(\d+)$")
@@ -23,6 +24,11 @@ SETTINGS_NAMES = {
     'use_ale_dmypy',
     'use_edit_real_path',
     'want_neovim_lsp_python',
+    'show_git_state_in_zsh',
+}
+
+SHELL_SETTINGS = {
+    'show_git_state_in_zsh': 'ZSH_SHOW_GIT_STATE',
 }
 
 
@@ -42,6 +48,7 @@ class State:
         self._state[name] = value
         self._write_state()
         self._write_settings_vim()
+        self._write_settings_shell()
 
     def get_state(self, name: str, default: int) -> int:
         assert name not in SETTINGS_NAMES
@@ -79,6 +86,12 @@ class State:
             for name, value in self._state.items():
                 if name in SETTINGS_NAMES:
                     f.write(f"let g:{name} = {int(value)}\n")
+
+    def _write_settings_shell(self) -> None:
+        SETTINGS_PATH_SHELL.parent.mkdir(parents=True, exist_ok=True)
+        with SETTINGS_PATH_SHELL.open('w') as f:
+            for name, shellvar in SHELL_SETTINGS.items():
+                f.write(f"export {shellvar}={int(self._state[name])}\n")
 
 
 def yesno(prompt: str, *, default: int, automatic: bool) -> int:
@@ -309,6 +322,14 @@ def main(automatic: bool, print_json: bool) -> None:
         disadvantages=[
             'May confuse other plugins?',
         ],
+    )
+
+    _yesno_setting_big(
+        'Show git repo state in ZSH?',
+        'show_git_state_in_zsh',
+        default=1,
+        state=state,
+        automatic=automatic or print_json,
     )
 
     if print_json:
