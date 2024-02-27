@@ -266,6 +266,9 @@ if filereadable(s:plugpath)
       let g:ale_python_mypy_options = 'run -- '
     endif
 
+    aug NoALEInFugitiveBuffers | aug end
+    au! NoALEInFugitiveBuffers BufRead fugitive://* let b:ale_enabled = 0
+
   " }}}
 
   if s:use_lsp
