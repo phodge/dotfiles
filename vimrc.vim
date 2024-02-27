@@ -763,7 +763,7 @@ if filereadable(s:plugpath)
   endif
 
   " vim-gh-line - open the current file/line on github/gitlab etc
-  " See also: https://github.com/tyru/open-browser-github.vi
+  " See also: https://github.com/tyru/open-browser-github.vim
   " Use :GHInteractive to open the current line in github or :GBInteractive to
   " open Blame view
   let g:gh_line_map_default = 0
