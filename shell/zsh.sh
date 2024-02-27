@@ -57,7 +57,11 @@ antigen bundle git
 antigen bundle mercurial
 #antigen bundle colored-man-pages
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle olivierverdier/zsh-git-prompt
+
+# we need to be able to disable this bundle altogether when disabling git status globally
+if [ "$ZSH_SHOW_GIT_STATE" = "1" ]; then
+    antigen bundle olivierverdier/zsh-git-prompt
+fi
 
 antigen apply
 

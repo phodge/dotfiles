@@ -5,6 +5,12 @@ else
     DOTFILES_PATH="$(dirname $(dirname ${(%):-%N}))"
 fi
 
+test -z "$ZSH_SHOW_GIT_STATE" && export ZSH_SHOW_GIT_STATE=1
+if [ "$ZSH_SHOW_GIT_STATE" != "1" ]; then
+    # set the old flag
+    export ZSHNOGIT=1
+fi
+
 if echo $HOME | grep -q ^/Users/; then
     export IS_MACOS=1
 else
