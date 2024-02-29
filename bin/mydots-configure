@@ -91,7 +91,8 @@ class State:
         SETTINGS_PATH_SHELL.parent.mkdir(parents=True, exist_ok=True)
         with SETTINGS_PATH_SHELL.open('w') as f:
             for name, shellvar in SHELL_SETTINGS.items():
-                f.write(f"export {shellvar}={int(self._state[name])}\n")
+                if name in self._state:
+                    f.write(f"export {shellvar}={int(self._state[name])}\n")
 
 
 def yesno(prompt: str, *, default: int, automatic: bool) -> int:
