@@ -106,3 +106,6 @@
 [submodule "vim-myschema.git"]
 	path = vim-packages/vim-myschema.git
 	url = https://github.com/phodge/vim-myschema.git
+[submodule "reference-repository-utils.git"]
+	path = reference-repository-utils.git
+	url = https://github.com/phodge/reference-repository-utils.git

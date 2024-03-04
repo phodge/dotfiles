@@ -24,6 +24,7 @@ if [[ $IS_MACOS ]]; then
 fi
 # this repo
 PATH_HIGH="$DOTFILES_PATH/bin:$PATH_HIGH"
+PATH_HIGH="$DOTFILES_PATH/reference-repository-utils.git/bin:$PATH_HIGH"
 
 # have pipx install stuff directly into $HOME/bin on macos
 if [[ $IS_MACOS ]]; then
