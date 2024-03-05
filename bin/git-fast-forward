@@ -18,4 +18,8 @@ else
     _remote="$(git remote)"
 fi
 
+if [ -n "$GIT_FAST_FORWARD_PRECMD" ]; then
+    $GIT_FAST_FORWARD_PRECMD "$_remote" "$_branch"
+fi
+
 git fetch "$_remote" "$_branch:$_branch"
