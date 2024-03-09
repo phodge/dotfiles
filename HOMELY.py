@@ -755,21 +755,7 @@ def want_ptpython():
     return yesno('want_any_ptpython', 'Is PTPython wanted anywhere?', False)
 
 
-def mypips(venv_pip=None, write_dev_reqs=False):
-    # if we're on macos then we need to tell homely.pipinstall to use 'pip3' instead of 'pip'
-    if IS_OSX:
-        pips = ['pip3']
-    else:
-        pips = None
-
-    # of course we probably want virtualenv!
-    if venv_pip is None:
-        pipinstall('virtualenv', pips=pips)
-
-    theworks = want_full or venv_pip
-
-    # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
-    # present. They're needed for development.
+def _get_some_packages(theworks: bool):
     packages = [
         'jedi',
         'yapf',
@@ -796,14 +782,23 @@ def mypips(venv_pip=None, write_dev_reqs=False):
     if theworks or yesno('install_python_q', 'PIP Install `q`?', True):
         packages.append('q')
 
-    if write_dev_reqs:
-        assert venv_pip is None
-        mkdir('~/.config')
+    return packages
 
-        with writefile('~/.config/dev_requirements.txt') as f:
-            f.write('flake8\n')
-            for p in packages:
-                f.write(p + '\n')
+
+def mypips(venv_pip=None):
+    # if we're on macos then we need to tell homely.pipinstall to use 'pip3' instead of 'pip'
+    if IS_OSX:
+        pips = ['pip3']
+    else:
+        pips = None
+
+    # of course we probably want virtualenv!
+    if venv_pip is None:
+        pipinstall('virtualenv', pips=pips)
+
+    # these packages will be installed using the virtualenv's pip, or pip2+pip3 depending on what's
+    # present. They're needed for development.
+    packages = _get_some_packages(theworks=want_full or venv_pip)
 
     trypips = ['pip3']
 
@@ -828,7 +823,14 @@ def mypips(venv_pip=None, write_dev_reqs=False):
 @section
 def pipfavourites():
     # install my favourite pip modules with --user
-    mypips(write_dev_reqs=True)
+    mypips()
+
+    mkdir('~/.config')
+
+    with writefile('~/.config/dev_requirements.txt') as f:
+        f.write('flake8\n')
+        for p in _get_some_packages(theworks=True):
+            f.write(p + '\n')
 
 
 @section(quick=True, enabled=yesno('install_envup', 'Install envup?', default=False))
