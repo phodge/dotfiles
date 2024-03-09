@@ -9,8 +9,8 @@ from homely.install import InstallFromSource
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
-from HOMELY import (IS_OSX, IS_UBUNTU, allow_installing_stuff, getpippaths,
-                    section_macos, want_full, wantjerjerrod)
+from HOMELY import (IS_OSX, IS_UBUNTU, allow_installing_stuff, section_macos,
+                    want_full, wantjerjerrod)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -134,13 +134,6 @@ def shell_path():
 
     if haveexecutable('python3') and haveexecutable('pip3'):
         lines += list(_findpybin('python3'))
-
-    # if we are installing pip modules into separate bin paths, add them to our $PATH now
-    pippaths = getpippaths()
-    try:
-        lines.append('PATH_HIGH="%s:$PATH_HIGH"' % pippaths['pip3'])
-    except KeyError:
-        pass
 
     lines.append('PATH_HIGH="$HOME/bin:$PATH_HIGH"')
 

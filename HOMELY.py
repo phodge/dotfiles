@@ -714,43 +714,6 @@ def fzf_install():
 
 
 @memoize
-def getpippaths():
-    if IS_OSX:
-        return {}
-
-    # do we need to out a pip config such that py2/py3 binaries don't clobber each other?
-    question = 'Force pip to install into separate py2/py3 bin dirs?'
-    if not yesno('force_pip_bin_paths', question, None):
-        return {}
-
-    scripts = {}
-
-    for version in (2, 3):
-        # TODO: we probably should drop into vim somewhere and make sure g:my_pyX_paths is
-        # defined in prefs.vim or else our stuff is gonna be broken
-        # TODO: we also want these in our $PATH ... or not?
-        pip = "pip%d" % version
-        var = "g:my_py%d_paths" % version
-
-        if not haveexecutable(pip):
-            continue
-
-        stdout = execute([pip, '--version'], stdout=True)[1].decode('utf-8').rstrip()
-        assert re.search(r' \(python \d+\.\d+\)$', stdout)
-        version = stdout.rsplit(' ', 1)[1][:-1]
-        path = '%s/.local/python-%s-bin' % (HOME, version)
-
-        scripts[pip] = path
-        lineinfile('~/.vimrc', "let %s = ['%s']" % (var, path), where=WHERE_END)
-
-    return scripts
-
-
-def mypipinstall(*args, **kwargs):
-    return pipinstall(*args, scripts=getpippaths(), **kwargs)
-
-
-@memoize
 def want_ptpython():
     return yesno('want_any_ptpython', 'Is PTPython wanted anywhere?', False)
 
@@ -806,7 +769,7 @@ def mypips(venv_pip=None):
         if venv_pip:
             venv_exec(venv_pip, ['pip', 'install', package])
         else:
-            mypipinstall(package, trypips=trypips)
+            pipinstall(package, trypips=trypips)
 
     # if it's a virtualenv, always just install flake8. Otherwise, we need to ask the user if
     # they want to install both
@@ -817,7 +780,7 @@ def mypips(venv_pip=None):
     else:
         have_pip3 = haveexecutable('pip3')
         if have_pip3 and yesno('install_flake8_python3', 'Install flake8 for python3?'):
-            mypipinstall('flake8', ['pip3'])
+            pipinstall('flake8', ['pip3'])
 
 
 @section
