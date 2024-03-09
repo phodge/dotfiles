@@ -17,7 +17,7 @@ from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_snap,
 
 VIM_TAG = 'v8.1.0264'
 
-NVIM_TAG = 'v0.8.2'
+NVIM_TAG = 'v0.9.5'
 
 
 @memoize
