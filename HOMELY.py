@@ -831,7 +831,7 @@ def pipfavourites():
     mypips(write_dev_reqs=True)
 
 
-@section(quick=True)
+@section(quick=True, enabled=yesno('install_envup', 'Install envup?', default=False))
 def envup_install():
     pipinstall('libtmux', trypips=['pip3'])
     symlink('bin/envup', '~/bin/envup')
