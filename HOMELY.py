@@ -748,6 +748,8 @@ def _get_some_packages(theworks: bool):
     return packages
 
 
+# TODO: PEP 668 doesn't like this, apparently we have to get rid of installing
+# to --user
 def mypips(venv_pip=None):
     # if we're on macos then we need to tell homely.pipinstall to use 'pip3' instead of 'pip'
     if IS_OSX:
@@ -786,7 +788,8 @@ def mypips(venv_pip=None):
 @section
 def pipfavourites():
     # install my favourite pip modules with --user
-    mypips()
+    if yesno('install_python_packages_to_user', 'Install python packages with --user?', recommended=False):
+        mypips()
 
     mkdir('~/.config')
 
