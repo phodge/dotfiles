@@ -1,0 +1,3 @@
+DOTFILES025 rather than funky calls out to pip-install, it would be better for
+HOMELY to provide a mechanism whereby it will create a virtualenv to execute
+your HOMELY.py script.

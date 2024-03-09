@@ -3,11 +3,11 @@ import sys
 from homely.general import (WHERE_TOP, blockinfile, mkdir, run, section,
                             writefile)
 from homely.install import InstallFromSource, installpkg
-from homely.system import haveexecutable
+from homely.system import execute, haveexecutable
 from homely.ui import warn, yesno
 
-from HOMELY import (HERE, HOME, allow_installing_stuff, mypipinstall,
-                    need_installpkg, powerline_path, want_full, wantpowerline)
+from HOMELY import (HERE, HOME, allow_installing_stuff, need_installpkg,
+                    powerline_path, want_full, wantpowerline)
 
 want_tmux = allow_installing_stuff and yesno(
     'install_tmux',
@@ -157,7 +157,18 @@ def tmux_keys():
     lines = []
 
     # needs to be installed for the current version of python
-    mypipinstall('pyyaml', ['pip%d' % sys.version_info.major])
+    # TODO: DOTFILES025: give homely a requirements.txt mechanism
+    cmd = [
+        'pip3.%d' % sys.version_info.minor,
+        'install',
+        '--user',
+        'pyyaml',
+    ]
+    if sys.version_info.minor >= 12:
+        # for 3.12+ we need the new PEP-668 override flag
+        cmd.append('--break-system-packages')
+    execute(cmd)
+
     import yaml
 
     with open(HERE + '/keybindings/keys.yaml') as f:
