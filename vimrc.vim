@@ -1556,6 +1556,9 @@ if has('osx')
   " if we're running under OS X, yank into the main clipboard by default
   " NOTE: this is different in vim vs neovim
   set clipboard=unnamed
+else
+  " for ubuntu we want to use unnamedplus
+  set clipboard=unnamedplus
 endif
 
 
