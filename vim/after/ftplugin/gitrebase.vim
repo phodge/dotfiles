@@ -40,6 +40,16 @@ let s:chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 fun! <SID>AddSeparator()
   let l:curpos = getcurpos()
   try
+    " check to see whether there is already a 'REVIEW BELOW' separator in the
+    " file
+    let l:title = 'REVIEW BELOW'
+    if search('REVIEW BELOW', 'cnw') > 0
+      " it's important this is the same number of Words (vim-motion Words)
+      " so that the normal! command to visually select the new text works
+      " correctly
+      let l:title = 'NEW SEPARATOR'
+    endif
+
     " check to see what "exec touch ..." lines already exist in the file
     let l:exectouch = {}
     for l:linenr in range(1, line('$'))
@@ -65,13 +75,13 @@ fun! <SID>AddSeparator()
       endif
 
       " add an exec line for this file
-      let l:newline = 'exec touch %s && git add %s && git commit -m "===== SEPARATOR ====="'
+      let l:newline = 'exec touch %s && git add %s && git commit -m "===== %s ====="'
       call setpos('.', l:curpos)
-      call append(line('.'), printf(l:newline, l:char, l:char))
+      call append(line('.'), printf(l:newline, l:char, l:char, l:title))
 
       " now jump ahead to the newly added separator
-      call search('SEPARATOR', 'sW')
-      normal! vE
+      call search(l:title, 'sW')
+      normal! vEE
       let l:curpos = v:null  " dont move cursor later
       return
     endfor
