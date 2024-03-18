@@ -184,8 +184,16 @@ def bash_config():
 
 @section(enabled=want_full)
 def zsh_config():
-    lineinfile('~/.zshrc', 'source $HOME/.shellrc', where=WHERE_TOP)
-    lineinfile('~/.zshrc', 'source $HOME/.config/shell_settings.sh', where=WHERE_TOP)
+    blockinfile(
+        '~/.zshrc',
+        [
+            'source $HOME/.config/shell_settings.sh',
+            'source $HOME/.shellrc',
+        ],
+        where=WHERE_TOP,
+        prefix='Start of homely initialisation',
+        suffix='End of homely initialisation',
+    )
     install_completions('~/.zshrc')
     lineinfile('~/.zshrc', 'shell_init_done  # this line must be last', where=WHERE_END)
     antigen = InstallFromSource('https://github.com/zsh-users/antigen.git',
