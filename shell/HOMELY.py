@@ -190,9 +190,9 @@ def zsh_config():
             'source $HOME/.config/shell_settings.sh',
             'source $HOME/.shellrc',
         ],
-        where=WHERE_TOP,
-        prefix='Start of homely initialisation',
-        suffix='End of homely initialisation',
+        WHERE_TOP,
+        prefix='# Start of homely initialisation',
+        suffix='# End of homely initialisation',
     )
     install_completions('~/.zshrc')
     lineinfile('~/.zshrc', 'shell_init_done  # this line must be last', where=WHERE_END)
