@@ -1671,6 +1671,7 @@ aug end
 
 
 com! -nargs=0 NChanged Shell git diff origin/master... --name-status --no-renames; git status --short
+com! -nargs=0 NMine Shell git-list-my-committed-files
 
 " have had to add this as git commit hooks wreak havoc with my open buffers if
 " they reformat them

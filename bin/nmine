@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nvim "+Shell git-list-my-committed-files" "+bw 1"
