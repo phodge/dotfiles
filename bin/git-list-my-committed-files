@@ -6,8 +6,8 @@ from functools import partial
 _check_output = partial(subprocess.check_output, encoding='utf-8')
 
 
-def _get_last_10k_commits():
-    cmd = ['git', 'log', '-10000', '--format=%ce %H']
+def _get_last_10k_commits(limit: int):
+    cmd = ['git', 'log', f'-{limit}', '--format=%ce %H']
     output = _check_output(cmd)
     for line in output.splitlines():
         # skip blank lines
@@ -15,7 +15,8 @@ def _get_last_10k_commits():
             continue
 
         email, sha = line.split(' ')
-        assert '@' in email
+        # NOTE: there's not really any validation on commit email addresses
+        # assert '@' in email
         assert sha.isalnum()
         yield email, sha
 
@@ -26,14 +27,14 @@ def _get_my_email_addresses():
     return {output}
 
 
-def _get_my_commits(limit):
+def _get_my_commits(my_history_size: int, examine_history_size: int):
     done = 0
     my_emails = _get_my_email_addresses()
-    for email, sha in _get_last_10k_commits():
+    for email, sha in _get_last_10k_commits(examine_history_size):
         if email in my_emails:
             yield sha
             done += 1
-            if done >= limit:
+            if done >= my_history_size:
                 return
 
 
@@ -56,9 +57,9 @@ def _get_commit_changed_files(sha):
         raise Exception(f"TODO: handle line {line!r}")
 
 
-def main():
-    # get last 100 commits by me, out of the last 10000 commits
-    last100 = _get_my_commits(limit=100)
+def main(*, examine_history_size: int, my_history_size: int):
+    # get last 100 commits by me, out of the last 100000 commits
+    last100 = _get_my_commits(my_history_size=my_history_size, examine_history_size=examine_history_size)
 
     # use a dict for de-duplication and to preserve ordering
     recent_files = {}
@@ -70,14 +71,47 @@ def main():
         # refactorings
 
         for filename in sha_files:
+            # skip single-letter filenames
+            if len(filename) == 1 and filename.isalpha():
+                continue
+
             recent_files.setdefault(filename, []).append(sha)
+
+    sha_msg_shown = set()
+    sha_msg_needed = []
 
     # now print the list of files
     fwidth = max(map(len, recent_files.keys()))
     for filename, shas in recent_files.items():
         shastr = ' '.join([sha[:8] for sha in shas[:6]])
+        if len(shas) == 1:
+            # put the commit message on the end if not seen before
+            if shas[0] not in sha_msg_shown:
+                sha_msg = _get_commit_headline_for_sha(shas[0])
+                sha_msg_shown.add(shas[0])
+                if len(sha_msg) > 40:
+                    sha_msg = sha_msg[:40] + '...'
+                shastr += f'  -> {sha_msg}'
+        elif len(shas) > 6:
+            shastr += ' ...'
+        else:
+            sha_msg_needed.extend(shas)
         print(f"{filename:<{fwidth}} {shastr}")
+
+    # add commit subjects for commits not shown yet
+    print("")
+    for sha in sha_msg_needed:
+        if sha not in sha_msg_shown:
+            sha_msg = _get_commit_headline_for_sha(sha)
+            print(f"{sha[:8]} -> {sha_msg}")
+            sha_msg_shown.add(sha)
+
+
+def _get_commit_headline_for_sha(sha: str) -> str:
+    cmd = ['git', 'log', '-1', '--format=%s', sha]
+    return _check_output(cmd).strip()
+
 
 
 if __name__ == "__main__":
-    main()
+    main(examine_history_size=100000, my_history_size=100)
