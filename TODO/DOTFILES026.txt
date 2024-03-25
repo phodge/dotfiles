@@ -1,0 +1,7 @@
+DOTFILES026 bring back 'spell' for vim/neovim
+
+> Here's a nifty keymap, this one will find the last misspelled word before the
+> cursor and replace it with the top suggestion all while in insert mode. Means
+> you can correct spelling mistakes on the fly
+
+    <c-g>u<Esc>[s1z=`]a<c-g>u
