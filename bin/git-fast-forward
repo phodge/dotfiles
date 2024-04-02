@@ -15,7 +15,7 @@ if [ -n "$1" ]; then
     _branch="$1"
     shift
 else
-    _remote="$(git remote)"
+    _remote="$(git remote | head -n 1)"
 fi
 
 if [ -n "$GIT_FAST_FORWARD_PRECMD" ]; then
