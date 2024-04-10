@@ -69,10 +69,6 @@ else
 	# append to the history file, don't overwrite it
 	shopt -s histappend
 
-	# make history / history file sizes a bit more generous
-	HISTSIZE=100000
-	HISTFILESIZE=100000
-
 	# check the window size after each command and, if necessary,
 	# update the values of LINES and COLUMNS.
 	shopt -s checkwinsize
@@ -82,6 +78,11 @@ else
     fi
     source $DOTFILES_PATH/shell/bash_prompt_wizard.sh
 fi
+
+# Note: we want to do this for bash _and_ zsh so that we don't accidentally
+# trim history file down when running bash
+export HISTSIZE=1000000
+export SAVEHIST=1000000
 
 EDITOR=vim
 which nvim &> /dev/null && EDITOR=nvim
