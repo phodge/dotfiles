@@ -671,6 +671,9 @@ def tools():
             if len(install):
                 execute(['brew', 'install'] + install)
 
+    if IS_OSX and haveexecutable('brew') and allow_installing_stuff:
+        execute(['brew', 'install', 'git-absorb'])
+
 
 @section
 def fzf_install():

@@ -17,7 +17,9 @@
     branch-diff = diff master...HEAD --
     ff = !git-fast-forward
     outtomaster = log --reverse -p origin/master..
-    abs = !git absorb && git rebas -i
+    # shortcut to git-absorb and immediate rebase
+    # See https://github.com/tummychow/git-absorb
+    abs = !git absorb && git -c core.hooksPath=/no/hooks rebase -i
 
 [fetch]
     # like always having --prune turned on
