@@ -17,6 +17,7 @@
     branch-diff = diff master...HEAD --
     ff = !git-fast-forward
     outtomaster = log --reverse -p origin/master..
+    abs = !git absorb && git rebas -i
 
 [fetch]
     # like always having --prune turned on
@@ -52,3 +53,12 @@
 
 [init]
     defaultBranch = master
+
+[absorb]
+    # git-absorb config
+    # See 'git-abs' alias
+    # See DOTFILES027
+
+    # save time by automatically staging
+    autoStageIfNothingStaged = true
+    fixupTargetAlwaysSHA = true
