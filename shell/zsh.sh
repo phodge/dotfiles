@@ -29,9 +29,10 @@ CASE_SENSITIVE="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-
-# no I don't want shared history
+# set history colleciton options
 unsetopt share_history
+setopt histignorealldups
+setopt histignorespace
 
 # git completion for zsh.
 # Instructions were found in git-completion.zsh itself
