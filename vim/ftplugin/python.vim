@@ -650,7 +650,11 @@ fun! <SID>AddImportLineNow(line) " {{{
     " add a mark we can jump back to
     normal! mi
     call append(l:where -1, a:line)
-    Isort
+    if get(b:, 'peter_auto_import_use_ale_fix', 0)
+      ALEFix
+    else
+      Isort
+    endif
     normal! `i
     return
   endwhile
