@@ -480,6 +480,12 @@ fun! <SID>SmartImportUI() " {{{
         \ "chain": "itertools",
         \ }
 
+  let l:exactimport = get(b:, 'peter_auto_import_exact_imports', {})->get(l:word, '')
+  if strlen(l:exactimport)
+    call <SID>AddImportLineNow(l:exactimport)
+    return
+  endif
+
   let l:module = get(l:vocabulary, l:word, "")
   if strlen(l:module)
     call <SID>AddImportLineNow('from '.l:module.' import '.l:word)
