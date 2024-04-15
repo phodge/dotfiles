@@ -144,3 +144,8 @@ def install_docker_engine():
             'docker-compose-plugin',
     ]:
         installpkg(pkg)
+
+    USER = os.environ['USER']
+    if yesno('add_USER_to_docker_group', f'Add {USER!r} to "docker" unix group?', recommended=True):
+        _sudo(['usermod', '--append', '--groups', 'docker', USER])
+        _sudo(['newgrp', 'docker'])
