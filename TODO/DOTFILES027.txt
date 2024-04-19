@@ -1,8 +1,5 @@
 DOTFILES027 try better git rebase tools
 
-* automatic "!fixup" commits via git-absorb:
-  https://github.com/tummychow/git-absorb
-
 * better git rebase via git-revise
   https://git-revise.readthedocs.io/en/latest/man.html
 
