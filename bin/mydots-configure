@@ -20,6 +20,7 @@ SETTINGS_NAMES = {
     'want_neovim_treesitter_python',
     'want_neovim_snippy',
     'want_vimade',
+    'want_git_revise',
     'use_vendored_fzf',
     'use_ale_dmypy',
     'use_edit_real_path',
@@ -29,6 +30,7 @@ SETTINGS_NAMES = {
 
 SHELL_SETTINGS = {
     'show_git_state_in_zsh': 'ZSH_SHOW_GIT_STATE',
+    'want_git_revise': 'WANT_GIT_REVISE',
 }
 
 
@@ -308,6 +310,21 @@ def main(automatic: bool, print_json: bool) -> None:
         ],
         disadvantages=[
             'Can be slow with many buffers open',
+        ],
+    )
+
+    _yesno_setting_big(
+        'Use git-revise for "git rebas"?',
+        'want_git_revise',
+        default=0,
+        state=state,
+        automatic=automatic or print_json,
+        advantages=[
+            'Can edit commit messages directly in rebase plan.',
+            'Use "cut" command to split a commit.',
+        ],
+        disadvantages=[
+            'gitrebase syntax highlighting and filetype features do not work',
         ],
     )
 

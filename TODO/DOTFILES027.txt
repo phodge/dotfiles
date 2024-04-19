@@ -1,8 +1,5 @@
 DOTFILES027 try better git rebase tools
 
-* better git rebase via git-revise
-  https://git-revise.readthedocs.io/en/latest/man.html
-
 * Stacked Git - probably need to watch some YT videos on this thing to know if
   worthwhile.
   https://stacked-git.github.io/
