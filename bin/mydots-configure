@@ -325,6 +325,7 @@ def main(automatic: bool, print_json: bool) -> None:
         ],
         disadvantages=[
             'gitrebase syntax highlighting and filetype features do not work',
+            'Frequently fails with error: "invalid value: Commit XXX has 2 parents"',
         ],
     )
 
