@@ -148,4 +148,6 @@ def install_docker_engine():
     USER = os.environ['USER']
     if yesno('add_USER_to_docker_group', f'Add {USER!r} to "docker" unix group?', recommended=True):
         _sudo(['usermod', '--append', '--groups', 'docker', USER])
-        _sudo(['newgrp', 'docker'])
+        # XXX: the internet suggested I do this as well, but it seems to drop
+        # me into a root shell when executing homely update
+        # _sudo(['newgrp', 'docker'])
