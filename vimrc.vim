@@ -1407,10 +1407,8 @@ set sidescrolloff=20
     nnoremap <F4> :RepoTodoList<CR>
     nnoremap <S-F4> :RepoTodoAdd<CR>
 
-    " for mac
-    if has('macunix')
-      map <F16> <S-F4>
-    endif
+    " XXX: this seems to be required for mac and ubuntu w/ Gnome Terminal
+    map <F16> <S-F4>
 
     " use c" to swap quote types {{{
 
