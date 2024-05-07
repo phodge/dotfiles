@@ -15,7 +15,6 @@ if ! exists('g:hackymappings')
 endif
 
 let s:ts_lsp = has('nvim') && strlen($NVIM_TS_LSP)
-let s:require_plenary = 0
 
 " sensible defaults to start with
 if &compatible
@@ -229,7 +228,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('jose-elias-alvarez/nvim-lsp-ts-utils')
 
     " plenary.nvim is required for the nvim-lsp-ts-utils plugin
-    let s:require_plenary = 1
+    call <SID>VendoredPlug('nvim-lua/plenary.nvim')
   endif
 
   if ! has('nvim-0.9.0')
@@ -601,10 +600,6 @@ if filereadable(s:plugpath)
   Plug 'tpope/vim-obsession'
   Plug 'tpope/vim-repeat'
   Plug 'AndrewRadev/linediff.vim'
-
-  if s:require_plenary
-    call <SID>VendoredPlug('nvim-lua/plenary.nvim')
-  endif
 
   " Debugger
   if g:peter_give_me_a_debugger
