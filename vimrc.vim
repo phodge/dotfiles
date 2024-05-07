@@ -771,6 +771,12 @@ if filereadable(s:plugpath)
   let g:gh_line_repo_map_default = 0
   Plug 'https://github.com/ruanyl/vim-gh-line'
 
+  if has('nvim')
+    " other init stuff that only works for nvim+lua
+    exe printf('source %s/vimlua/startup.lua', s:dotfiles_root)
+    call v:lua.mydots_init_plugins(s:)
+  endif
+
   " TODO: have a crack at some of these plugins
   " Plug 'chrisbra/NrrwRgn'
   " https://github.com/prettier/prettier
