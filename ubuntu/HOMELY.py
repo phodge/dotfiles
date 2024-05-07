@@ -162,3 +162,18 @@ def install_docker_engine():
         # XXX: the internet suggested I do this as well, but it seems to drop
         # me into a root shell when executing homely update
         # _sudo(['newgrp', 'docker'])
+
+
+@section_ubuntu(enabled=want_full and yesno('install_github_cli', 'Install "gh" (github-cli)'))
+def install_github_cli():
+    def _sudo(cmd, *args, **kwargs):
+        return execute(['sudo'] + cmd, *args, stdout="TTY", **kwargs)
+
+    _install_keyring('githubcli-archive-keyring.gpg', 'https://cli.github.com/packages/githubcli-archive-keyring.gpg')
+
+    arch = _get_arch()
+    cfg = f"deb [arch={arch} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
+    _sudo(['bash', '-c', f'echo "{cfg}" > /etc/apt/sources.list.d/github-cli.list'])
+
+    # finally - install the gh package
+    installpkg('gh')
