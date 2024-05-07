@@ -119,7 +119,6 @@ fun! <SID>VendoredPlug(path)
   endif
 endfun
 
-
 " per-project config
 call <SID>VendoredPlug('phodge/vim-project-config')
 let s:config_dirs = get(g:, 'mydots_additional_project_config_paths', {})
@@ -1719,7 +1718,7 @@ fun! InTmuxWindow(cmd, opt)
   "  format can be modified by using -F. This is probably not useful as we run
   "  with :silent so all output is invisible.
   " let l:cmd_spawn .= ' -P'
-  
+
   " We spawn through a bash subshell so that we can run multiple commands in
   " sequence
   " First step is to run the original command and decorate with a 'FAIL ...'
