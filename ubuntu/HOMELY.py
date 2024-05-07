@@ -107,30 +107,41 @@ def ubuntu_install_devilspie2():
         f.write("X-GNOME-Autostart-enabled=true\n")
 
 
+def _sudo(cmd, *args, **kwargs):
+    return execute(['sudo'] + cmd, *args, stdout="TTY", **kwargs)
+
+
+def _install_keyring(keyname: str, url: str):
+    keypath = '/etc/apt/keyrings/' + keyname
+
+    if not os.path.exists(keypath):
+        _sudo(['install', '-m', '0755', '-d', '/etc/apt/keyrings'])
+        curl = f'curl -fsSL {url}'
+        gpg = f'gpg --dearmor -o {keypath}'
+        execute(['bash', '-c', f'{curl} | sudo {gpg}'], stdout="TTY")
+
+    _sudo(['chmod', 'a+r', keypath])
+
+
+def _get_arch():
+    return execute(['dpkg', '--print-architecture'], stdout=True)[1].strip().decode('utf-8')
+
+
 @section_ubuntu(enabled=want_full and yesno('install_docker', 'Install docker?'))
 def install_docker_engine():
-    def _sudo(cmd, *args, **kwargs):
-        return execute(['sudo'] + cmd, *args, stdout="TTY", **kwargs)
-
     # Add Docker's official GPG key:
     installpkg('ca-certificates')
     installpkg('curl')
     installpkg('gnupg')
 
-    if not os.path.exists('/etc/apt/keyrings/docker.gpg'):
-        _sudo(['install', '-m', '0755', '-d', '/etc/apt/keyrings'])
-        curl = 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg'
-        gpg = 'gpg --dearmor -o /etc/apt/keyrings/docker.gpg'
-        execute(['bash', '-c', f'{curl} | sudo {gpg}'], stdout="TTY")
-
-    _sudo(['chmod', 'a+r', '/etc/apt/keyrings/docker.gpg'])
+    _install_keyring('docker.gpg', 'https://download.docker.com/linux/ubuntu/gpg')
 
     # Add the repository to Apt sources:
     VERSION_CODENAME = execute(
         ['bash', '-c', '. /etc/os-release && echo "$VERSION_CODENAME"'],
         stdout=True,
     )[1].strip().decode('utf-8')
-    arch = execute(['dpkg', '--print-architecture'], stdout=True)[1].strip().decode('utf-8')
+    arch = _get_arch()
 
     cfg = f"deb [arch={arch} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {VERSION_CODENAME} stable"
     _sudo(['bash', '-c', f'echo "{cfg}" > /etc/apt/sources.list.d/docker.list'])
