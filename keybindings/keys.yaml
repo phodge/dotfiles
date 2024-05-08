@@ -1,16 +1,15 @@
 # prefixes:
-# A- ALT
-# C- COMMAND (Alt key on keyboard)
-# O- OPTION (Windows key)
+# CTRL- CTRL Key
+# ALT- META ("Alt" Key / "Command" on Mac keyboards)
 # S- SHIFT
-# F- FN (Context menu key on keyboard)
+# WIN- (Context menu / "Option" on mac keyboards)
 os:
-  C-A-S-T: __new_terminal_interactive__
+  CTRL-ALT-S-T: __new_terminal_interactive__
 
 
 
 terminal:
-  A-N: __new_window__
+  ALT-N: __new_window__
 
 
 
@@ -23,37 +22,37 @@ tmux:
     # mark/unmark the current pane
     M: select-pane -m
     S-M: select-pane -M
-    C-B: last-window
-    C-P: previous-window
-    C-N: next-window
-    C-M: command-prompt "move-window -t '%%'"
+    CTRL-B: last-window
+    CTRL-P: previous-window
+    CTRL-N: next-window
+    CTRL-M: command-prompt "move-window -t '%%'"
   direct:
     # moving between panes
     # smart pane switching with awareness of vim splits
     # https://robots.thoughtbot.com/seamlessly-navigate-vim-and-tmux-splits
-    M-H: if-shell "$is_vim" "send-keys M-h" "select-pane -L"
-    M-J: if-shell "$is_vim" "send-keys M-j" "select-pane -D"
-    M-K: if-shell "$is_vim" "send-keys M-k" "select-pane -U"
-    M-L: if-shell "$is_vim" "send-keys M-l" "select-pane -R"
+    ALT-H: if-shell "$is_vim" "send-keys M-h" "select-pane -L"
+    ALT-J: if-shell "$is_vim" "send-keys M-j" "select-pane -D"
+    ALT-K: if-shell "$is_vim" "send-keys M-k" "select-pane -U"
+    ALT-L: if-shell "$is_vim" "send-keys M-l" "select-pane -R"
     # splitting panes
-    M-S-L: split-window -h
-    M-S-H: split-window -h \; swap-pane -U
-    M-S-J: split-window
-    M-S-K: split-window \; swap-pane -U
+    ALT-S-L: split-window -h
+    ALT-S-H: split-window -h \; swap-pane -U
+    ALT-S-J: split-window
+    ALT-S-K: split-window \; swap-pane -U
     # move between windows
-    M-P: previous-window
-    M-N: next-window
+    ALT-P: previous-window
+    ALT-N: next-window
     # creating a new window
-    M-S-N: command-prompt -p "New Window" "new-window -n '%1'"
+    ALT-S-N: command-prompt -p "New Window" "new-window -n '%1'"
     # create a new session; move between sessions
-    M-1: switch-client -n
+    ALT-1: switch-client -n
     # NOTE: meta-[ is not a thing you can bind, because term codes
-    M-2: command-prompt -p "New Session,New Window" "new-session -n '%2' -s '%1'"
+    ALT-2: command-prompt -p "New Session,New Window" "new-session -n '%2' -s '%1'"
   copy-mode-vi:
     V: begin-selection
-    Y: { static: tmux_copy_cmd }
-    S-Y: { static: tmux_copy_cmd }
-    CR: { static: tmux_copy_cmd }
+    Y: { special: tmux_copy_cmd }
+    S-Y: { special: tmux_copy_cmd }
+    CR: { special: tmux_copy_cmd }
     ESC: cancel
 
 

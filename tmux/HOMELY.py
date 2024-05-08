@@ -169,65 +169,64 @@ def tmux_keys():
         cmd.append('--break-system-packages')
     execute(cmd)
 
-    import yaml
+    oldpath = sys.path[:]
+    sys.path.append(HERE)
+    from keybindings import get_tmux_key_bindings
+    sys.path = oldpath
 
-    with open(HERE + '/keybindings/keys.yaml') as f:
-        document = yaml.safe_load(f)
-    regex = re.compile(r"^(C-)?(O-)?(M-)?(S-)?([ -~]|CR|BS|SPACE|ESC)$")
-    if 'tmux' in document:
-        static = {}
-        dynamic = {}
-        if haveexecutable("reattach-to-user-namespace"):
-            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"'
-        elif haveexecutable("pbcopy"):
-            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "pbcopy"'
-        elif True:
-            # XXX: I've been having issues with Ubuntu terminal lately where it
-            # can't decipher the terminal codes coming from tmux's
-            # copy-selection command
-            static['tmux_copy_cmd'] = 'copy-pipe-and-cancel "xsel -b -i"'
-        else:
-            static['tmux_copy_cmd'] = 'copy-selection'
+    tmux_keys = get_tmux_key_bindings()
 
-        sections = [
-            ('direct', 'bind-key -n {key} {binding}'),
-            ('prefixed', 'bind-key {key} {binding}'),
-            ('copy-mode-vi', 'bind-key -T copy-mode-vi {key} send-keys -X {binding}'),
-        ]
+    if haveexecutable("reattach-to-user-namespace"):
+        tmux_copy_cmd = 'copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"'
+    elif haveexecutable("pbcopy"):
+        tmux_copy_cmd = 'copy-pipe-and-cancel "pbcopy"'
+    elif True:
+        # XXX: I've been having issues with Ubuntu terminal lately where it
+        # can't decipher the terminal codes coming from tmux's
+        # copy-selection command
+        tmux_copy_cmd = 'copy-pipe-and-cancel "xsel -b -i"'
+    else:
+        # TODO: any reason not to use this?
+        tmux_copy_cmd = 'copy-selection'
 
-        for sectionname, template in sections:
-            for keycombo, binding in document["tmux"].get(sectionname, {}).items():
-                if hasattr(binding, 'keys'):  # is it a dict?
-                    if 'static' in binding:
-                        binding = static[binding['static']]
-                    elif 'dynamic' in binding:
-                        binding = dynamic[binding['dynamic']]()
-                    else:
-                        raise Exception("Invalid binding %r" % binding)
-                m = regex.match(keycombo)
-                if not m:
-                    warn("Invalid keycombo for tmux: direct: %r" % keycombo)
-                    continue
-                ctrl, opt, meta, shift, key = m.groups()
-                if key == "CR":
-                    key = "Enter"
-                elif key == "ESC":
-                    key = "Escape"
-                elif key == "SPACE":
-                    key = "Space"
+    sections = [
+        ('direct', 'bind-key -n {key} {binding}'),
+        ('prefixed', 'bind-key {key} {binding}'),
+        ('copy-mode-vi', 'bind-key -T copy-mode-vi {key} send-keys -X {binding}'),
+    ]
+
+    for sectionname, template in sections:
+        for binding in tmux_keys.get(sectionname, {}):
+            if hasattr(binding.command, 'keys'):  # is it a dict?
+                if 'special' in binding.command:
+                    assert binding.command['special'] == 'tmux_copy_cmd'
+                    use_binding = tmux_copy_cmd
                 else:
-                    assert not key.islower(), "Lowercase keycombo %r is not allowed" % keycombo
-                    key = key.lower()
-                modifiers = ''
-                if ctrl:
-                    modifiers += 'C-'
-                assert not opt, "O- prefix not allowed for tmux keybinding %r" % keycombo
-                if meta:
-                    modifiers += 'M-'
-                if shift:
-                    assert key.islower(), "Invalid keycombo %r" % keycombo
-                    key = key.upper()
-                lines.append(template.format(key=modifiers + key, binding=binding))
+                    raise Exception("Invalid binding %r" % binding)
+            else:
+                use_binding = binding.command
+
+            if binding.key == "CR":
+                bindwhat = "Enter"
+            elif binding.key == "ESC":
+                bindwhat = "Escape"
+            elif binding.key == "SPACE":
+                bindwhat = "Space"
+            else:
+                assert not binding.key.islower(), f"Lowercase keycombo {binding.key!r} is not allowed"
+                bindwhat = binding.key.lower()
+
+            modifiers = ''
+            assert not binding.win
+            if binding.ctrl:
+                modifiers += 'C-'
+            if binding.alt:
+                modifiers += 'M-'
+            if binding.shift:
+                # XXX: this means you can't bind SHIFT+Escape etc
+                assert bindwhat.islower(), f"Invalid keycombo {bindwhat!r}"
+                bindwhat = bindwhat.upper()
+            lines.append(template.format(key=modifiers + bindwhat, binding=use_binding))
 
     # we also want to make our special PANE mode
     pm = TmuxCustomMode(
