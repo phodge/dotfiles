@@ -5,3 +5,9 @@
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'DOTFILES'
 endfun
+
+fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
+  if a:relname == 'git/config'
+    return 'gitconfig'
+  endif
+endfun
