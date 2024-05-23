@@ -1028,13 +1028,13 @@ def git_install():
 @section_macos(enabled=allow_installing_stuff and haveexecutable('brew'))
 def font_install():
     fonts = [
-        'homebrew/cask-fonts/font-inconsolata',
+        'homebrew/cask/font-inconsolata',
         # this download doesn't seem to work any more
         # 'homebrew/cask-fonts/font-anonymous-pro',
     ]
     if wantpowerline():
         fonts.extend([
-            'homebrew/cask-fonts/font-inconsolata-for-powerline',
+            'homebrew/cask/font-inconsolata-for-powerline',
             # this one seems to require `brew install svn` which I'm maybe not prepared to do
             # 'homebrew/cask-fonts/font-anonymice-powerline',
         ])
