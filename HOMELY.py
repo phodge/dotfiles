@@ -1222,13 +1222,19 @@ def poetry_install():
         )
 
 
-@section_macos(enabled=want_full and yesno('install_fnm', 'Install fnm?'))
+@section(enabled=want_full and yesno('install_fnm', 'Install fnm?'))
 def install_fnm():
     """https://github.com/Schniz/fnm"""
-    # NOTE: this is currently mac-os only because I don't have a quick
-    # one-liner to install on Ubuntu yet
-    # TODO: DOTFILES015 install on ubuntu
-    installpkg('fnm', brew='fnm')
+    if IS_UBUNTU:
+        # TODO: DOTFILES015 get this to update somehow
+        # TODO: first you need rustup via "snap install rustup --classic" then "rustup default stable"
+        execute(['cargo', 'install', 'fnm'])
+    elif IS_OSX:
+        # NOTE: this is currently mac-os only because I don't have a quick
+        # one-liner to install on Ubuntu yet
+        installpkg('fnm', brew='fnm')
+    else:
+        raise Exception("fnm installation not supported on this OS")
 
     # bash setup
     lineinfile('~/.bashrc', 'eval "$(fnm completions --shell bash)"')
