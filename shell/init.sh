@@ -37,6 +37,10 @@ if [ -e ~/.pyenv ]; then
     PATH_HIGH="$PYENV_ROOT/bin:$PATH_HIGH"
 fi
 
+if [ -e ~/.cargo ]; then
+    PATH_HIGH="$HOME/.cargo/bin:$PATH_HIGH"
+fi
+
 # add our locally compiled man files
 MANPATH=$HOME/man:$MANPATH
 
