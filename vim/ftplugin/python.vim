@@ -412,6 +412,8 @@ fun! <SID>SmartImportUI() " {{{
         \ "namedtuple": "collections",
         \ "OrderedDict": "collections",
         \ "defaultdict": "collections",
+        \ "Collection": "collections.abc",
+        \ "Reversible": "collections.abc",
         \ "Decimal": "decimal",
         \ "Any": "typing",
         \ "Callable": "typing",
