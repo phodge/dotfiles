@@ -58,7 +58,10 @@ def ubuntu_mouse_speed():
         return
 
     _gsettings_set('org.gnome.desktop.peripherals.mouse', 'accel-profile', 'flat')
-    _gsettings_set('org.gnome.desktop.peripherals.mouse', 'speed',         '0.0')
+    # XXX: this used to be "0.0" but on my new Ubuntu PC with a corded mouse
+    # and dual 4K monitors that speed was waaaayyyy too slow. (This may also be
+    # due to using X11 instead of Wayland on this PC)
+    _gsettings_set('org.gnome.desktop.peripherals.mouse', 'speed',         '0.8')
 
 
 @section_ubuntu(enabled=want_full, quick=True)
