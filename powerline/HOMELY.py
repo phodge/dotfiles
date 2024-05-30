@@ -107,7 +107,7 @@ def powerline_theme():
     right.append({
         "function": "homely.powerline.shortstatus",
         "args": {
-            "autoupdate": True,
+            "autoupdate": False,
             "reattach_to_user_namespace": haveexecutable('reattach-to-user-namespace'),
             "colors": {
                 "paused": "HOMELY:PAUSED",
