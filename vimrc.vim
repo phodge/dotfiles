@@ -798,6 +798,7 @@ if filereadable(s:plugpath)
   " https://github.com/romgrk/nvim-treesitter-context
   " https://github.com/romgrk/searchReplace.vim
   " https://github.com/romgrk/barbar.nvim
+  " https://github.com/barrett-ruth/import-cost.nvim
   call plug#end() " }}}
 endif
 
