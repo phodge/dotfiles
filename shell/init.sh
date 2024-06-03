@@ -293,7 +293,7 @@ pushthis() {
 }
 
 __peter_fnm_init() {
-    $(which fnm)&>/dev/null || return
+    which fnm &>/dev/null || return
 
     if [ -n "$ZSH_NAME" ]; then
         eval $(fnm env)
