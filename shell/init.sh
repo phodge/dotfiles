@@ -292,7 +292,22 @@ pushthis() {
     git push origin "${ref}:refs/heads/$PUSHTO" "$@"
 }
 
+__peter_fnm_init() {
+    $(which fnm)&>/dev/null || return
+
+    if [ -n "$ZSH_NAME" ]; then
+        eval $(fnm env)
+    elif [ -n "$BASHPID" ]; then
+        # bash needs fnm completions installed on startup
+        eval "$(fnm completions --shell bash)"
+        eval $(fnm env)
+    fi
+}
+
 shell_post_init() {
+    # initialise fnm for current shell if it is installed
+    __peter_fnm_init
+
     for fn in $(echo $DOTFILES_POST_INIT); do
         $fn || echo "dotfiles init.sh POST-INIT ERROR: $fn() failed" >&2
         unset -f $fn 2>/dev/null || :

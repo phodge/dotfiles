@@ -1236,13 +1236,8 @@ def install_fnm():
     else:
         raise Exception("fnm installation not supported on this OS")
 
-    # bash setup
-    lineinfile('~/.bashrc', 'eval "$(fnm completions --shell bash)"')
-    lineinfile('~/.bashrc', 'eval $(fnm env)')
-
     if wantzsh():
         # setup for zsh
-        lineinfile('~/.zshrc', 'eval $(fnm env)  # initialise fnm')
         mkdir('~/.zsh')
         zsh_completion = execute(['fnm', 'completions', '--shell', 'zsh'], stdout=True)[1]
         with writefile('~/.zsh/_fnm') as f:
