@@ -1,0 +1,18 @@
+DOTFILES037 Ubuntu display issues/lag research
+
+NOT caused by nvim or tmux or Wayland
+
+Manifests in Alacritty at 320 columns OR large enough window size
+
+gnome-terminal does not "lag" but sometimes has keystrokes that stay "pending" another keystroke arrives OR until screen is re-rendered
+
+Note that my Desktop defaults to X11; if I log in with Wayland then I get
+LLVMPipe graphics drivers and instead of lag I get very slow terminal
+rendering.
+
+I have been coding all day in Alacritty in fullscreen windows on X11 (nvidia graphics drivers) without perceptible lag
+
+See:
+- https://www.reddit.com/r/EndeavourOS/comments/p8b2kf/for_those_that_have_stutterlags_problems_with_kde/
+- https://www.reddit.com/r/pop_os/comments/rjfim5/wayland_keeps_defaulting_to_llvmpipe_instead_of/
+- https://www.reddit.com/r/kde/comments/xdv1qe/fixed_my_lag_issues_on_nvidia_gpu_on_x11/
