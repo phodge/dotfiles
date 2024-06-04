@@ -42,6 +42,10 @@ def ubuntu_key_repeat_rate():
 
 @section_ubuntu(enabled=want_full)
 def ubuntu_os_key_bindings():
+    # see:
+    #  gsettings list-recursively org.gnome.shell.keybindings
+    #  gsettings list-recursively org.gnome.desktop.wm.keybindings
+    #  { for schema in $(gsettings list-schemas); do echo; echo $schema; gsettings list-recursively $schema; done; } > schemas.txt
     if not yesno('ubuntu_set_os_keybindings', 'Ubuntu: Install OS keybindings (maximize windows, etc)?', recommended=True):
         return
 
