@@ -1,0 +1,7 @@
+DOTFILES029 tidier i3config
+
+- review the entirety of i3/config
+- ability split out work-related workspace configs and keyboard shortcuts
+  - these need to be installable by separate dotfiles repos
+- ability to get keyboard shortcuts from keybindings/keys.yaml
+- ability to change default terminal program

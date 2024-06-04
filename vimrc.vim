@@ -1757,3 +1757,11 @@ fun! InTmuxWindow(cmd, opt)
 
   silent exe printf('!%s %s', l:cmd_spawn, shellescape(l:cmd_wrapped))
 endfun
+
+aug i3ConfigHotReload
+au! BufWritePost **/i3/config nested call <SID>i3HotReload()
+aug end
+
+fun! <SID>i3HotReload()
+  silent !i3-msg restart
+endfun

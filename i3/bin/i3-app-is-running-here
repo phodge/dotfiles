@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+import json
+import sys
+from subprocess import check_output
+
+
+def main():
+    workspace_name = sys.argv[1]
+    program = sys.argv[2]
+
+    # what workspace are we in?
+
+    result = check_output(['i3-msg', '-t', 'get_workspaces'], encoding='utf-8')
+    data = json.loads(result)
+    the_workspace = None
+    for workspace in data:
+        if workspace['name'] == workspace_name:
+            assert the_workspace is None
+            the_workspace = workspace
+
+    result = check_output(['i3-msg', '-t', 'get_tree'], encoding='utf-8')
+
+    rootnode = json.loads(result)
+    assert rootnode['type'] == "root"
+    assert rootnode['name'] == "root"
+    for node_ in rootnode['nodes']:
+        if node_['name'] == "__i3":
+            continue
+
+        # there should be one node for each display
+        #assert node_['name'] in display_names
+
+        for subnode in node_['nodes']:
+            if subnode['type'] == 'dockarea':
+                if subnode['name'] not in ('topdock', 'bottomdock'):
+                    raise Exception
+                continue
+
+            assert subnode['type'] == 'con'
+            assert subnode['name'] == 'content'
+
+            for workspace in subnode['nodes']:
+                assert workspace['type'] == 'workspace'
+                if workspace['name'] != workspace_name:
+                    continue
+
+                if _program_in_nodes(workspace, program.lower()):
+                    sys.exit(0)
+
+    sys.exit(5)
+
+
+def _program_in_nodes(topnode, program) -> bool:
+    wp = topnode.get('window_properties', {})
+
+    for field in ['class', 'instance', 'window_role', 'title']:
+        box = wp.get(field, '').lower()
+        if program in box:
+            return True
+
+    for subnode in topnode.get('nodes', []):
+        if _program_in_nodes(subnode, program):
+            return True
+
+    return False
+
+
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 
-from homely.general import mkdir, symlink, writefile
+from homely.general import WHERE_END, lineinfile, mkdir, symlink, writefile
 from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import section_ubuntu, want_full
+from HOMELY import HERE, HOME, section_ubuntu, want_full
 
 
 @section_ubuntu(enabled=want_full, quick=True)
@@ -184,3 +185,15 @@ def install_github_cli():
 
     # finally - install the gh package
     installpkg('gh')
+
+
+@section_ubuntu(enabled=want_full)
+def i3_config():
+    mkdir('~/.config')
+    mkdir('~/.config/i3')
+
+    i3_config_file = Path(HOME + '/.config/i3/config')
+    if not i3_config_file.exists():
+        i3_config_file.write_text("# set $screen1 HDMI-i\n# set $screen2 DP-0\n")
+
+    lineinfile(str(i3_config_file), f'include {HERE}/i3/config', where=WHERE_END)

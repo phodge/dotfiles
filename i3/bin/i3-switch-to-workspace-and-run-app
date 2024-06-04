@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+workspace="$1"
+shift
+screen="$1"
+shift
+program="$1"
+shift
+program_args="$@"
+
+# move to the desired workspace
+# start the program if it isn't already running
+cmd="workspace --no-auto-back-and-forth $workspace; move workspace to output $screen"
+cmd="workspace --no-auto-back-and-forth $workspace"
+if ! $HOME/dotfiles/i3/bin/i3-app-is-running-here "$workspace" "$program"; then
+    cmd="$cmd; exec $program $program_args"
+fi
+i3-msg "$cmd"
