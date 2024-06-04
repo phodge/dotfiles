@@ -1,0 +1,9 @@
+DOTFILES035 experiment with Kitty terminal?
+
+https://sw.kovidgoyal.net/kitty/
+
+Similar to Alacritty but hopefully without lag issues I'm seeing on Ubuntu
+
+Also, graphics support!
+
+- ability to install automatically on Ubuntu/Mac would be nice

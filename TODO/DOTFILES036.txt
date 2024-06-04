@@ -1,0 +1,5 @@
+DOTFILES036 experiment with WezTerm
+
+https://wezfurlong.org/wezterm/
+
+graphics support!
