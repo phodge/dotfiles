@@ -1763,7 +1763,17 @@ fun! InAlacrittyWindow(cmd, opt)
   let l:autoclose = get(a:opt, 'autoclose', v:false)
 
   let l:options = [
+        " \ 'window.decorations="None"',
+        \ 'window.opacity=0.9',
+        \ 'window.blur=true',
+        "\ 'window.position={x=1000,y=500}',
+        \ 'window.dimensions={lines=60,columns=200}',
+        \ 'window.padding={x=50,y=20}',
         \ ]
+  call add(l:options, 'colors.primary.background="#000033"')
+  "     \ " 'live_config_reload=false',
+  "     \ " 'ipc_socket=false',
+  "     \ ]
 
   " TODO: DOTFILES011: implement this somehow - the desired behaviour is to
   " kill any "Please wait" prompt hanging around in existing window and
