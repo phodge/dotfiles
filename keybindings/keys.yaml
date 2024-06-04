@@ -5,12 +5,30 @@
 # WIN- (Context menu / "Option" on mac keyboards)
 os:
   CTRL-ALT-S-T: __new_terminal_interactive__
+  # TODO: DOTFILES020: install these automatically on MacOS and Ubuntu
+  ALT-Return: toggle-full-screen
+  WIN-Left: resize-left-half
+  WIN-Right: resize-left-half
+  WIN-Up: move-to-monitor-left
+  WIN-Down: move-to-monitor-left
+  # SHIFT+OPTION+ == resize windows?
+  ALT-S-Up: NULL
+  ALT-S-Down: toggle-maximized
+  ALT-S-Left: NULL
+  ALT-S-Right: NULL
+  ALT-WIN-Left: switch-workspace-left
+  ALT-WIN-Right: switch-workspace-left
+  ALT-WIN-Up: show-all-workspace-windows
+  ALT-WIN-Down: NULL
 
 
 
 terminal:
   ALT-N: __new_window__
 
+  # TODO: DOTFILES020: can we get vi-mode keys working in alacritty like we
+  # have in tmux?
+  # See: https://github.com/alacritty/alacritty/blob/master/docs/features.md
 
 
 tmux:

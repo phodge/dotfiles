@@ -1,0 +1,8 @@
+DOTFILES031: standardise CTRL+ALT+T for opening a terminal
+
+To change default terminal on ubuntu you might use:
+
+    sudo update-alternatives --config x-terminal-emulator
+
+
+We want to have this shortcut on i3 as well

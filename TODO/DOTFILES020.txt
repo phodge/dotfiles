@@ -1,10 +1,15 @@
 DOTFILES020 standardise OS keyboard shortcuts and script their installation
 
+Worth checking whether skhd is an easier route for MacOS (see DOTFILES033)
+
 - show all application windows (for this Desktop)
   - cmd+option+up
 - move to next/prev Desktop
   - cmd+option+right
   - cmd+option+left
+
+- open a terminal (ctrl+see DOTFILES031)
+- ALSO can we have these shortcuts automatically reinstall on file save for fast customisation?
 
 
 TODO: script this
