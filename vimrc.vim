@@ -1758,6 +1758,55 @@ fun! InTmuxWindow(cmd, opt)
   silent exe printf('!%s %s', l:cmd_spawn, shellescape(l:cmd_wrapped))
 endfun
 
+fun! InAlacrittyWindow(cmd, opt)
+  let l:winname = get(a:opt, 'name', 'InAlacrittyWindow')
+  let l:autoclose = get(a:opt, 'autoclose', v:false)
+
+  let l:options = [
+        \ ]
+
+  " TODO: DOTFILES011: implement this somehow - the desired behaviour is to
+  " kill any "Please wait" prompt hanging around in existing window and
+  " recreate the window.
+  let l:reuse_window = get(a:opt, 'reuse', v:false)
+
+  " We spawn through a bash subshell so that we can run multiple commands in
+  " sequence
+  " First step is to run the original command and decorate with a 'FAIL ...'
+  " message if it doesn't work
+  let l:bash_cmds = [printf('{ %s || echo "FAILED[$?]:" %s; }', a:cmd, shellescape(a:cmd))]
+
+  if ! l:autoclose
+    call add(l:bash_cmds, 'read -p "Press any key to close" -n 1')
+  endif
+
+  " TODO: should this be using $SHELL?
+  " Note we use '-i' so that the user's .bashrc is sourced and aliases are
+  " available
+  let l:cmd_wrapped = 'bash -i -c ' . shellescape(join(l:bash_cmds, '; '))
+
+  " build the cmd
+  let l:cmd_spawn = 'alacritty -T ' . shellescape(winname)
+
+  for l:option in l:options
+    let l:cmd_spawn .= ' -o ' . shellescape(l:option)
+  endfor
+
+  " add environment variables also
+  for l:varname in get(a:opt, 'copy_env_vars', [])
+    let l:cmd_spawn .= printf(' -o env.%s="%s"', l:varname, shellescape(getenv(l:varname)))
+  endfor
+
+  let l:cmd_spawn .= ' --command ' . l:cmd_wrapped
+
+  " When using :! to spawn the command you would need to escape "#" characters
+  " which are substituted with alternate buffer name.
+  " But instead we use jobstart() because otherwise our UI thread is blocked
+  " until the alacritty window is closed
+  "exe '!' . escape(l:cmd_spawn, '#')
+  call jobstart(l:cmd_spawn)
+endfun
+
 aug i3ConfigHotReload
 au! BufWritePost **/i3/config nested call <SID>i3HotReload()
 aug end

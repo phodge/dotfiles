@@ -1,1 +1,3 @@
-DOTFILES011 implement reuse window for InTmuxWindow()
+DOTFILES011 implement reuse window for InTmuxWindow() and InAlacrittyWindow()
+
+For InAlacrittyWindow() this may be doable by killing the job startd by jobstart()
