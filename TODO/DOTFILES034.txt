@@ -1,0 +1,6 @@
+DOTFILES034 cpu temps in tmux and/or i3
+
+TMUX:
+- see https://coderwall.com/p/cmw1mq/cpu-temperature-segment-in-tmux-powerline
+- maybe do GPU as well?
+  https://medium.com/@cristianduguet/track-cpu-and-gpu-temperature-in-tmux-52d3e18457e2
