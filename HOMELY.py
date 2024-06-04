@@ -1105,8 +1105,9 @@ def install_alacritty():
     # write an alacritty.yml config that imports the ones from this repo
     imports = [f'{HERE}/alacritty-base.toml']
 
-    # FIXME: add some proper MacOS detection to homely
-    if IS_OSX:
+    if IS_UBUNTU:
+        imports.append(f'{HERE}/alacritty-ubuntu.toml')
+    elif IS_OSX:
         imports.append(f'{HERE}/alacritty-macos.toml')
 
         def _export(d: dict):
