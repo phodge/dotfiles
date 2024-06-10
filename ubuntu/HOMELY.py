@@ -6,10 +6,10 @@ from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import HERE, HOME, section_ubuntu, want_full
+from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff
 
 
-@section_ubuntu(enabled=want_full, quick=True)
+@section_ubuntu(enabled=allow_installing_stuff, quick=True)
 def ubuntu_swap_caps_escape():
     if not yesno('ubuntu_swap_caps_escape', 'Ubuntu: Swap caps/escape using dconf-editor?'):
         return
@@ -32,7 +32,7 @@ def _gsettings_set(area, key, value):
     execute(['gsettings', 'set', area, key, value])
 
 
-@section_ubuntu(enabled=want_full)
+@section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_key_repeat_rate():
     if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?', recommended=True):
         return
@@ -41,7 +41,7 @@ def ubuntu_key_repeat_rate():
     _gsettings_set('org.gnome.desktop.peripherals.keyboard', 'delay',           'uint32 210')
 
 
-@section_ubuntu(enabled=want_full)
+@section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_os_key_bindings():
     # see:
     #  gsettings list-recursively org.gnome.shell.keybindings
@@ -57,7 +57,7 @@ def ubuntu_os_key_bindings():
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
 
 
-@section_ubuntu(enabled=want_full)
+@section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_mouse_speed():
     if not yesno('ubuntu_set_mouse_speed', 'Ubuntu: Set mouse speed / acceleration?', recommended=True):
         return
@@ -69,7 +69,7 @@ def ubuntu_mouse_speed():
     _gsettings_set('org.gnome.desktop.peripherals.mouse', 'speed',         '0.8')
 
 
-@section_ubuntu(enabled=want_full, quick=True)
+@section_ubuntu(enabled=allow_installing_stuff, quick=True)
 def ubuntu_app_switcher_current_workspace():
     if not yesno(
         'ubuntu_set_app_switcher_current_workspace',
@@ -86,7 +86,7 @@ def ubuntu_app_switcher_current_workspace():
     ])
 
 
-@section_ubuntu(enabled=want_full)
+@section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_install_devilspie2():
     """
     Install devilspie2 under Ubuntu.
@@ -135,7 +135,7 @@ def _get_arch():
     return execute(['dpkg', '--print-architecture'], stdout=True)[1].strip().decode('utf-8')
 
 
-@section_ubuntu(enabled=want_full and yesno('install_docker', 'Install docker?'))
+@section_ubuntu(enabled=allow_installing_stuff and yesno('install_docker', 'Install docker?'))
 def install_docker_engine():
     # Add Docker's official GPG key:
     installpkg('ca-certificates')
@@ -172,7 +172,7 @@ def install_docker_engine():
         # _sudo(['newgrp', 'docker'])
 
 
-@section_ubuntu(enabled=want_full and yesno('install_github_cli', 'Install "gh" (github-cli)'))
+@section_ubuntu(enabled=allow_installing_stuff and yesno('install_github_cli', 'Install "gh" (github-cli)'))
 def install_github_cli():
     def _sudo(cmd, *args, **kwargs):
         return execute(['sudo'] + cmd, *args, stdout="TTY", **kwargs)
