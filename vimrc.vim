@@ -1818,12 +1818,18 @@ fun! InAlacrittyWindow(cmd, opt)
 
   let l:cmd_spawn .= ' --command ' . l:cmd_wrapped
 
+  " kill a previous job?
+  if exists('s:last_alacritty_job')
+    call jobstop(s:last_alacritty_job)
+    unlet s:last_alacritty_job
+  endif
+
   " When using :! to spawn the command you would need to escape "#" characters
   " which are substituted with alternate buffer name.
   " But instead we use jobstart() because otherwise our UI thread is blocked
   " until the alacritty window is closed
   "exe '!' . escape(l:cmd_spawn, '#')
-  call jobstart(l:cmd_spawn)
+  let s:last_alacritty_job = jobstart(l:cmd_spawn, {'detach': v:true})
 endfun
 
 aug i3ConfigHotReload
