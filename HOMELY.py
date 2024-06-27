@@ -677,7 +677,7 @@ def tools():
 
 @section
 def fzf_install():
-    if not yesno('install_fzf', 'Install fzf?', want_full):
+    if not yesno('install_fzf', 'Install fzf?', want_full, recommended=False if IS_UBUNTU else None):
         return
 
     if haveexecutable('brew') and allow_installing_stuff:
