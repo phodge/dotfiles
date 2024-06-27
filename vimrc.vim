@@ -590,7 +590,9 @@ if filereadable(s:plugpath)
   PlugMaster 'phodge/MicroRefactor'
   PlugMaster 'phodge/vim-syn-info'
   PlugMaster 'phodge/vim-split-search'
-  PlugMaster 'phodge/vim-auto-spell'
+  " XXX: disabling this for now because it jumps us off the first tab page on
+  " startup
+  " PlugMaster 'phodge/vim-auto-spell'
   PlugMaster 'phodge/vim-vimui'
   PlugMaster 'phodge/vim-vcs'
 
