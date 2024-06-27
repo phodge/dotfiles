@@ -1771,18 +1771,22 @@ fun! InAlacrittyWindow(cmd, opt)
   let l:winname = get(a:opt, 'name', 'InAlacrittyWindow')
   let l:autoclose = get(a:opt, 'autoclose', v:false)
 
+  " XXX: for some reason you can't change some settings like font.size without
+  " it affecting *every* alacritty window :-(
   let l:options = [
-        " \ 'window.decorations="None"',
+        "\ these features aren't needed for my debug window
+        \ 'live_config_reload=false',
+        \ 'ipc_socket=false',
+        "\ set window styling
+        "\ 'window.decorations="None"',
+        \ 'colors.primary.background="#000022"',
         \ 'window.opacity=0.9',
         \ 'window.blur=true',
-        "\ 'window.position={x=1000,y=500}',
-        \ 'window.dimensions={lines=60,columns=200}',
-        \ 'window.padding={x=50,y=20}',
+        \ 'window.padding={x=20,y=10}',
+        "\ TODO: provide mechanism to customise these two values per machine
+        \ 'window.position={x=1920,y=0}',
+        \ 'window.dimensions={lines=90,columns=185}',
         \ ]
-  call add(l:options, 'colors.primary.background="#000033"')
-  "     \ " 'live_config_reload=false',
-  "     \ " 'ipc_socket=false',
-  "     \ ]
 
   " TODO: DOTFILES011: implement this somehow - the desired behaviour is to
   " kill any "Please wait" prompt hanging around in existing window and
