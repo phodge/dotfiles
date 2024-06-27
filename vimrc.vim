@@ -401,6 +401,11 @@ if filereadable(s:plugpath)
     let s:has_fzf = 1
     " use vim plugin provided by fzf homebrew package
     set rtp+=/usr/local/opt/fzf
+  elseif has('nvim') && isdirectory($HOME . '/src/fzf.git')
+    " on Ubuntu fzf should be installed into ~/src/fzf.git
+    let s:has_fzf = 1
+    let g:fzf_dir = $HOME . '/src/fzf.git'
+    let &rtp .= ',' . g:fzf_dir
   elseif has('nvim') && executable('fzf')
     let s:has_fzf = 1
     let &rtp .= ',' . expand('/opt/homebrew/Cellar/fzf/*')
