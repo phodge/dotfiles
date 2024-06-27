@@ -320,6 +320,8 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
 
     if ! g:want_neovim_treesitter_python
+      " XXX: Note: this can be slow for large files, so you may want to
+      " disable it (set foldmethod=indent) if there are >2000LOC
       call <SID>VendoredPlug('tmhedberg/SimpylFold')
     endif
   endif
