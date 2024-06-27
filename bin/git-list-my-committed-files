@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import re
+from argparse import ArgumentParser
+import argparse
 import subprocess
 from functools import partial
 
@@ -27,9 +28,14 @@ def _get_my_email_addresses():
     return {output}
 
 
-def _get_my_commits(my_history_size: int, examine_history_size: int):
+def _get_my_commits(
+    my_history_size: int,
+    examine_history_size: int,
+    extra_email: list[str],
+):
     done = 0
     my_emails = _get_my_email_addresses()
+    my_emails |= set(extra_email)
     for email, sha in _get_last_10k_commits(examine_history_size):
         if email in my_emails:
             yield sha
@@ -57,9 +63,13 @@ def _get_commit_changed_files(sha):
         raise Exception(f"TODO: handle line {line!r}")
 
 
-def main(*, examine_history_size: int, my_history_size: int):
+def main(*, examine_history_size: int, my_history_size: int, extra_email: list[str]):
     # get last 100 commits by me, out of the last 100000 commits
-    last100 = _get_my_commits(my_history_size=my_history_size, examine_history_size=examine_history_size)
+    last100 = _get_my_commits(
+        my_history_size=my_history_size,
+        examine_history_size=examine_history_size,
+        extra_email=extra_email,
+    )
 
     # use a dict for de-duplication and to preserve ordering
     recent_files = {}
@@ -114,4 +124,7 @@ def _get_commit_headline_for_sha(sha: str) -> str:
 
 
 if __name__ == "__main__":
-    main(examine_history_size=100000, my_history_size=100)
+    parser = ArgumentParser()
+    parser.add_argument('-e', '--extra-email', nargs='*')
+    args = parser.parse_args()
+    main(examine_history_size=100000, my_history_size=100, extra_email=args.extra_email or [])
