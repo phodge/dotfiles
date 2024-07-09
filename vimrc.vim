@@ -264,6 +264,13 @@ if filereadable(s:plugpath)
       let g:ale_python_mypy_options = 'run -- '
     endif
 
+    let g:ale_linters = get(g:, 'ale_linters', {})
+    if ! exists('g:ale_linters.python')
+      " XXX: disable ruff linting by default because it's experimental and
+      " frequently raises error due to being invoked the wrong way
+      let g:ale_linters.python = ['flake8', 'mypy']
+    endif
+
     aug NoALEInFugitiveBuffers | aug end
     au! NoALEInFugitiveBuffers BufRead fugitive://* let b:ale_enabled = 0
 
