@@ -403,6 +403,7 @@ fun! <SID>SmartImportUI() " {{{
   let l:vocabulary = {
         \ "partial": "functools",
         \ "contextmanager": "contextlib",
+        \ "asynccontextmanager": "contextlib",
         \ "ArgumentParser": "argparse",
         \ "check_call": "subprocess",
         \ "check_output": "subprocess",
