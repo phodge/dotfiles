@@ -256,6 +256,9 @@ if filereadable(s:plugpath)
     let g:ale_python_flake8_executable = expand('~/.venv/vim-python-tools/bin/flake8')
     let g:ale_python_mypy_executable = expand('~/.venv/vim-python-tools/bin/mypy')
 
+    " tell ALE it can invoke commands using poetry
+    let g:ale_python_auto_poetry = 1
+
     if get(g:, 'use_ale_dmypy')
       " tell ale to use dmypy instead of mypy
       " WARNING: see notes in mydots-configure
