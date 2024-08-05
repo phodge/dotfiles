@@ -1363,6 +1363,7 @@ set sidescrolloff=20
   nnoremap \p :set paste! paste?<CR>
   nnoremap \w :set wrap! wrap?<CR>
   nnoremap \q :call ExcaliburQuitWindow()<CR>
+  nnoremap \x :q<CR>
   " essentially :tabclose but also works when there is only one tab
   nnoremap \t :windo quit<CR>
 
