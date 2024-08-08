@@ -4,6 +4,7 @@
 # S- SHIFT
 # WIN- (Context menu / "Option" on mac keyboards)
 os:
+  CTRL-ALT-T: __new_terminal__
   CTRL-ALT-S-T: __new_terminal_interactive__
   # TODO: DOTFILES020: install these automatically on MacOS and Ubuntu
   ALT-Return: toggle-full-screen
