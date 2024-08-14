@@ -1726,6 +1726,12 @@ fun! InTmuxWindow(cmd, opt)
     let l:cmd_spawn .= ' -d'
   endif
 
+  " target window?
+  let l:target_window = get(a:opt, 'target_window', v:null)
+  if l:target_window isnot v:null
+    let l:cmd_spawn .= ' -a -t ' . shellescape(l:target_window)
+  endif
+
   for l:varname in get(a:opt, 'copy_env_vars', [])
       let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(getenv(l:varname)))
   endfor
