@@ -1,0 +1,26 @@
+DOTFILES039 URGENT Personal Experiments Runner
+
+- Experiment can be activated per ...
+  - one github clone?
+  - one project (github repo unique id)
+  - single tmux session
+  - one system
+  - all systems
+
+- Experiment has:
+  - a duration (can be extended)
+  - explanation of what features will behave differently
+  - feedback Question(s) to ask at end of duration
+  - mechanism to measure how many times the new feature was used
+  - mechanism to measure how many times the new feature was successful
+
+Also must have a mechanism at end of experiment period to ask whether the
+experiment was successful, and whether I want to:
+  A) run it again
+    - either on the same or different basis (per project/per tmux session, etc)
+  B) turn it on permanently
+  C) turn it off permanently
+
+Should also have a CLI to ...
+- create a new experiment?
+- show what experiments are in play
