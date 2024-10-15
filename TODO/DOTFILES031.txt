@@ -6,3 +6,10 @@ To change default terminal on ubuntu you might use:
 
 
 We want to have this shortcut on i3 as well
+
+ALSO: can we install some custom shortcuts as well?
+See https://askubuntu.com/questions/180312/is-it-possible-to-assign-shortcuts-to-launch-applications
+
+TODO: I need to get rid of the /usr/bin/alacritty-gogogo and remove it from update-alternatives
+
+TODO: I also need to remove /snap/bin/alacritty from update-alternatives because it doesn't work
