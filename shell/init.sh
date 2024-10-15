@@ -314,3 +314,20 @@ shell_post_init() {
     done
     unset -f shell_post_init
 }
+
+shell_then_hibernate() {
+    if [[ $IS_MACOS ]]; then
+        echo "shell_then_hibernate() does not work in MacOS" >&2
+        return 1
+    fi
+
+    local me=$USER
+    if [ "$#" -gt 0 ]; then
+        cmd="$@"
+    else
+        cmd=$SHELL
+    fi
+    # Note the use of -E (--preserve-env) here so that commands like
+    # 'caffeinate' have what they need to keep a system awake
+    sudo -E bash -ic "sudo -E -u $me bash -ic '$cmd'; echo 'Hibernation in 10s'; sleep 10; systemctl hibernate"
+}
