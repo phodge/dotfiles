@@ -36,19 +36,33 @@ fun! <SID>OpenNextTODO() abort
 
   let l:todos_dir = <SID>getTodosDir(l:root)
 
+  let l:stop = 10
+  let l:next_todo_path = v:null
+  let l:next_todo_name = v:null
+
   for l:check in range(1, 999)
     let l:numwidth = strlen(l:check)
-    let l:todoname = b:repo_todo_prefix . repeat('0', 3 - l:numwidth) . l:check
-    let l:todo_path = printf('%s/%s.txt', l:todos_dir, l:todoname)
+    let l:todo_name = b:repo_todo_prefix . repeat('0', 3 - l:numwidth) . l:check
+    let l:todo_path = printf('%s/%s.txt', l:todos_dir, l:todo_name)
     if bufexists(l:todo_path) || filereadable(l:todo_path)
+      let l:stop = l:check + 100
+      let l:next_todo_path = v:null
+      let l:next_todo_name = v:null
       continue
     endif
 
-    exe 'split' l:todo_path
-    exe 'normal! I' . l:todoname . ' '
-    startinsert!
-    return
-  endwhile
+    if l:next_todo_path is v:null
+      let l:next_todo_path = l:todo_path
+      let l:next_todo_name = l:todo_name
+    endif
+
+    if l:check > l:stop
+      exe 'split' l:next_todo_path
+      exe 'normal! I' . l:next_todo_name . ' '
+      startinsert!
+      return
+    endif
+  endfor
 
   throw 'ERROR: all TODO numbers are occupied'
 endfun
