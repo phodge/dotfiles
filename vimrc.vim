@@ -132,6 +132,8 @@ if has('nvim') && g:want_copilot
 
   " the default mapping for Copilot is <tab>, to change it see
   " :help copilot-maps
+  imap <silent><script><expr> <S-TAB> copilot#Accept("\<CR>")
+  let g:copilot_no_tab_map = v:true
 
   " disable copilot for certain filetypes
   aug PeterCopilot
