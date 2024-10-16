@@ -446,6 +446,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Path": "pathlib",
         \ "dedent": "textwrap",
         \ "dataclass": "dataclasses",
+        \ "classproperty": "django.utils.functional",
         \ }
 
   " these words instantly trigger adding an import for a top-level module
