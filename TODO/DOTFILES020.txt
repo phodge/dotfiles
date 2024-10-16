@@ -1,4 +1,4 @@
-DOTFILES020 standardise OS keyboard shortcuts and script their installation
+DOTFILES020 VALUE standardise OS keyboard shortcuts and script their installation
 
 Worth checking whether skhd is an easier route for MacOS (see DOTFILES033)
 

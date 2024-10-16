@@ -1,4 +1,4 @@
-DOTFILES031: standardise CTRL+ALT+T for opening a terminal
+DOTFILES031 VALUE standardise CTRL+ALT+T for opening a terminal
 
 To change default terminal on ubuntu you might use:
 

@@ -1,4 +1,4 @@
-DOTFILES039 URGENT Personal Experiments Runner
+DOTFILES039 PRIORITY VALUE Personal Experiments Runner
 
 - Experiment can be activated per ...
   - one github clone?

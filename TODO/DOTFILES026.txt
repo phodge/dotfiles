@@ -1,4 +1,4 @@
-DOTFILES026 bring back 'spell' for vim/neovim
+DOTFILES026 VALUE bring back 'spell' for vim/neovim
 
 > Here's a nifty keymap, this one will find the last misspelled word before the
 > cursor and replace it with the top suggestion all while in insert mode. Means

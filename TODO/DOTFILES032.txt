@@ -1,3 +1,3 @@
-DOTFILES032 investigate Yabai tiling window manager for MacOS
+DOTFILES032 VALUE investigate Yabai tiling window manager for MacOS
 
 https://github.com/koekeishiya/yabai

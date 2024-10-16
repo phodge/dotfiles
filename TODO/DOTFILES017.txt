@@ -1,4 +1,4 @@
-DOTFILES017 MySchema enhanced postgres support
+DOTFILES017 VALUE MySchema enhanced postgres support
 
 - gss mapping should show tables and not increment lists
 - g:MySchema_default_user should be engine-specific so we stop using 'root' as the default for postgres

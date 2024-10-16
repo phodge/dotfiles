@@ -1,3 +1,3 @@
-DOTFILES004 nerdfonts.com
+DOTFILES004 EASY nerdfonts.com
 
 - see if I can improve my tmux/vim status bars using nerd fonts

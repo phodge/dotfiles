@@ -1,1 +1,1 @@
-DOTFILES023 Ubuntu: install a version of alacritty that uses TOML
+DOTFILES023 EASY Ubuntu: install a version of alacritty that uses TOML

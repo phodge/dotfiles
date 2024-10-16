@@ -1,1 +1,3 @@
-DOTFILES006 buffer opened by OpenRepoListBuffer() sometimes gets the wrong b:repo_todo_prefix if the main cwd is in another project
+DOTFILES006 EASY buffer opened by OpenRepoListBuffer() sometimes gets the wrong b:repo_todo_prefix if the main cwd is in another project
+
+See comments in vim/plugin/repotodo.vim
