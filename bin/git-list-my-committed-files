@@ -48,6 +48,10 @@ def _get_commit_changed_files(sha):
     cmd = ['git', 'show', sha, '--format=%H', '--name-status']
     lines = _check_output(cmd).splitlines()
     assert lines[0] == sha
+    if len(lines) == 1:
+        # no lines - empty commit
+        return
+
     assert lines[1] == ''
 
     for line in lines[2:]:
