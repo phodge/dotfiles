@@ -101,6 +101,10 @@ fun! <SID>OpenTodosList() abort
 
   " delete last line from end of file, then jump back to start
   normal! Gddgg
+
+  syn keyword Operator PRIORITY
+  syn keyword Typedef EASY
+  syn keyword Statement VALUE
 endfun
 
 fun! <SID>OpenRepoListBuffer(root, prefix) abort
