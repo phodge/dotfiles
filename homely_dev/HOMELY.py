@@ -18,7 +18,7 @@ def homely_dev():
 
     # create the virtualenv if it doesn't already exist
     if not exists(join(venv, 'bin')):
-        execute(['virtualenv', '--python=python3', venv], stdout="TTY")
+        execute(['python3', '-m', 'venv', venv], stdout="TTY")
 
     # check out homely.git repo if it isn't there yet
     if not exists(checkout):
