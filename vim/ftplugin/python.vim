@@ -478,7 +478,6 @@ fun! <SID>SmartImportUI() " {{{
         \ "make_transient": "sqlalchemy.orm",
         \ "mapped_column": "sqlalchemy.orm",
         \ "mock": "unittest",
-        \ "notin_": "sqlalchemy",
         \ "or_": "sqlalchemy",
         \ "realpath": "os.path",
         \ "run": "subprocess",
