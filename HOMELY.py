@@ -157,12 +157,13 @@ if IS_UBUNTU:
     }
     UBUNTU_MAJOR = int(LSB_RELEASE['DISTRIB_RELEASE'].split('.')[0])
 
+
 if want_full:
     if IS_OSX:
         pipx_install_fn = lambda: installpkg('pipx', brew='pipx')  # noqa: E731
     elif IS_UBUNTU:
         def pipx_install_fn():
-            if UBUNTU_MAJOR >= 2023:
+            if UBUNTU_MAJOR >= 23:
                 installpkg('pipx', apt='pipx')
                 # TODO: not sure if this step from the official docs will be
                 # required since I already add ~/.local/bin to $PATH
