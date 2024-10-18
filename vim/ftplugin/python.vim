@@ -468,6 +468,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Session": "sqlalchemy.orm",
         \ "b64decode": "base64",
         \ "b64encode": "base64",
+        \ "cast": "typing",
         \ "chain": "itertools",
         \ "date": "datetime",
         \ "datetime": "datetime",
