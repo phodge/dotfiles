@@ -154,7 +154,11 @@ def install_docker_engine():
     cfg = f"deb [arch={arch} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {VERSION_CODENAME} stable"
     _sudo(['bash', '-c', f'echo "{cfg}" > /etc/apt/sources.list.d/docker.list'])
 
+    # refresh package list or it won't work
+    _sudo(['apt', 'update'])
+
     # finally - install the various docker packages
+    # TODO: would be nice to have an API for installing multiple packages at once
     for pkg in [
             'docker-ce',
             'docker-ce-cli',
