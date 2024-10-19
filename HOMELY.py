@@ -1083,7 +1083,7 @@ def install_alt_tab():
 
 @section(enabled=allow_installing_stuff)
 def install_pyenv():
-    if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv?', default=None):
+    if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv? (Needed for FudgeMoney dev)', default=None):
         return
 
     gitclone = InstallFromSource('https://github.com/pyenv/pyenv.git', '~/.pyenv')
