@@ -5,12 +5,12 @@ import re
 
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             lineinfile, mkdir, run, section)
-from homely.install import InstallFromSource
+from homely.install import InstallFromSource, installpkg
 from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, note, warn, yesno
 
 from HOMELY import (IS_OSX, IS_UBUNTU, allow_installing_stuff, section_macos,
-                    want_full, wantjerjerrod)
+                    want_full, wantjerjerrod, section_ubuntu)
 
 bash_profile = os.environ['HOME'] + '/.bash_profile'
 bashrc = os.environ['HOME'] + '/.bashrc'
@@ -21,6 +21,12 @@ upgrade_bash = IS_OSX and allow_installing_stuff and haveexecutable('brew') and 
     'upgrade_bash',
     'Upgrade bash?',
     default=False,
+)
+
+install_zsh = IS_UBUNTU and allow_installing_stuff and yesno(
+    'install_zsh',
+    'Install zsh?',
+    recommended=True,
 )
 
 
@@ -36,6 +42,11 @@ def _get_bash_executable():
             return candidate
 
     raise Exception("Bash executable not found")
+
+
+@section_ubuntu(enabled=install_zsh)
+def zsh_install():
+    installpkg('zsh', apt='zsh')
 
 
 @section_macos(enabled=upgrade_bash)
