@@ -1,0 +1,1 @@
+DOTFILES041 PRIORITY error from vim-project-config when opening a file in a fresh git repo
