@@ -1,0 +1,3 @@
+DOTFILES042 deepcool2 - try changing OS name using guide here:
+
+https://forums.debian.net/viewtopic.php?t=75648
