@@ -1246,6 +1246,31 @@ def install_fnm():
             f.write(zsh_completion.decode('utf-8'))
 
 
+@section(enabled=allow_installing_stuff)
+def clone_blog():
+    print("ASK")
+    if not yesno("create_blog_clone", "Clone blog to ~/src/blog.gt?"):
+        print("NAH")
+        return
+
+    print("YEH")
+
+    if yesno('install_hugo', 'Install hugo for blog?', recommended=True):
+        if IS_UBUNTU:
+            if not haveexecutable('hugo'):
+                # install from Snap because we need a newer version for our
+                # theme
+                execute(['sudo', 'snap', 'install', 'hugo'])
+        elif IS_OSX:
+            installpkg('hugo', brew='hugo')
+
+    installer = InstallFromSource('git@gitlab.com:peterhodge/blog.git',
+                                  '~/src/blog.git')
+    installer.select_branch('master')
+    run(installer)
+
+
+
 # note that these need to be carried out in order of dependency
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
