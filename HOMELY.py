@@ -1267,8 +1267,11 @@ def clone_blog():
     installer = InstallFromSource('git@gitlab.com:peterhodge/blog.git',
                                   '~/src/blog.git')
     installer.select_branch('master')
+    installer.compile_cmd([
+        ['git', 'submodule', 'init'],
+        ['git', 'submodule', 'update'],
+    ])
     run(installer)
-
 
 
 # note that these need to be carried out in order of dependency
