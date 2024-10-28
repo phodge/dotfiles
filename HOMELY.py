@@ -1199,8 +1199,7 @@ def pull_submodules(filter_path):
     # case the submodules have their own submodules that we accidentally
     # fast-forwarded
     for path in paths:
-        cmd = ['git', 'submodule', 'update', '--recursive', '--', path]
-        execute(cmd, cwd=HERE)
+        execute(['git', 'submodule', 'update', '--recursive'], cwd=path)
 
     # check whether submodules are changed
     _, stdout, _ = execute(['git', 'status', '--short', filter_path], cwd=HERE, stdout=True)
