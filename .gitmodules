@@ -51,6 +51,10 @@
 [submodule "nvim-lspconfig.git"]
 	path = vim-packages/nvim-lspconfig.git
 	url = https://github.com/neovim/nvim-lspconfig.git
+[submodule "vim-packages/nvim-lspconfig-old.git"]
+	path = vim-packages/nvim-lspconfig-old.git
+	url = https://github.com/neovim/nvim-lspconfig.git
+    update = none
 [submodule "plenary.nvim.git"]
 	path = vim-packages/plenary.nvim.git
 	url = https://github.com/nvim-lua/plenary.nvim.git

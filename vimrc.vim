@@ -223,7 +223,11 @@ if filereadable(s:plugpath)
   endif
 
   if s:ts_lsp
-    call <SID>VendoredPlug('neovim/nvim-lspconfig')
+    if has('nvim-0.10.0')
+      call <SID>VendoredPlug('neovim/nvim-lspconfig')
+    else
+      call <SID>VendoredPlug('neovim/nvim-lspconfig-old')
+    endif
     call <SID>VendoredPlug('jose-elias-alvarez/null-ls.nvim')
 
     " provides :TSLspImportCurrent, TSLspRenameFile, TSLspOrganize
