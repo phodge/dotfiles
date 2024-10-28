@@ -1370,8 +1370,11 @@ set sidescrolloff=20
   nnoremap \t :windo quit<CR>
 
   " this is about the only mapping that's safe for others
-  nnoremap gt :execute 'tj' expand('<cword>')<CR>zv
-  nnoremap gst :execute 'stj' expand('<cword>')<CR>zv
+  " XXX: DOTFILES043: horrible reset of 'tagfunc' is because the
+  " typescript/react LSP takes over this functionality with no obvious way to
+  " disable it
+  nnoremap gt :set tagfunc=<CR>:execute 'tj' expand('<cword>')<CR>zv
+  nnoremap gst :set tagfunc=<CR>:execute 'stj' expand('<cword>')<CR>zv
 
   " fugitive
   nnoremap \g :tab sp<CR>:exe (exists(':Git') =~ '[12]' ? 'Git' : 'Shell hg st')<CR><C-W>w:close<CR>:tabmove<CR>
