@@ -241,6 +241,13 @@ def wantnvim():
     return yesno('install_nvim', 'Install neovim?', want_full)
 
 
+want_vendored_typescript_langserver = wantnvim() and yesno(
+    'want_vendored_typescript_langserver',
+    'Use vendored typescript-language-server?',
+    recommended=not_work_machine or None,
+)
+
+
 @memoize
 def use_neovim_virtualenv():
     return wantnvim() and yesno(
@@ -1242,6 +1249,13 @@ def install_fnm():
         zsh_completion = execute(['fnm', 'completions', '--shell', 'zsh'], stdout=True)[1]
         with writefile('~/.zsh/_fnm') as f:
             f.write(zsh_completion.decode('utf-8'))
+
+    if yesno(
+        'install_node_lts',
+        'Install node --lts via FNM?',
+        recommended=want_vendored_typescript_langserver,
+    ):
+        execute(['fnm', 'install', '--lts'])
 
 
 @section(enabled=allow_installing_stuff)
