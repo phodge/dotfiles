@@ -20,6 +20,13 @@ VIM_TAG = 'v8.1.0264'
 NVIM_TAG = 'v0.9.5'
 
 
+submodule_updates_here = allow_installing_stuff and yesno(
+    'submodule_updates',
+    'Perform dotfile submodule udpates on this machine?',
+    default=not_work_machine,
+)
+
+
 @memoize
 def want_nvim_devel() -> bool:
     return HOMELY.wantnvim() and not_work_machine and yesno(
@@ -420,7 +427,7 @@ def vim_plugin_update():
     _install_vim_selfupdater()
 
 
-@section(interval='2w')
+@section(interval='4w', enabled=submodule_updates_here)
 def vim_submodule_update():
     from HOMELY import pull_submodules
 
