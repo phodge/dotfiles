@@ -164,7 +164,7 @@ def install_docker_engine():
             'docker-ce-cli',
             'containerd.io',
             'docker-buildx-plugin',
-            'docker-compose-plugin',
+            'docker-compose',
     ]:
         installpkg(pkg)
 
