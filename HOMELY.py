@@ -1161,7 +1161,7 @@ def install_alacritty():
 
     blockinfile(
         '~/.config/alacritty.toml',
-        ['import = ['] + [f'  "{path}",' for path in imports] + [']'],
+        ['general.import = ['] + [f'  "{path}",' for path in imports] + [']'],
         WHERE_TOP,
     )
 
