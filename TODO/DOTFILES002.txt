@@ -1,1 +1,1 @@
-DOTFILES002 configure lspconfig.tsserver importModuleSpecifierPreference needs to be configured by project somehow
+DOTFILES002 configure lspconfig.ts_ls importModuleSpecifierPreference needs to be configured by project somehow

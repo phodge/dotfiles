@@ -1,6 +1,6 @@
 -- See https://github.com/nanotee/nvim-lua-guide for tips
 
-require("lspconfig").tsserver.setup({
+require("lspconfig").ts_ls.setup({
     init_options = {
         preferences = {
             -- this is for fudgemoney
