@@ -1741,8 +1741,15 @@ fun! InTmuxWindow(cmd, opt)
     let l:cmd_spawn .= ' -a -t ' . shellescape(l:target_window)
   endif
 
-  for l:varname in get(a:opt, 'copy_env_vars', [])
-      let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(getenv(l:varname)))
+  let l:copy_env_vars = get(a:opt, 'copy_env_vars', [])
+  if l:copy_env_vars == "auto"
+    let l:copy_env_vars = ['VIRTUAL_ENV']
+  endif
+  for l:varname in l:copy_env_vars
+    let l:value = getenv(l:varname)
+    if l:value isnot v:null
+      let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(l:value))
+    endif
   endfor
 
   " -P prints infomration about the new window after it has been created. The
