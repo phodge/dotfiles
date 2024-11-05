@@ -6,6 +6,8 @@
 "
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'FM'
+
+  nmap <buffer> <space>t :call InTmuxWindow('./retest.sh', {'name': 'retest.sh', 'copy_env_vars': 'auto'})<CR>
 endfun
 
 fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
