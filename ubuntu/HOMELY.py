@@ -53,7 +53,6 @@ def ubuntu_os_key_bindings():
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-fullscreen',     "['<Alt>Return']")
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-maximized',      "['<Shift><Super>Down']")
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'maximize',              "@as []")
-    # XXX: this is untested as I only have one display attached to this machine right now
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
 
 
