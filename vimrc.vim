@@ -1741,15 +1741,8 @@ fun! InTmuxWindow(cmd, opt)
     let l:cmd_spawn .= ' -a -t ' . shellescape(l:target_window)
   endif
 
-  let l:copy_env_vars = get(a:opt, 'copy_env_vars', [])
-  if l:copy_env_vars == "auto"
-    let l:copy_env_vars = ['VIRTUAL_ENV']
-  endif
-  for l:varname in l:copy_env_vars
-    let l:value = getenv(l:varname)
-    if l:value isnot v:null
-      let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(l:value))
-    endif
+  for [l:varname, l:varvalue] in <SID>GetCopyEnvVars(get(a:opt, 'copy_env_vars', []))
+    let l:cmd_spawn .= printf(' -e %s=%s', l:varname, shellescape(l:varvalue))
   endfor
 
   " -P prints infomration about the new window after it has been created. The
@@ -1849,8 +1842,8 @@ fun! InAlacrittyWindow(cmd, opt)
   endfor
 
   " add environment variables also
-  for l:varname in get(a:opt, 'copy_env_vars', [])
-    let l:cmd_spawn .= printf(' -o env.%s="%s"', l:varname, shellescape(getenv(l:varname)))
+  for [l:varname, l:varvalue] in <SID>GetCopyEnvVars(get(a:opt, 'copy_env_vars', []))
+    let l:cmd_spawn .= printf(' -o env.%s="%s"', l:varname, shellescape(l:varvalue))
   endfor
 
   let l:cmd_spawn .= ' --command ' . l:cmd_wrapped
@@ -1867,6 +1860,25 @@ fun! InAlacrittyWindow(cmd, opt)
   " until the alacritty window is closed
   "exe '!' . escape(l:cmd_spawn, '#')
   let s:last_alacritty_job = jobstart(l:cmd_spawn, {'detach': v:true})
+endfun
+
+fun! <SID>GetCopyEnvVars(vars)
+  if type(a:vars) == type("") && a:vars == "auto"
+    let l:vars = ['VIRTUAL_ENV']
+  elseif type(a:vars) == type([])
+    let l:vars = a:vars
+  else
+    throw 'Invalid argument to GetCopyEnvVars()'
+  endif
+
+  let l:return = []
+  for l:varname in l:vars
+    let l:value = getenv(l:varname)
+    if l:value isnot v:null
+      call add(l:return, [l:varname, l:value])
+    endif
+  endfor
+  return l:return
 endfun
 
 aug i3ConfigHotReload
