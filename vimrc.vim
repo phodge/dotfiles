@@ -1823,16 +1823,23 @@ fun! InAlacrittyWindow(cmd, opt)
   " sequence
   " First step is to run the original command and decorate with a 'FAIL ...'
   " message if it doesn't work
-  let l:bash_cmds = [printf('{ %s || echo "FAILED[$?]:" %s; }', a:cmd, shellescape(a:cmd))]
+  let l:printfail = printf('echo "FAILED[$?]:" %s', shellescape(a:cmd))
+  if l:autoclose == 'on_success'
+    " we need to put the prompt here so that this is the only path where it is
+    " encountered
+    let l:printfail = printf('{ %s; read -p "Press any key to close" -n 1; }', l:printfail)
+  endif
 
-  if ! l:autoclose
-    call add(l:bash_cmds, 'read -p "Press any key to close" -n 1')
+  let l:bash_cmd = printf('{ %s || %s; }', a:cmd, l:printfail)
+
+  if l:autoclose != 'on_success' && ! l:autoclose
+    let l:bash_cmd .= '; read -p "Press any key to close" -n 1'
   endif
 
   " TODO: should this be using $SHELL?
   " Note we use '-i' so that the user's .bashrc is sourced and aliases are
   " available
-  let l:cmd_wrapped = 'bash -i -c ' . shellescape(join(l:bash_cmds, '; '))
+  let l:cmd_wrapped = 'bash -i -c ' . shellescape(l:bash_cmd)
 
   " build the cmd
   let l:cmd_spawn = 'alacritty -T ' . shellescape(winname)
