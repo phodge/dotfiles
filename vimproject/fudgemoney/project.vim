@@ -9,6 +9,10 @@ function projectconfig.BufEnter() dict
 
   nmap <buffer> <space>t :call InTmuxWindow('./retest.sh', {'name': 'retest.sh', 'copy_env_vars': 'auto'})<CR>
   nmap <buffer> <space>b :call InTmuxWindow('./rebuild.sh', {'name': 'rebuild.sh', 'copy_env_vars': 'auto'})<CR>
+
+  if &l:filetype == 'vue'
+    let b:ale_enabled = 0
+  endif
 endfun
 
 fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
