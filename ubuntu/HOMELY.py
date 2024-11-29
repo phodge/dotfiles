@@ -85,6 +85,23 @@ def ubuntu_app_switcher_current_workspace():
     ])
 
 
+@section_ubuntu(enabled=allow_installing_stuff, quick=True)
+def ubuntu_workspaces_on_all_monitors():
+    if not yesno(
+        'ubuntu_set_workspaces_all_monitors',
+        'Ubuntu: Set Workspaces to use all monitors?',
+    ):
+        return
+
+    execute([
+        'gsettings',
+        'set',
+        'org.gnome.mutter',
+        'workspaces-only-on-primary',
+        'false',
+    ])
+
+
 @section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_install_devilspie2():
     """
