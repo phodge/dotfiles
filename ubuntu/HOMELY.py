@@ -6,7 +6,7 @@ from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff
+from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff, want_alacritty
 
 
 @section_ubuntu(enabled=allow_installing_stuff, quick=True)
@@ -54,6 +54,23 @@ def ubuntu_os_key_bindings():
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-maximized',      "['<Shift><Super>Down']")
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'maximize',              "@as []")
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
+
+    # Get rid of CTRL+Period emoji shortcut. Slack already has its own action
+    # for this key combo, CTRL+Semicolon can be used instead for emoji.
+    # TODO: this appears to not work. :-(
+    _gsettings_set('org.freedesktop.ibus.panel.emoji', 'hotkey', "['<Control>semicolon']")
+
+
+@section_ubuntu(enabled=allow_installing_stuff and want_alacritty)
+def ubuntu_os_default_terminal():
+    # install alacritty as the default terminal?
+    #
+    # write /usr/bin/alacritty-gogogo 0755:
+    #     #!/usr/bin/env bash
+    #     /snap/bin/alacritty "$@"
+    #
+    # sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty-gogogo 70
+    pass
 
 
 @section_ubuntu(enabled=allow_installing_stuff)
