@@ -1,0 +1,32 @@
+DOTFILES044 Replace CleverEdit with treesitter text objects:
+
+> FWIW you can do it with treesitter textobjects, would be something like this in your treesitter config
+
+    opts = {
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ["ir"] = "@parameter.inner",
+            ["ar"] = "@parameter.outer",
+          },
+        },
+      }
+    }
+
+> then you can do a `cir`  `dar` etc.
+> TS textobjects is quite nifty, you can do things like
+
+    opts = {
+      textobjects = {
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<leader>a"] = "@parameter.inner",
+          },
+        },
+      }
+    }
+
+> which means you can swap a parameter/argument with the next one along. I don't use it often but when I do need it I'm like

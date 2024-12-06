@@ -5,4 +5,15 @@ To change default terminal on ubuntu you might use:
     sudo update-alternatives --config x-terminal-emulator
 
 
+Also worth looking at whether
+[keyd](https://github.com/rvaiya/keyd) or
+[KMonad](https://github.com/kmonad/kmonad?tab=readme-ov-file#features) provide
+a portable solution for arbitrary keymapping.
+
+
 We want to have this shortcut on i3 as well
+
+
+Possibly this can be done on MacOS through Karabiner-Elements:
+
+https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to/shell-command/

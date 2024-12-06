@@ -1,0 +1,10 @@
+DOTFILES046 Try better breakpoint / debugging experience for pytest:
+
+1) You could look at nvim-dap
+
+2) Also:
+
+> to be honest I really enjoy using breakpoint() with `PYTHON_BREAKPOINT=ipdb.set_trace` and tmux  - much more of a command line process
+
+
+3) See also: https://stackoverflow.com/questions/16022915/how-to-execute-ipdb-set-trace-at-will-while-running-pytest-tests
