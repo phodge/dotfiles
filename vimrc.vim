@@ -1836,6 +1836,11 @@ fun! InAlacrittyWindow(cmd, opt)
     let l:bash_cmd .= '; read -p "Press any key to close" -n 1'
   endif
 
+  if get(a:opt, 'chdir', 0)
+    " TODO: ideally this would abort with an error message if it fails
+    let l:bash_cmd = 'cd ' . shellescape(getcwd()) . ' && ' . l:bash_cmd
+  endif
+
   " TODO: should this be using $SHELL?
   " Note we use '-i' so that the user's .bashrc is sourced and aliases are
   " available
