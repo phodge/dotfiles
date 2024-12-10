@@ -113,3 +113,12 @@
 [submodule "reference-repository-utils.git"]
 	path = reference-repository-utils.git
 	url = https://github.com/phodge/reference-repository-utils.git
+[submodule "vim-javascript-syntax.git"]
+	path = vim-packages/vim-javascript-syntax.git
+	url = https://github.com/phodge/vim-javascript-syntax.git
+[submodule "MicroRefactor.git"]
+	path = vim-packages/MicroRefactor.git
+	url = https://github.com/phodge/MicroRefactor.git
+[submodule "vim-syn-info.git"]
+	path = vim-packages/vim-syn-info.git
+	url = https://github.com/phodge/vim-syn-info.git

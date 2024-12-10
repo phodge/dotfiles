@@ -537,7 +537,7 @@ if filereadable(s:plugpath)
 
   if get(g:, 'clipchamp_js', 0)
     " just use my own javascript syntax
-    PlugMaster 'phodge/vim-javascript-syntax'
+    call <SID>VendoredPlug('phodge/vim-javascript-syntax')
 
     " TODO: this doesn't always take precedence - the builtin filetype
     " detection takes precedence for Skylight windows and the buffer ends up
@@ -556,7 +556,7 @@ if filereadable(s:plugpath)
   elseif has('nvim') && g:want_neovim_treesitter
     " don't do anything if we are using treesitter syntax
   elseif 1
-    PlugMaster 'phodge/vim-javascript-syntax'
+    call <SID>VendoredPlug('phodge/vim-javascript-syntax')
 
     " TODO: this doesn't always take precedence - the builtin filetype
     " detection takes precedence for Skylight windows and the buffer ends up
@@ -610,8 +610,8 @@ if filereadable(s:plugpath)
   command! -nargs=0 SQLWindow call MySchema#SQLWindow()
   call <SID>VendoredPlug('phodge/vim-myschema')
 
-  PlugMaster 'phodge/MicroRefactor'
-  PlugMaster 'phodge/vim-syn-info'
+  call <SID>VendoredPlug('phodge/MicroRefactor')
+  call <SID>VendoredPlug('phodge/vim-syn-info')
   PlugMaster 'phodge/vim-split-search'
   " XXX: disabling this for now because it jumps us off the first tab page on
   " startup
