@@ -1,5 +1,11 @@
 -- See https://github.com/nanotee/nvim-lua-guide for tips
 
+-- set defaults for diagnostics
+vim.diagnostic.config({
+    signs = true,
+    float = { source = true },
+})
+
 require("lspconfig").ts_ls.setup({
     init_options = {
         preferences = {
