@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "eslint_d": "^12.2.0",
-    "typescript-language-server": "^0.9.7"
+    "eslint_d": "^14.2.2",
+    "typescript-language-server": "^4.3.3"
   }
 }
