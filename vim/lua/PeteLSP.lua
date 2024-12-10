@@ -32,9 +32,10 @@
 
 exports = {}
 
-function _get_ts_ls_config()
+function _get_ts_ls_config(with_vue)
     config = {
         init_options = {
+            plugins = {},
             preferences = {
                 -- this is for fudgemoney
                 -- TODO: DOTFILES002: how to configure this per-project?
@@ -51,6 +52,20 @@ function _get_ts_ls_config()
         -- TODO: DOTFILES002: set per-buffer or per-project config settings here
         end,
     }
+    if with_vue then
+        config.filetypes = {"javascript", "typescript", "vue"}
+    else
+        config.filetypes = {"javascript", "typescript"}
+    end
+
+    if with_vue then
+        table.insert(config.init_options.plugins, {
+            name = "@vue/typescript-plugin",
+            location = vim.g.pete_dotfiles_root .. "/nvim_ts/node_modules/@vue/language-server",
+            languages = {"vue", "javascript", "typescript"},
+        })
+    end
+
     return config
 end
 

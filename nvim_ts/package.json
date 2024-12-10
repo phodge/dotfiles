@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@vue/typescript-plugin": "^2.1.10",
     "eslint_d": "^14.2.2",
     "typescript-language-server": "^4.3.3"
   }

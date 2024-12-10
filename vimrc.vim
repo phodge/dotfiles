@@ -23,6 +23,8 @@ if &compatible
 endif
 
 let s:dotfiles_root = expand('<sfile>:p:h')
+" NOTE: this is needed in one of the Lua LSP initialisers
+let g:pete_dotfiles_root = s:dotfiles_root
 
 set confirm
 
