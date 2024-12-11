@@ -54,24 +54,43 @@ function _get_ts_ls_config()
     return config
 end
 
+function _has_client(findname)
+    local clients = vim.lsp.get_clients({bufnr = vim.fn.bufnr()})
+    for _, client in ipairs(clients) do
+        if client.name == findname then
+            return true
+        end
+    end
+    return false
+end
+
 exports.init_ts_ls = function(opts)
-    require("lspconfig").ts_ls.setup(_get_ts_ls_config(opts.vue))
+    if not _has_client('ts_ls') then
+        -- XXX: If you look at the lspconfig package's ts_ls.lua you'll see
+        -- that it's doing very (very!) little and we might be better off
+        -- managing the server lifecycle ourself to get the desired per-buffer
+        -- behaviour. This might make it possible to get rid of our
+        -- _has_client() hack as well
+        require("lspconfig").ts_ls.setup(_get_ts_ls_config(opts.vue))
+    end
 end
 
 exports.init_null_ls = function()
-    local null_ls = require('null-ls')
-    null_ls.setup({
-        -- TODO: discover more things we can do with null-ls:
-        -- https://github.com/jose-elias-alvarez/null-ls.nvim
-        sources = {
-            -- We use eslint_d for linting - apparently it is much faster, although
-            -- in my testing both eslint and eslint_d took 18-25 seconds to
-            -- execute, possibly due to the typescript checking
-            null_ls.builtins.diagnostics.eslint_d,
-            null_ls.builtins.code_actions.eslint_d,
-            null_ls.builtins.formatting.prettier,
-        },
-    })
+    if not _has_client('null-ls') then
+        local null_ls = require('null-ls')
+        null_ls.setup({
+            -- TODO: discover more things we can do with null-ls:
+            -- https://github.com/jose-elias-alvarez/null-ls.nvim
+            sources = {
+                -- We use eslint_d for linting - apparently it is much faster, although
+                -- in my testing both eslint and eslint_d took 18-25 seconds to
+                -- execute, possibly due to the typescript checking
+                null_ls.builtins.diagnostics.eslint_d,
+                null_ls.builtins.code_actions.eslint_d,
+                null_ls.builtins.formatting.prettier,
+            },
+        })
+    end
 end
 
 return exports
