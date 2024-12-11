@@ -1,0 +1,5 @@
+DOTFILES047 clean out old LSP code
+
+Also get rid of all references to ...
+- $NVIM_TS_LSP
+- g:peter_use_lsp

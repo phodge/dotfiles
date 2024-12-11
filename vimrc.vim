@@ -14,7 +14,8 @@ if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
 
-let s:ts_lsp = has('nvim') && strlen($NVIM_TS_LSP)
+" TODO(DOTFILES047): get rid of this variable
+let s:ts_lsp = has('nvim')
 
 " sensible defaults to start with
 if &compatible
@@ -26,7 +27,7 @@ let s:dotfiles_root = expand('<sfile>:p:h')
 set confirm
 
 " when to use LSP and YCM
-" TODO: probably get rid of these in favour of s:ts_lsp above
+" TODO(DOTFILES047): probably get rid of these in favour of s:ts_lsp above
 let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
 
 " 256-color mode for vim8/neovim
@@ -222,7 +223,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('glacambre/firenvim')
   endif
 
-  if s:ts_lsp
+  if has('nvim')
     if has('nvim-0.10.0')
       call <SID>VendoredPlug('neovim/nvim-lspconfig')
     else
@@ -285,8 +286,15 @@ if filereadable(s:plugpath)
 
   " }}}
 
-  if s:use_lsp
+  if s:use_lsp && 0
+    " TODO(DOTFILES047): decide whether any of this is worth keeping
+
     " language servers
+    " TODO(DOTFILES047): this seems to have a bunch of features for
+    " - using FZF for menu selection
+    " - customising appearance of diagnostics and hover
+    " - maybe will help us get non-async codeAction working so that we can add
+    "   an import and then format the buffer?
     Plug 'autozimu/LanguageClient-neovim', {
           \ 'branch': 'next',
           \ 'do': 'bash install.sh',
@@ -546,16 +554,30 @@ if filereadable(s:plugpath)
     aug end
     autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
 
-    "Plug 'https://github.com/HerringtonDarkholme/yats.vim'
+    " TODO(DOTFILES047): decide whether there's any value keeping this stuff
+    if 0
+      Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 
-    "hi! link typescriptAssign Operator
-    "hi! link typescriptTypeAnnotation Function
-    "hi! link typescriptUnaryOp Operator
-    "hi! link typescriptBinaryOp Number
-    "hi! link typescriptDotNotation Operator
+      hi! link typescriptAssign Operator
+      hi! link typescriptTypeAnnotation Function
+      hi! link typescriptUnaryOp Operator
+      hi! link typescriptBinaryOp Number
+      hi! link typescriptDotNotation Operator
+    endif
   elseif has('nvim') && g:want_neovim_treesitter
     " don't do anything if we are using treesitter syntax
   elseif 1
+    " XXX: this is my new config for FudgeMoney
+    call <SID>VendoredPlug('phodge/vim-javascript-syntax')
+
+    " typescript support
+    " XXX: this seems like it would be important but I'm not really sure what
+    " it was giving me
+    if 0
+      Plug 'leafgarland/typescript-vim', {'on': []}
+    endif
+  elseif 1
+    " TODO: delete this section when we're more confident we don't need it
     call <SID>VendoredPlug('phodge/vim-javascript-syntax')
 
     " TODO: this doesn't always take precedence - the builtin filetype
@@ -575,9 +597,6 @@ if filereadable(s:plugpath)
 
     " tsx syntax as well
     Plug 'peitalin/vim-jsx-typescript', {'on': []}
-
-    " Vue support
-    Plug 'posva/vim-vue'
   else
     Plug 'pangloss/vim-javascript'
     Plug 'othree/javascript-libraries-syntax.vim'
@@ -834,13 +853,7 @@ if has('nvim')
         \ })
 endif
 
-fun! <SID>InitLSPBuffer()
-  " turn off ALE
-  ALEDisableBuffer
-
-  " hide diagnostics by default
-  lua vim.diagnostic.hide()
-
+fun! PeteLSPKeymaps()
   " XXX: I'm using vim.lsp.buf.code_action() here instead of
   " :TSLspImportCurrent because sometimes there are multiple sources to import
   " from
@@ -848,6 +861,21 @@ fun! <SID>InitLSPBuffer()
   " however code_action() seems to actually be async and so the prompt ends up
   " appearing _after_ the buffer has been formatted :facepalm:
   nnoremap <buffer> <space>i :lua vim.lsp.buf.code_action()<CR>
+endfun
+
+fun! <SID>InitLSPBuffer()
+  " TODO: this util is DEPRECATED in favour of the using vim-project-config to
+  " activate language servers as needed.
+  "
+  " If there is something in here that you need then move it into
+  " PeteLSPKeymaps() and call it from your vim-project-config.
+
+  " turn off ALE
+  ALEDisableBuffer
+
+  " hide diagnostics by default
+  lua vim.diagnostic.hide()
+
   if &l:filetype == 'typescript' || &l:filetype == 'typescriptreact'
     nnoremap <buffer> <space>I :TSLspOrganize<CR>
   else
@@ -896,11 +924,6 @@ fun! <SID>ToggleDiagnostic()
 endfun
 
 if s:ts_lsp
-  aug PeterLSPInit
-  au!
-  au FileType typescript,typescriptreact,javascript call <SID>InitLSPBuffer()
-  aug end
-
   exe printf('source %s/vim_lsp_config.lua', s:dotfiles_root)
 endif
 
