@@ -1,4 +1,4 @@
-nnoremap <SPACE>h :call <SID>GotoHelp()<CR>
+nnoremap <buffer> <space>h :call <SID>GotoHelp()<CR>
 
 function! <SID>GotoHelp()
   let l:word = expand('<cword>')
