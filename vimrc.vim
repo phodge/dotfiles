@@ -923,8 +923,8 @@ fun! <SID>ToggleDiagnostic()
   endif
 endfun
 
-if s:ts_lsp
-  exe printf('source %s/vim_lsp_config.lua', s:dotfiles_root)
+if has('nvim')
+  lua require('Universal')
 endif
 
 " vim/tmux navigator keybindings {{{
