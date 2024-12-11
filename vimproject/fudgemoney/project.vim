@@ -21,6 +21,7 @@ function projectconfig.BufEnter() dict
       LspStart
       let b:lsp_init_done = 1
     endif
+    call PeteLSPKeymaps()
   endif
 endfun
 
