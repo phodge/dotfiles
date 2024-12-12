@@ -70,4 +70,4 @@
 # to specify a personal IdentityFile in ~/.ssh/config (this is automated
 # already via use_github_ssh_key_hack in my HOMELY.py
 [url "git@phodge.github.com:phodge/"] insteadof = https://github.com/phodge/
-[url "git@phodge.github.com:phodge/"] insteadof = git@github.com:hodge/
+[url "git@phodge.github.com:phodge/"] insteadof = git@github.com:phodge/
