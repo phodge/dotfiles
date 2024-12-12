@@ -55,6 +55,12 @@ def ubuntu_os_key_bindings():
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'maximize',              "@as []")
     _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
 
+    # Get rid of CTRL+Period emoji shortcut. Slack already has its own action
+    # for this key combo, CTRL+Semicolon can be used instead for emoji.
+    if False:
+        # XXX: this appears to not work. :-(
+        _gsettings_set('org.freedesktop.ibus.panel.emoji', 'hotkey', "['<Control>semicolon']")
+
 
 @section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_mouse_speed():
