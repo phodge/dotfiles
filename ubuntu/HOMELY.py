@@ -116,9 +116,12 @@ def ubuntu_install_devilspie2():
     devilspie2 can "pin" apps like Rhythmbox or Spotify, causing them to move across all
     desktops/workspaces. This means I don't accidentally flip to another desktop/workspace when I
     go to play some music or respond to a chat message.
+
+    NOTE: In newer versions of Ubuntu you right-click the app title bar and
+    tick "Always on visible workspace".
     """
     question = 'Install devilspie2 to manage window sticky bits (share apps across all desktops)?'
-    if not yesno('want_devilspie2', question, default=True):
+    if not yesno('want_devilspie2', question, default=False, recommended=False):
         return
 
     mkdir('~/.config')
