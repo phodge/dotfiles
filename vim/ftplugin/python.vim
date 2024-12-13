@@ -6,8 +6,10 @@ if has('nvim') && g:want_neovim_treesitter_python
   setlocal foldexpr=nvim_treesitter#foldexpr()
 endif
 
-" ninja mapping for visual 'gq' that temporarily sets tw=79 while it is working
-vnoremap gq <ESC>:call <SID>GQ(1)<CR>
+
+" Ninja mapping for visual 'gq' that temporarily sets tw=79 while it is working.
+" Set b:peter_formatting_use_textwidth = 1 to disable it
+vnoremap gq <ESC>:exe (get(b:, 'peter_formatting_use_textwidth', 1) ? 'normal! gvgq' : 'call <SID>GQ(1)')<CR>
 
 function! <SID>GQ(isvisual)
   let l:old_tw = &l:textwidth
