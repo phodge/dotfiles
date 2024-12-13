@@ -119,7 +119,7 @@ endfun
 " use :Isort to fix imports in the current buffer
 " Note that vim plugin 'fisadev/vim-isort' is supposed to do this, but when I
 " use that plugin it doesn't respect the config in my ~/.isort.cfg file
-com! -range=% Isort call <SID>DoSort('<line1>', '<line2>')
+com! -buffer -range=% Isort call <SID>DoSort('<line1>', '<line2>')
 fun! <SID>DoSort(line1, line2)
   if exists('b:isort_disabled') && b:isort_disabled
     echohl WarningMsg
