@@ -1755,6 +1755,9 @@ fun! InTmuxWindow(cmd, opt)
   " but won't execute further commands. This isn't particularly helpful when
   " the desired behaviour would be to reuse that window but open a new pane
   " within it.
+  "
+  " Note: The -k flag doesn't work here because it relies on using -t to
+  " target a window by number instead of name
   let l:reuse_window = get(a:opt, 'reuse', v:false)
 
   let l:cmd_spawn = 'tmux new-window -c ' . shellescape(getcwd())
