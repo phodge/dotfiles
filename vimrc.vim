@@ -28,7 +28,7 @@ let g:pete_dotfiles_root = s:dotfiles_root
 
 set confirm
 
-" when to use LSP and YCM
+" when to use LSP
 " TODO(DOTFILES047): probably get rid of these in favour of s:ts_lsp above
 let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
 

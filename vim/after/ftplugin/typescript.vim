@@ -34,9 +34,6 @@ else
   iunmap <buffer> ,T
 endif
 
-" goto definition and such
-nnoremap <buffer> <space>d :YcmCompleter GoToDefinition<CR>
-
 " use K and CTRL+K for comment/uncomment
 if g:vim_peter
   noremap <buffer> <silent>     K :call <SID>AddComment()<CR>j
