@@ -6,6 +6,9 @@ if has('nvim') && g:want_neovim_treesitter_python
   setlocal foldexpr=nvim_treesitter#foldexpr()
 endif
 
+" set a nice 'foldlevel' so that everything isn't collapsed when we open a
+" file
+setlocal foldlevel=1
 
 " Ninja mapping for visual 'gq' that temporarily sets tw=79 while it is working.
 " Set b:peter_formatting_use_textwidth = 1 to disable it
