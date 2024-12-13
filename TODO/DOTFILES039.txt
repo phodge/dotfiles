@@ -1,5 +1,14 @@
 DOTFILES039 PRIORITY VALUE Personal Experiments Runner
 
+- XXX: the problem with using environment variables is that you need to restart
+  your shell for the change to take effect.
+  - at least with vim g: variables you can have something take effect again by restarting neovim
+  - for a b:variable you could (potentially) have an experiment toggle just by reloading a buffer!
+
+- Note - [direnv](direnv.net) may be useful for activating experiment
+  environment vars when entering/leaving directories by creating a
+  ~/.config/direnv/direnvrc or ~/.config/direnv/lib/*.sh file
+
 - Experiment can be activated per ...
   - one github clone?
   - one project (github repo unique id)
@@ -24,3 +33,133 @@ experiment was successful, and whether I want to:
 Should also have a CLI to ...
 - create a new experiment?
 - show what experiments are in play
+
+ALSO can we have a mechanism that records each time an experiment was
+encountered. (For example, we ran ripgrep with the custom config file, or
+opened a vim python file with PyLSP instead of Jedi)
+
+
+WHAT EXPERIMENTS DO WE NEED?
+
+- Anything out of homely yes/no questions?
+- What about that n2 alias?
+- Any uncommitted stuff in ~/dotfiles/
+- Any uncommitted stuff in ~/dotfiles.kraken/?
+- What to do with "backup tools" like vendored FZF or using dcampos/nvim-snippy for snippets?
+
+
+--- from mydots-configure ---
+A) Use TreeSitter?
+  - probably want this broken down by language
+    - do we need Experiment Dependencies? E.g. Can only turn on TreeSitter for python if using TreeSitter in general?
+B) Use dmypy under ALE?
+  - is there a way we can "park" an experiment that isn't particularly useful right now but might be useful later?
+C) Use Vimade to dim inactive windows
+D) Use git-revise for git rebase
+E) Use EditRealPath mini-plugin?
+  - I don't remember why this is even an optional thing when I much prefer to
+    have it active. Do I need a way to record *why* I turned something off in
+    the first place?
+F) Show git repo state in ZSH?
+  - honestly this is more of just a general feature toggle for me - although if
+    I could make it take effect on a per-repo basis then that would be preferable
+
+
+--- from ~/dotfiles repo ---
+
+A) An alternate .ripgreprc is needed for kraken-core repo ... either that or I
+need to overload 'rg' command with a wrapper in ~/bin/
+- This is a good candidate for folder-based customisation, although it's not an
+  experiment but a long-term feature
+
+B) We recently added `set foldlevel=1` to our ftplugin/python.vim ... it would
+be nice to run this experiment on several projects before we make it permanent
+- This implies running multiple experiments for a single feature flag
+- Is there a way we can keep track of which project(s) the experiment(s) are related to?
+
+
+HOW TO IMPLEMENT
+
+XXX: is it easier to just rework some of this functionality into the mydots-configure tool?
+
+
+
+
+I. FLAG PRESENCE
+
+- set FLAG_ENVIRONMENT_VAR=1 when flag is on or undefined or empty string when off (NOT zero)
+- set g:FLAG_VIM_VAR = v:true when flag is on (maybe - IF it is worth the extra effort)
+- probably want to have an alias mechanism in case I want to merge/rename experiments
+
+II. FLAG ACTIVATION PER ...
+
+1. All Devices
+- Is there a way I can share experiment state without dotfiles pull? I might not remember to do this at the start of the experiment window
+  - can I get my powerline session to show me when there are new experiments to pull?
+  - Do I put the experiment states in a separate github repo? Or can I use a github wiki page maybe and edit it via APIs?
+
+2. One system
+- This is the easiest - add state/expiry in a file in $HOME somewhere
+
+3. Single tmux session
+- Do we want to ask on startup what the experiment state should be?
+- Do we want to ask on-exit what the experiment state should be?
+- Please write up a valid use-case for this before implementing
+
+4. One project
+- This offers similar challenges to the all-devices case - where we need to share state across multiple machines
+- We also need to steal some logic from vim-project-config to implement repo identification
+
+5. One github clone on One Device
+- This is maybe the easiest to implement, but least value
+
+6. One project on One Device
+- mash-up of 2 and 4 because it should be easier to implement than the others
+
+
+CLI INTERFACE
+- print-experiments to show what experiments are active/available/unavailable
+- activate-experiments to open Vim with file list of experiments and I can set the ones I want to True to have them activated
+- end-experiments to open Vim with file list of experiments and I can set the ones I want to disable to False and they will become deactivated
+
+
+IDEA
+- can I have a quick and easy place to log issues so that when I get to the end
+  of an experiment I can try to connect recent issues to experiments that may
+  have caused them?
+
+
+
+--- where to start?
+
+1. What experiments do I want to begin first?
+  A) Probably whether to use Python LSP instead of Jedi+ALE
+    - Can we do this? I think we want it to be per-project so that's perhaps not ideal
+  B) Alternate .ripgreprc
+    - This might be ideal - we can activate it per-device just for the kraken
+      machines and start it as an experiment to begin with
+
+2. What infrastructure do I need to build to support that?
+  create-experiment EXP_RIPGREP_NO_IGNORE
+    - we want some extra details:
+      - what duration do we want the experiment to run for? (The experiment
+        should have its own default)
+    - this needs to commit the experiment to my dotfiles repo and push it ... I think?
+  activate-experiment EXP_RIPGREP_NO_IGNORE
+    - we want to capture some extra input:
+      - how long should the experiment run for (by default)
+      - describe what will change when the experiment is active
+      - describe what the benefit(s) should be
+  [also] something in my .shellrc that sets the environment variables
+  - have it set $EXP_FRAMEWORK_ACTIVE so that the commands can know whether the
+    environment is set up appropriately
+
+
+3. Do I make this part of Homely or keep it separate?
+
+- do I want experiment state stored in my dotfiles repo or elsewhere?
+  - I can use `git checkout --orphan BRANCH` to create a separate history for
+    experiments within my dotfiles repo
+    - this doesn't mean that synchronisation is easy - I need to avoid merge
+      conflicts when possible and resolve them automatically in all other
+      cases.
