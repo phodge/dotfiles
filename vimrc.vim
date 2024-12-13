@@ -341,6 +341,9 @@ if filereadable(s:plugpath)
   " nginx syntax
   call <SID>VendoredPlug('chr4/nginx.vim')
 
+  " graphql stuff
+  Plug 'jparise/vim-graphql'
+
   if ! g:want_fast
     call <SID>VendoredPlug('EinfachToll/DidYouMean')
     call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
