@@ -1,0 +1,11 @@
+DOTFILES050 rethink fzf installation
+
+- on MacOS I am successfully using g:use_vendored_fzf to load the fzf vim
+  plugin modules from my dotfiles repo's submodule, but the fzf executable in
+  $PATH is provided by homebrew.
+
+- We almost certainly don't want to use the self-installing (download pre-build
+  binary) mechanisms the plugin prompts us to use. I think we probably want to
+  get rid of use_vendored_fzf altogether and just make sure ~/src/fzf.git has a
+  known working version, but otherwise look at whatever fzf is in $PATH and set
+  &rtp to its location.

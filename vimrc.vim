@@ -418,6 +418,7 @@ if filereadable(s:plugpath)
   " TODO: revisit this and see if we can get some nice mappings up
   Plug 'brooth/far.vim'
 
+  " TODO(DOTFILES050) redo this and get it working on Ubuntu
   let s:has_fzf = 0
   if has('nvim') && get(g:, 'use_vendored_fzf', 0)
     " use vendored version of FZF since the brew version (0.44.1) is having
