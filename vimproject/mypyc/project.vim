@@ -4,7 +4,15 @@
 fun! projectconfig.BufEnter() dict
     if &filetype == 'python'
         let b:ale_linters = ['mypy', 'flake8']
+
+        let b:ale_python_mypy_options = '--config-file=mypy_self_check.ini'
     endif
 
     nnoremap <buffer> <space>t :call InTmuxWindow('./retest.sh', {'name': 'retest.sh'})<CR>
+endfun
+
+fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
+    if a:ext == 'test' && a:relname =~ '^test-data/'
+        return 'mypytestdata'
+    endif
 endfun
