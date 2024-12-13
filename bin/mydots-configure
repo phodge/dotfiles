@@ -357,6 +357,7 @@ def main(automatic: bool, print_json: bool) -> None:
         sys.exit(0)
 
     if not automatic:
+        # TODO(DOTFILES052) move these out of here
         print("NOTE: to use LSP for TypeScript/JavaScript in neovim:")
         # TODO: what packages?
         print("  - Make sure your project's package.json includes TypeScript for type checking")

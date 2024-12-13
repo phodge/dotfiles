@@ -1,0 +1,4 @@
+DOTFILES052 move LSP setup notes out of mydots-configure
+
+Packages required should be documented next to the Lua functions that
+initialise the language servers
