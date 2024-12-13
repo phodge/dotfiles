@@ -250,18 +250,39 @@ if filereadable(s:plugpath)
   " XXX: we manage this with vim-plug because vim-plug takes care of
   " initialising jedi's own submodules
   Plug 'davidhalter/jedi-vim'
+
+  " Note: we leave the plugin un-initialised by default and disable most of
+  " the keymaps so that it is easier to ensure all keymaps are superseded by
+  " LSP keymaps when those are activated in a particular buffer.
+  " BUT this means we do need to manually ...
+  " - set 'omnifunc' for python buffers
+  " - create our own mappings to jedi commands
+  " - call jedi#configure_call_signatures() if we want that feature?
+  " - We possibly need to define :Pyimport ourselves if we want that command
+  "   available
+  let g:jedi#auto_initialization = 0
+
+  " sets 'completeopt' for us, I don't *think* we want this?
+  let g:jedI#auto_vim_configuration = 0
+
+  " we probably want to have this ON but we need to document how to turn it
+  " off for larger projects
+  " ALTHOUGH: it is probably not effective because I have set #auto_initialization = 0 above
+  let g:jedi#popup_on_dot = 0
+
+  " other jedi configuration
   let g:jedi#use_splits_not_buffers = "winwidth"
   " NOTE: I'm disabling call signatures because A) it doesn't seem to work and
   " B() vim isfreezing and I don't know why
   let g:jedi#show_call_signatures = 0
   let g:jedi#smart_auto_mappings = 0
-  let g:jedi#popup_on_dot = 0
 
   " ALE setup {{{
 
     call <SID>VendoredPlug('w0rp/ale')
 
     " default behaviour is to use flake8/mypy from our virtualenv
+    " TODO(DOTFILES049) redo this - not sure this is what we want
     let g:ale_python_flake8_executable = expand('~/.venv/vim-python-tools/bin/flake8')
     let g:ale_python_mypy_executable = expand('~/.venv/vim-python-tools/bin/mypy')
 
@@ -307,9 +328,6 @@ if filereadable(s:plugpath)
     let g:LanguageClient_diagnosticsEnable = 0
 
     " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    " \ 'javascript': ['/usr/local/bin/javascript-typescript-stdio'],
-    " \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    " \ 'python': ['/usr/local/bin/pyls'],
     " \ }
 
     Plug 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins'}
@@ -859,37 +877,13 @@ if has('nvim')
         \ })
 endif
 
-fun! PeteLSPKeymaps()
-  " XXX: I'm using vim.lsp.buf.code_action() here instead of
-  " :TSLspImportCurrent because sometimes there are multiple sources to import
-  " from
-  " XXX: I wanted this to do the code_action _and_ then format the buffer;
-  " however code_action() seems to actually be async and so the prompt ends up
-  " appearing _after_ the buffer has been formatted :facepalm:
-  nnoremap <buffer> <space>i :lua vim.lsp.buf.code_action()<CR>
-endfun
-
 fun! <SID>InitLSPBuffer()
   " TODO: this util is DEPRECATED in favour of the using vim-project-config to
   " activate language servers as needed.
-  "
-  " If there is something in here that you need then move it into
-  " PeteLSPKeymaps() and call it from your vim-project-config.
 
-  " turn off ALE
-  ALEDisableBuffer
-
-  " hide diagnostics by default
-  lua vim.diagnostic.hide()
-
-  if &l:filetype == 'typescript' || &l:filetype == 'typescriptreact'
-    nnoremap <buffer> <space>I :TSLspOrganize<CR>
-  else
-    nnoremap <buffer> <space>I :echoerr 'No "\<space>I" import organizer is defined for this filetype'
-  endif
-  nnoremap <buffer> <F7>     :sp <BAR> lua vim.lsp.buf.references()<CR>
-  nnoremap <buffer> <space>d :sp <BAR> lua vim.lsp.buf.definition()<CR>
-  nnoremap <buffer> <space>h :lua vim.lsp.buf.hover()<CR>
+  " TODO: move all this stuff into peter#LSPKeymapsFallback() or some other function
+  " callable from per-project config because InitLSPBuffer() is no longer a
+  " thing
   nnoremap <buffer> <space>f :lua vim.lsp.buf.incoming_calls()<CR>
   nnoremap <buffer> \A       :call <SID>ToggleDiagnostic()<CR>
 
@@ -897,11 +891,18 @@ fun! <SID>InitLSPBuffer()
   " to install 'prettier' into your project. The guide I based this on
   " recommended using 'npm install -g prettier' however I'm keen to avoid
   " having a global version that gets stale / differs between machines
+  " TODO(DOTFILES051) move these into peter#LSPKeymaps*()
   nnoremap <buffer> \f       :lua vim.lsp.buf.format()<CR>
   nnoremap <buffer> \F       :call <SID>ToggleAutoFormatting()<CR>
   command! -nargs=0 -buffer Format lua vim.lsp.buf.format()
 
   " TODO: tidy this up so we're *not* using ALE namespace vars
+  " TODO: move this into vim/autoload/peter.vim
+  " TODO(DOTFILES051) untangle this
+  " TODO: since ALE also defines its own autocmd that check b:ale_fix_on_save,
+  " this means that our hijacking of this variable here will cause ALE to
+  " *also* format the buffer unless we have completely disabled ALE in the
+  " current buffer while we turned on LSP.
   let b:ale_fix_on_save = 0
   aug PeterLSPAutoFormat
   au! BufWritePre <buffer> exe b:ale_fix_on_save ? 'lua vim.lsp.buf.format()' : ''
@@ -1932,3 +1933,13 @@ aug end
 fun! <SID>i3HotReload()
   silent !i3-msg restart
 endfun
+
+aug PeterLSPKeymapsAutocmds
+" Calling the function with no args will cause it to not override flags that
+" have already been set, causing it to be a no-op if it has already been
+" called.
+"
+" If you called this in a vim-project-config BufEnter hook then it
+" would have been called already and this will be a noop.
+au! BufEnter * call peter#LSPKeymapsFallback()
+aug end

@@ -1,3 +1,4 @@
+" TODO(DOTFILES048) move this mapping into vim/autoload/peter.vim
 nnoremap <buffer> <space>h :call <SID>GotoHelp()<CR>
 
 function! <SID>GotoHelp()

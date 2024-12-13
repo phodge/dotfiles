@@ -384,6 +384,7 @@ def create_neovim_python_tools_venv():
     core_packages = [
         'flake8',
         'mypy',
+        # TODO(DOTFILES055) can we install LSP packages here as well?
     ]
     maintain_virtualenv(HOME + '/.venv/vim-python-tools', core_packages)
 

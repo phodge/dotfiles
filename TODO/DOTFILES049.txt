@@ -1,0 +1,24 @@
+DOTFILES049 figure out vim-python-tools virtualenv with flake8/mypy linters
+
+Right now we set g:ale_python_flake8_executable to use the virtualenv flake8 ...
+
+TODO: is this a good idea? Wouldn't we want the logic to be ...
+- if the current active virtualenv has a 'flake8' executable, use that
+- if there is no virtualenv active but the current project uses poetry,
+  use 'poetry' to invoke the command (this should work - see
+  g:ale_python_auto_poetry)
+- only if both of the above fail, fall back to using linters from the
+  vim-python-tools virtualenv
+
+
+OR do we leave them pointing to the virtualenv tools and then use
+vim-project-config to override them to either the project virtualenv (I guess
+just set b:ale_flake8_executable = 'flake8' and it'll pick up the one from the
+virtualenv?) The disadvantage of this approach is that I normally always
+activate virtualenvs via shell shortcuts and so there's likely to be a
+virtualenv already active and we need to determine whether or not we should use
+it.
+
+We could also do the above via peter#LSPKeymaps* or a similar initialiser and
+just always set the b:ale_* variables to a sensible value instead of using the
+g: variants.

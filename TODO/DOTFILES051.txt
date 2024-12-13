@@ -1,0 +1,3 @@
+DOTFILES051 move \f code formatting keymap into peter#LSPKeymaps*
+
+we'll have to untangle the b:ale_format_on_save = 1 hackery that's currently in vimrc.vim

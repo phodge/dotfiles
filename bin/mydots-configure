@@ -24,7 +24,6 @@ SETTINGS_NAMES = {
     'use_vendored_fzf',
     'use_ale_dmypy',
     'use_edit_real_path',
-    'want_neovim_lsp_python',
     'show_git_state_in_zsh',
 }
 
@@ -283,20 +282,6 @@ def main(automatic: bool, print_json: bool) -> None:
             "doesn't seem to be built corretly into ALE and might not work",
             "often silently fails due to: [Errno 61] Connection refused",
             "often not faster due to: Restarting: configuration changed",
-        ],
-    )
-
-    _yesno_setting_big(
-        'Activate PyLSP for python files in Neovim?',
-        'want_neovim_lsp_python',
-        default=0,
-        state=state,
-        automatic=automatic or print_json,
-        advantages=[
-            '(None - not yet implemented)',
-        ],
-        disadvantages=[
-            '(None - not yet implemented)',
         ],
     )
 

@@ -11,17 +11,7 @@ function projectconfig.BufEnter() dict
   nmap <buffer> <space>b :call InTmuxWindow('./rebuild.sh', {'name': 'rebuild.sh', 'copy_env_vars': 'auto'})<CR>
 
   if &l:filetype == 'vue' || &l:filetype == 'typescript'
-    let b:ale_enabled = 0
-    " XXX: b:lsp_init_done is required due to a bug in vim-project-config
-    " where it keeps executing the BufEnter function every time we switch
-    " windows
-    if ! get(b:, 'lsp_init_done', 0)
-      lua require('PeteLSP').init_ts_ls({vue = true})
-      lua require('PeteLSP').init_null_ls()
-      LspStart
-      let b:lsp_init_done = 1
-    endif
-    call PeteLSPKeymaps()
+    call peter#IDEFeaturesJS({'lsp_manage_imports': 1, 'lsp_eslint_d': 1, 'with_vue': 1})
   endif
 endfun
 

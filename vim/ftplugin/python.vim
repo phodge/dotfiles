@@ -172,9 +172,8 @@ fun! <SID>AutoIsort()
   endif
 endfun
 
+com! -buffer -nargs=0 SmartIsortTrigger call <SID>SmartIsortTrigger()
 
-nnoremap <buffer> <space>i :Isort<CR>
-nnoremap <buffer> <space>i :call <SID>SmartIsortTrigger()<CR>
 fun! <SID>SmartIsortTrigger() " {{{
   " if the character under the cursor is alphanumeric, work out what the word is
   " if the current line is an import statement, 
@@ -294,26 +293,6 @@ if exists('g:vim_peter')
   inoremap <buffer> ,T raise Exception("TODO: finish this")  # noqa<ESC>F"hvFfo
 else
   silent! iunmap <buffer> ,T
-endif
-
-" jedi mappings
-if exists('g:vim_peter')
-  " go to original definition of whatever is under the cursor
-  nnoremap <buffer> <SPACE>d :call jedi#goto()<CR>
-  " replace/rename whatever is under the cursor
-  nnoremap <buffer> <SPACE>r :call jedi#replace()<CR>
-  " find uses of the thing under the cursor
-  nnoremap <buffer> <SPACE>u :call jedi#usages()<CR>
-  " show documentation (help) for the thing under the cursor
-  nnoremap <buffer> <SPACE>h :call jedi#show_documentation()<CR>
-  " rename the thing under the cursor
-  nnoremap <buffer> <SPACE>r :call jedi#rename()<CR>
-else
-  silent! nunmap <buffer> <SPACE>d
-  silent! nunmap <buffer> <SPACE>r
-  silent! nunmap <buffer> <SPACE>u
-  silent! nunmap <buffer> <SPACE>h
-  silent! nunmap <buffer> <SPACE>r
 endif
 
 " gF mapping

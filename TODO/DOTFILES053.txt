@@ -1,0 +1,6 @@
+DOTFILES053 bring back default jedi keymaps
+
+Now that jedi isn't initialised by default, I am missing a few keymaps that
+used to be available in all python files:
+
+i_<C-space> to start omnicompletion at the cursor location

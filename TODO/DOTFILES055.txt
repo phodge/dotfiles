@@ -1,0 +1,9 @@
+DOTFILES055 determine whether we can install python-lsp-server into our nvim-virtualenv instead of installing it per-project
+
+K project uses this in its requirements.txt, do we still need all of these?
+
+  python-lsp-server==1.9.0
+  pylsp-mypy==0.6.8
+  pyls-isort==0.2.2
+
+See also DOTFILES049

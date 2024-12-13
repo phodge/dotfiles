@@ -1,0 +1,32 @@
+DOTFILES048 standardise keymaps that have LSP / TreeSitter functions
+
+<F7>  Show usages of item under cursor (vim.lsp.buf.references)
+
+i_<ctrl+space>  Perform autocompletion at the cursor.
+
+<space>a  Split/join current line by arguments.
+<space>i  Code Action (add missing import for name under cursor)
+  - TODO: would like to split "code action" off into its own <space><space> and
+    have <space>i just be the add-missing-import actions, which a prompt if
+    there are multiple ways to do it.
+<space>I  Sort imports
+<space>d  Goto definition
+  - Do we want to split this such that we get more distinction between "Go to
+    the original implementation of this thing under the cursor" vs "Go to the
+    place where this local identifier is initialised from something?" Keeping
+    in mind we also have vim's 'gd' to do an unintelligent jump to the first
+    occurence of the name in the current buffer
+<space>h  Show help/docs (preferably via hover/popup) for item under cursor
+<space>r  Rename item under cursor
+
+??  Show man page for item under cursor (in split window)
+??  LSP has a vim.lsp.buf.incoming_calls() that we might want to use?
+
+\a  Jump to next ALE/Diagnostic error
+\A  to toggle diagnostics on or off (is this really useful?)
+\f  Autoformat current file
+
+
+Jedi has a couple of other tricks that could be useful:
+- jedi#goto_stubs()
+- jedi#py_import() to open a module by module-name instead of file-name
