@@ -416,6 +416,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "OrderedDict": "collections",
         \ "defaultdict": "collections",
         \ "Collection": "collections.abc",
+        \ "QuerySet": "django.db.models",
         \ "Reversible": "collections.abc",
         \ "Decimal": "decimal",
         \ "Any": "typing",
