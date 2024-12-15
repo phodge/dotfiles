@@ -1273,8 +1273,13 @@ def install_rust():
 def install_fnm():
     """https://github.com/Schniz/fnm"""
     if IS_UBUNTU:
-        # TODO: DOTFILES015 get this to update somehow
-        execute(['cargo', 'install', 'fnm'])
+        # NOTE: due to a build error with fnm v1.38.1, I need to use the
+        # following two commands to try and install a newer version otherwise
+        # an older version
+        cmd1 = "cargo install fnm --version '>1.38.1'"
+        cmd2 = "cargo install fnm --version '<1.38'"
+
+        execute(['bash', '-c', f'{cmd1} || {cmd2}'])
     elif IS_OSX:
         # NOTE: this is currently mac-os only because I don't have a quick
         # one-liner to install on Ubuntu yet
