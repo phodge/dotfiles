@@ -1262,12 +1262,18 @@ def poetry_install():
         )
 
 
+# TODO: adapt this for MacOS also
+@section_ubuntu(enabled=want_full and yesno('install_rust', 'Install rust/cargo?', recommended=True))
+def install_rust():
+    execute(['sudo', 'snap', 'install', 'rustup', '--classic'])
+    execute(['rustup', 'default', 'stable'])
+
+
 @section(enabled=want_full and yesno('install_fnm', 'Install fnm?'))
 def install_fnm():
     """https://github.com/Schniz/fnm"""
     if IS_UBUNTU:
         # TODO: DOTFILES015 get this to update somehow
-        # TODO: first you need rustup via "snap install rustup --classic" then "rustup default stable"
         execute(['cargo', 'install', 'fnm'])
     elif IS_OSX:
         # NOTE: this is currently mac-os only because I don't have a quick
