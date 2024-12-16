@@ -436,9 +436,15 @@ if filereadable(s:plugpath)
   " TODO: revisit this and see if we can get some nice mappings up
   Plug 'brooth/far.vim'
 
-  " TODO(DOTFILES050) redo this and get it working on Ubuntu
   let s:has_fzf = 0
-  if has('nvim') && get(g:, 'use_vendored_fzf', 0)
+  if 1
+    " TODO(DOTFILES050) this should supersede all the other fancy stuff below
+    " for figuring out fzf path
+    if g:peter_fzf_install_path != ''
+      let &rtp .= ',' . g:peter_fzf_install_path
+      let s:has_fzf = 1
+    endif
+  elseif has('nvim') && get(g:, 'use_vendored_fzf', 0)
     " use vendored version of FZF since the brew version (0.44.1) is having
     " issues
     let s:has_fzf = 1
@@ -457,9 +463,6 @@ if filereadable(s:plugpath)
   elseif has('nvim') && executable('fzf')
     let s:has_fzf = 1
     let &rtp .= ',' . expand('/opt/homebrew/Cellar/fzf/*')
-  else
-    Plug 'ctrlpvim/ctrlp.vim'
-    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
   endif
 
   if s:has_fzf
@@ -472,6 +475,9 @@ if filereadable(s:plugpath)
                 \ }
     " I just want to be able to hit enter to open a file in a new split
     let g:fzf_action['enter'] = 'split'
+  else
+    Plug 'ctrlpvim/ctrlp.vim'
+    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
   endif
 
   " Use `:DiffviewFileHistory %` to get a history of the current buffer

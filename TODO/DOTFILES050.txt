@@ -9,3 +9,6 @@ DOTFILES050 rethink fzf installation
   get rid of use_vendored_fzf altogether and just make sure ~/src/fzf.git has a
   known working version, but otherwise look at whatever fzf is in $PATH and set
   &rtp to its location.
+
+- Alternatively, if Ubuntu 24.04 provides a new-enough fzf then perhaps we can
+  just use upstream-provided fzf?

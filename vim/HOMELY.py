@@ -71,6 +71,11 @@ def get_vim_options() -> Dict[str, Union[bool, str]]:
     ret['g:peter_want_rust_plugins'] = HOMELY.want_rust_anything
     ret['g:peter_want_php_plugins'] = HOMELY.want_php_anything
 
+    # put the fzf install path in here as well
+    _, _, get_fzf_install_path = HOMELY.fzf_install_info()
+    fzf_path = get_fzf_install_path()
+    ret['g:peter_fzf_install_path'] = fzf_path or ''
+
     return ret
 
 

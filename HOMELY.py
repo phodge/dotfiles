@@ -687,39 +687,73 @@ def tools():
         execute(['brew', 'install', 'git-absorb'])
 
 
-@section
+FZF_REPO = os.path.expanduser('~/src/fzf.git')
+
+
+@memoize
+def fzf_install_info():
+    should_install = False
+    use_brew = False
+    get_install_path = lambda: None  # noqa
+
+    can_install = allow_installing_stuff and yesno(
+        'install_fzf',
+        'Install fzf?',
+        recommended=True,
+    )
+
+    if can_install:
+        use_brew = IS_OSX and haveexecutable('brew') and yesno(
+            'install_fzf_homebrew',
+            'Install fzf via Homebrew?',
+            recommended=True,
+        )
+
+        if use_brew:
+            brewpath = execute(['brew', '--prefix'], stdout=True)[1].decode('utf-8').strip()
+
+            def get_install_path():  # noqa: F811
+                if brewpath == '/opt/homebrew':
+                    # brew puts the fzf files into versioned folders, so all we can do
+                    # is glob and sort (which isn't perfect because it would need to be
+                    # a semver-compatible sort) and pick the first one
+                    return execute(
+                        ['bash', '-c', f'echo {brewpath}/Cellar/fzf/* | sort -r | head -n 1'],
+                        stdout=True,
+                    )[1].decode('utf-8').strip()
+
+                # this is how it was on my old mac
+                return brewpath + '/opt/fzf'
+
+        else:
+            def get_install_path():  # noqa: F811
+                return FZF_REPO
+
+    return should_install, use_brew, get_install_path
+
+
+@section()
 def fzf_install():
-    if not yesno('install_fzf', 'Install fzf?', want_full, recommended=False if IS_UBUNTU else None):
+    should_install, use_brew, get_install_path = fzf_install_info()
+
+    if not should_install:
         return
 
-    if haveexecutable('brew') and allow_installing_stuff:
+    if use_brew:
         installpkg('fzf')
-        brewpath = execute(['brew', '--prefix'], stdout=True)[1].decode('utf-8').strip()
-        if brewpath == '/opt/homebrew':
-            # brew puts the fzf files into versioned folders, so all we can do
-            # is glob and sort (which isn't perfect because it would need to be
-            # a semver-compatible sort) and pick the first one
-            fzf_path = execute(
-                ['bash', '-c', f'echo {brewpath}/Cellar/fzf/* | sort -r | head -n 1'],
-                stdout=True,
-            )[1].decode('utf-8').strip()
-        else:
-            # this is how it was on my old mac
-            fzf_path = brewpath + '/opt/fzf'
     else:
         # do it the long way
-        import os.path
-        fzf_repo = os.path.expanduser('~/src/fzf.git')
         fzf_install = InstallFromSource('https://github.com/junegunn/fzf.git',
-                                        fzf_repo)
-        fzf_install.select_tag('0.17.3')
+                                        FZF_REPO)
+        fzf_install.select_tag('v0.56.3')
         fzf_install.compile_cmd([
             ['./install', '--bin'],
         ])
         fzf_install.symlink('bin/fzf', '~/bin/fzf')
         run(fzf_install)
-        execute(['./install', '--bin'], cwd=fzf_repo, stdout='TTY')
-        fzf_path = fzf_repo
+        execute(['./install', '--bin'], cwd=FZF_REPO, stdout='TTY')
+
+    fzf_path = get_install_path()
 
     lineinfile('~/.bashrc', 'source {}/shell/completion.bash'.format(fzf_path))
     lineinfile('~/.bashrc', 'source {}/shell/key-bindings.bash'.format(fzf_path))
