@@ -464,7 +464,6 @@ if filereadable(s:plugpath)
 
   if s:has_fzf
     nnoremap <C-P> :FZF<CR>
-    nnoremap \\ :call fzf#vim#grep('git-branch-status --short --quiet', 0)<CR>
     let g:fzf_layout = {'window': {'width': 0.8, 'height': 0.8}}
     let g:fzf_action = {
                 \ 'ctrl-t': 'tab split',
