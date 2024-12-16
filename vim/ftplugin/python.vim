@@ -128,7 +128,7 @@ fun! <SID>DoSort(line1, line2)
     return
   endif
 
-  let l:isort = 'isort'
+  let l:isort = get(b:, 'isort_command', 'isort')
 
   " do we have any options CLI options for isort?
   let l:options = get(b:, 'isort_flags', {})
@@ -142,6 +142,7 @@ fun! <SID>DoSort(line1, line2)
 
   let l:pos = exists('*getcurpos') ? getcurpos() : getpos('.')
   try
+    let b:last_isort_cmd = l:isort
     exe printf('%s,%s!%s -', a:line1, a:line2, l:isort)
     if v:shell_error != 0
       let b:isort_disabled = 1
