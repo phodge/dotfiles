@@ -696,13 +696,13 @@ def fzf_install_info():
     use_brew = False
     get_install_path = lambda: None  # noqa
 
-    can_install = allow_installing_stuff and yesno(
+    should_install = allow_installing_stuff and yesno(
         'install_fzf',
         'Install fzf?',
         recommended=True,
     )
 
-    if can_install:
+    if should_install:
         use_brew = IS_OSX and haveexecutable('brew') and yesno(
             'install_fzf_homebrew',
             'Install fzf via Homebrew?',
@@ -751,7 +751,6 @@ def fzf_install():
         ])
         fzf_install.symlink('bin/fzf', '~/bin/fzf')
         run(fzf_install)
-        execute(['./install', '--bin'], cwd=FZF_REPO, stdout='TTY')
 
     fzf_path = get_install_path()
 
