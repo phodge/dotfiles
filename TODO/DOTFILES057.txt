@@ -1,0 +1,3 @@
+DOTFILES057 investigate whether mini.nvim has anything useful for us?
+
+- https://github.com/echasnovski/mini.nvim

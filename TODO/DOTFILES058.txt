@@ -1,0 +1,3 @@
+DOTFILES058 find a new nvim file explorer
+
+- https://github.com/rockerBOO/awesome-neovim#file-explorer

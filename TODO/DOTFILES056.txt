@@ -1,0 +1,5 @@
+DOTFILES056 experiment with session-saving plugins & workflows
+
+- https://github.com/stevearc/resession.nvim
+- https://github.com/olimorris/persisted.nvim
+- https://github.com/folke/persistence.nvim
