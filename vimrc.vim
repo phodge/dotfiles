@@ -1948,3 +1948,9 @@ aug PeterLSPKeymapsAutocmds
 " would have been called already and this will be a noop.
 au! BufEnter * call peter#LSPKeymapsFallback()
 aug end
+
+" nuke annoying neovim default mappings (see :help default-mappings)
+if has('nvim')
+  unmap *
+  unmap #
+endif
