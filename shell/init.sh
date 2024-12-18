@@ -344,3 +344,11 @@ shell_then_hibernate() {
     done
     sudo -E bash -ic "sudo -E -u $me bash -ic '$cmd'; $cmd2 systemctl hibernate"
 }
+
+# these mainly exist for tmux's <F4> + <S-F4> keyboard shortcuts
+repo_todo_list_view() {
+    nvim __no_file__ '+setlocal buftype=nofile' +RepoTodoList +1bw +redraw +messages
+}
+repo_todo_list_add() {
+    nvim __no_file__ '+setlocal buftype=nofile' +RepoTodoList +1bw '+normal! G' +RepoTodoAdd
+}

@@ -119,7 +119,7 @@ fun! <SID>OpenRepoListBuffer(root, prefix) abort
     endtry
   else
     new
-    setlocal buftype=nofile
+    setlocal buftype=nofile nowrap
     let s:repo_list_buffers[a:root] = bufnr('')
   endif
 
