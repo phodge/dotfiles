@@ -12,6 +12,7 @@ fun! peter#IDEFeaturesJS(flags)
         \ 'lsp_manage_imports': a:flags.lsp_manage_imports,
         \ 'js_lsp_eslint_d': a:flags.lsp_eslint_d,
         \ 'js_vue_support': get(a:flags, 'with_vue', 0),
+        \ 'is_js': v:true,
         \ })
 endfun
 
@@ -60,7 +61,7 @@ fun! peter#LSPKeymapsFallback(flags = v:null)
   " fallbacks
 
   let l:lsp_manage_imports = <SID>pop(l:flags, 'lsp_manage_imports', 0)
-  let l:js_lsp_eslint_d = <SID>pop(l:flags, 'lsp_eslint_d', 0)
+  let l:js_lsp_eslint_d = <SID>pop(l:flags, 'js_lsp_eslint_d', 0)
   let l:js_vue_support = <SID>pop(l:flags, 'js_vue_support', 0)
 
   " which keymaps to take over
