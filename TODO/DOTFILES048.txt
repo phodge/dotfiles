@@ -16,7 +16,6 @@ i_<ctrl+space>  Perform autocompletion at the cursor.
     place where this local identifier is initialised from something?" Keeping
     in mind we also have vim's 'gd' to do an unintelligent jump to the first
     occurence of the name in the current buffer
-<space>h  Show help/docs (preferably via hover/popup) for item under cursor
 <space>r  Rename item under cursor
 
 ??  Show man page for item under cursor (in split window)

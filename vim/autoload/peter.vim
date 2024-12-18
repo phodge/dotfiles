@@ -154,6 +154,25 @@ fun! s:vanilla.python() dict
   nnoremap <buffer> <space>i :SmartIsortTrigger<CR>
 endfun
 
+fun! s:vanilla.vim() dict
+  nnoremap <buffer> <space>h :call <SID>GotoVimHelp()<CR>
+endfun
+
+function! <SID>GotoVimHelp()
+  let l:word = expand('<cword>')
+  let l:synid = synID(line('.'), col('.'), 0)
+  let l:synname = synIDattr(l:synid, 'name')
+  if l:synname == 'vimFuncName'
+    let l:topic = ' %s()'
+  elseif l:synname == 'vimOption'
+    let l:topic = "'%s'"
+  else
+    let l:topic = ':%s'
+  endif
+  execute 'help '.printf(l:topic, l:word)
+  wincmd p
+endfunction
+
 fun! <SID>BlankKeymaps()
   nnoremap <buffer> <F7> :echoerr 'ERROR: No mapping configured for <F7> in vim/autoload/peter.vim'<CR>
 

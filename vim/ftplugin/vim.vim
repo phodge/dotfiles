@@ -1,22 +1,3 @@
-" TODO(DOTFILES048) move this mapping into vim/autoload/peter.vim
-nnoremap <buffer> <space>h :call <SID>GotoHelp()<CR>
-
-function! <SID>GotoHelp()
-  let l:word = expand('<cword>')
-  let l:synid = synID(line('.'), col('.'), 0)
-  let l:synname = synIDattr(l:synid, 'name')
-  if l:synname == 'vimFuncName'
-    let l:topic = ' %s()'
-  elseif l:synname == 'vimOption'
-    let l:topic = "'%s'"
-  else
-    let l:topic = ':%s'
-  endif
-  execute 'help '.printf(l:topic, l:word)
-  wincmd p
-endfunction
-
-
 " use K and CTRL+K for comment/uncomment
 if exists('g:vim_peter')
   noremap <buffer> <silent>     K :call <SID>AddComment()<CR>j
