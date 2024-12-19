@@ -1,4 +1,5 @@
 import os
+import re
 from pathlib import Path
 
 from homely.general import WHERE_END, lineinfile, mkdir, symlink, writefile
@@ -6,7 +7,7 @@ from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff
+from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff, want_alacritty
 from HOMELY import get_key_combos_for_action
 
 
@@ -116,6 +117,123 @@ def ubuntu_os_key_bindings():
     if False:
         # XXX: this appears to not work. :-(
         _gsettings_set('org.freedesktop.ibus.panel.emoji', 'hotkey', "['<Control>semicolon']")
+
+
+BINDING_NAMES_ROOT = '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings'
+
+
+def _get_current_custom_bindings():
+    root = BINDING_NAMES_ROOT
+    out = execute(['dconf', 'read', root], stdout=True)[1]
+    custom = eval(out.decode('utf-8'))
+    assert isinstance(custom, list)
+    ret = {}
+    for entry in custom:
+        assert isinstance(entry, str)
+        assert entry.startswith(root)
+        tail = entry[len(root):]
+        m = re.match(r'^/custom\d+/$', tail)
+        assert m
+        key = tail[1:-1]
+        out2 = execute(['dconf', 'read', root + '/' + key + '/name'], stdout=True)[1]
+        ret[key] = eval(out2.decode('utf-8'))
+    return ret
+
+
+def _write_current_custom_bindings(names: list[str]):
+    root = BINDING_NAMES_ROOT
+    values = [
+        root + '/' + name + '/'
+        for name in sorted(names)
+    ]
+    execute(['dconf', 'write', root, repr(values)])
+
+
+def _maybe_install_custom_binding(title, keybinds, command):
+    _current = _get_current_custom_bindings()
+    found_key = None
+    for otherkey, othertitle in _current.items():
+        if title == othertitle:
+            found_key = otherkey
+            break
+
+    if found_key is None:
+        if not keybinds:
+            return
+
+        new_key = True
+        try_key = ""
+        use_key = ""
+        for i in range(9):
+            try_key = f'custom{i}'
+            if try_key not in _current:
+                use_key = try_key
+                break
+
+        if not use_key:
+            raise Exception("All custom keys are used")
+    else:
+        use_key = found_key
+        new_key = False
+
+    fields = {
+        "binding": lambda: repr(keybinds[0].gnome_key),
+        "command": lambda: repr(command),
+        "name": lambda: repr(title),
+    }
+
+    # if we don't have a keybind, we need to delete the entry
+    if not keybinds:
+        if new_key:
+            return
+
+        _current.pop(use_key)
+        _write_current_custom_bindings(_current.keys())
+        # delete the 3x fields as well
+        for field in fields.keys():
+            field_key = BINDING_NAMES_ROOT + '/' + use_key + '/' + field
+            execute(['dconf', 'reset', field_key])
+        return
+
+    for field, getval in fields.items():
+        field_key = BINDING_NAMES_ROOT + '/' + use_key + '/' + field
+        _dconf_write(field_key, getval())
+
+    if new_key:
+        # if it is a new key then we need to add it to the list
+        _write_current_custom_bindings([*_current.keys(), use_key])
+
+
+@section_ubuntu(enabled=allow_installing_stuff and want_alacritty)
+def ubuntu_os_terminal_shortcuts():
+    # TODO: this section needs reworking just a little - even without alacritty
+    # we might want to install these shortcuts but use gnome-terminal or x-terminal-emulator
+
+    # remove the default gnome CTRL+ALT+T keyboard shortcut
+    execute([
+        'dconf',
+        'write',
+        '/org/gnome/settings-daemon/plugins/media-keys/terminal',
+        _get_gsettings_bind([]),
+    ])
+
+    _maybe_install_custom_binding(
+        'Alacritty',
+        get_key_combos_for_action('os', 'OPEN_TERMINAL'),
+        'alacritty',
+    )
+
+    _maybe_install_custom_binding(
+        'Alacritty - Tmux',
+        get_key_combos_for_action('os', 'OPEN_TERMINAL_TMUX_NEW'),
+        'alacritty -e tmux',
+    )
+
+    _maybe_install_custom_binding(
+        'Alacritty - New Tmux Session',
+        get_key_combos_for_action('os', 'OPEN_TERMINAL_TMUX_PICKER'),
+        'alacritty -e tmux',
+    )
 
 
 @section_ubuntu(enabled=allow_installing_stuff)

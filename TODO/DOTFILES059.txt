@@ -1,0 +1,7 @@
+DOTFILES059 EASY keyboard shortcut to open DOTFILES tmux session
+
+- CTRL+ALT+D
+- If alacritty use different background color (purple?)
+- use 'tmux attach-session -t DOTFILES -c ~/dotfiles'
+- try to set CWD to dotfiles repo
+
