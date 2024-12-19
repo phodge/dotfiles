@@ -169,6 +169,7 @@ def tmux_keys():
         cmd.append('--break-system-packages')
     execute(cmd)
 
+    # XXX: dirty hack to import the key bindings module
     oldpath = sys.path[:]
     sys.path.append(HERE)
     from keybindings import get_tmux_key_bindings
