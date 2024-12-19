@@ -125,8 +125,8 @@ BINDING_NAMES_ROOT = '/org/gnome/settings-daemon/plugins/media-keys/custom-keybi
 
 def _get_current_custom_bindings():
     root = BINDING_NAMES_ROOT
-    out = execute(['dconf', 'read', root], stdout=True)[1]
-    custom = eval(out.decode('utf-8'))
+    out = execute(['dconf', 'read', root], stdout=True)[1].strip()
+    custom = eval(out.decode('utf-8')) if len(out) else []
     assert isinstance(custom, list)
     ret = {}
     for entry in custom:
