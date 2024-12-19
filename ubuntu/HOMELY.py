@@ -33,6 +33,10 @@ def _gsettings_set(area, key, value):
     execute(['gsettings', 'set', area, key, value])
 
 
+def _dconf_write(key, value):
+    execute(['dconf', 'write', key, value])
+
+
 @section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_key_repeat_rate():
     if not yesno('ubuntu_set_repeat_rate', 'Ubuntu: Set keyboard repeat rate?', recommended=True):
@@ -94,10 +98,18 @@ def ubuntu_os_key_bindings():
         ('org.gnome.mutter.keybindings',     mutteractions),
     ]
 
+    # do we use dconf or gsettings
+    # XXX: only my work linux machine I needed to use `dconf write /org/gnome/...` instead of gsettings
+    use_gsettings = False
+
     for gnomepath, actions in action_paths:
         for ouraction, gnomeaction in actions:
             keybinds = _get_gsettings_bind(get_key_combos_for_action('os', ouraction))
-            _gsettings_set(gnomepath, gnomeaction, keybinds)
+            if use_gsettings:
+                _gsettings_set(gnomepath, gnomeaction, keybinds)
+            else:
+                dconfpath = '/' + gnomepath.replace('.', '/') + '/'
+                _dconf_write(dconfpath + gnomeaction, keybinds)
 
     # Get rid of CTRL+Period emoji shortcut. Slack already has its own action
     # for this key combo, CTRL+Semicolon can be used instead for emoji.
