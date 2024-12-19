@@ -1303,12 +1303,8 @@ def install_fnm():
 
 @section(enabled=allow_installing_stuff)
 def clone_blog():
-    print("ASK")
     if not yesno("create_blog_clone", "Clone blog to ~/src/blog.gt?"):
-        print("NAH")
         return
-
-    print("YEH")
 
     if yesno('install_hugo', 'Install hugo for blog?', recommended=True):
         if IS_UBUNTU:
