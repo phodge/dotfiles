@@ -424,12 +424,8 @@ def create_winwin_config():
     winwincfg.write_text(json.dumps(config, indent=2, sort_keys=True))
 
 
-@section(enabled=allow_installing_stuff)
+@section_macos(enabled=allow_installing_stuff)
 def install_winwin_shortcuts():
-    if not IS_OSX:
-        # FIXME: get this working under Ubuntu as well
-        return
-
     q = 'Install macOS system terminal shortcuts (requires Alacritty)?'
     if not yesno('want_winwin_shortcuts', q):
         return
