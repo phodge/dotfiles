@@ -370,10 +370,16 @@ def create_powerline_venv():
 
 @section(
     enabled=allow_installing_stuff,
-    interval='4w' if os.path.exists(WINWIN_VENV) else None,
+    # I was attempting to make this faster, but this won't run on other
+    # machines for weeks if I do this change
+    # TODO: needs an interval_id so I can flag changes for other systems
+    # interval='4w' if os.path.exists(WINWIN_VENV) else None,
 )
 def create_winwin_venv():
     maintain_virtualenv(WINWIN_VENV, [])
+    # we need to install winwin package or the launcher won't be able to find
+    # the libs
+    venv_exec(WINWIN_VENV + '/bin/pip', ['pip', 'install', '-e', HERE + '/winwin.git'])
 
 
 @section(
@@ -400,17 +406,18 @@ def create_winwin_config():
 
     config['force_platform'] = config.get('force_platform', 'terminal/tmux')
 
-    # if we're on macos, we need to configure winwin to use Alacritty as our
-    # terminal
-    if IS_OSX and want_alacritty:
+    if want_alacritty:
         config['terminal_app'] = config.get('terminal_app', 'alacritty')
-        if yesno(
-            'alacritty_ctrl_h_glitch',
-            'Are you experiencing the Alacritty CMD+H glitch when it is launched via terminal launcher?',
-        ):
-            config['alacritty_path'] = '/Applications/Alacritty.app/Contents/MacOS/alacritty'
-        elif install_alacritty_homebrew and os.path.exists('/opt/homebrew/bin'):
-            config['alacritty_path'] = config.get('alacritty_path', '/opt/homebrew/bin/alacritty')
+
+        # if we're on macos, we need to tell winwin where to find Alacritty
+        if IS_OSX:
+            if yesno(
+                'alacritty_ctrl_h_glitch',
+                'Are you experiencing the Alacritty CMD+H glitch when it is launched via terminal launcher?',
+            ):
+                config['alacritty_path'] = '/Applications/Alacritty.app/Contents/MacOS/alacritty'
+            elif install_alacritty_homebrew and os.path.exists('/opt/homebrew/bin'):
+                config['alacritty_path'] = config.get('alacritty_path', '/opt/homebrew/bin/alacritty')
 
     winwincfg.parent.mkdir(exist_ok=True)
     winwincfg.write_text(json.dumps(config, indent=2, sort_keys=True))
@@ -425,10 +432,6 @@ def install_winwin_shortcuts():
     q = 'Install macOS system terminal shortcuts (requires Alacritty)?'
     if not yesno('want_winwin_shortcuts', q):
         return
-
-    # we need to install winwin package or the launcher won't be able to find
-    # the libs
-    venv_exec(WINWIN_VENV + '/bin/pip', ['pip', 'install', '-e', HERE + '/winwin.git'])
 
     # XXX: for some reason on later versions of macOS I had to also install
     # winwin into this python/pip as well as this was the only one available to
