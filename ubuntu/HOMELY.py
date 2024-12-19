@@ -1,4 +1,5 @@
 import os
+import shlex
 import re
 from pathlib import Path
 
@@ -229,10 +230,27 @@ def ubuntu_os_terminal_shortcuts():
         'alacritty -e tmux',
     )
 
+    picker_cmd = [
+        'alacritty',
+        '--title=TLauncher2',
+        '-o', 'font.size=20',
+        '-o', 'window.dimensions={columns=80,lines=30}',
+        '-o', 'window.padding={x=40,y=20}',
+        # XXX: Note how string values need to be wrapped
+        '-o', 'window.decorations="None"',
+        '-o', 'window.opacity=0.85',
+        '-o', 'window.blur=true',
+        # TODO(DOTFILES059): give the dotfiles session this colour and pick
+        # something else here
+        '-o', 'colors.primary.background="#220044"',
+        # XXX: the argument following '--command' must be an executable, so we
+        # use /bin/sh and wrap everything else as a subcommand
+        '--command', '/bin/sh', '-c', f'{HOME}/.venv/winwin/bin/python -m winwin.cli present-ui || sleep 3',
+    ]
     _maybe_install_custom_binding(
         'Alacritty - New Tmux Session',
         get_key_combos_for_action('os', 'OPEN_TERMINAL_TMUX_PICKER'),
-        'alacritty -e tmux',
+        shlex.join(picker_cmd),
     )
 
 

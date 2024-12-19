@@ -18,7 +18,7 @@ os:
   ALT-WIN-Up: SHOW_ALL_WORKSPACE_WINDOWS
   ALT-WIN-Down: null
   CTRL-ALT-T: OPEN_TERMINAL
-  CTRL-ALT-S: null  # OPEN_TERMINAL_TMUX_PICKER  <- needs implementing
+  CTRL-ALT-S: OPEN_TERMINAL_TMUX_PICKER
   CTRL-ALT-S-T: OPEN_TERMINAL_TMUX_NEW
 
   # XXX: we don't bind this on MacOS - it's an OS default
