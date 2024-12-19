@@ -1,4 +1,5 @@
 import glob
+import sys
 import json
 import os
 import os.path
@@ -1326,6 +1327,25 @@ def clone_blog():
         ['git', 'submodule', 'update'],
     ])
     run(installer)
+
+
+def get_key_combos_for_action(section, action):
+    try:
+        keybindings = sys.modules['keybindings']
+    except KeyError:
+        oldpath = sys.path[:]
+        sys.path.append(HERE)
+        import keybindings
+        sys.path = oldpath
+
+    bindings = keybindings.get_new_bindings()
+
+    try:
+        sectiondata = bindings[section]
+    except KeyError:
+        raise KeyError(f"keybindings/keys.yaml does not have a section {section!r}")
+
+    return sectiondata.get(action, [])
 
 
 # note that these need to be carried out in order of dependency

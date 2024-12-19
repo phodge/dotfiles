@@ -1,0 +1,25 @@
+# prefixes:
+# CTRL- CTRL Key
+# ALT- META ("Alt" Key / "Command" on Mac keyboards)
+# S- SHIFT
+# WIN- (Context menu / "Option" on mac keyboards)
+os:
+  # TODO: DOTFILES020: install these automatically on MacOS and Ubuntu
+  ALT-Return: TOGGLE_FULLSCREEN
+  WIN-Left: RESIZE_WINDOW_LEFT_HALF
+  WIN-Right: RESIZE_WINDOW_RIGHT_HALF
+  WIN-Up: MOVE_WINDOW_PREV_DISPLAY
+  WIN-Down: MOVE_WINDOW_NEXT_DISPLAY
+  WIN-M: MINIMIZE_WINDOW
+  S-WIN-Down: TOGGLE_MAXIMIZED
+  S-WIN-Up: FORCE_MAXIMIZED
+  ALT-WIN-Left: SWITCH_TO_WORKSPACE_LEFT
+  ALT-WIN-Right: SWITCH_TO_WORKSPACE_RIGHT
+  ALT-WIN-Up: SHOW_ALL_WORKSPACE_WINDOWS
+  ALT-WIN-Down: null
+  CTRL-ALT-T: OPEN_TERMINAL
+  CTRL-ALT-S: null  # OPEN_TERMINAL_TMUX_PICKER  <- needs implementing
+  CTRL-ALT-S-T: OPEN_TERMINAL_TMUX_NEW
+
+  # XXX: we don't bind this on MacOS - it's an OS default
+  CTRL-ALT-S-4: OS_SCREENSHOT_UI

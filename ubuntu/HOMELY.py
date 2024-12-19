@@ -7,6 +7,7 @@ from homely.system import execute
 from homely.ui import yesno
 
 from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff
+from HOMELY import get_key_combos_for_action
 
 
 @section_ubuntu(enabled=allow_installing_stuff, quick=True)
@@ -41,19 +42,62 @@ def ubuntu_key_repeat_rate():
     _gsettings_set('org.gnome.desktop.peripherals.keyboard', 'delay',           'uint32 210')
 
 
+def _get_gsettings_bind(keybinds):
+    if not keybinds:
+        return "@as []"
+
+    strings = []
+    for k in keybinds:
+        strings.append(k.gnome_key)
+
+    return "['" + "','".join(strings) + "']"
+
+
 @section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_os_key_bindings():
     # see:
     #  gsettings list-recursively org.gnome.shell.keybindings
     #  gsettings list-recursively org.gnome.desktop.wm.keybindings
-    #  { for schema in $(gsettings list-schemas); do echo; echo $schema; gsettings list-recursively $schema; done; } > schemas.txt
+    #  for schema in $(gsettings list-schemas); do echo; echo $schema; gsettings list-recursively $schema; done
+    #  dconf dump /
     if not yesno('ubuntu_set_os_keybindings', 'Ubuntu: Install OS keybindings (maximize windows, etc)?', recommended=True):
         return
 
-    _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-fullscreen',     "['<Alt>Return']")
-    _gsettings_set('org.gnome.desktop.wm.keybindings', 'toggle-maximized',      "['<Shift><Super>Down']")
-    _gsettings_set('org.gnome.desktop.wm.keybindings', 'maximize',              "@as []")
-    _gsettings_set('org.gnome.desktop.wm.keybindings', 'move-to-monitor-right', "['<Super>Down']")
+    # TODO(DOTFILES020) these need to be implemented on MacOS also
+    wmactions = {
+        ('MOVE_WINDOW_NEXT_DISPLAY',  'move-to-monitor-right'),
+        ('MOVE_WINDOW_PREV_DISPLAY',  'move-to-monitor-left'),
+        ('TOGGLE_MAXIMIZED',          'toggle-maximized'),
+        ('FORCE_MAXIMIZED',           'maximize'),
+        #('TOGGLE_FULLSCREEN',         'toggle-fullscreen'),
+        ('TOGGLE_FULLSCREEN',         'toggle-above'),
+        ('MINIMIZE_WINDOW',           'minimize'),
+        ('_RESIZE_WINDOW_LEFT_HALF',  'move-to-side-e'),
+        ('_RESIZE_WINDOW_RIGHT_HALF', 'move-to-side-e'),
+        ('SWITCH_TO_WORKSPACE_LEFT',  'switch-to-workspace-left'),
+        ('SWITCH_TO_WORKSPACE_RIGHT',  'switch-to-workspace-right'),
+    }
+
+    gnomeshellactions = {
+        ('OS_SCREENSHOT_UI',           'show-screenshot-ui'),
+        ('SHOW_ALL_WORKSPACE_WINDOWS', 'toggle-overview'),
+    }
+
+    mutteractions = {
+        ('RESIZE_WINDOW_LEFT_HALF',  'toggle-tiled-left'),
+        ('RESIZE_WINDOW_RIGHT_HALF', 'toggle-tiled-right'),
+    }
+
+    action_paths = [
+        ('org.gnome.desktop.wm.keybindings', wmactions),
+        ('org.gnome.shell.keybindings',      gnomeshellactions),
+        ('org.gnome.mutter.keybindings',     mutteractions),
+    ]
+
+    for gnomepath, actions in action_paths:
+        for ouraction, gnomeaction in actions:
+            keybinds = _get_gsettings_bind(get_key_combos_for_action('os', ouraction))
+            _gsettings_set(gnomepath, gnomeaction, keybinds)
 
     # Get rid of CTRL+Period emoji shortcut. Slack already has its own action
     # for this key combo, CTRL+Semicolon can be used instead for emoji.
