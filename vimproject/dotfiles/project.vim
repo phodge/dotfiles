@@ -4,6 +4,14 @@
 
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'DOTFILES'
+
+  if &l:filetype == 'python'
+    nnoremap <space>t :call <SID>Retest()<CR>
+  endif
+endfun
+
+fun! <SID>Retest()
+  call InAlacrittyWindow('./retest.sh', {})
 endfun
 
 fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
