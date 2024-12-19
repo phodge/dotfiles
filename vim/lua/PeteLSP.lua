@@ -83,7 +83,7 @@ function _get_default_pylsp_settings()
                 -- jedi_completion = { enabled = false, },
                 jedi_definition = { enabled = true, },
                 jedi_hover = { enabled = true, },
-                -- jedi_references = { enabled = true, },
+                jedi_references = { enabled = true, },
                 -- jedi_signature_help = { enabled = false, },
                 mccabe = { enabled = false, },
                 -- requires python-lsp-isort installed in the virtualenv
@@ -119,7 +119,7 @@ function _get_default_pylsp_settings()
 end
 
 -- TODO(DOTFILES049): can we have pylsp installed somewhere global so that we don't have to install it in all our virtualenvs?
-function _get_pylsp_config(references, signatures)
+function _get_pylsp_config(signatures)
     return {
         settings = _get_default_pylsp_settings(),
         on_attach = function(client, bufnr)
@@ -127,15 +127,8 @@ function _get_pylsp_config(references, signatures)
             -- See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
             local settings = _get_default_pylsp_settings()
 
-            if references then
-                settings.pylsp.plugins.jedi_references.enabled = true
-            end
-
             if signatures then
                 settings.pylsp.plugins.jedi_signature_help.enabled = true
-            end
-
-            if signatures or references then
                 client.notify('workspace/didChangeConfiguration', { settings = settings })
             end
 
@@ -201,7 +194,7 @@ exports.init_pylsp = function()
     if not _has_client('pylsp') then
         -- TODO: do these need to be turned on for these to work?
         -- (sticky notes)
-        require("lspconfig").pylsp.setup(_get_pylsp_config(false, false))
+        require("lspconfig").pylsp.setup(_get_pylsp_config(false))
     end
 end
 
