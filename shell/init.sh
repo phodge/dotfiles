@@ -281,7 +281,7 @@ rmempty() {
 }
 
 pushthis() {
-    ref="$1";
+    local ref="$1";
     shift
     local choice=
 
@@ -301,6 +301,11 @@ pushthis() {
 
     echo "$ git push origin '${ref}:refs/heads/$PUSHTO' '$@'"
     git push origin "${ref}:refs/heads/$PUSHTO" "$@"
+}
+pushthisf() {
+    local ref="$1"
+    shift
+    pushthis "$1" --force-with-lease "$@"
 }
 
 __peter_fnm_init() {
