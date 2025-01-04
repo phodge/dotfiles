@@ -152,6 +152,10 @@ alias cnv='git commit --no-verify'
 alias canv='git commit --amend --no-verify'
 alias co='git checkout'
 alias dc='docker-compose'
+alias gf='git fetch -p'
+alias gp='git pull --rebase'
+alias gP='git push'
+
 
 irebas() {
     while :; do
