@@ -302,10 +302,10 @@ pushthis() {
     echo "$ git push origin '${ref}:refs/heads/$PUSHTO' '$@'"
     git push origin "${ref}:refs/heads/$PUSHTO" "$@"
 }
-pushthisf() {
+fpushthis() {
     local ref="$1"
     shift
-    pushthis "$1" --force-with-lease "$@"
+    pushthis "$ref" --force-with-lease "$@"
 }
 
 __peter_fnm_init() {
