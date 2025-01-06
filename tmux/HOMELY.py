@@ -70,12 +70,14 @@ def tmux_install():
         )
         tmux = InstallFromSource('https://github.com/tmux/tmux.git',
                                  '~/src/tmux.git')
-        tmux.select_tag('2.7')
+        tmux.select_tag('3.3a')
         tmux.compile_cmd([
             # distclean will always fail if there's nothing to clean
             ['bash', '-c', 'make distclean || :'],
+            # TODO: need to replace all _SYS_QUEUE_H_ with _COMPACT_QUEUE_H_ in compat/queue.h if building a version <3.5a
+            # (See https://trac.macports.org/ticket/70719 and https://github.com/tmux/tmux/pull/4041/files)
             ['sh', 'autogen.sh'],
-            ['./configure'],
+            ['./configure', '--disable-utf8proc'],
             ['make'],
         ])
         tmux.symlink('tmux', '~/bin/tmux')
