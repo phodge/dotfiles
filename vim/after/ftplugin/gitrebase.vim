@@ -75,7 +75,7 @@ fun! <SID>AddSeparator()
       endif
 
       " add an exec line for this file
-      let l:newline = 'exec touch %s && git add %s && git commit -m "===== %s ====="'
+      let l:newline = 'exec touch %s && git add %s && git commit --no-verify -m "===== %s ====="'
       call setpos('.', l:curpos)
       call append(line('.'), printf(l:newline, l:char, l:char, l:title))
 
