@@ -410,10 +410,12 @@ if filereadable(s:plugpath)
 
     call <SID>VendoredPlug('dcampos/nvim-snippy')
 
+    " NOTE: we can't use SHIFT+TAB for snippy any more because we need it for
+    " Copilot
     imap <expr> <Tab> snippy#can_expand_or_advance() ? '<Plug>(snippy-expand-or-advance)' : '<Tab>'
-    imap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
+    " imap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
     smap <expr> <Tab> snippy#can_jump(1) ? '<Plug>(snippy-next)' : '<Tab>'
-    smap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
+    " smap <expr> <S-Tab> snippy#can_jump(-1) ? '<Plug>(snippy-previous)' : '<S-Tab>'
     xmap <Tab> <Plug>(snippy-cut-text)
   elseif has('nvim') && v:version >= 704
     Plug 'SirVer/ultisnips', v:version >= 704 ? {} : {'on': []}
