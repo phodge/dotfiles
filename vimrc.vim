@@ -566,6 +566,7 @@ if filereadable(s:plugpath)
 
   Plug 'majutsushi/tagbar', g:want_fast ? {'on': []} : {}
   nnoremap <space>n :TagbarToggle<CR>
+  let g:tagbar_width = 60
 
   " go to next ALE error. We use :ALENextWrap instead of :ALEFirst because often I can fix a bug and
   " hit '\a' again before ale has re-linted and removed the current error.
