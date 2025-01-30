@@ -1408,6 +1408,7 @@ set sidescrolloff=20
   nnoremap \w :set wrap! wrap?<CR>
   nnoremap \q :call ExcaliburQuitWindow()<CR>
   nnoremap \x :q<CR>
+  nnoremap \X :call <SID>CloseAllOthers()<CR>
   " essentially :tabclose but also works when there is only one tab
   nnoremap \t :windo quit<CR>
 
@@ -1951,6 +1952,18 @@ aug PeterLSPKeymapsAutocmds
 " would have been called already and this will be a noop.
 au! BufEnter * call peter#LSPKeymapsFallback()
 aug end
+
+fun! <SID>CloseAllOthers()
+  let l:bufnr = bufnr('')
+  let l:current_win_id = win_getid()
+  let g:foo = [l:bufnr, l:current_win_id]
+
+  for l:win_id in win_findbuf(l:bufnr)
+    if l:win_id != l:current_win_id
+      call win_execute(l:win_id, 'hide')
+    endif
+  endfor
+endfun
 
 " nuke annoying neovim default mappings (see :help default-mappings)
 if has('nvim')
