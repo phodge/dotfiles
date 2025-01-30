@@ -1966,7 +1966,8 @@ fun! <SID>CloseAllOthers()
 endfun
 
 " nuke annoying neovim default mappings (see :help default-mappings)
-if has('nvim')
+if has('nvim') && !exists('s:nuked')
   unmap *
   unmap #
+  let s:nuked = 1
 endif
