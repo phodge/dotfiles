@@ -60,11 +60,18 @@ def _get_commit_changed_files(sha):
             yield parts[1]
             continue
 
+        # include renamed files
+        if parts[0].startswith('R'):
+            renameparts = parts[1].split('\t', 1)
+            # we want the 2nd of the two filenames
+            yield renameparts[1]
+            continue
+
         # skip deleted files
         if parts[0] == 'D':
             continue
 
-        raise Exception(f"TODO: handle line {line!r}")
+        raise Exception(f"TODO: handle line {line!r} from sha {sha}")
 
 
 def main(*, examine_history_size: int, my_history_size: int, extra_email: list[str]):
