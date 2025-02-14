@@ -1,0 +1,3 @@
+DOTFILES060 check out Ghostty terminal, see how it compares to Alacritty
+
+https://news.ycombinator.com/item?id=42517447

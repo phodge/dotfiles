@@ -1,0 +1,6 @@
+DOTFILES061 VALUE investigate llama.vim for Local LLM-assisted text completion
+
+https://github.com/ggml-org/llama.vim
+
+This is more beneficial for my personal use where I don't have access to / want
+to use Copilot.
