@@ -343,15 +343,28 @@ shell_then_hibernate() {
     else
         cmd=$SHELL
     fi
+
+    if [ -n "$SHELL_THEN_POWEROFF" ]; then
+        hibernate_cmd="poweroff"
+        verb="Shutdown"
+    else
+        hibernate_cmd="systemctl hibernate"
+        verb="Hibernation"
+    fi
+
     # Note the use of -E (--preserve-env) here so that commands like
     # 'caffeinate' have what they need to keep a system awake
     cmd2=''
     i=20
     while [ $i -gt 0 ]; do
-        cmd2="$cmd2 echo 'Hibernation in ${i}s!'; sleep 1;"
+        cmd2="$cmd2 echo '$verb in ${i}s!'; sleep 1;"
         let i=$i-1
     done
-    sudo -E bash -ic "sudo -E -u $me bash -ic '$cmd'; $cmd2 systemctl hibernate"
+    sudo -E bash -ic "sudo -E -u $me bash -ic '$cmd'; $cmd2 $hibernate_cmd"
+}
+shell_then_poweroff() {
+    export SHELL_THEN_POWEROFF=1
+    shell_then_hibernate "$@"
 }
 
 # these mainly exist for tmux's <F4> + <S-F4> keyboard shortcuts
