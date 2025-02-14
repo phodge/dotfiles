@@ -331,6 +331,26 @@ shell_post_init() {
     unset -f shell_post_init
 }
 
+countdown() {
+    local seconds=$1
+    shift
+    local prefix="$1"
+    shift
+
+    while [ $seconds -gt 0 ]; do
+        if [ $seconds -gt 59 ]; then
+            let min=($seconds/60);
+            let sec="($seconds-($min*60))"
+            timestr="${min}m ${sec}s"
+        else
+            timestr="${seconds}s"
+        fi
+        echo "$prefix${timestr}!'"
+        sleep 1
+        let seconds=$seconds-1
+    done
+}
+
 shell_then_hibernate() {
     if [[ $IS_MACOS ]]; then
         echo "shell_then_hibernate() does not work in MacOS" >&2
