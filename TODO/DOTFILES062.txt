@@ -1,0 +1,3 @@
+DOTFILES062 investigate using Telescope to show file commit history
+
+Apparently ":Telescope git_bcommits" is a thing

@@ -1,0 +1,7 @@
+DOTFILES063 investigate git "checkout.workers == 0"
+
+git config --global checkout.workers 0
+
+apparently also needs fetch.parallel 0?
+
+https://krakentech.slack.com/archives/C01ETJG1RGV/p1738080716547759

@@ -1,0 +1,3 @@
+DOTFILES064 investigate Neotest and vim-test as alternatives to Spacetea
+
+https://krakentech.slack.com/archives/C084X5PGUDU/p1736506798503859
