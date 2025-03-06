@@ -1036,12 +1036,14 @@ set fileformats=unix,dos,mac
 " use \\ as mapleader
 let g:mapleader = '\\'
 
-" use <F5> and <F6> to run ack searches
+" use <F5> and <F6> to run ripgrep searches
 if executable('rg')
   " NOTE: I'm not defaulting to rg yet because it doesn't include line numbers
   " in the output
   nnoremap <F5> :Shell rg -wn <C-R><C-W><CR>
   nnoremap <F6> :Shell rg -wni <C-R><C-W><CR>
+  nnoremap <S-F5> :Shell rg -n '<C-R><C-F>'<CR>
+  nnoremap <S-F6> :Shell git ls-files <BAR> grep '<C-R><C-F>'<CR>
 else
   nnoremap <F5> :Shell ag -ws <C-R><C-W><CR>
   nnoremap <F6> :Shell ag -wsi <C-R><C-W><CR>
