@@ -139,7 +139,6 @@ alias ss=show_status_long
 alias g=edit_status
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=False'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
-alias recon='git -c core.hooksPath=/no/hooks rebase --continue'
 if [[ $WANT_GIT_REVISE = 1 ]]; then
     alias rebas='git -c core.hooksPath=/no/hooks revise -e -i'
 else
@@ -155,6 +154,14 @@ alias dc='docker-compose'
 alias gf='git fetch -p'
 alias gp='git pull --rebase'
 alias gP='git push'
+
+_recon() {
+    git -c core.hooksPath=/no/hooks rebase --continue
+}
+
+recon() {
+    _recon || { cnv && _recon; }
+}
 
 
 irebas() {
