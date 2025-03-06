@@ -14,7 +14,10 @@ def _get_last_10k_commits(limit: int):
         if line == '':
             continue
 
-        email, sha = line.split(' ')
+        try:
+            email, sha = line.split(' ')
+        except ValueError:
+            continue
         # NOTE: there's not really any validation on commit email addresses
         # assert '@' in email
         assert sha.isalnum()
