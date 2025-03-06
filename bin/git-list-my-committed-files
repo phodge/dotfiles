@@ -139,6 +139,7 @@ def _get_commit_headline_for_sha(sha: str) -> str:
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('-e', '--extra-email', nargs='*')
+    parser.add_argument('-s', '--history-size', type=int, help="Number of commits to examine", default=100_000)
     args = parser.parse_args()
 
     extra_email = set(args.extra_email or [])
@@ -146,4 +147,4 @@ if __name__ == "__main__":
     if extra_from_env:
         extra_email |= set(extra_from_env.split(','))
 
-    main(examine_history_size=100000, my_history_size=100, extra_email=extra_email)
+    main(examine_history_size=args.history_size, my_history_size=100, extra_email=extra_email)
