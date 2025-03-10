@@ -17,6 +17,12 @@ else
     export IS_MACOS=
 fi
 
+# activate experiments
+_reload_experiments() {
+    test -e $HOME/.config/experiments.sh && source ~/.config/experiments.sh
+}
+_reload_experiments
+
 # PATH modifications
 if [[ $IS_MACOS ]]; then
     # homebrew
@@ -124,19 +130,24 @@ edit_status() {
     fi
 }
 
+# XXX: DOTFILES065: why is this needed? Can it get removed?
+unalias g 2>/dev/null || :
+
+# using any of these shortcuts will cause experiments to be reloaded *in the current shell*
+n()  { _reload_experiments ; nvim "$@"             ; }
+j()  { _reload_experiments ; jerjerrod "$@"        ; }
+s()  { _reload_experiments ; show_status "$@"      ; }
+ss() { _reload_experiments ; show_status_long "$@" ; }
+g()  { _reload_experiments ; edit_status "$@"      ; }
+
 # custom aliases
 alias l='ls -lah --color=always'
 alias ll='ls -lah --color=always'
 alias v=vim
-alias n=nvim
 alias n2='NVIM_TS_LSP=1 nvim'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
-alias j=jerjerrod
-alias s=show_status
-alias ss=show_status_long
-alias g=edit_status
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=False'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
 if [[ $WANT_GIT_REVISE = 1 ]]; then
@@ -160,11 +171,13 @@ _recon() {
 }
 
 recon() {
+    _reload_experiments
     _recon || { cnv && _recon; }
 }
 
 
 irebas() {
+    _reload_experiments
     while :; do
         rebas -i "$@" && continue
         return $?

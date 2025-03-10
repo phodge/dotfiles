@@ -1,4 +1,6 @@
 import glob
+from datetime import date
+from dataclasses import dataclass
 import sys
 import json
 import os
@@ -1343,8 +1345,72 @@ def get_key_combos_for_action(section, action):
 
     return sectiondata.get(action, [])
 
+_DEVICE_UUID = None
+
+def _get_device_uuid() -> str:
+    uuid_file = Path(HOME + '/.config/experiments_uuid')
+    global _DEVICE_UUID
+    if _DEVICE_UUID is None:
+        if uuid_file.exists():
+            _DEVICE_UUID = uuid_file.read_text().strip()
+        else:
+            _DEVICE_UUID = ""
+
+    return _DEVICE_UUID
+
+
+@dataclass
+class Experiment:
+    name: str
+    by_uuid: list[str]
+    active_until: date | None
+    source: str
+
+    def get_state_and_reason(self) -> tuple[bool, str]:
+        device_uuid = _get_device_uuid()
+        if device_uuid in self.by_uuid:
+            return True, f"Active for device {device_uuid}"
+
+        if not self.by_uuid:
+            return False, "Not active for any devices"
+
+        return False, "Not active for this device"
+
+
+class ExperimentsManager:
+    def __init__(self) -> None:
+        self._experiments: dict[str, Experiment] = {}
+
+    def define_experiment(
+        self,
+        name,
+        *,
+        by_uuid: list[str] | None = None,
+        active_until: str | None,
+    ) -> None:
+        # find out what file and line this function was called from without using inspect module
+        import traceback
+        stack = traceback.extract_stack(limit=7)
+        source = stack[5].filename
+        if stack[5].lineno:
+            source += ':' + str(stack[5].lineno)
+
+        self._experiments[name] = Experiment(
+            name,
+            by_uuid=by_uuid or [],
+            active_until=date.fromisoformat(active_until) if active_until else None,
+            source=source
+        )
+
+    def all_experiments(self) -> list[Experiment]:
+        return list(self._experiments.values())
+
+
+EXP = ExperimentsManager()
+
 
 # note that these need to be carried out in order of dependency
+include('experiments.py')
 include('jerjerrod/HOMELY.py')
 include('powerline/HOMELY.py')
 include('tmux/HOMELY.py')
