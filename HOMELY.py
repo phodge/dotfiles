@@ -1,11 +1,11 @@
 import glob
-from datetime import date
-from dataclasses import dataclass
-import sys
 import json
 import os
 import os.path
 import platform
+import sys
+from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import List, Optional
 
