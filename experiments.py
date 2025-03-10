@@ -23,6 +23,37 @@ EXP.define_experiment(
     active_until=None
 )
 
+# Attempt #1 at fixing Italic fonts in tmux on Ubuntu 22.04
+EXP.define_experiment(
+    # probably should be scrapped in favour of EXP_TMUX_DEFAULT_TERMINAL
+    'EXP_TMUX_ITALIC_FIX1',
+    by_uuid=[],
+    active_until='2025-05-01',
+)
+EXP.define_experiment(
+    # probably should be scrapped in favour of EXP_TMUX_DEFAULT_TERMINAL
+    'EXP_TMUX_ITALIC_FIX2',
+    by_uuid=[],
+    active_until='2025-05-01',
+)
+
+# add 'set -g default-terminal tmux-256color to tmux.conf'.
+# This should fix itatlic text in neovim in tmux.
+#
+# Seems to work in DEEPCOOL2_UUID (Ubuntu 22.04) but need to activate it on
+# more environments to ensure its working.
+#
+# Test By:
+# - open ~/src/blog.git/content/posts/real-cpu-cooling/index.md and search for ' _\w'
+# - execute
+#        :hi String gui=undercurl
+#        :hi Identifier gui=strikethrough
+EXP.define_experiment(
+    'EXP_TMUX_DEFAULT_TERMINAL',
+    by_uuid=[DEEPCOOL2_UUID],
+    active_until='2025-05-01',
+)
+
 
 @section(quick=True)
 def refresh_experiments():
