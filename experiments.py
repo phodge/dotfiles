@@ -59,7 +59,11 @@ EXP.define_experiment(
 #        :hi String gui=undercurl
 #        :hi Identifier gui=strikethrough
 #
+#
 # Confirmed not needed on SPARK_UUID
+#
+# Note: on OCTOMACM2_UUID $TERM appears to be set correctly already, however my
+# font (Incosolata for Powerline) doesn't seem to support Italics
 EXP.define_experiment(
     'EXP_TMUX_DEFAULT_TERMINAL',
     by_uuid=[DEEPCOOL2_UUID],
