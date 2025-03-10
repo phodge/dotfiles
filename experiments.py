@@ -2,9 +2,17 @@ from homely.general import section, writefile
 from HOMELY import EXP, HOME
 
 
+# I. DEVICE IDS
+#
+# Each device needs its own unique ID. Create a unique ID for this device by
+# running the following command:
+#
+#   test -e $HOME/.config/experiments_uuid || uuidgen > $HOME/.config/experiments_uuid
+#
+# Then add a variable for your device below:
 DEEPCOOL2_UUID = "acc4f383-d2f3-411c-a84d-68e7891b9007"
 MACITRON_UUID = "todo_here"
-SPARK_UUID = "todo_here"
+SPARK_UUID = "e162867b-4d2c-49d7-ab4b-ed0b563e79cc"
 OCTOMACM2_UUID = "982B22E0-830D-48FD-8B51-BC31909CDEC1"
 
 
@@ -48,6 +56,8 @@ EXP.define_experiment(
 # - execute
 #        :hi String gui=undercurl
 #        :hi Identifier gui=strikethrough
+#
+# Confirmed not needed on SPARK_UUID
 EXP.define_experiment(
     'EXP_TMUX_DEFAULT_TERMINAL',
     by_uuid=[DEEPCOOL2_UUID],
