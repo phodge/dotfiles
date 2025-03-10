@@ -10,7 +10,9 @@ function projectconfig.BufEnter() dict
   nmap <buffer> <space>t :call InTmuxWindow('./retest.sh', {'name': 'retest.sh', 'copy_env_vars': 'auto'})<CR>
   nmap <buffer> <space>b :call InTmuxWindow('./rebuild.sh', {'name': 'rebuild.sh', 'copy_env_vars': 'auto'})<CR>
 
-  if &l:filetype == 'vue' || &l:filetype == 'typescript'
+  if &l:filetype == 'typescriptreact'
+    call peter#IDEFeaturesJS({'lsp_manage_imports': 1, 'lsp_eslint_d': 1, 'with_vue': 0})
+  elseif &l:filetype == 'vue' || &l:filetype == 'typescript'
     call peter#IDEFeaturesJS({'lsp_manage_imports': 1, 'lsp_eslint_d': 1, 'with_vue': 1})
   endif
 endfun
