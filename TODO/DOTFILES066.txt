@@ -1,0 +1,3 @@
+DOTFILES066 have a go adding useful stuff to mouse right-menu
+
+see :help disable-mouse
