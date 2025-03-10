@@ -28,5 +28,7 @@ endfun
 fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
   if a:relname == 'git/config'
     return 'gitconfig'
+  elseif a:relname =~ '^tmux/.*\.conf$'
+    return 'tmux'
   endif
 endfun
