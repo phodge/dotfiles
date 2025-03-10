@@ -55,9 +55,9 @@ function _get_ts_ls_config(with_vue)
         end,
     }
     if with_vue then
-        config.filetypes = {"javascript", "typescript", "vue"}
+        config.filetypes = {"javascript", "typescript", "typescriptreact", "vue"}
     else
-        config.filetypes = {"javascript", "typescript"}
+        config.filetypes = {"javascript", "typescript", "typescriptreact"}
     end
 
     if with_vue then
