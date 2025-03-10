@@ -400,7 +400,7 @@ if filereadable(s:plugpath)
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
   let g:vimade.basebg = '#000000'
-  if get(g:, 'want_vimade', 0)
+  if $FEAT_VIM_VIMADE == '1'
     call <SID>VendoredPlug('TaDaa/vimade')
   endif
 
