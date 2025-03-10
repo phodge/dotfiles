@@ -7,7 +7,7 @@ import os
 import os.path
 import platform
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from homely._ui import allowinteractive
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
@@ -1345,7 +1345,9 @@ def get_key_combos_for_action(section, action):
 
     return sectiondata.get(action, [])
 
+
 _DEVICE_UUID = None
+
 
 def _get_device_uuid() -> str:
     uuid_file = Path(HOME + '/.config/experiments_uuid')
@@ -1363,7 +1365,7 @@ def _get_device_uuid() -> str:
 class Experiment:
     name: str
     by_uuid: list[str]
-    active_until: date | None
+    active_until: Optional[date]
     source: str
 
     def get_state_and_reason(self) -> tuple[bool, str]:
@@ -1385,8 +1387,8 @@ class ExperimentsManager:
         self,
         name,
         *,
-        by_uuid: list[str] | None = None,
-        active_until: str | None,
+        by_uuid: Optional[List[str]] = None,
+        active_until: Optional[str],
     ) -> None:
         # find out what file and line this function was called from without using inspect module
         import traceback
