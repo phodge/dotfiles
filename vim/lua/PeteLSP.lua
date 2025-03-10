@@ -49,7 +49,9 @@ function _get_ts_ls_config(with_vue)
             ts_utils.setup({})
             ts_utils.setup_client(client)
 
-        -- TODO: DOTFILES002: set per-buffer or per-project config settings here
+            -- TODO: DOTFILES002: set per-buffer or per-project config settings here
+            vim.o.formatexpr = ""
+            vim.o.tagfunc = ""
         end,
     }
     if with_vue then
@@ -186,7 +188,14 @@ exports.init_null_ls = function(want_eslint_d)
             -- table.insert(sources, null_ls.builtins.code_actions.eslint_d)
         end
 
-        null_ls.setup({sources = sources})
+        null_ls.setup({
+            sources = sources,
+            on_attach = function(client, bufnr)
+                -- XXX: try to prevent these being defined for typescript files
+                vim.o.formatexpr = ""
+                vim.o.tagfunc = ""
+            end,
+        })
     end
 end
 
