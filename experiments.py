@@ -16,6 +16,8 @@ SPARK_UUID = "e162867b-4d2c-49d7-ab4b-ed0b563e79cc"
 OCTOMACM2_UUID = "982B22E0-830D-48FD-8B51-BC31909CDEC1"
 
 
+# II. DECLARE FEATURES & EXPERIMENTS
+
 # Use Vimade for dimming inactive windows in Vim/Neovim?
 #
 # Pros:
