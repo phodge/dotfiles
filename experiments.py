@@ -64,6 +64,19 @@ EXP.define_experiment(
     active_until='2025-05-01',
 )
 
+# Use git-revise for "git rebas"?
+# Pros:
+# - Can edit commit messages directly in rebase plan.
+# - Use "cut" command to split a commit.
+# Cons:
+# - gitrebase syntax highlighting and filetype features do not work
+# - Frequently fails with error: "invalid value: Commit XXX has 2 parents"
+EXP.define_experiment(
+    'EXP_GIT_REVISE',
+    by_uuid=[],
+    active_until=None,
+)
+
 
 @section(quick=True)
 def refresh_experiments():

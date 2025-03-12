@@ -20,6 +20,11 @@ fi
 # activate experiments
 _reload_experiments() {
     test -e $HOME/.config/experiments.sh && source ~/.config/experiments.sh
+    if [[ $EXP_GIT_REVISE = 1 ]]; then
+        alias rebas='git -c core.hooksPath=/no/hooks revise -e -i'
+    else
+        alias rebas='git -c core.hooksPath=/no/hooks rebase -i'
+    fi
 }
 _reload_experiments
 
@@ -150,11 +155,6 @@ alias mv='mv -i'
 alias cp='cp -i'
 alias i2='ipython2 --TerminalInteractiveShell.confirm_exit=False'
 alias i3='ipython3 --TerminalInteractiveShell.confirm_exit=False'
-if [[ $WANT_GIT_REVISE = 1 ]]; then
-    alias rebas='git -c core.hooksPath=/no/hooks revise -e -i'
-else
-    alias rebas='git -c core.hooksPath=/no/hooks rebase -i'
-fi
 alias f='find *'
 alias c='git commit'
 alias ca='git commit --amend'
