@@ -9,5 +9,7 @@ function projectconfig.BufEnter() dict
   if &l:filetype == 'markdown'
     setlocal textwidth=99
     setlocal sw=2 sts=2 ts=2 et
+    let b:ale_markdown_markdownlint_executable = 'markdownlint'
+    ALELint
   endif
 endfun
