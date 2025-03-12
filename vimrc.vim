@@ -304,8 +304,18 @@ if filereadable(s:plugpath)
       let g:ale_linters.python = ['flake8', 'mypy']
     endif
 
+    " turn off ALE in fugitive:// buffers
     aug NoALEInFugitiveBuffers | aug end
     au! NoALEInFugitiveBuffers BufRead fugitive://* let b:ale_enabled = 0
+
+    " Disable markdownlint by default; To bring it back for a project, add
+    "
+    " this to your project config:
+    "   if &l:filetype == 'markdown'
+    "     let b:ale_markdown_markdownlint_executable = 'markdownlint'
+    "     ALELint
+    "   endif
+    let g:ale_markdown_markdownlint_executable = 'markdownlint_disabled_vimrc'
 
   " }}}
 
