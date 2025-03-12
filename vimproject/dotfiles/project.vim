@@ -7,7 +7,7 @@ aug end
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'DOTFILES'
 
-  if &l:filetype == 'python'
+  if &l:filetype == 'python' || &l:filetype == 'vim'
     nnoremap <space>t :call <SID>Retest()<CR>
   endif
 
