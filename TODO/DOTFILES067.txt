@@ -1,0 +1,1 @@
+DOTFILES067 investigate Aerospace for MacOS window management (like i3)

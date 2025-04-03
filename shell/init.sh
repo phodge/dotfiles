@@ -139,6 +139,7 @@ edit_status() {
 unalias g 2>/dev/null || :
 
 # using any of these shortcuts will cause experiments to be reloaded *in the current shell*
+# TODO: if no arguments to these aliases then we might want to do interactive install?
 n()  { _reload_experiments ; nvim "$@"             ; }
 j()  { _reload_experiments ; jerjerrod "$@"        ; }
 s()  { _reload_experiments ; show_status "$@"      ; }

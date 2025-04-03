@@ -1,3 +1,5 @@
 DOTFILES062 investigate using Telescope to show file commit history
 
 Apparently ":Telescope git_bcommits" is a thing
+
+Could also look into snacks.nvim or some of the other Telescope commands for finding files?
