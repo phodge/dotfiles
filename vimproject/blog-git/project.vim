@@ -12,4 +12,10 @@ function projectconfig.BufEnter() dict
     let b:ale_markdown_markdownlint_executable = 'markdownlint'
     ALELint
   endif
+
+  com! -buffer -nargs=0 BlogDevServer call <SID>BlogDevServerTmuxWindow()
+endfun
+
+fun! <SID>BlogDevServerTmuxWindow()
+  call InTmuxWindow('bin/dev_server', {'name': 'BLOG:DEVSERVER', 'target_window': '10', 'switch': 0})
 endfun
