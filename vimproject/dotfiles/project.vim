@@ -11,6 +11,10 @@ function projectconfig.BufEnter() dict
     nnoremap <space>t :call <SID>Retest()<CR>
   endif
 
+  if &l:filetype == 'python'
+    call peter#IDEFeaturesPython({'use_pylsp': 0})
+  endif
+
   if bufname() =~ 'experiments.py'
     au! DotfilesSaveEffects BufWritePost <buffer> call <SID>RefreshExperiments('on_success')
     nnoremap <buffer> <space>b :call <SID>RefreshExperiments(v:false)<CR>
