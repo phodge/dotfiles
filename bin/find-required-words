@@ -1,0 +1,387 @@
+#!/usr/bin/env python3
+from subprocess import STDOUT
+import tempfile
+from subprocess import PIPE
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Iterator, Optional
+import json
+import os.path
+import re
+import argparse
+import asyncio
+
+PREVIEWLEN = 80
+
+
+def _handle_arg_word_list_file(
+    arg_name: str,
+    arg_value: list[str],
+    *,
+    required: bool,
+) -> set[str]:
+    if not arg_value:
+        if required:
+            raise Exception(f'At least one {arg_name} is required')
+
+        return set()
+
+    all_words = set()
+
+    for wlf in arg_value:
+        if not os.path.exists(wlf):
+            raise Exception(f"Invalid {arg_name}: {wlf}")
+
+        with open(wlf) as f:
+            all_words.update(set(f.read().splitlines()))
+
+    return all_words
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--noun', type=str, default="word")
+    parser.add_argument('--word-list-file', type=str, action='append')
+    parser.add_argument('--state-dir', type=str, required=True)
+    parser.add_argument('--word-list-path-var', type=str, required=True)
+    parser.add_argument('--known-required-file', type=str, action='append')
+    parser.add_argument('--known-optional-file', type=str, action='append')
+    parser.add_argument('--command', type=str, action='append', required=True)
+    # parser.add_argument('--probably-optional-file', type=str, action='append')
+    # parser.add_argument('--probably-required-file', type=str, action='append')
+    parser.add_argument('--summary-json', type=str)
+    parser.add_argument('--no-verify')
+    parser.add_argument('-p', '--parallel', type=int, default=1)
+    args = parser.parse_args()
+
+    # check args are set correctly
+    if not re.match(r'^[a-zA-Z_]\w*$', args.word_list_path_var):
+        raise Exception(f'Invalid word list path var: {args.word_list_path_var}')
+
+    all_words = _handle_arg_word_list_file(
+        '--word-list-file',
+        args.word_list_file,
+        required=True,
+    )
+    known_required = _handle_arg_word_list_file(
+        '--known-required-file',
+        args.known_required_file,
+        required=False,
+    )
+    known_optional = _handle_arg_word_list_file(
+        '--known-optional-file',
+        args.known_optional_file,
+        required=False,
+    )
+
+    if not os.path.exists(args.state_dir):
+        raise Exception(f"--state-dir folder {args.state_dir} does not exist")
+
+    strategy = Strategy1(
+        noun=args.noun,
+        all_words=all_words,
+        state_dir=Path(args.state_dir),
+        path_var=args.word_list_path_var,
+        known_required=known_required,
+        known_optional=known_optional,
+        commands=list(args.command),
+    )
+
+    if not args.no_verify:
+        asyncio.run(strategy.verify_commands())
+
+    summary = asyncio.run(strategy.execute(parallel=args.parallel))
+    if args.summary_json:
+        summary_str = json.dumps(summary, indent=2, sort_keys=True)
+        with open(args.summary_json, 'w') as f:
+            f.write(summary_str)
+
+
+class Strategy:
+    _noun: str
+    _all_words: set[str]
+    _path_var: str
+    _known_required: frozenset[str]
+    _known_optional: frozenset[str]
+    _commands: list[str]
+    _state_dir: Path
+    _established_as_required: set[str]
+    _established_as_optional: set[str]
+
+    def __init__(
+        self,
+        noun: str,
+        all_words: set[str],
+        path_var: str,
+        known_required: set[str],
+        known_optional: set[str],
+        commands: list[str],
+        state_dir: Path,
+    ) -> None:
+        self._noun = noun
+        self._all_words = all_words
+        self._path_var = path_var
+        self._known_required = frozenset(known_required)
+        self._known_optional = frozenset(known_optional)
+        self._commands = commands
+        self._state_dir = state_dir
+
+        # first step is to add known optional and required words to state dir
+        _safely_add_optional_words(state_dir, known_optional)
+        _safely_add_required_words(state_dir, known_required)
+
+        # find out what words have already been checked (in case we restart the process)
+        self._established_as_required = set(_read_words_from_file(state_dir / 'required.txt'))
+        self._established_as_optional = set(_read_words_from_file(state_dir / 'optional.txt'))
+
+    @contextmanager
+    def _makeTempStateDir(self, *, extra_optional: set[str]) -> Iterator[Path]:
+        # create a temporary folder for the custom word list
+        required_words = set(self._established_as_required)
+        optional_words = set(self._established_as_optional)
+        optional_words.update(extra_optional)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            _safely_add_optional_words(Path(tmpdir), optional_words)
+            _safely_add_required_words(Path(tmpdir), required_words)
+            yield Path(tmpdir)
+
+    def get_next_job(self) -> Iterator[asyncio.Task]:
+        raise NotImplementedError
+
+    async def execute(self, parallel: int) -> dict[str, str | int]:
+        # our job is to keep N parallel tasks going at once and begin a new one
+        # whenever one finishes
+        active_tasks = []
+        tasks_completed = 0
+        for job in self.get_next_job():
+            active_tasks.append(job)
+            tasks_completed += 1
+
+            if len(active_tasks) >= parallel:
+                # wait for a job to complete before continuing
+                _, pending = await asyncio.wait(
+                    active_tasks,
+                    return_when=asyncio.FIRST_COMPLETED,
+                )
+                active_tasks = list(pending)
+
+        # wait for remaining tasks to complete
+        for task in active_tasks:
+            await task
+
+        await self.run_final_job()
+
+        # return a summary of what happened
+        return {"tasks_completed": tasks_completed}
+
+    async def verify_commands(self) -> None:
+        already_done_optional = set(_read_words_from_file(self._state_dir / 'optional.txt'))
+
+        # create a temporary dir to verify with current word list. Note that
+        # this directory can't be cleaned up until the jobs are cleaned up.
+        with self._makeTempStateDir(extra_optional=already_done_optional) as tmpdir:
+            jobs: list[asyncio.Task] = []
+
+            # first create jobs to verify in isolation
+            for commandstr in self._commands:
+                jobs.append(asyncio.create_task(self._verify_command(commandstr, None)))
+
+            # now create jobs that verify with the current word list
+            for commandstr in self._commands:
+                jobs.append(asyncio.create_task(self._verify_command(commandstr, tmpdir)))
+
+            for job in jobs:
+                outcome = await job
+                if outcome is not None:
+                    raise Exception("ERROR: " + outcome)
+
+        print("All commands are working")
+
+    async def _verify_command(self, commandstr: str, state_dir: Optional[Path]) -> Optional[str]:
+        if len(commandstr) >= PREVIEWLEN:
+            preview = commandstr[:(PREVIEWLEN - 3)] + '...'
+        else:
+            preview = commandstr
+        verifywhat = f"command '{preview}'"
+        if state_dir:
+            verifywhat += f" with current {self._noun} list"
+        else:
+            verifywhat += " in isolation"
+
+        print(f"Verifying {verifywhat}")
+        env = os.environ.copy()
+        if state_dir:
+            env[self._path_var] = str(state_dir / 'optional.txt')
+        else:
+            env[self._path_var] = '/dev/null'
+
+        proc = await asyncio.create_subprocess_exec(
+            'bash', '-c', commandstr,
+            env=env,
+            stdout=PIPE,
+            stderr=STDOUT,
+        )
+        stdout, _ = await proc.communicate()
+
+        if proc.returncode is None:
+            raise Exception("Impossible")
+
+        if proc.returncode > 0:
+            print(stdout)
+            return f"Verification failed for {verifywhat}"
+
+        # no failure
+        return None
+
+    async def run_final_job(self):
+        """Placeholder for any final cleanup the strategy might need to execute."""
+
+
+class Strategy1(Strategy):
+    """
+    Given words A, B, C, D, etc and commands $1, $2, $3 etc, and maximum
+    concurrent processes of N, start a parallel job for up to N words at a
+    time. Test each word's commands one by one and if they all succeed, add
+    them to the optional.txt. If any of the commands fails, add the word to
+    required.txt.
+
+    This strategy has two weaknesses:
+    - can only test N words at a time in parallel.
+    - can easily produce a non-working word lists where there are two
+      interdependent words. For example, if A or B can be optional, but not
+      both, but they are tested in separate parallel processes, they  might
+      both get switched off at the same time.
+    - won't discover a scenario where A and B are both optional, but they must
+      be made optional together.
+    """
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._postponed_optional: set[str] = set()
+
+    def get_next_job(self) -> Iterator[asyncio.Task]:
+        words_to_check = sorted(self._all_words.difference([
+            *self._established_as_required,
+            *self._established_as_optional,
+        ]))
+        print(f"{len(words_to_check)} words left to check ...")
+
+        for word in sorted(words_to_check):
+            yield asyncio.create_task(self._check_word_and_add_to_word_list(word))
+
+    async def run_final_job(self):
+        print(f"Rechecking {len(self._postponed_optional)} postponed {self._noun}(s) ...")
+        for word in self._postponed_optional:
+            await self._check_word_and_add_to_word_list(word)
+
+    async def _check_word_and_add_to_word_list(self, word: str) -> None:
+        word_list_before_start = set(self._established_as_optional)
+
+        # create a temporary dir with the custom word lists
+        is_required = False
+        with self._makeTempStateDir(extra_optional={word}) as tmpdir:
+            # TODO: eventually we want to run commands in parallel, however
+            # this isn't a big deal for now because my current use case only
+            # has one command to check in real-world use
+            for commandstr in self._commands:
+                env = os.environ.copy()
+                env[self._path_var] = str(tmpdir / 'optional.txt')
+                if len(commandstr) >= PREVIEWLEN:
+                    preview = commandstr[:(PREVIEWLEN - 3)] + '...'
+                else:
+                    preview = commandstr
+                print(f"Checking {self._noun} {word} with '{preview}'")
+                proc = await asyncio.create_subprocess_exec(
+                    'bash', '-c', commandstr,
+                    env=env,
+                    stdout=PIPE,
+                    stderr=STDOUT,
+                )
+                stdout, stderr = await proc.communicate()
+
+                if proc.returncode is None:
+                    raise Exception("Impossible")
+
+                if proc.returncode > 0:
+                    print(f"A command failed for {self._noun} {word}")
+                    is_required = True
+                    break
+
+        # if the list of optional words has changed, we'll have to recheck this word later
+        if self._established_as_optional != word_list_before_start:
+            print(f"Word list changed while checking {self._noun} {word} - will recheck later")
+            self._postponed_optional.add(word)
+            return
+
+        if is_required:
+            print(f"{self._noun} {word} is required - some commands fail when it is marked optional")
+            self._established_as_required.add(word)
+            _safely_add_required_words(self._state_dir, {word})
+        else:
+            self._established_as_optional.add(word)
+            print(f"All commands succeeded when {self._noun} {word} was marked optional")
+            _safely_add_optional_words(self._state_dir, {word})
+
+
+def _safely_add_words_to_file(
+    filepath: Path,
+    words: set[str],
+) -> None:
+    lockfile = (filepath.parent / (filepath.name + '.lock'))
+    backupfile = (filepath.parent / (filepath.name + '.prev'))
+
+    # create the lock file
+    with open(lockfile, 'x') as f:
+        # read any existing file
+        if filepath.exists():
+            existing = _read_words_from_file(filepath)
+        else:
+            existing = []
+
+        seen = set()
+        for word in existing:
+            if not word:
+                continue
+
+            if word in seen:
+                continue
+
+            seen.add(word)
+            f.write(word + "\n")
+
+        # now add the new words
+        for word in sorted(words):
+            if word in seen:
+                continue
+
+            f.write(word + "\n")
+
+        # if there is an existing file, move it to backup spot
+        if filepath.exists():
+            filepath.rename(backupfile)
+
+    # move lockfile to final file path to release the lock
+    lockfile.rename(filepath)
+
+
+def _safely_add_optional_words(statedir: Path, words: set[str]) -> None:
+    _safely_add_words_to_file(statedir / 'optional.txt', words)
+
+
+def _safely_add_required_words(statedir: Path, words: set[str]) -> None:
+    _safely_add_words_to_file(statedir / 'required.txt', words)
+
+
+def _read_words_from_file(filepath: Path) -> list[str]:
+    if not filepath.exists():
+        return []
+
+    return [
+        word.strip()
+        for word in filepath.read_text().splitlines()
+        if word.strip()
+    ]
+
+
+if __name__ == '__main__':
+    main()
