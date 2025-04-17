@@ -259,12 +259,13 @@ class Strategy1(Strategy):
     them to the friendly.txt. If any of the commands fails, add the word to
     hostile.txt.
 
+    If two or more words are identified to be friendly at the same time in
+    separate parallel processes, we don't know if they are still friendly when
+    used together, so ony one of them is marked friendly and the other(s) will
+    be re-checked after the rest of the word list has been checked.
+
     This strategy has two weaknesses:
     - can only test N words at a time in parallel.
-    - can easily produce a non-working word lists where there are two
-      interdependent words. For example, if A or B can be friendly, but not
-      both, but they are tested in separate parallel processes, they  might
-      both get switched off at the same time.
     - won't discover a scenario where A and B are both friendly, but they must
       be made friendly together.
     """
