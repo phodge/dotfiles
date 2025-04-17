@@ -44,11 +44,13 @@ def main() -> None:
     parser.add_argument('--word-list-file', type=str, action='append')
     parser.add_argument('--state-dir', type=str, required=True)
     parser.add_argument('--word-list-path-var', type=str, required=True)
-    parser.add_argument('--known-required-file', type=str, action='append')
-    parser.add_argument('--known-optional-file', type=str, action='append')
+    parser.add_argument('--known-hostile-file', type=str, action='append')
+    parser.add_argument('--known-friendly-file', type=str, action='append')
     parser.add_argument('--command', type=str, action='append', required=True)
-    # parser.add_argument('--probably-optional-file', type=str, action='append')
-    # parser.add_argument('--probably-required-file', type=str, action='append')
+    parser.add_argument('--hostile-word', type=str)
+    parser.add_argument('--friendly-word', type=str)
+    # parser.add_argument('--probably-friendly-file', type=str, action='append')
+    # parser.add_argument('--probably-hostile-file', type=str, action='append')
     parser.add_argument('--summary-json', type=str)
     parser.add_argument('--no-verify')
     parser.add_argument('-p', '--parallel', type=int, default=1)
@@ -63,14 +65,14 @@ def main() -> None:
         args.word_list_file,
         required=True,
     )
-    known_required = _handle_arg_word_list_file(
-        '--known-required-file',
-        args.known_required_file,
+    known_hostile = _handle_arg_word_list_file(
+        '--known-hostile-file',
+        args.known_hostile_file,
         required=False,
     )
-    known_optional = _handle_arg_word_list_file(
-        '--known-optional-file',
-        args.known_optional_file,
+    known_friendly = _handle_arg_word_list_file(
+        '--known-friendly-file',
+        args.known_friendly_file,
         required=False,
     )
 
@@ -82,9 +84,11 @@ def main() -> None:
         all_words=all_words,
         state_dir=Path(args.state_dir),
         path_var=args.word_list_path_var,
-        known_required=known_required,
-        known_optional=known_optional,
+        known_hostile=known_hostile,
+        known_friendly=known_friendly,
         commands=list(args.command),
+        hostile_word=args.hostile_word,
+        friendly_word=args.friendly_word,
     )
 
     if not args.no_verify:
@@ -103,43 +107,56 @@ class Strategy:
     _path_var: str
     _commands: list[str]
     _state_dir: Path
-    _established_as_required: set[str]
-    _established_as_optional: set[str]
+    _proven_hostile: set[str]
+    _proven_friendly: set[str]
 
     def __init__(
         self,
         noun: str,
         all_words: set[str],
         path_var: str,
-        known_required: set[str],
-        known_optional: set[str],
+        known_hostile: set[str],
+        known_friendly: set[str],
         commands: list[str],
         state_dir: Path,
+        hostile_word: str,
+        friendly_word: str,
     ) -> None:
         self._noun = noun
         self._all_words = all_words
         self._path_var = path_var
         self._commands = commands
-        self._state_dir = state_dir
 
-        # first step is to add known optional and required words to state dir
-        _safely_add_optional_words(state_dir, known_optional)
-        _safely_add_required_words(state_dir, known_required)
+        self._state_dir = state_dir
+        self._hostile_word = hostile_word
+        self._friendly_word = friendly_word
+        self._hostile_filename = f'{hostile_word}.txt'
+        self._friendly_filename = f'{friendly_word}.txt'
+
+        # first step is to add known friendly and hostile words to state dir
+        self._safely_add_friendly_words(state_dir, known_friendly)
+        self._safely_add_hostile_words(state_dir, known_hostile)
 
         # find out what words have already been checked (in case we restart the process)
-        self._established_as_required = set(_read_words_from_file(state_dir / 'required.txt'))
-        self._established_as_optional = set(_read_words_from_file(state_dir / 'optional.txt'))
+        self._proven_hostile = set(_read_words_from_file(state_dir / self._hostile_filename))
+        self._proven_friendly = set(_read_words_from_file(state_dir / self._friendly_filename))
+
+    def _safely_add_friendly_words(self, statedir: Path, words: set[str]) -> None:
+        _safely_add_words_to_file(statedir / self._friendly_filename, words)
+
+    def _safely_add_hostile_words(self, statedir: Path, words: set[str]) -> None:
+        _safely_add_words_to_file(statedir / self._hostile_filename, words)
 
     @contextmanager
-    def _makeTempStateDir(self, *, extra_optional: set[str]) -> Iterator[Path]:
+    def _makeTempStateDir(self, *, extra_friendly: set[str]) -> Iterator[Path]:
         # create a temporary folder for the custom word list
-        required_words = set(self._established_as_required)
-        optional_words = set(self._established_as_optional)
-        optional_words.update(extra_optional)
+        hostile_words = set(self._proven_hostile)
+        friendly_words = set(self._proven_friendly)
+        friendly_words.update(extra_friendly)
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            _safely_add_optional_words(Path(tmpdir), optional_words)
-            _safely_add_required_words(Path(tmpdir), required_words)
+            self._safely_add_friendly_words(Path(tmpdir), friendly_words)
+            self._safely_add_hostile_words(Path(tmpdir), hostile_words)
             yield Path(tmpdir)
 
     def get_next_job(self) -> Iterator[asyncio.Task]:
@@ -172,11 +189,11 @@ class Strategy:
         return {"tasks_completed": tasks_completed}
 
     async def verify_commands(self) -> None:
-        already_done_optional = set(_read_words_from_file(self._state_dir / 'optional.txt'))
+        already_done_friendly = set(_read_words_from_file(self._state_dir / self._friendly_filename))
 
         # create a temporary dir to verify with current word list. Note that
         # this directory can't be cleaned up until the jobs are cleaned up.
-        with self._makeTempStateDir(extra_optional=already_done_optional) as tmpdir:
+        with self._makeTempStateDir(extra_friendly=already_done_friendly) as tmpdir:
             jobs: list[asyncio.Task] = []
 
             # first create jobs to verify in isolation
@@ -208,7 +225,7 @@ class Strategy:
         print(f"Verifying {verifywhat}")
         env = os.environ.copy()
         if state_dir:
-            env[self._path_var] = str(state_dir / 'optional.txt')
+            env[self._path_var] = str(state_dir / self._friendly_filename)
         else:
             env[self._path_var] = '/dev/null'
 
@@ -239,50 +256,50 @@ class Strategy1(Strategy):
     Given words A, B, C, D, etc and commands $1, $2, $3 etc, and maximum
     concurrent processes of N, start a parallel job for up to N words at a
     time. Test each word's commands one by one and if they all succeed, add
-    them to the optional.txt. If any of the commands fails, add the word to
-    required.txt.
+    them to the friendly.txt. If any of the commands fails, add the word to
+    hostile.txt.
 
     This strategy has two weaknesses:
     - can only test N words at a time in parallel.
     - can easily produce a non-working word lists where there are two
-      interdependent words. For example, if A or B can be optional, but not
+      interdependent words. For example, if A or B can be friendly, but not
       both, but they are tested in separate parallel processes, they  might
       both get switched off at the same time.
-    - won't discover a scenario where A and B are both optional, but they must
-      be made optional together.
+    - won't discover a scenario where A and B are both friendly, but they must
+      be made friendly together.
     """
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self._postponed_optional: set[str] = set()
+        self._postponed_friendly: set[str] = set()
 
     def get_next_job(self) -> Iterator[asyncio.Task]:
         words_to_check = sorted(self._all_words.difference([
-            *self._established_as_required,
-            *self._established_as_optional,
+            *self._proven_hostile,
+            *self._proven_friendly,
         ]))
         print(f"{len(words_to_check)} words left to check ...")
 
         for word in sorted(words_to_check):
-            yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_required=True))
+            yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_hostile=True))
 
     async def run_final_job(self) -> None:
-        print(f"Rechecking {len(self._postponed_optional)} postponed {self._noun}(s) ...")
-        postponed_words = list(sorted(self._postponed_optional))
+        print(f"Rechecking {len(self._postponed_friendly)} postponed {self._noun}(s) ...")
+        postponed_words = list(sorted(self._postponed_friendly))
         batches: list[list[str]] = [postponed_words]
         while len(batches):
             batch = batches[0]
             batches = batches[1:]
             outcome = await self._check_words_and_add_to_word_list(
                 set(batch),
-                can_mark_required=len(batch) == 1,
+                can_mark_hostile=len(batch) == 1,
             )
-            if outcome == "__optional__":
-                # all words were marked optional, go to next batch
+            if outcome == "__friendly__":
+                # all words were marked friendly, go to next batch
                 continue
 
-            assert outcome == "__required__"
+            assert outcome == "__hostile__"
             if len(batch) == 1:
-                # the word will already have been marked required
+                # the word will already have been marked hostile
                 continue
 
             # split the batch and add to the front of the queue
@@ -296,24 +313,24 @@ class Strategy1(Strategy):
     async def _check_words_and_add_to_word_list(
         self,
         words: set[str],
-        can_mark_required: bool,
+        can_mark_hostile: bool,
     ) -> str:
         wordstr = "+".join(sorted(words))
         noun = self._noun
         if (len(words) > 1) and not noun.endswith('s'):
             noun = f"{noun}s"
 
-        word_list_before_start = set(self._established_as_optional)
+        word_list_before_start = set(self._proven_friendly)
 
         # create a temporary dir with the custom word lists
         all_succeeded = True
-        with self._makeTempStateDir(extra_optional=words) as tmpdir:
+        with self._makeTempStateDir(extra_friendly=words) as tmpdir:
             # TODO: eventually we want to run commands in parallel, however
             # this isn't a big deal for now because my current use case only
             # has one command to check in real-world use
             for commandstr in self._commands:
                 env = os.environ.copy()
-                env[self._path_var] = str(tmpdir / 'optional.txt')
+                env[self._path_var] = str(tmpdir / self._friendly_filename)
                 if len(commandstr) >= PREVIEWLEN:
                     preview = commandstr[:(PREVIEWLEN - 3)] + '...'
                 else:
@@ -336,23 +353,23 @@ class Strategy1(Strategy):
                     break
 
         if all_succeeded:
-            # if the list of optional words has changed, we'll have to recheck this word later
-            if self._established_as_optional != word_list_before_start:
+            # if the list of friendly words has changed, we'll have to recheck this word later
+            if self._proven_friendly != word_list_before_start:
                 print(f"Word list changed while checking {noun} {wordstr} - will recheck later")
-                self._postponed_optional.update(words)
+                self._postponed_friendly.update(words)
                 return "__postpone__"
 
-            self._established_as_optional.update(words)
-            print(f"All commands succeeded when {noun} {wordstr} was marked optional")
-            _safely_add_optional_words(self._state_dir, words)
-            return "__optional__"
+            self._proven_friendly.update(words)
+            print(f"All commands succeeded when {noun} {wordstr} was marked friendly")
+            self._safely_add_friendly_words(self._state_dir, words)
+            return "__friendly__"
 
-        # at least one word is required
-        print(f"{noun} {wordstr} is required - some commands fail when it is marked optional")
-        if can_mark_required:
-            self._established_as_required.update(words)
-            _safely_add_required_words(self._state_dir, words)
-        return "__required__"
+        # at least one word is hostile
+        print(f"{noun} {wordstr} is {self._hostile_word} - some commands fail when it is marked friendly")
+        if can_mark_hostile:
+            self._proven_hostile.update(words)
+            self._safely_add_hostile_words(self._state_dir, words)
+        return "__hostile__"
 
 
 def _safely_add_words_to_file(
@@ -394,14 +411,6 @@ def _safely_add_words_to_file(
 
     # move lockfile to final file path to release the lock
     lockfile.rename(filepath)
-
-
-def _safely_add_optional_words(statedir: Path, words: set[str]) -> None:
-    _safely_add_words_to_file(statedir / 'optional.txt', words)
-
-
-def _safely_add_required_words(statedir: Path, words: set[str]) -> None:
-    _safely_add_words_to_file(statedir / 'required.txt', words)
 
 
 def _read_words_from_file(filepath: Path) -> list[str]:
