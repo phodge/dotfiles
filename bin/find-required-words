@@ -267,14 +267,37 @@ class Strategy1(Strategy):
 
     async def run_final_job(self) -> None:
         print(f"Rechecking {len(self._postponed_optional)} postponed {self._noun}(s) ...")
-        for word in self._postponed_optional:
-            await self._check_words_and_add_to_word_list({word}, can_mark_required=True)
+        postponed_words = list(sorted(self._postponed_optional))
+        batches: list[list[str]] = [postponed_words]
+        while len(batches):
+            batch = batches[0]
+            batches = batches[1:]
+            outcome = await self._check_words_and_add_to_word_list(
+                set(batch),
+                can_mark_required=len(batch) == 1,
+            )
+            if outcome == "__optional__":
+                # all words were marked optional, go to next batch
+                continue
+
+            assert outcome == "__required__"
+            if len(batch) == 1:
+                # the word will already have been marked required
+                continue
+
+            # split the batch and add to the front of the queue
+            halfway = len(batch) // 2
+            batches = [
+                batch[0:halfway],
+                batch[halfway:],
+                *batches,
+            ]
 
     async def _check_words_and_add_to_word_list(
         self,
         words: set[str],
         can_mark_required: bool,
-    ) -> None:
+    ) -> str:
         wordstr = "+".join(sorted(words))
         noun = self._noun
         if (len(words) > 1) and not noun.endswith('s'):
@@ -317,19 +340,19 @@ class Strategy1(Strategy):
             if self._established_as_optional != word_list_before_start:
                 print(f"Word list changed while checking {noun} {wordstr} - will recheck later")
                 self._postponed_optional.update(words)
-                return
+                return "__postpone__"
 
             self._established_as_optional.update(words)
             print(f"All commands succeeded when {noun} {wordstr} was marked optional")
             _safely_add_optional_words(self._state_dir, words)
-            return
+            return "__optional__"
 
         # at least one word is required
         print(f"{noun} {wordstr} is required - some commands fail when it is marked optional")
         if can_mark_required:
             self._established_as_required.update(words)
             _safely_add_required_words(self._state_dir, words)
-        return
+        return "__required__"
 
 
 def _safely_add_words_to_file(
