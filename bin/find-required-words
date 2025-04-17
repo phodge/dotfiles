@@ -101,8 +101,6 @@ class Strategy:
     _noun: str
     _all_words: set[str]
     _path_var: str
-    _known_required: frozenset[str]
-    _known_optional: frozenset[str]
     _commands: list[str]
     _state_dir: Path
     _established_as_required: set[str]
@@ -121,8 +119,6 @@ class Strategy:
         self._noun = noun
         self._all_words = all_words
         self._path_var = path_var
-        self._known_required = frozenset(known_required)
-        self._known_optional = frozenset(known_optional)
         self._commands = commands
         self._state_dir = state_dir
 
@@ -234,7 +230,7 @@ class Strategy:
         # no failure
         return None
 
-    async def run_final_job(self):
+    async def run_final_job(self) -> None:
         """Placeholder for any final cleanup the strategy might need to execute."""
 
 
@@ -267,19 +263,28 @@ class Strategy1(Strategy):
         print(f"{len(words_to_check)} words left to check ...")
 
         for word in sorted(words_to_check):
-            yield asyncio.create_task(self._check_word_and_add_to_word_list(word))
+            yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_required=True))
 
-    async def run_final_job(self):
+    async def run_final_job(self) -> None:
         print(f"Rechecking {len(self._postponed_optional)} postponed {self._noun}(s) ...")
         for word in self._postponed_optional:
-            await self._check_word_and_add_to_word_list(word)
+            await self._check_words_and_add_to_word_list({word}, can_mark_required=True)
 
-    async def _check_word_and_add_to_word_list(self, word: str) -> None:
+    async def _check_words_and_add_to_word_list(
+        self,
+        words: set[str],
+        can_mark_required: bool,
+    ) -> None:
+        wordstr = "+".join(sorted(words))
+        noun = self._noun
+        if (len(words) > 1) and not noun.endswith('s'):
+            noun = f"{noun}s"
+
         word_list_before_start = set(self._established_as_optional)
 
         # create a temporary dir with the custom word lists
-        is_required = False
-        with self._makeTempStateDir(extra_optional={word}) as tmpdir:
+        all_succeeded = True
+        with self._makeTempStateDir(extra_optional=words) as tmpdir:
             # TODO: eventually we want to run commands in parallel, however
             # this isn't a big deal for now because my current use case only
             # has one command to check in real-world use
@@ -290,7 +295,7 @@ class Strategy1(Strategy):
                     preview = commandstr[:(PREVIEWLEN - 3)] + '...'
                 else:
                     preview = commandstr
-                print(f"Checking {self._noun} {word} with '{preview}'")
+                print(f"Checking {noun} {wordstr} with '{preview}'")
                 proc = await asyncio.create_subprocess_exec(
                     'bash', '-c', commandstr,
                     env=env,
@@ -303,24 +308,28 @@ class Strategy1(Strategy):
                     raise Exception("Impossible")
 
                 if proc.returncode > 0:
-                    print(f"A command failed for {self._noun} {word}")
-                    is_required = True
+                    print(f"A command failed for {noun} {wordstr}")
+                    all_succeeded = False
                     break
 
-        # if the list of optional words has changed, we'll have to recheck this word later
-        if self._established_as_optional != word_list_before_start:
-            print(f"Word list changed while checking {self._noun} {word} - will recheck later")
-            self._postponed_optional.add(word)
+        if all_succeeded:
+            # if the list of optional words has changed, we'll have to recheck this word later
+            if self._established_as_optional != word_list_before_start:
+                print(f"Word list changed while checking {noun} {wordstr} - will recheck later")
+                self._postponed_optional.update(words)
+                return
+
+            self._established_as_optional.update(words)
+            print(f"All commands succeeded when {noun} {wordstr} was marked optional")
+            _safely_add_optional_words(self._state_dir, words)
             return
 
-        if is_required:
-            print(f"{self._noun} {word} is required - some commands fail when it is marked optional")
-            self._established_as_required.add(word)
-            _safely_add_required_words(self._state_dir, {word})
-        else:
-            self._established_as_optional.add(word)
-            print(f"All commands succeeded when {self._noun} {word} was marked optional")
-            _safely_add_optional_words(self._state_dir, {word})
+        # at least one word is required
+        print(f"{noun} {wordstr} is required - some commands fail when it is marked optional")
+        if can_mark_required:
+            self._established_as_required.update(words)
+            _safely_add_required_words(self._state_dir, words)
+        return
 
 
 def _safely_add_words_to_file(
