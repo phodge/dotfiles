@@ -415,3 +415,9 @@ repo_todo_list_view() {
 repo_todo_list_add() {
     nvim __no_file__ '+setlocal buftype=nofile' +RepoTodoList +1bw '+normal! G' +RepoTodoAdd
 }
+
+if [ "$IS_MACOS" != 1 ]; then
+    ubuntu-audio-driver-restore() {
+        pacmd set-card-profile 'bluez_card.AC_BF_71_0B_AC_28' a2dp_sink
+    }
+fi
