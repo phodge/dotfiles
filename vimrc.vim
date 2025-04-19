@@ -1983,3 +1983,28 @@ if has('nvim') && !exists('s:nuked')
   unmap #
   let s:nuked = 1
 endif
+
+nmap <F13> <S-F1>
+nmap <F14> <S-F2>
+nmap <F15> <S-F3>
+nmap <F16> <S-F4>
+nmap <F17> <S-F5>
+nmap <F18> <S-F6>
+nmap <F19> <S-F7>
+nmap <F20> <S-F8>
+nmap <F21> <S-F9>
+nmap <F22> <S-F10>
+nmap <F23> <S-F11>
+nmap <F24> <S-F12>
+nmap <F25> <C-F1>
+nmap <F26> <C-F2>
+nmap <F27> <C-F3>
+nmap <F28> <C-F4>
+nmap <F29> <C-F5>
+nmap <F30> <C-F6>
+nmap <F31> <C-F7>
+nmap <F32> <C-F8>
+nmap <F33> <C-F9>
+nmap <F34> <C-F10>
+nmap <F35> <C-F11>
+nmap <F36> <C-F12>
