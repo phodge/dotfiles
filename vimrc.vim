@@ -1428,8 +1428,8 @@ set sidescrolloff=20
   " XXX: DOTFILES043: horrible reset of 'tagfunc' is because the
   " typescript/react LSP takes over this functionality with no obvious way to
   " disable it
-  nnoremap gt :set tagfunc=<CR>:execute 'tj' expand('<cword>')<CR>zv
-  nnoremap gst :set tagfunc=<CR>:execute 'stj' expand('<cword>')<CR>zv
+  nnoremap gt :set tagfunc=<CR>:execute 'tj' expand('<cword>') <BAR> normal! zv<CR>
+  nnoremap gst :set tagfunc=<CR>:execute 'stj' expand('<cword>') <BAR> normal! zv<CR>
 
   " fugitive
   nnoremap \g :tab sp<CR>:exe (exists(':Git') =~ '[12]' ? 'Git' : 'Shell hg st')<CR><C-W>w:close<CR>:tabmove<CR>
