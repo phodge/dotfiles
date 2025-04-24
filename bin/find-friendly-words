@@ -361,12 +361,12 @@ class Strategy1(Strategy):
                 return "__postpone__"
 
             self._proven_friendly.update(words)
-            print(f"All commands succeeded when {noun} {wordstr} was marked friendly")
+            print(f"All commands succeeded when {noun} {wordstr} was marked {self._friendly_word}")
             self._safely_add_friendly_words(self._state_dir, words)
             return "__friendly__"
 
         # at least one word is hostile
-        print(f"{noun} {wordstr} is {self._hostile_word} - some commands fail when it is marked friendly")
+        print(f"{noun} {wordstr} is {self._hostile_word} - some commands fail when it is marked {self._friendly_word}")
         if can_mark_hostile:
             self._proven_hostile.update(words)
             self._safely_add_hostile_words(self._state_dir, words)
