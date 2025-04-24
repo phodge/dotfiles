@@ -333,6 +333,10 @@ class Strategy1(Strategy):
             yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_hostile=True))
 
     async def run_final_job(self) -> None:
+        if not self._postponed_friendly:
+            print("No postponed words to check")
+            return
+
         print(f"Rechecking {len(self._postponed_friendly)} postponed {self._noun}(s) ...")
         postponed_words = list(sorted(self._postponed_friendly))
         batches: list[list[str]] = [postponed_words]
