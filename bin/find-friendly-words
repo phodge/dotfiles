@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from collections import defaultdict
 from subprocess import STDOUT
 import tempfile
 from subprocess import PIPE
@@ -43,6 +44,7 @@ def main() -> None:
     parser.add_argument('--noun', type=str, default="word")
     parser.add_argument('--word-list-file', type=str, action='append')
     parser.add_argument('--state-dir', type=str, required=True)
+    parser.add_argument('--log-dir', type=str)
     parser.add_argument('--word-list-path-var', type=str, required=True)
     parser.add_argument('--known-hostile-file', type=str, action='append')
     parser.add_argument('--known-friendly-file', type=str, action='append')
@@ -79,10 +81,14 @@ def main() -> None:
     if not os.path.exists(args.state_dir):
         raise Exception(f"--state-dir folder {args.state_dir} does not exist")
 
+    if args.log_dir and os.path.exists(args.log_dir):
+        raise Exception(f"--log-dir folder {args.log_dir} already exists")
+
     strategy = Strategy1(
         noun=args.noun,
         all_words=all_words,
         state_dir=Path(args.state_dir),
+        log_dir=Path(args.log_dir) if args.log_dir else None,
         path_var=args.word_list_path_var,
         known_hostile=known_hostile,
         known_friendly=known_friendly,
@@ -107,6 +113,7 @@ class Strategy:
     _path_var: str
     _commands: list[str]
     _state_dir: Path
+    _log_dir: Optional[Path]
     _proven_hostile: set[str]
     _proven_friendly: set[str]
 
@@ -119,6 +126,7 @@ class Strategy:
         known_friendly: set[str],
         commands: list[str],
         state_dir: Path,
+        log_dir: Optional[Path],
         hostile_word: str,
         friendly_word: str,
     ) -> None:
@@ -126,6 +134,7 @@ class Strategy:
         self._all_words = all_words
         self._path_var = path_var
         self._commands = commands
+        self._log_dir = log_dir
 
         self._state_dir = state_dir
         self._hostile_word = hostile_word
@@ -140,6 +149,7 @@ class Strategy:
         # find out what words have already been checked (in case we restart the process)
         self._proven_hostile = set(_read_words_from_file(state_dir / self._hostile_filename))
         self._proven_friendly = set(_read_words_from_file(state_dir / self._friendly_filename))
+        self._logs_used: dict[str, int] = defaultdict(int)
 
     def _safely_add_friendly_words(self, statedir: Path, words: set[str]) -> None:
         _safely_add_words_to_file(statedir / self._friendly_filename, words)
@@ -197,12 +207,12 @@ class Strategy:
             jobs: list[asyncio.Task] = []
 
             # first create jobs to verify in isolation
-            for commandstr in self._commands:
-                jobs.append(asyncio.create_task(self._verify_command(commandstr, None)))
+            for commandidx, commandstr in enumerate(self._commands):
+                jobs.append(asyncio.create_task(self._verify_command(commandstr, commandidx, None)))
 
             # now create jobs that verify with the current word list
-            for commandstr in self._commands:
-                jobs.append(asyncio.create_task(self._verify_command(commandstr, tmpdir)))
+            for commandidx, commandstr in enumerate(self._commands):
+                jobs.append(asyncio.create_task(self._verify_command(commandstr, commandidx, tmpdir)))
 
             for job in jobs:
                 outcome = await job
@@ -211,15 +221,17 @@ class Strategy:
 
         print("All commands are working")
 
-    async def _verify_command(self, commandstr: str, state_dir: Optional[Path]) -> Optional[str]:
+    async def _verify_command(self, commandstr: str, commandidx: int, state_dir: Optional[Path]) -> Optional[str]:
         if len(commandstr) >= PREVIEWLEN:
             preview = commandstr[:(PREVIEWLEN - 3)] + '...'
         else:
             preview = commandstr
         verifywhat = f"command '{preview}'"
         if state_dir:
+            logtype = 'current-' + self._noun + '-list'
             verifywhat += f" with current {self._noun} list"
         else:
+            logtype = 'in-isolation'
             verifywhat += " in isolation"
 
         print(f"Verifying {verifywhat}")
@@ -229,19 +241,25 @@ class Strategy:
         else:
             env[self._path_var] = '/dev/null'
 
-        proc = await asyncio.create_subprocess_exec(
-            'bash', '-c', commandstr,
-            env=env,
-            stdout=PIPE,
-            stderr=STDOUT,
-        )
-        stdout, _ = await proc.communicate()
+        log_path = self._get_log_path(commandidx, verify=logtype)
+
+        with open(log_path or '/dev/null', 'w') as f:
+            proc = await asyncio.create_subprocess_exec(
+                'bash', '-c', commandstr,
+                env=env,
+                stdout=f if log_path else PIPE,
+                stderr=STDOUT,
+            )
+            stdout, _ = await proc.communicate()
 
         if proc.returncode is None:
             raise Exception("Impossible")
 
         if proc.returncode > 0:
-            print(stdout)
+            if log_path:
+                print(f"Output written to {log_path}")
+            else:
+                print(stdout)
             return f"Verification failed for {verifywhat}"
 
         # no failure
@@ -249,6 +267,37 @@ class Strategy:
 
     async def run_final_job(self) -> None:
         """Placeholder for any final cleanup the strategy might need to execute."""
+
+    def _get_log_path(
+        self,
+        commandidx: int,
+        *,
+        wordstr: str | None = None,
+        verify: str | None = None,
+    ) -> Optional[Path]:
+        if not self._log_dir:
+            return None
+
+        self._log_dir.mkdir(parents=True, exist_ok=True)
+
+        if len(self._commands) > 1:
+            commandstr = '-COMMAND' + str(commandidx)
+        else:
+            commandstr = ''
+
+        if wordstr is not None:
+            assert verify is None
+            base_name = f"{self._noun}-{wordstr}{commandstr}"
+        else:
+            assert verify is not None
+            base_name = f"verify-{verify}{commandstr}"
+
+        self._logs_used[base_name] += 1
+        encounter = self._logs_used[base_name]
+        if encounter > 1:
+            base_name += f"-{encounter:02d}"
+
+        return self._log_dir / f"{base_name}.log"
 
 
 class Strategy1(Strategy):
@@ -329,27 +378,33 @@ class Strategy1(Strategy):
             # TODO: eventually we want to run commands in parallel, however
             # this isn't a big deal for now because my current use case only
             # has one command to check in real-world use
-            for commandstr in self._commands:
+            for commandidx, commandstr in enumerate(self._commands):
                 env = os.environ.copy()
                 env[self._path_var] = str(tmpdir / self._friendly_filename)
                 if len(commandstr) >= PREVIEWLEN:
                     preview = commandstr[:(PREVIEWLEN - 3)] + '...'
                 else:
                     preview = commandstr
-                print(f"Checking {noun} {wordstr} with '{preview}'")
-                proc = await asyncio.create_subprocess_exec(
-                    'bash', '-c', commandstr,
-                    env=env,
-                    stdout=PIPE,
-                    stderr=STDOUT,
-                )
-                stdout, stderr = await proc.communicate()
+
+                log_path = self._get_log_path(commandidx, wordstr=wordstr)
+
+                with open(log_path or '/dev/null', 'w') as f:
+                    print(f"Checking {noun} {wordstr} with '{preview}'")
+                    proc = await asyncio.create_subprocess_exec(
+                        'bash', '-c', commandstr,
+                        env=env,
+                        stdout=f if log_path else PIPE,
+                        stderr=STDOUT,
+                    )
+                    stdout, stderr = await proc.communicate()
 
                 if proc.returncode is None:
                     raise Exception("Impossible")
 
                 if proc.returncode > 0:
                     print(f"A command failed for {noun} {wordstr}")
+                    if log_path:
+                        print(f">>> Output written to {log_path}")
                     all_succeeded = False
                     break
 
