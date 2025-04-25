@@ -330,7 +330,7 @@ class Strategy1(Strategy):
         print(f"{len(words_to_check)} words left to check ...")
 
         for word in sorted(words_to_check):
-            yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_hostile=True))
+            yield asyncio.create_task(self._check_words_and_add_to_word_list({word}, can_mark_hostile=True, can_log=True))
 
     async def run_final_job(self) -> None:
         if not self._postponed_friendly:
@@ -346,6 +346,7 @@ class Strategy1(Strategy):
             outcome = await self._check_words_and_add_to_word_list(
                 set(batch),
                 can_mark_hostile=len(batch) == 1,
+                can_log=len(batch) == 1,
             )
             if outcome == "__friendly__":
                 # all words were marked friendly, go to next batch
@@ -368,6 +369,7 @@ class Strategy1(Strategy):
         self,
         words: set[str],
         can_mark_hostile: bool,
+        can_log: bool,
     ) -> str:
         wordstr = "+".join(sorted(words))
         noun = self._noun
@@ -375,6 +377,8 @@ class Strategy1(Strategy):
             noun = f"{noun}s"
 
         word_list_before_start = set(self._proven_friendly)
+
+        log_path = None
 
         # create a temporary dir with the custom word lists
         all_succeeded = True
@@ -390,7 +394,8 @@ class Strategy1(Strategy):
                 else:
                     preview = commandstr
 
-                log_path = self._get_log_path(commandidx, wordstr=wordstr)
+                if can_log:
+                    log_path = self._get_log_path(commandidx, wordstr=wordstr)
 
                 with open(log_path or '/dev/null', 'w') as f:
                     print(f"Checking {noun} {wordstr} with '{preview}'")
