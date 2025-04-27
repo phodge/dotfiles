@@ -2,6 +2,7 @@ import re
 import textwrap
 from pathlib import Path
 from dataclasses import dataclass
+from typing import Union
 
 
 OLD_KEYFILE = Path(__file__).parent / 'keys.yaml'
@@ -13,7 +14,7 @@ old_regex = re.compile(r"^(CTRL-)?(ALT-)?(WIN-)?(S-)?([ -~]|CR|BS|SPACE|ESC)$")
 
 @dataclass
 class TmuxKeybind:
-    command: str | dict[str, str]
+    command: Union[str, dict[str, str]]
     key: str
     ctrl: bool
     alt: bool
