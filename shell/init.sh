@@ -150,7 +150,6 @@ g()  { _reload_experiments ; edit_status "$@"      ; }
 alias l='ls -lah --color=always'
 alias ll='ls -lah --color=always'
 alias v=vim
-alias n2='NVIM_TS_LSP=1 nvim'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'

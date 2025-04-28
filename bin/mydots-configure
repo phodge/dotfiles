@@ -315,7 +315,7 @@ def main(automatic: bool, print_json: bool) -> None:
         print("  - Make sure your project's package.json includes TypeScript for type checking")
         print("  - Make sure your project's package.json includes an .eslintrc file")
         print("  - Make sure your project's package.json includes prettier for code formatting")
-        print("  - Launch neovim with the 'n2' shell alias")
+        print("  - Use :ProjectConfigEdit and add initialiser for IDE/LSP features")
 
 
 if __name__ == "__main__":

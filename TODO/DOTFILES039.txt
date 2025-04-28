@@ -42,7 +42,6 @@ opened a vim python file with PyLSP instead of Jedi)
 WHAT EXPERIMENTS DO WE NEED?
 
 - Anything out of homely yes/no questions?
-- What about that n2 alias?
 - Any uncommitted stuff in ~/dotfiles/
 - Any uncommitted stuff in ~/dotfiles.kraken/?
 - What to do with "backup tools" like vendored FZF or using dcampos/nvim-snippy for snippets?

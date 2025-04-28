@@ -14,9 +14,6 @@ if ! exists('g:hackymappings')
   let g:hackymappings = 0
 endif
 
-" TODO(DOTFILES047): get rid of this variable
-let s:ts_lsp = has('nvim')
-
 " sensible defaults to start with
 if &compatible
   setglobal nocompatible
@@ -27,10 +24,6 @@ let s:dotfiles_root = expand('<sfile>:p:h')
 let g:pete_dotfiles_root = s:dotfiles_root
 
 set confirm
-
-" when to use LSP
-" TODO(DOTFILES047): probably get rid of these in favour of s:ts_lsp above
-let s:use_lsp = has('nvim') && get(g:, 'peter_use_lsp', 0)
 
 " 256-color mode for vim8/neovim
 if exists('&termguicolors')
@@ -319,39 +312,6 @@ if filereadable(s:plugpath)
 
   " }}}
 
-  if s:use_lsp && 0
-    " TODO(DOTFILES047): decide whether any of this is worth keeping
-
-    " language servers
-    " TODO(DOTFILES047): this seems to have a bunch of features for
-    " - using FZF for menu selection
-    " - customising appearance of diagnostics and hover
-    " - maybe will help us get non-async codeAction working so that we can add
-    "   an import and then format the buffer?
-    Plug 'autozimu/LanguageClient-neovim', {
-          \ 'branch': 'next',
-          \ 'do': 'bash install.sh',
-          \ }
-    let g:LanguageClient_serverCommands = {'php': ['tcp://127.0.0.1:12346']}
-
-    " don't use language server for linting - Ale does a better job of this already
-    let g:LanguageClient_diagnosticsEnable = 0
-
-    " \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    " \ }
-
-    Plug 'Shougo/deoplete.nvim', {'do': 'UpdateRemotePlugins'}
-
-    "Plug 'roxma/LanguageServer-php-neovim', {'do': 'composer install && composer run-script parse-stubs'}
-
-    aug PeterLSP
-    au!
-    au FileType php nnoremap <buffer> <space>d :sp <BAR> call LanguageClient_textDocument_definition()<CR>
-    au FileType php nnoremap <buffer> <space>u :sp <BAR> call LanguageClient_textDocument_references()<CR>
-    au FileType php nnoremap <buffer> <space>r :sp <BAR> call LanguageClient_textDocument_rename()<CR>
-    aug end
-  endif
-
   " ArgWrap {{{
 
     " TODO: would be good if we could outsource this to the LS
@@ -628,7 +588,7 @@ if filereadable(s:plugpath)
     aug TypeScriptTSX
     aug end
     " XXX: this messes with the language server stuff so we need to scrap it
-    if s:ts_lsp
+    if has('nvim')
       autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set syntax=javascript
     else
       autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
