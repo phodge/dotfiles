@@ -596,7 +596,7 @@ if filereadable(s:plugpath)
     aug end
     autocmd! TypeScriptTSX BufNewFile,BufRead *.{ts,tsx} set filetype=javascript
 
-    " TODO(DOTFILES047): decide whether there's any value keeping this stuff
+    " TODO(DOTFILES068): decide whether there's any value keeping this stuff
     if 0
       Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 
