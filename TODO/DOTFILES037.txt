@@ -1,4 +1,4 @@
-DOTFILES037 Ubuntu display issues/lag research
+DOTFILES037 RESOLVED Ubuntu display issues/lag research
 
 NOT caused by nvim or tmux or Wayland
 
