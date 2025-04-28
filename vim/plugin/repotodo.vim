@@ -102,9 +102,13 @@ fun! <SID>OpenTodosList() abort
   " delete last line from end of file, then jump back to start
   normal! Gddgg
 
+  syn region todoResolved start=/^.* RESOLVED / end=/$/ oneline keepend extend
+  syn keyword Macro MAC
   syn keyword Operator PRIORITY
   syn keyword Typedef EASY
   syn keyword Statement VALUE
+
+  hi! todoResolved guifg=#444444
 endfun
 
 fun! <SID>OpenRepoListBuffer(root, prefix) abort
