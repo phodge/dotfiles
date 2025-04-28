@@ -1027,6 +1027,7 @@ def pypirc():
 
 @section_macos(quick=True)
 def osx():
+    # DOTFILES069: this doesn't seem to have any effect on macOS Sequoia
     execute(['defaults', 'write', 'NSGlobalDomain', 'InitialKeyRepeat', '-int', '15'])
     # KeyRepeat < 1.0 doesn't work :-(
     execute(['defaults', 'write', 'NSGlobalDomain', 'KeyRepeat', '-float', '1.0'])

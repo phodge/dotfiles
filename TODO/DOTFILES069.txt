@@ -1,0 +1,1 @@
+DOTFILES069 MAC keyboard repeat rate and repeat delay are no longer set automatically
