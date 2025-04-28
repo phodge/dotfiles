@@ -1,4 +1,4 @@
-DOTFILES027 try better git rebase tools
+DOTFILES027 VALUE try better git rebase tools
 
 * Stacked Git - probably need to watch some YT videos on this thing to know if
   worthwhile.

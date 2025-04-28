@@ -1,5 +1,0 @@
-DOTFILES038 EASY VALUE see if any BIOS settings can modify CPU "Max Speed"
-
-`sudo dmidecode -t processor` shows Max Speed of 4650Mhz (as per product
-marketing specs), so we could experiment with BIOS clock speeds and see whether
-its possible to increase this limit upwards.

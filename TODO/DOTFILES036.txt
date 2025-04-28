@@ -1,4 +1,4 @@
-DOTFILES036 experiment with WezTerm
+DOTFILES036 PRIORITY VALUE experiment with WezTerm
 
 https://wezfurlong.org/wezterm/
 
