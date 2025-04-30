@@ -1,5 +1,8 @@
 # this will cause ripgrep to search hidden folders like .github/ by default,
 # but not all of .git or anything excluded by .gitignore
+# XXX: this is a bit too slow for large projects. For big repos I might need to
+# override $RIPGREP_CONFIG_PATH with a more lightweight config (one that
+# doesn't use --hidden)
 --hidden
 --glob=!.git
 # explicitly ignore .tags in case it isn't mentioned in a repo's .gitignore file
