@@ -1,1 +1,3 @@
-DOTFILES067 investigate Aerospace for MacOS window management (like i3)
+DOTFILES067 MAC PRIORITY investigate Aerospace for MacOS window management (like i3)
+
+https://github.com/nikitabobko/AeroSpace?tab=readme-ov-file
