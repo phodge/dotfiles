@@ -1,0 +1,5 @@
+DOTFILES071 Meaningful RGB
+
+- load avg 0->8 (16? More?)
+- CPU temps
+- Memory usage / swap usage
