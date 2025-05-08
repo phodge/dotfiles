@@ -1,0 +1,10 @@
+DOTFILES072 RESOLVED MAC tmux issues on MacOS
+
+MINIMUM STEPS TO REPRODUCE
+
+start tmux
+k2
+g
+open a file in diff mode
+spam M-h / M-l to jump left/right between windows
+
