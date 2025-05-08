@@ -1,0 +1,3 @@
+DOTFILES070 MAC VALUE check out SketcbyBar
+
+Potential replacement for Jerjerrod + tmux status bar?
