@@ -16,6 +16,10 @@ function projectconfig.BufEnter() dict
     call peter#IDEFeaturesJS({'lsp_manage_imports': 1, 'lsp_eslint_d': 0, 'with_vue': 0})
   elseif &l:filetype == 'vue' || &l:filetype == 'typescript'
     call peter#IDEFeaturesJS({'lsp_manage_imports': 1, 'lsp_eslint_d': 1, 'with_vue': 1})
+  elseif &l:filetype == 'python'
+    " XXX: We can't activate PyLSP until we have it installed somehwere ...
+    " can we set a path to it in our peter autoload script?
+    call peter#IDEFeaturesPython({'use_pylsp': 0})
   endif
 endfun
 
