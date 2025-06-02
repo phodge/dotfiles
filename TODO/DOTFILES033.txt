@@ -1,3 +1,5 @@
 DOTFILES033 MAC PRIORITY VALUE investigate using skhd to install keyboard shortcuts on MacOS more easily
 
 https://github.com/koekeishiya/skhd/
+
+See also DOTFILES020

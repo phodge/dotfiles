@@ -1,0 +1,19 @@
+DOTFILES074 MAC Script installation of Alt-Tab settings
+
+
+## Shortcut 1
+
+Alt+Tab
+Windows from Visible workspaces
+Minimised/Hidden at end
+
+## Appearance
+
+Thumbnails
+Show on Screen including menu bar
+
+## Blacklists
+
+com.apple.finder: hide when no open window
+com.toggl.daneel: hide when no open window
+

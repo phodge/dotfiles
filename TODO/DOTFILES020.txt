@@ -1,4 +1,4 @@
-DOTFILES020 VALUE standardise OS keyboard shortcuts and script their installation
+DOTFILES020 MAC VALUE PRIORITY standardise OS keyboard shortcuts and script their installation
 
 Worth checking whether skhd is an easier route for MacOS (see DOTFILES033)
 
@@ -7,6 +7,14 @@ Worth checking whether skhd is an easier route for MacOS (see DOTFILES033)
 - move to next/prev Desktop
   - cmd+option+right
   - cmd+option+left
+
+(These were previously managed through BTT)
+option+left: maximise left half
+option+shift+left: maximise left two-thirds
+option+right: maximum right half
+option+shift+right: maximum right one-thirds
+option+down: move to next monitor
+
 
 - open a terminal (ctrl+see DOTFILES031)
 - ALSO can we have these shortcuts automatically reinstall on file save for fast customisation?
