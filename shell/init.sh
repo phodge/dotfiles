@@ -165,6 +165,7 @@ alias dc='docker-compose'
 alias gf='git fetch -p'
 alias gp='git pull --rebase'
 alias gP='git push'
+alias gRP='git pull --rebase && git push'
 
 _recon() {
     git -c core.hooksPath=/no/hooks rebase --continue
