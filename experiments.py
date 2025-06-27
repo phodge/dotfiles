@@ -84,6 +84,21 @@ EXP.define_experiment(
     active_until=None,
 )
 
+# Use CopilotChat plugin for nvim?
+#
+# You will need to add something like the following to a project's BufEnter
+# autocmd:
+#
+#   if $EXP_NVIM_COPILOT_CHAT == "1"
+#     lua require("CopilotChat").setup{ agent = "copilot" }
+#   endif
+#
+EXP.define_experiment(
+    'EXP_NVIM_COPILOT_CHAT',
+    by_uuid=[],
+    active_until=None,
+)
+
 
 @section(quick=True)
 def refresh_experiments():

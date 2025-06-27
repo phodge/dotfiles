@@ -123,6 +123,8 @@ call vimprojectconfig#initialise({
       \ })
 unlet s:config_dirs
 
+let s:use_copilot_chat = 0
+
 if has('nvim') && g:want_copilot
   call <SID>VendoredPlug('github/copilot.vim')
 
@@ -138,6 +140,9 @@ if has('nvim') && g:want_copilot
 
   " NOTE: you may need to set g:copilot_node_command if you have an old
   " version of node set as default
+  if $EXP_NVIM_COPILOT_CHAT == "1"
+    let s:use_copilot_chat = 1
+  endif
 endif
 
 
@@ -209,6 +214,14 @@ if filereadable(s:plugpath)
 
   if g:tmux_session == 'SPACETEA-DEV'
     call <SID>VendoredPlug('phodge/spacetea.vim')
+  endif
+
+  " copilot chat
+  if s:use_copilot_chat
+    " NOTE: this also requires plenary.nvim but I don't have a way to
+    " specificy dependencies yet
+    call <SID>VendoredPlug('CopilotC-Nvim/CopilotChat.nvim')
+    call <SID>VendoredPlug('nvim-lua/plenary.nvim')
   endif
 
   " firenvim

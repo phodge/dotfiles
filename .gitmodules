@@ -122,3 +122,6 @@
 [submodule "vim-syn-info.git"]
 	path = vim-packages/vim-syn-info.git
 	url = https://github.com/phodge/vim-syn-info.git
+[submodule "CopilotChat.nvim.git"]
+	path = vim-packages/CopilotChat.nvim.git
+	url = https://github.com/CopilotC-Nvim/CopilotChat.nvim.git
