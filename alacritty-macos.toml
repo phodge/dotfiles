@@ -3,7 +3,7 @@
 option_as_alt = "Both"
 
 [font]
-size = 16
+size = 19
 
 [font.normal]
 family = "Inconsolata for Powerline"
