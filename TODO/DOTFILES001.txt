@@ -16,3 +16,7 @@ make treesitter the default for python?
 ex-machinae
 - review use of latin
 - See vim-packages/python-treesitter-overrides.nvim.git/ex-machinae.txt
+
+See also:
+- https://jackevans.bearblog.dev/refactoring-python-with-tree-sitter-jedi/
+  https://news.ycombinator.com/item?id=41637286
