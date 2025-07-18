@@ -1,0 +1,3 @@
+DOTFILES077 MAC VALUE experiment with https://clipy-app.com/
+
+brew install --cask clipy
