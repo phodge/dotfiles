@@ -1,0 +1,3 @@
+DOTFILES079 look into Zed "Edit Predictions" for Neovim
+
+See https://www.reddit.com/r/neovim/comments/1ms8gh3/ive_become_obsessed_with_the_idea_of_edit/
