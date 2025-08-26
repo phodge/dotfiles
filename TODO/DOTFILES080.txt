@@ -1,0 +1,3 @@
+DOTFILES080 LINUX MAC experiment with Flameshot for screenshots
+
+https://flameshot.org/
