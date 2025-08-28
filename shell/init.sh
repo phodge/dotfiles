@@ -180,8 +180,14 @@ recon() {
 irebas() {
     _reload_experiments
     while :; do
-        rebas -i "$@" && continue
-        return $?
+        prev_hash=$(git rev-parse HEAD)
+        rebas -i "$@" || return $?
+        # if nothing was changed, bail out of the rebase
+        current_hash=$(git rev-parse HEAD)
+        if [ "$prev_hash" = "$current_hash" ]; then
+            echo "No changes - exiting rebase"
+            return
+        fi
     done
 }
 
