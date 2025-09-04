@@ -181,7 +181,7 @@ irebas() {
     _reload_experiments
     while :; do
         prev_hash=$(git rev-parse HEAD)
-        rebas -i "$@" || return $?
+        rebas "$@" || return $?
         # if nothing was changed, bail out of the rebase
         current_hash=$(git rev-parse HEAD)
         if [ "$prev_hash" = "$current_hash" ]; then
