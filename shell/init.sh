@@ -21,9 +21,9 @@ fi
 _reload_experiments() {
     test -e $HOME/.config/experiments.sh && source ~/.config/experiments.sh
     if [[ $EXP_GIT_REVISE = 1 ]]; then
-        alias rebas='git -c core.hooksPath=/no/hooks revise -e -i'
+        alias rebas='GIT_REBASING=1 git -c core.hooksPath=/no/hooks revise -e -i'
     else
-        alias rebas='git -c core.hooksPath=/no/hooks rebase -i'
+        alias rebas='GIT_REBASING=1 git -c core.hooksPath=/no/hooks rebase -i'
     fi
 }
 _reload_experiments
