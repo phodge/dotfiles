@@ -1649,6 +1649,14 @@ fun! <SID>JerjerrodInit()
 endfunction
 
 fun! <SID>JerjerrodClearCache()
+  if &l:filetype == 'gitrebase'
+    " We don't want to clear jerjerrod cache when performing interactive
+    " rebases because jerjerrod getting repo status often interferes with
+    " git's rebase internals and causes it to error out because it expects
+    " exclusive access to the repo.
+    return
+  endif
+
   if has('*jobstart')
     call jobstart(['jerjerrod', 'clearcache', '--local', expand('%')])
   else
