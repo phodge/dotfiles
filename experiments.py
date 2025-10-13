@@ -100,6 +100,14 @@ EXP.define_experiment(
 )
 
 
+# Install our own copy of "uv"?
+EXP.define_experiment(
+    'EXP_OWN_ASTRAL_UV',
+    by_uuid=[SPARK_UUID],
+    active_until=None,
+)
+
+
 @section(quick=True)
 def refresh_experiments():
     with writefile(HOME + '/.config/experiments.sh') as f:

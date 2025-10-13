@@ -1408,6 +1408,9 @@ class ExperimentsManager:
     def all_experiments(self) -> list[Experiment]:
         return list(self._experiments.values())
 
+    def is_active(self, name: str) -> bool:
+        return self._experiments[name].get_state_and_reason()[0]
+
 
 EXP = ExperimentsManager()
 
@@ -1422,3 +1425,14 @@ include('shell/HOMELY.py')
 include('homely_dev/HOMELY.py')
 include('php/HOMELY.py')
 include('ubuntu/HOMELY.py')
+
+
+# install our own copy of astral UV?
+# XXX: I had to put this at the end because it's done as an experiment and I
+# don't have a good way to get experiment values before experiments.py is
+# included.
+@section(enabled=EXP.is_active("EXP_OWN_ASTRAL_UV"))
+def install_uv():
+    execute(['pipx', 'install', 'uv'])
+    lineinfile("~/.zshrc", 'eval "$(uv generate-shell-completion zsh)"', WHERE_END)
+    lineinfile("~/.zshrc", 'eval "$(uvx --generate-shell-completion zsh)"', WHERE_END)
