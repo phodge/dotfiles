@@ -1,3 +1,7 @@
-DOTFILES045 Try better file browser for Neovim: triptych.nvim
+DOTFILES045 Try better file browser for Neovim (various)
 
 https://github.com/simonmclean/triptych.nvim
+
+https://github.com/Konfekt/filepicker.vim
+
+https://www.reddit.com/r/neovim/comments/1maz9uf/announcing_fffnvim_the_file_picker_youve_been/
