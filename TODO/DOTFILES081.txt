@@ -1,0 +1,3 @@
+DOTFILES081 MAC experiment with rift twm for macOS
+
+https://github.com/acsandmann/rift
