@@ -238,7 +238,7 @@ def ubuntu_os_terminal_shortcuts():
         '-o', 'window.padding={x=40,y=20}',
         # XXX: Note how string values need to be wrapped
         '-o', 'window.decorations="None"',
-        '-o', 'window.opacity=0.85',
+        '-o', 'window.opacity=0.92',
         '-o', 'window.blur=true',
         # TODO(DOTFILES059): give the dotfiles session this colour and pick
         # something else here
