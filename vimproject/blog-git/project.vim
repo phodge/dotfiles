@@ -6,6 +6,10 @@
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'BLOG'
 
+  if &l:filetype == 'html'
+    setlocal sw=2 sts=2 ts=2 et
+  endif
+
   if &l:filetype == 'markdown'
     setlocal textwidth=99
     setlocal sw=2 sts=2 ts=2 et
