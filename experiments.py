@@ -103,7 +103,7 @@ EXP.define_experiment(
 # Install our own copy of "uv"?
 EXP.define_experiment(
     'EXP_OWN_ASTRAL_UV',
-    by_uuid=[SPARK_UUID],
+    by_uuid=[SPARK_UUID, DEEPCOOL2_UUID],
     active_until=None,
 )
 
