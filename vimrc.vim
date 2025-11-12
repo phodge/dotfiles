@@ -1762,7 +1762,9 @@ fun! InTmuxWindow(cmd, opt)
   "
   " Note: The -k flag doesn't work here because it relies on using -t to
   " target a window by number instead of name
-  let l:reuse_window = get(a:opt, 'reuse', v:false)
+  if get(a:opt, 'reuse', v:false)
+    silent exe printf('!tmux kill-window -t %s', shellescape(l:winname))
+  endif
 
   let l:cmd_spawn = 'tmux new-window -c ' . shellescape(getcwd())
   let l:cmd_spawn .= ' -n ' . shellescape(l:winname)
@@ -1770,7 +1772,7 @@ fun! InTmuxWindow(cmd, opt)
     let l:cmd_spawn .= ' -d'
   endif
 
-  " target window?
+  " target window (this is a number)
   let l:target_window = get(a:opt, 'target_window', v:null)
   if l:target_window isnot v:null
     let l:cmd_spawn .= ' -a -t ' . shellescape(l:target_window)
