@@ -13,7 +13,6 @@ from HOMELY import EXP, HOME
 DEEPCOOL2_UUID = "acc4f383-d2f3-411c-a84d-68e7891b9007"
 MACITRON_UUID = "todo_here"
 SPARK_UUID = "e162867b-4d2c-49d7-ab4b-ed0b563e79cc"
-OCTOMACM2_UUID = "982B22E0-830D-48FD-8B51-BC31909CDEC1"
 KRAKENMAC25_UUID = "A5F9F70C-509B-4073-BAC6-5D9A31181DAB"
 
 
@@ -63,8 +62,8 @@ EXP.define_experiment(
 #
 # Confirmed not needed on SPARK_UUID
 #
-# Note: on OCTOMACM2_UUID $TERM appears to be set correctly already, however my
-# font (Incosolata for Powerline) doesn't seem to support Italics
+# Note: on old work-supplied M2 Mac $TERM appears to be set correctly already,
+# however my font (Incosolata for Powerline) doesn't seem to support Italics
 EXP.define_experiment(
     'EXP_TMUX_DEFAULT_TERMINAL',
     by_uuid=[DEEPCOOL2_UUID],
