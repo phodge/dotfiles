@@ -425,7 +425,7 @@ if filereadable(s:plugpath)
   if 1
     " TODO(DOTFILES050) this should supersede all the other fancy stuff below
     " for figuring out fzf path
-    if g:peter_fzf_install_path != ''
+    if exists('g:peter_fzf_install_path') && g:peter_fzf_install_path != ''
       let &rtp .= ',' . g:peter_fzf_install_path
       let s:has_fzf = 1
     endif
