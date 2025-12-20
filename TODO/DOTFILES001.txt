@@ -20,3 +20,5 @@ ex-machinae
 See also:
 - https://jackevans.bearblog.dev/refactoring-python-with-tree-sitter-jedi/
   https://news.ycombinator.com/item?id=41637286
+- https://github.com/afnanenayet/diffsitter
+  https://news.ycombinator.com/item?id=44520438

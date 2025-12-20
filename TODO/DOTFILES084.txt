@@ -1,0 +1,4 @@
+DOTFILES084 attempt getting by without tmux
+
+- https://bower.sh/you-might-not-need-tmux
+  https://news.ycombinator.com/item?id=44754492
