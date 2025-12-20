@@ -1,0 +1,3 @@
+DOTFILES082 MAC stuff from old Macitron
+
+brew install mysql-client (for fudgemoney dev)
