@@ -125,8 +125,16 @@ unlet s:config_dirs
 
 let s:use_copilot_chat = 0
 
+if $GIT_REBASING == "1"
+  let g:git_rebasing = 1
+else
+  let g:git_rebasing = 0
+endif
+
 if has('nvim') && g:want_copilot
-  call <SID>VendoredPlug('github/copilot.vim')
+  if ! g:git_rebasing
+    call <SID>VendoredPlug('github/copilot.vim')
+  endif
 
   " the default mapping for Copilot is <tab>, to change it see
   " :help copilot-maps
@@ -148,8 +156,10 @@ endif
 
 if has('nvim') && g:want_neovim_treesitter " {{{ tree-sitter
 
-  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
-  call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
+  if ! g:git_rebasing
+    call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter')
+    call <SID>VendoredPlug('nvim-treesitter/nvim-treesitter-playground')
+  endif
 
   let g:peter_ts_disable = []
   if ! g:want_neovim_treesitter_python
@@ -192,7 +202,9 @@ EOF
   " use e.g. "TSInstall typescript" to install a specific parser
 
   " also set up ts-node-action while we're here
-  call <SID>VendoredPlug('CKolkey/ts-node-action')
+  if ! g:git_rebasing
+    call <SID>VendoredPlug('CKolkey/ts-node-action')
+  endif
 
   lua vim.keymap.set({"n"}, "\\x", require("ts-node-action").node_action, { desc = "Trigger Node Action" })
 
@@ -217,7 +229,7 @@ if filereadable(s:plugpath)
   endif
 
   " copilot chat
-  if s:use_copilot_chat
+  if s:use_copilot_chat && !g:git_rebasing
     " NOTE: this also requires plenary.nvim but I don't have a way to
     " specificy dependencies yet
     call <SID>VendoredPlug('CopilotC-Nvim/CopilotChat.nvim')
@@ -225,13 +237,13 @@ if filereadable(s:plugpath)
   endif
 
   " firenvim
-  if get(g:, 'peter_want_firenvim', 0)
+  if get(g:, 'peter_want_firenvim', 0) && !g:git_rebasing
     " see https://github.com/glacambre/firenvim for instructions on how to
     " configure
     call <SID>VendoredPlug('glacambre/firenvim')
   endif
 
-  if has('nvim')
+  if has('nvim') && ! g:git_rebasing
     if has('nvim-0.10.0')
       call <SID>VendoredPlug('neovim/nvim-lspconfig')
     else
@@ -246,7 +258,7 @@ if filereadable(s:plugpath)
     call <SID>VendoredPlug('nvim-lua/plenary.nvim')
   endif
 
-  if ! has('nvim-0.9.0')
+  if ! has('nvim-0.9.0') && !g:git_rebasing
     " this is built into neovim from v0.9 onwards
     call <SID>VendoredPlug('editorconfig/editorconfig-vim')
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -285,7 +297,9 @@ if filereadable(s:plugpath)
 
   " ALE setup {{{
 
-    call <SID>VendoredPlug('w0rp/ale')
+    if ! g:git_rebasing
+      call <SID>VendoredPlug('w0rp/ale')
+    endif
 
     " default behaviour is to use flake8/mypy from our virtualenv
     " TODO(DOTFILES049) redo this - not sure this is what we want
@@ -340,12 +354,14 @@ if filereadable(s:plugpath)
   endif " }}}
 
   " nginx syntax
-  call <SID>VendoredPlug('chr4/nginx.vim')
+  if ! g:git_rebasing
+    call <SID>VendoredPlug('chr4/nginx.vim')
+  endif
 
   " graphql stuff
   Plug 'jparise/vim-graphql'
 
-  if ! g:want_fast
+  if ! g:want_fast && !g:git_rebasing
     call <SID>VendoredPlug('EinfachToll/DidYouMean')
     call <SID>VendoredPlug('hynek/vim-python-pep8-indent')
 
@@ -383,7 +399,7 @@ if filereadable(s:plugpath)
   let g:vimade = get(g:, 'vimade', {})
   let g:vimade.fadelevel = 0.5
   let g:vimade.basebg = '#000000'
-  if $FEAT_VIM_VIMADE == '1'
+  if $FEAT_VIM_VIMADE == '1' && ! g:git_rebasing
     call <SID>VendoredPlug('TaDaa/vimade')
   endif
 
@@ -1630,7 +1646,7 @@ autocmd! PowerlineCFG BufRead powerline/**/*.json setlocal sts=2 sw=2 ts=2 et
 " TODO: move this into a plugin once I have a good system for doing so
 augroup Jerjerrod
 augroup end
-if g:jerjerrod_cache_clearing
+if g:jerjerrod_cache_clearing && ! g:git_rebasing
   au! Jerjerrod BufWritePost * call <SID>JerjerrodInit()
 endif
 
