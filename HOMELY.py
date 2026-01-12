@@ -1122,6 +1122,14 @@ def install_alt_tab():
     # file when it saves changes
 
 
+@section_macos(enabled=haveexecutable('brew') and allow_installing_stuff)
+def install_htop_macos():
+    if not yesno('install_htop', 'Install htop via homebrew?'):
+        return
+
+    execute(['brew', 'install', 'htop'])
+
+
 @section(enabled=allow_installing_stuff)
 def install_pyenv():
     if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv? (Needed for FudgeMoney dev)', default=None):
