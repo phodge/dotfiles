@@ -5,7 +5,7 @@ import os.path
 import platform
 import sys
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import List, Optional
 
@@ -15,7 +15,7 @@ from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
 from homely.install import InstallFromSource, installpkg, setallowinstall
 from homely.pipinstall import pipinstall
 from homely.system import execute
-from homely.ui import yesno, allowinteractive
+from homely.ui import yesno, allowinteractive, head, note
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
@@ -1419,6 +1419,59 @@ class ExperimentsManager:
         return self._experiments[name].get_state_and_reason()[0]
 
 
+def manual_step(
+    key: str,
+    title: str,
+    instructions: str,
+    *,
+    undoable: bool,
+) -> None:
+    all_states = _get_manual_steps_state()
+    current_state = all_states.get(key)
+    if current_state and current_state["instructions"] == instructions:
+        # already done with same instructions
+        return
+
+    if not allowinteractive():
+        raise Exception(f"Can't execute manual step without a TTY: {title}")
+
+    head('MANUAL STEP: ' + title)
+    if current_state:
+        head("NOTE: this has changed since last time")
+    first = True
+    for line in instructions.splitlines():
+        if first:
+            first = False
+            if line == "":
+                continue
+        note('    ' + line)
+
+    if yesno(None, "Done?"):
+        # save new state
+        all_states[key] = {
+            "time_done": datetime.now().isoformat(),
+            "title": title,
+            "instructions": instructions,
+            "undoable": undoable,
+        }
+        _write_manual_steps_state(all_states)
+    else:
+        raise Exception("TODO: no save")  # noqa
+
+
+def _get_manual_steps_state() -> dict[str, dict[str, str | bool]]:
+    state_file = Path(HOME + '/.homely/manual_steps_state.json')
+    if state_file.exists():
+        return json.loads(state_file.read_text())
+    return {}
+
+
+def _write_manual_steps_state(all_states: dict[str, dict[str, str | bool]]) -> None:
+    dumped = json.dumps(all_states, indent=2, sort_keys=True)
+    state_file = Path(HOME + '/.homely/manual_steps_state.json')
+    state_file.write_text(dumped)
+
+
 EXP = ExperimentsManager()
 
 
@@ -1432,6 +1485,7 @@ include('shell/HOMELY.py')
 include('homely_dev/HOMELY.py')
 include('php/HOMELY.py')
 include('ubuntu/HOMELY.py')
+include('macos_automation//HOMELY.py')
 
 
 # install our own copy of astral UV?
