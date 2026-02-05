@@ -9,14 +9,13 @@ from datetime import date
 from pathlib import Path
 from typing import List, Optional
 
-from homely._ui import allowinteractive
 from homely.general import (WHERE_END, WHERE_TOP, blockinfile, download,
                             haveexecutable, include, lineinfile, mkdir, run,
                             section, symlink, writefile)
 from homely.install import InstallFromSource, installpkg, setallowinstall
 from homely.pipinstall import pipinstall
 from homely.system import execute
-from homely.ui import yesno
+from homely.ui import yesno, allowinteractive
 
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
