@@ -1,5 +1,18 @@
-DOTFILES033 MAC PRIORITY VALUE investigate using skhd to install keyboard shortcuts on MacOS more easily
+DOTFILES033 CLOSED MAC investigate using skhd to install keyboard shortcuts on MacOS more easily
 
 https://github.com/koekeishiya/skhd/
 
 See also DOTFILES020
+
+
+We did:
+
+  $ brew install jackielii/tap/skhd-zig
+
+We also want:
+
+  skhd --install-service
+  codesign --force --deep $(brew --prefix skhd-zig)/bin/skhd
+  [Grant accessibility permissions to skhd in System Settings]
+
+CLOSED: Tahoe is making it difficult to grant Accessibility permissions so this has become a non-starter.
