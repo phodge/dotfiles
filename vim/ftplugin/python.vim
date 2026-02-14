@@ -398,6 +398,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Collection": "collections.abc",
         \ "QuerySet": "django.db.models",
         \ "Reversible": "collections.abc",
+        \ "Mapping": "collections.abc",
         \ "Decimal": "decimal",
         \ "Any": "typing",
         \ "Callable": "typing",
@@ -437,7 +438,7 @@ fun! <SID>SmartImportUI() " {{{
         \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
         \ .' contextlib tempfile neovim dataclasses typing decimal abc pytest attrs platform'
-        \ .' shlex unittest time_machine'
+        \ .' shlex unittest time_machine tomllib logging asyncio urllib'
         \ )
 
   " these names are suggested when the identifiers are encountered
