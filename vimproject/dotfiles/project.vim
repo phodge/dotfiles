@@ -26,7 +26,7 @@ fun! <SID>RefreshExperiments(autoclose)
 endfun
 
 fun! <SID>Retest()
-  call InAlacrittyWindow('./retest.sh', {})
+  call InAlacrittyWindow('./retest.sh', {"chdir": 1})
 endfun
 
 fun! projectconfig.api2024.filetypeDetect(bufnr, ext, basename, relname) dict
