@@ -22,6 +22,9 @@ os:
   CTRL-ALT-T: OPEN_TERMINAL
   CTRL-ALT-S: OPEN_TERMINAL_TMUX_PICKER
   CTRL-ALT-S-T: OPEN_TERMINAL_TMUX_NEW
+  # TODO(DOTFILES086): do we want a shortcut for moving a window to the next
+  # Desktop? - what will happen in macOS if there is no Next Desktop? - do we
+  # want to move the view to the Next Desktop at the same time?
 
   # XXX: we don't bind this on MacOS - it's an OS default
   CTRL-ALT-S-4: OS_SCREENSHOT_UI
