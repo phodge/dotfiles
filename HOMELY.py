@@ -20,6 +20,10 @@ from homely.ui import yesno, allowinteractive, head, note
 HOME = os.environ['HOME']
 HERE = os.path.dirname(__file__)
 
+# TODO: DOTFILES085: get rid of this when we have virtualenv feature working
+# ... this is so that we can import keybindings as a module
+sys.path.append(HERE)
+
 
 IS_OSX = platform.system() == "Darwin"
 IS_UBUNTU = os.path.exists('/etc/lsb-release')
