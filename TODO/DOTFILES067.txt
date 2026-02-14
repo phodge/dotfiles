@@ -8,3 +8,7 @@ https://nikitabobko.github.io/AeroSpace/guide#default-config
 https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 https://nikitabobko.github.io/AeroSpace/commands
 https://nikitabobko.github.io/AeroSpace/guide#exec-on-workspace-change-callback
+
+Install with:
+
+  brew install --cask nikitabobko/tap/aerospace
