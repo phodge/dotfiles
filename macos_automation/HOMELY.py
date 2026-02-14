@@ -1,4 +1,7 @@
 from textwrap import dedent
+from homely.ui import yesno
+from homely.general import haveexecutable
+from homely.system import execute
 from HOMELY import section_macos, manual_step, allow_installing_stuff
 
 
@@ -149,4 +152,68 @@ def macos_better_touch_tool():
             '''
         ),
         undoable=True,
+    )
+
+
+@section_macos(enabled=haveexecutable('brew') and allow_installing_stuff)
+def macos_alt_tab_util():
+    # https://github.com/lwouis/alt-tab-macos
+    if not yesno(
+        "install_alt_tab",
+        "Do you want to install Alt-Tab for enhanced app-switching UI in macOS?",
+    ):
+        return
+
+    execute(['brew', 'install', '--cask', 'alt-tab'])
+
+    # NOTE: the config file for this app is at
+    # ~/Library/Preferences/com.lwouis.alt-tab-macos.plist but there doesn't
+    # seem to be a way to move the file into the repo the app recreates the
+    # file when it saves changes. We can at least try to copy the repo file
+    # into ~/Library/Preferences/?
+    manual_step(
+        'macos_alt_tab_plist_file',
+        'Copy com.lwouis.alt-tab-macos.plist into ~/Library/Preferences/',
+        '1. Maually copy com.lwouis.alt-tab-macos.plist to ~/Library/Preferences/',
+        undoable=False,
+    )
+
+    manual_step(
+        'macos_alt_tab_system_permissions',
+        'Grant system permissions for Alt-Tab utility',
+        '1. Open AltTab and grant permissions for it to work.',
+        undoable=False,
+    )
+    manual_step(
+        'macos_alt_tab_configuration',
+        'Manually configure Alt-Tab utility',
+        dedent(
+            '''
+            Open Alt-Tab preferences and configure the following:
+            1. General
+               A) Start at login ON
+               B) Menubar icon to be the colourful one
+            2. Controls
+               A) Shortcut 1
+                  i)   Trigger shortcut: CMD+Tab
+                  ii)  Show windows from spaces: Visible spaces
+               B) Shortcut 2
+                  i)  Trigger shortcut: CMD+Tilde
+                  ii) Show windows from spaces: Visible spaces
+            3. Appearance
+               A) Appearance: Thumbnails
+               B) Size: Small
+               C) Theme: System
+               D) Customize Thumbnails style:
+                  i)   Hide Space number labels ON
+                  ii)  Preview selected window ON
+                  iii) Align Windows: Leading
+               E) Show on: Screen including menu bar
+               F) Animations:
+                  i) Apparition delay of Switcher: 0ms
+            4. Blacklists
+               A) com.apple.finder: Hide in Alt Tab when no open window
+            '''
+        ),
+        undoable=False,
     )
