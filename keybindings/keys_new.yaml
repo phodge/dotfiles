@@ -5,13 +5,15 @@
 # WIN- (Context menu / "Option" on mac keyboards)
 os:
   # TODO: DOTFILES020: install these automatically on MacOS and Ubuntu
+  # WARNING: some of these are controlled by BetterTouchTool on MacOS which
+  # will require manually updating BTT config and re-exporting.
   ALT-Return: TOGGLE_FULLSCREEN
   WIN-Left: RESIZE_WINDOW_LEFT_HALF
   WIN-Right: RESIZE_WINDOW_RIGHT_HALF
-  WIN-Up: MOVE_WINDOW_PREV_DISPLAY
+  WIN-Up: MOVE_WINDOW_PREV_DISPLAY  # not available on macOS
   WIN-Down: MOVE_WINDOW_NEXT_DISPLAY
   WIN-M: MINIMIZE_WINDOW
-  S-WIN-Down: TOGGLE_MAXIMIZED
+  S-WIN-Down: TOGGLE_MAXIMIZED  # not available on macOS
   S-WIN-Up: FORCE_MAXIMIZED
   ALT-WIN-Left: SWITCH_TO_WORKSPACE_LEFT
   ALT-WIN-Right: SWITCH_TO_WORKSPACE_RIGHT

@@ -2,8 +2,13 @@ from textwrap import dedent
 from HOMELY import section_macos, manual_step
 
 
+def _get_macos_keybindings():
+    from keybindings import get_new_bindings
+    return get_new_bindings()["os"]
+
+
 @section_macos()
-def macos_manual_keybindings():
+def macos_system_keyboard_setup():
     manual_step(
         'macos_keyboard_function_keys_as_function_keys',
         'Configure F1, F2 as function keys by default',
@@ -29,15 +34,26 @@ def macos_manual_keybindings():
         ),
         undoable=False,
     )
+
+
+@section_macos()
+def macos_standard_keybindings():
+    new_bindings = _get_macos_keybindings()
+
+    # TODO: rather than grabbing the first keybind, it would be nice to have some validation of keys_new.yaml that
+    # A) ensures required keybindings are present
+    # B) prevents or at least warns when there are duplicates of the same keybinding or key combination
+    mission_control_key = new_bindings["SHOW_ALL_WORKSPACE_WINDOWS"][0].macos_human_readable
+    left_half_key = new_bindings["RESIZE_WINDOW_LEFT_HALF"][0].macos_human_readable
+    right_half_key = new_bindings["RESIZE_WINDOW_RIGHT_HALF"][0].macos_human_readable
+
     manual_step(
         'macos_keyboard_shortcuts_mission_control',
         'Install Mission Control keyboard shortcuts',
         dedent(
-            '''
+            f'''
             1. Open System Settings > Keyboard > Keyboard Shortcuts > Mission Control.
-            2. Change 'Mission Control' to 'CMD+Option+Up'.
-            3. Change 'Mission Control -> Move Left a Space' to 'CMD+Option+Left'.
-            4. Change 'Mission Control -> Move Right a Space' to 'CMD+Option+Left'.
+            2. Change 'Mission Control' to '{mission_control_key}'.
             '''
         ),
         undoable=False,
@@ -46,10 +62,10 @@ def macos_manual_keybindings():
         'macos_keyboard_shortcuts_window_management',
         'Install Window Management keyboard shortcuts',
         dedent(
-            '''
+            f'''
             1. Open System Settings > Keyboard > Keyboard Shortcuts > Windows.
-            2. Change 'Halves -> Tile Left Half' to 'Option+Left'.
-            3. Change 'Halves -> Tile Right Half' to 'Option+Right'.
+            2. Change 'Halves -> Tile Left Half' to '{left_half_key}'.
+            3. Change 'Halves -> Tile Right Half' to '{right_half_key}'.
             '''
         ),
         undoable=False,

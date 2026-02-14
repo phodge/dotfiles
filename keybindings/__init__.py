@@ -161,6 +161,31 @@ class NewKeyCombo:
 
         return class_(key=key, **flags)
 
+    @property
+    def macos_human_readable(self) -> str:
+        ret: str
+
+        if len(self.key) == 1:
+            ret = self.key
+        elif re.match(r'^F\d+$', self.key):
+            ret = self.key
+        elif self.key in VALID_KEY_NAMES:
+            ret = self.key
+        else:
+            raise Exception(f"TODO: how to translate key {self.key!r} for macos?")  # noqa
+
+        # prepend modifiers
+        if self.ctrl:
+            ret = 'Ctrl' + ret
+        if self.shift:
+            ret = 'Shift+' + ret
+        if self.win:
+            ret = 'Option+' + ret
+        if self.alt:
+            ret = 'Cmd+' + ret
+
+        return ret
+
 
 _NEW_BINDINGS = None
 
