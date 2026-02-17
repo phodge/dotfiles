@@ -1,0 +1,3 @@
+DOTFILES087 experiment with using FracturedJson for formatting JSON files
+
+https://github.com/j-brooke/FracturedJson/wiki
