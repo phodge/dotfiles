@@ -1746,8 +1746,15 @@ au! BufReadPost TODO.txt setlocal sw=2 sts=2 ts=2 et filetype=est
 aug end
 
 
-com! -nargs=0 NChanged Shell git diff origin/master... --name-status --no-renames; git status --short --untracked-files=all
+com! -nargs=0 NChanged call <SID>NChanged()
 com! -nargs=0 NMine Shell git-list-my-committed-files
+
+fun! <SID>NChanged()
+  let l:mastername = trim(system("git-master-name"))
+  let l:cmd = 'git diff origin/' . l:mastername . '... --name-status --no-renames'
+        \ . '; git status --short --untracked-files=all'
+  exe 'Shell ' . l:cmd
+endfun
 
 " have had to add this as git commit hooks wreak havoc with my open buffers if
 " they reformat them
