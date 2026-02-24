@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e -o pipefail
+
+candidates=${GIT_MASTER_NAMES:-"master main"}
+
+for candidate in $candidates; do
+    if git branch -a | cut -b 3- | grep "^remotes/origin/$candidate\$" > /dev/null; then
+        echo $candidate
+        exit 0
+    elif git branch | cut -b 3- | grep "^$candidate\$" > /dev/null; then
+        echo $candidate
+        exit 0
+    fi
+done
+
+nicenames="'"$(echo $candidates | sed -e "s/ /', '/g")"'"
+echo "FAIL! Could not determine 'master' branch name. Looked for: $nicenames." >&2
+exit 2
