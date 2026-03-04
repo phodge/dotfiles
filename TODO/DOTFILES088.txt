@@ -1,0 +1,3 @@
+DOTFILES088 MAC VALUE PRIORITY experiment with maccy for clipboard management
+
+https://github.com/p0deje/Maccy
