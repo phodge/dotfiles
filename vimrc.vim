@@ -1748,12 +1748,22 @@ aug end
 
 com! -nargs=0 NChanged call <SID>NChanged()
 com! -nargs=0 NMine Shell git-list-my-committed-files
+com! -nargs=0 Masterdiff call <SID>Masterdiff()
 
 fun! <SID>NChanged()
   let l:mastername = trim(system("git-master-name"))
   let l:cmd = 'git diff origin/' . l:mastername . '... --name-status --no-renames'
         \ . '; git status --short --untracked-files=all'
   exe 'Shell ' . l:cmd
+endfun
+
+fun! <SID>Masterdiff()
+  let l:mastername = trim(system("git-master-name"))
+  exe 'Gdiffsplit origin/' . l:mastername
+  " move the new window to the left side
+  wincmd H
+  " move cursor back to the original buffer
+  wincmd w
 endfun
 
 " have had to add this as git commit hooks wreak havoc with my open buffers if
