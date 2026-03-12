@@ -1,0 +1,3 @@
+DOTFILES091 EASY investigate folke/snack.nvim for quick wins
+
+https://github.com/folke/snacks.nvim

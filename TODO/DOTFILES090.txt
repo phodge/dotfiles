@@ -1,0 +1,3 @@
+DOTFILES090 VALUE look for quick tmux wins in this blog post by evgeniipendragon
+
+https://news.ycombinator.com/item?id=44787374

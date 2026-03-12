@@ -1,0 +1,5 @@
+DOTFILES092 grab anything useful from "Scripts I wrote that I use all the time"
+
+https://news.ycombinator.com/item?id=45670052
+
+The "notify" stuff sounds particularly interesting

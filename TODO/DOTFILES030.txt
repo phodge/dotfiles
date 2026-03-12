@@ -2,6 +2,7 @@ DOTFILES030 i3 power user
 
 - get ALT+HJKL window movement and ALT+SHIFT+HJKL window splitting working
 - windows/workspaces need to be restored on reboot
+  - have a lok at https://pypi.org/project/i3-resurrect/
 - keyboard shortcut to take a screenshot
 - customise status bar
   - show Slack unread message count?
