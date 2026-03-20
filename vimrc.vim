@@ -1993,6 +1993,19 @@ fun! <SID>CloseAllOthers()
   endfor
 endfun
 
+aug CheckUnresolvedMergeConflicts
+au! BufWritePost * call <SID>WarnUnresolvedMergeConflicts()
+aug end
+
+fun! <SID>WarnUnresolvedMergeConflicts()
+  let l:first = search('^\%(<<<<\|>>>>\|====\)', 'ncw')
+  if l:first > 0
+    echohl WarningMsg
+    echo printf('WARNING: Merge conflict marker at line %d!', l:first)
+    echohl None
+  endif
+endfun
+
 " nuke annoying neovim default mappings (see :help default-mappings)
 if has('nvim') && !exists('s:nuked')
   unmap *
