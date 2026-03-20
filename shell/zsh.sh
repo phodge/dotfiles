@@ -50,7 +50,6 @@ antigen use oh-my-zsh
 
 # === other plugins ===
 antigen bundle git
-antigen bundle mercurial
 #antigen bundle colored-man-pages
 antigen bundle zsh-users/zsh-syntax-highlighting
 
