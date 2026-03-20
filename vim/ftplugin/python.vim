@@ -402,6 +402,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Decimal": "decimal",
         \ "Any": "typing",
         \ "Callable": "typing",
+        \ "TypeVar": "typing",
         \ "Dict": "typing",
         \ "Iterable": "typing",
         \ "Iterator": "typing",
