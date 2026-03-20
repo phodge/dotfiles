@@ -29,11 +29,6 @@ CASE_SENSITIVE="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-# set history colleciton options
-unsetopt share_history
-setopt histignorealldups
-setopt histignorespace
-
 # git completion for zsh.
 # Instructions were found in git-completion.zsh itself
 zstyle ':completion:*:*:git:*' script ~/src/git-completion.bash
@@ -65,6 +60,25 @@ if [ "$ZSH_SHOW_GIT_STATE" = "1" ]; then
 fi
 
 antigen apply
+
+# History options. These must be set after "antigen apply" because oh-my-zsh's
+# lib/history.zsh sets share_history and inc_append_history, and we need to
+# override those.
+
+# Append new commands to the history file on exit, rather than overwriting it.
+# This prevents sessions that exit later from clobbering history from earlier sessions.
+setopt append_history
+# Don't write commands to the history file as they are entered. Wait until the
+# session exits. This keeps one session's history out of other running sessions.
+unsetopt inc_append_history
+# Don't import new commands from the history file during the session.
+unsetopt share_history
+
+# Don't record duplicate commands in the history.
+setopt histignorealldups
+
+# Don't record commands that start with a space
+setopt histignorespace
 
 
 zsh_no_git() {
