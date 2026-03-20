@@ -8,7 +8,7 @@ from HOMELY import HERE
 SKILLS_DIR = os.path.join(HERE, 'skills')
 
 
-want_agent_skills = not yesno(
+want_agent_skills = yesno(
     'want_agent_skills',
     'Want skills/ symlinked to ~/.claude and ~/.agents?',
     None,
