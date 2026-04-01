@@ -167,6 +167,10 @@ alias gp='git pull --rebase'
 alias gP='git push'
 alias gRP='git pull --rebase && git push'
 
+tm() {
+    tmux "$@" && exit
+}
+
 _recon() {
     git -c core.hooksPath=/no/hooks rebase --continue
 }
