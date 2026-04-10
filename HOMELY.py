@@ -1473,7 +1473,6 @@ include('homely_dev/HOMELY.py')
 include('php/HOMELY.py')
 include('ubuntu/HOMELY.py')
 include('macos_automation//HOMELY.py')
-include('skills/HOMELY.py')
 
 
 # install our own copy of astral UV?
