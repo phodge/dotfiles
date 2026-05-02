@@ -1,4 +1,0 @@
-DOTFILES065 clean up old experiments shell scripts
-
-- shell/_experiments.sh
-- experiments.sh
