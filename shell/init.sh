@@ -100,6 +100,11 @@ EDITOR=vim
 which nvim &> /dev/null && EDITOR=nvim
 export EDITOR
 
+# configure homely to pull even when dirty; and sync submodules
+export HOMELY_PULL_WHEN_DIRTY=1
+export HOMELY_PULL_SYNC_SUBMODULES=1
+
+
 in_git_repo() {
     here="$(realpath "$PWD")"
     while [ -n "$here" -a / != "$here" ]; do
