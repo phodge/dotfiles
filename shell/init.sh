@@ -95,6 +95,7 @@ fi
 export HISTSIZE=1000000
 export SAVEHIST=1000000
 
+# configure $EDITOR to choose nvim or vim
 EDITOR=vim
 which nvim &> /dev/null && EDITOR=nvim
 export EDITOR
@@ -136,7 +137,7 @@ edit_status() {
 }
 
 # XXX: DOTFILES065: why is this needed? Can it get removed?
-unalias g 2>/dev/null || :
+# unalias g 2>/dev/null || :
 
 # using any of these shortcuts will cause experiments to be reloaded *in the current shell*
 # TODO: if no arguments to these aliases then we might want to do interactive install?
