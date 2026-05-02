@@ -141,8 +141,8 @@ edit_status() {
     fi
 }
 
-# XXX: DOTFILES065: why is this needed? Can it get removed?
-# unalias g 2>/dev/null || :
+# XXX: something is defining an alias 'g=git' which conflicts whith my 'g' function below ...
+unalias g 2>/dev/null || :
 
 # using any of these shortcuts will cause experiments to be reloaded *in the current shell*
 # TODO: if no arguments to these aliases then we might want to do interactive install?
