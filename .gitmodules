@@ -51,10 +51,6 @@
 [submodule "nvim-lspconfig.git"]
 	path = vim-packages/nvim-lspconfig.git
 	url = https://github.com/neovim/nvim-lspconfig.git
-[submodule "vim-packages/nvim-lspconfig-old.git"]
-	path = vim-packages/nvim-lspconfig-old.git
-	url = https://github.com/neovim/nvim-lspconfig.git
-    update = none
 [submodule "plenary.nvim.git"]
 	path = vim-packages/plenary.nvim.git
 	url = https://github.com/nvim-lua/plenary.nvim.git
@@ -119,6 +115,3 @@
 [submodule "vim-syn-info.git"]
 	path = vim-packages/vim-syn-info.git
 	url = https://github.com/phodge/vim-syn-info.git
-[submodule "CopilotChat.nvim.git"]
-	path = vim-packages/CopilotChat.nvim.git
-	url = https://github.com/CopilotC-Nvim/CopilotChat.nvim.git
