@@ -407,6 +407,7 @@ fun! <SID>SmartImportUI() " {{{
         \ "Iterable": "typing",
         \ "Iterator": "typing",
         \ "Self": "typing",
+        \ "assert_never": "typing",
         \ "List": "typing",
         \ "NewType": "typing",
         \ "Optional": "typing",
