@@ -9,6 +9,7 @@ function projectconfig.BufEnter() dict
     "let b:ale_fix_on_save = 1
     "let b:ale_fixers = ['isort']
     let b:ale_python_mypy_executable = 'mypy'
+    let b:isort_command = 'uv run isort'
   endif
   nnoremap <buffer> <space>t :call <SID>DoRetest()<CR>
 endfun
