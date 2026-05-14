@@ -18,21 +18,6 @@ KRAKENMAC25_UUID = "A5F9F70C-509B-4073-BAC6-5D9A31181DAB"
 
 # II. DECLARE FEATURES & EXPERIMENTS
 
-# Use Vimade for dimming inactive windows in Vim/Neovim?
-#
-# Pros:
-# - Highlight the current active window
-# Cons:
-# - Can be slow with many buffers open
-#
-# Note: old setting was called "want_vimade"
-EXP.define_experiment(
-    'FEAT_VIM_VIMADE',
-    # Not currently used anywhere because it is too slow.
-    by_uuid=[],
-    active_until=None
-)
-
 # Attempt #1 at fixing Italic fonts in tmux on Ubuntu 22.04
 EXP.define_experiment(
     # probably should be scrapped in favour of EXP_TMUX_DEFAULT_TERMINAL

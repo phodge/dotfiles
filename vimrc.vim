@@ -395,14 +395,6 @@ if filereadable(s:plugpath)
   au! BufRead *.py command! -buffer Black !black %:p
   aug end
 
-  " make inactive windows dim slightly
-  let g:vimade = get(g:, 'vimade', {})
-  let g:vimade.fadelevel = 0.5
-  let g:vimade.basebg = '#000000'
-  if $FEAT_VIM_VIMADE == '1' && ! g:git_rebasing
-    call <SID>VendoredPlug('TaDaa/vimade')
-  endif
-
   if has('nvim') && get(g:, 'want_neovim_snippy', 0)
     " NOTE: you can find links to more snippets plugins here:
     " https://github.com/honza/vim-snippets
