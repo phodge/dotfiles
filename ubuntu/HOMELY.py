@@ -254,6 +254,19 @@ def ubuntu_os_terminal_shortcuts():
     )
 
 
+@section_ubuntu(enabled=allow_installing_stuff and want_alacritty)
+def ubuntu_os_default_terminal():
+    # see DOTFILES031
+    # install alacritty as the default terminal?
+    #
+    # write /usr/bin/alacritty-gogogo 0755:
+    #     #!/usr/bin/env bash
+    #     /snap/bin/alacritty "$@"
+    #
+    # sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty-gogogo 70
+    pass
+
+
 @section_ubuntu(enabled=allow_installing_stuff)
 def ubuntu_mouse_speed():
     if not yesno('ubuntu_set_mouse_speed', 'Ubuntu: Set mouse speed / acceleration?', recommended=True):

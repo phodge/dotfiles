@@ -3,3 +3,12 @@ DOTFILES031 VALUE standardise CTRL+ALT+T for opening a terminal
 Possibly this can be done on MacOS through Karabiner-Elements:
 
 https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to/shell-command/
+
+To change default terminal on ubuntu you might use:
+
+    sudo update-alternatives --config x-terminal-emulator
+
+We want to have this shortcut on i3 as well
+
+ALSO: can we install some custom shortcuts as well?
+See https://askubuntu.com/questions/180312/is-it-possible-to-assign-shortcuts-to-launch-applications
