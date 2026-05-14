@@ -1,0 +1,4 @@
+DOTFILES093 Configure my dotfiles repos to use `git config pull.rebase merges`
+
+This should be a better experience than `pull.ff only` and homely will do it for me
+automatically.
