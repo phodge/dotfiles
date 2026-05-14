@@ -253,6 +253,12 @@ def ubuntu_os_terminal_shortcuts():
         shlex.join(picker_cmd),
     )
 
+    # Get rid of CTRL+Period emoji shortcut. Slack already has its own action
+    # for this key combo, CTRL+Semicolon can be used instead for emoji.
+    # TODO: this appears to not work. :-(
+    if False:
+        _gsettings_set('org.freedesktop.ibus.panel.emoji', 'hotkey', "['<Control>semicolon']")
+
 
 @section_ubuntu(enabled=allow_installing_stuff and want_alacritty)
 def ubuntu_os_default_terminal():
