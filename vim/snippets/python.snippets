@@ -1,20 +1,25 @@
 snippet err
-	import pprint, sys
-	sys.stderr.write('${2:$1} = {}\n'.format(pprint.pformat(${1:locals()})))  # noqa TODO
+	# TODO: remove this debug
+	import sys
+	sys.stderr.write(f'{${1:locals()}=}\n')
 snippet out
-	import pprint
-	print('${2:$1} = ' + pprint.pformat(${1:locals()}))  # noqa TODO
+	# TODO: remove this debug
+	print(f'{${1:locals()}=}\n')
 snippet outl
-	print('${2:$1} = [')  # TODO
+	# TODO: remove debug below
+	print('${2:$1} = [')
 	for _ in ${1:locals()}:
-		print('  '+repr(_)+',')
+		print(f'  {_!r},')
 	print(']')
+	# TODO: remove debug above
 snippet errl
+	# TODO: remove debug below
 	import sys
 	sys.stderr.write('${2:$1} = [\n')  # TODO
 	for _ in ${1:locals()}:
-		sys.stderr.write('  '+repr(_)+',\n')
+		sys.stderr.write(f'  {_!r},\n')
 	sys.stderr.write(']\n')
+	# TODO: remove debug above
 snippet outd
 	print('${2:$1} = {')  # TODO
 	for _ in ${1:locals()}.items():
@@ -30,19 +35,21 @@ snippet lxml
 	from lxml.html import tostring
 	print('========== <${2:$1}> ==========\n%s\n========== </${2:$1}> =========' % tostring(${1:locals()}))  # noqa
 snippet log
-	with open('/tmp/q', 'a') as _f:  # TODO
-		_f.write('${2:$1} = %r\n' % (${1:locals()}, ))  # noqa
+	# TODO: remove this debug
+	with open('/tmp/q', 'a') as _f:
+		_f.write(f'{${1:locals()}=}')
 snippet logl
 	with open('/tmp/q', 'a') as _f:  # TODO
 		_f.write('${2:$1} = [\n')
 		for _ in ${1:locals()}:
-			_f.write('  '+repr(_)+',\n')
+			_f.write(f'  {_!r},\n')
 		_f.write(']\n')
 snippet logd
+	# TODO: remove this debug
 	with open('/tmp/q', 'a') as _f:  # TODO
 		_f.write('${2:$1} = {\n')
 		for _ in ${1:locals()}.items():
-			_f.write('  '+repr(_[0])+': '+repr(_[1])+',\n')
+			_f.write(f'  {_[0]!r}: {_[1]!r},\n')
 		_f.write('}\n')
 snippet loge
 	try:
