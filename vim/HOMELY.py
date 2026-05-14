@@ -11,7 +11,7 @@ from homely.system import execute, haveexecutable
 from homely.ui import allowinteractive, yesno
 
 import HOMELY
-from HOMELY import (HERE, HOME, allow_installing_stuff, install_nvim_via_snap,
+from HOMELY import (EXP, HERE, HOME, allow_installing_stuff, install_nvim_via_snap,
                     jerjerrod_addline, memoize, mypips, need_installpkg,
                     not_work_machine, want_full, wantjerjerrod, whenmissing)
 
@@ -405,6 +405,9 @@ def nvim_ls_ts():
     # packages, however those are more likely to be added to the project directly.
     symlink('nvim_ts/node_modules/.bin/typescript-language-server', '~/bin/typescript-language-server')
     symlink('nvim_ts/node_modules/.bin/eslint_d', '~/bin/eslint_d')
+
+    if EXP.is_active('EXP_WANT_MARKDOWNLINT'):
+        symlink('nvim_ts/node_modules/.bin/markdownlint', '~/bin/markdownlint')
 
 
 def _install_vim_selfupdater() -> None:

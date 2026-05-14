@@ -31,6 +31,11 @@ EXP.define_experiment(
     by_uuid=[],
     active_until='2025-05-01',
 )
+EXP.define_experiment(
+    'EXP_WANT_MARKDOWNLINT',
+    by_uuid=[DEEPCOOL2_UUID],
+    active_until=None,
+)
 
 # add 'set -g default-terminal tmux-256color to tmux.conf'.
 # This should fix itatlic text in neovim in tmux.
