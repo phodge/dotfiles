@@ -137,23 +137,6 @@ def macos_better_touch_tool():
             undoable=True,
         )
 
-    manual_step(
-        'macos_btt_shortcut_maximize_window',
-        'Add a Better Touch Tool shortcut for FORCE_MAXIMIZED',
-        dedent(
-            f'''
-            1. Open BTT Configuration
-            2. Add a Keyboard Shortcut
-               Key sequence: {force_maximize_key}
-               Action: Maximize Window
-            4. Add a Keyboard Shortcut
-               Key sequence: ????
-               Action: Navigating Spaces ... > Move Window One Space/Desktop Left
-            '''
-        ),
-        undoable=True,
-    )
-
 
 @section_macos(enabled=haveexecutable('brew') and allow_installing_stuff)
 def macos_alt_tab_util():
