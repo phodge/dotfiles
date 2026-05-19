@@ -399,6 +399,13 @@ def neovim_python_devel():
 
 @section(enabled=HOMELY.want_vendored_typescript_langserver)
 def nvim_ls_ts():
+    if not haveexecutable("npm"):
+        warn("No 'npm' available to install TS language server")
+        warn("If you are installing dotfiles for the first time this might be fine.")
+        return
+
+    # XXX: this doesn't seem to be ready yet ... because FNM isn't initialised
+    # in the current environment blerg
     execute(['npm', 'install'], cwd=HERE + '/nvim_ts')
     # We need these two to be available globally as they probably won't exist in project packages.
     # The language server will also need 'prettier', 'typescript' and 'eslint'
