@@ -1990,7 +1990,11 @@ au! BufWritePost * call <SID>WarnUnresolvedMergeConflicts()
 aug end
 
 fun! <SID>WarnUnresolvedMergeConflicts()
-  let l:first = search('^\%(<<<<\|>>>>\|====\)', 'ncw')
+  let l:pattern = '^\%(<<<<\|>>>>\|====\)'
+  if &l:filetype == 'markdown'
+    let l:pattern = '^\%(<<<<\|>>>>\)'
+  endif
+  let l:first = search(l:pattern, 'ncw')
   if l:first > 0
     echohl WarningMsg
     echo printf('WARNING: Merge conflict marker at line %d!', l:first)
