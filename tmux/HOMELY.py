@@ -161,7 +161,8 @@ def tmux_keys():
     # needs to be installed for the current version of python
     # TODO: DOTFILES025: give homely a requirements.txt mechanism
     cmd = [
-        'pip3.%d' % sys.version_info.minor,
+        'python3.%d' % sys.version_info.minor,
+        '-m', 'pip',
         'install',
         '--user',
         'pyyaml',
