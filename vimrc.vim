@@ -1167,8 +1167,7 @@ endfun
 
 " nicer statusline
 if g:vim_peter && version >= 700
-  set statusline=
-  set statusline+=%n\ \ %f
+  set statusline=%n\ \ %f
   set statusline+=\ %{(&l:ff=='dos')?':dos:\ ':''}%m%<%r%h%w
 
   " ALE status
