@@ -65,9 +65,12 @@
     autoStageIfNothingStaged = true
     fixupTargetAlwaysSHA = true
 
-# these two 'insteadof' rules ensure that I always use SSH for push/pull with
-# my own repos, and always through the 'phodge.github.com' domain, allowing me
-# to specify a personal IdentityFile in ~/.ssh/config (this is automated
-# already via use_github_ssh_key_hack in my HOMELY.py
+# these next 'insteadof' rules ensure that I always use SSH for push/pull with
+# my own repos, and always through the 'phodge.github.com' or
+# 'peterhodge.gitlab.com' domains, allowing me to specify a personal
+# IdentityFile in ~/.ssh/config (this is automated already via
+# use_github_ssh_key_hack in my HOMELY.py
 [url "git@phodge.github.com:phodge/"] insteadof = https://github.com/phodge/
 [url "git@phodge.github.com:phodge/"] insteadof = git@github.com:phodge/
+[url "git@peterhodge.gitlab.com:peterhodge/"] insteadof = https://gitlab.com/peterhodge/
+[url "git@peterhodge.gitlab.com:peterhodge/"] insteadof = git@gitlab.com:peterhodge/
