@@ -1,3 +1,4 @@
+import functools
 import os
 import shlex
 import re
@@ -8,7 +9,7 @@ from homely.install import installpkg
 from homely.system import execute
 from homely.ui import yesno
 
-from HOMELY import HERE, HOME, section_ubuntu, want_full, allow_installing_stuff, want_alacritty
+from HOMELY import HERE, HOME, IS_UBUNTU, section_ubuntu, want_full, allow_installing_stuff, want_alacritty
 from HOMELY import get_key_combos_for_action
 
 
@@ -371,7 +372,37 @@ def _get_arch():
     return execute(['dpkg', '--print-architecture'], stdout=True)[1].strip().decode('utf-8')
 
 
-@section_ubuntu(enabled=allow_installing_stuff and yesno('install_docker', 'Install docker?'))
+@functools.cache
+def want_install_podman():
+    return IS_UBUNTU and allow_installing_stuff and yesno(
+        'install_podman',
+        'Install podman?',
+        recommended=True,
+    )
+
+
+@functools.cache
+def want_install_docker():
+    return (
+        IS_UBUNTU
+        and allow_installing_stuff
+        and (not want_install_podman)
+        and yesno('install_docker', 'Install docker?')
+    )
+
+
+@section_ubuntu(enabled=want_install_podman())
+def install_podman():
+    installpkg('podman', apt='podman')
+
+    if yesno('install_podman_docker', 'Install podman-docker also?', recommended=True):
+        installpkg('podman-docker', apt='podman-docker')
+        # TODO: also need to add this line to /etc/containers/registries.conf.d/pete-podman-docker.conf
+        #
+        #     unqualified-search-registries = ["docker.io"]
+
+
+@section_ubuntu(enabled=want_install_docker())
 def install_docker_engine():
     # Add Docker's official GPG key:
     installpkg('ca-certificates')
