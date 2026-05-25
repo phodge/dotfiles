@@ -74,6 +74,7 @@ end
 function _get_default_pylsp_settings()
     return {
         pylsp = {
+            -- cmd = "/home/peter/.venv/neovim/bin/pylsp",
             -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
             plugins = {
                 -- disable most plugins
@@ -120,34 +121,6 @@ function _get_default_pylsp_settings()
     }
 end
 
--- TODO(DOTFILES049): can we have pylsp installed somewhere global so that we don't have to install it in all our virtualenvs?
-function _get_pylsp_config(signatures)
-    return {
-        settings = _get_default_pylsp_settings(),
-        on_attach = function(client, bufnr)
-            -- TODO: is there a way to use workspace/configuration request to get the current configuration before updating?
-            -- See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
-            local settings = _get_default_pylsp_settings()
-
-            if signatures then
-                settings.pylsp.plugins.jedi_signature_help.enabled = true
-                client.notify('workspace/didChangeConfiguration', { settings = settings })
-            end
-
-            -- XXX: steal this back from PyLSP - it's not capable of doing
-            -- partial formatting and we want to let our regular formatting
-            -- settings from our ftplugin do the work
-            -- TODO(DOTFILES043) should be able to use this for ts_ls also
-            vim.o.formatexpr = ""
-
-            -- XXX: also clear this so that PyLSP doesn't try doing "tags"
-            -- stuff for us - Gutentags does a fine job of this for us already.
-            -- TODO(DOTFILES043) should be able to use this for ts_ls also
-            vim.o.tagfunc = ""
-        end,
-    }
-end
-
 function _has_client(findname)
     local clients = vim.lsp.get_clients({bufnr = vim.fn.bufnr()})
     for _, client in ipairs(clients) do
@@ -156,6 +129,15 @@ function _has_client(findname)
         end
     end
     return false
+end
+
+function _maybe_stop_client(findname)
+    local clients = vim.lsp.get_clients({bufnr = vim.fn.bufnr()})
+    for _, client in ipairs(clients) do
+        if client.name == findname then
+            client.stop()
+        end
+    end
 end
 
 exports.init_ts_ls = function(opts)
@@ -201,10 +183,51 @@ end
 
 exports.init_pylsp = function()
     if not _has_client('pylsp') then
-        -- TODO: do these need to be turned on for these to work?
-        -- (sticky notes)
-        require("lspconfig").pylsp.setup(_get_pylsp_config(false))
+        local signatures = false
+
+        -- NOTE: I don't want to use vim.lsp.config() and vim.lsp.enable()
+        -- because they use lsp config's buffer-targeting mechanisms and can't
+        -- be manually activated per-buffer.
+        vim.lsp.start({
+            name = 'pylsp',
+            cmd = { '/home/peter/.venv/neovim/bin/pylsp' },
+            settings = _get_default_pylsp_settings(),
+            root_dir = vim.fs.root(0, {
+                -- copied from the lspconfig plugin I used to use ...
+                'Pipfile',
+                'pyproject.toml',
+                'requirements.txt',
+                'setup.cfg',
+                'setup.py',
+            }),
+            -- on-attach to reset vim options ... but also is there a way to not have to update settings like this?
+            on_attach = function(client, bufnr)
+                -- TODO: is there a way to use workspace/configuration request to get the current configuration before updating?
+                -- See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/
+                local settings = _get_default_pylsp_settings()
+
+                if signatures then
+                    settings.pylsp.plugins.jedi_signature_help.enabled = true
+                    client.notify('workspace/didChangeConfiguration', { settings = settings })
+                end
+
+                -- XXX: steal this back from PyLSP - it's not capable of doing
+                -- partial formatting and we want to let our regular formatting
+                -- settings from our ftplugin do the work
+                -- TODO(DOTFILES043) should be able to use this for ts_ls also
+                vim.o.formatexpr = ""
+
+                -- XXX: also clear this so that PyLSP doesn't try doing "tags"
+                -- stuff for us - Gutentags does a fine job of this for us already.
+                -- TODO(DOTFILES043) should be able to use this for ts_ls also
+                vim.o.tagfunc = ""
+            end,
+        })
     end
+end
+
+exports.stop_pylsp = function()
+    _maybe_stop_client('pylsp')
 end
 
 return exports

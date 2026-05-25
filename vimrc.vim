@@ -244,7 +244,9 @@ if filereadable(s:plugpath)
   endif
 
   if has('nvim') && ! g:git_rebasing
-    if has('nvim-0.10.0')
+    if has('nvim-0.12.0')
+      " no nvim-lspconfig plugin needed
+    elseif has('nvim-0.10.0')
       call <SID>VendoredPlug('neovim/nvim-lspconfig')
     else
       call <SID>VendoredPlug('neovim/nvim-lspconfig-old')

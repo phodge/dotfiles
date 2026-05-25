@@ -357,9 +357,13 @@ def ssh_config_hack():
     interval='4w' if os.path.exists(NEOVIM_VENV) else None,
 )
 def create_neovim_venv():
+    # TODO: DOTFILES098 pin these properly using pyproject.toml
     core_packages = [
         'pynvim',
         'GitPython',
+        'python-lsp-server',  # ==1.9.0
+        'pylsp-mypy',  # ==0.6.8
+        'pyls-isort',  # ==0.2.2
     ]
     maintain_virtualenv(NEOVIM_VENV, core_packages)
 

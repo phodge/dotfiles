@@ -93,14 +93,12 @@ fun! peter#LSPKeymapsFallback(flags = v:null)
     " between vim windows
     if ! get(b:, 'lsp_init_done', 0)
       lua require('PeteLSP').init_pylsp()
-      LspStart
       let b:lsp_init_done = 1
     endif
 
     let l:lsp_keymaps = 1
   else
-    " XXX: find a way to detach the language server from the current buffer
-    " (and preferably shut it down if there's no other buffers using it)
+      lua require('PeteLSP').stop_pylsp()
   endif
 
   " TODO: do we always want to disable ALE when js_lsp_eslint_d is active?
