@@ -1489,6 +1489,17 @@ def install_deadsnakes_ppa():
     )
 
 
+@section(enabled=allow_installing_stuff)
+def install_prek():
+    if not yesno("install_prek", "Install prek? (will be via 'uv tool install')"):
+        return
+
+    if not haveexecutable('uv'):
+        raise Exception("No 'uv' available")
+
+    execute(['uv', 'tool', 'install', 'prek'])
+
+
 # note that these need to be carried out in order of dependency
 include('experiments.py')
 include('jerjerrod/HOMELY.py')
