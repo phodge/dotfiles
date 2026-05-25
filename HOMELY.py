@@ -1470,6 +1470,25 @@ def install_uv():
     lineinfile("~/.zshrc", 'eval "$(uvx --generate-shell-completion zsh)"', WHERE_END)
 
 
+@section(enabled=IS_UBUNTU)
+def install_deadsnakes_ppa():
+    if not yesno("install_deadsnakes_ppa", "Add deadsnakes-ppa apt repository?"):
+        return
+
+    if not glob.glob("/etc/apt/sources.list.d/deadsnakes-*.sources"):
+        execute(
+            ['sudo', 'add-apt-repository', 'ppa:deadsnakes/ppa'],
+            stdout="TTY",
+        )
+
+    packages = ['python3.13', 'python3.13-dev', 'python3.13-venv']
+
+    execute(
+        ['sudo', 'apt', 'install', *packages],
+        stdout="TTY",
+    )
+
+
 # note that these need to be carried out in order of dependency
 include('experiments.py')
 include('jerjerrod/HOMELY.py')
