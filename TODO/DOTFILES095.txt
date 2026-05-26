@@ -1,0 +1,8 @@
+DOTFILES095 MAC MacOS 26.5 treesitter code-signing problem
+
+Note that MacOS 26.5 seems to be killing treesitter parser processes: See
+https://krakentech.slack.com/archives/C084X5PGUDU/p1779769452038629
+
+Possible fix: after running `:TSUpdate` (or any first-time parser install), re-sign all parsers:
+
+    find ~/.local/share/nvim -name "*.so" -exec codesign -f -s - {} \;
