@@ -13,6 +13,20 @@ from HOMELY import HERE, HOME, IS_UBUNTU, section_ubuntu, want_full, allow_insta
 from HOMELY import get_key_combos_for_action
 
 
+@functools.cache
+def ubuntu_release_major() -> int:
+    if not IS_UBUNTU:
+        raise Exception("Called ubuntu_release_name on non-ubuntu system")
+
+    for line in Path('/etc/lsb-release').read_text().splitlines():
+        key, val = line.strip().split('=', 1)
+        if key == 'DISTRIB_RELEASE':
+            parts = val.split('.')
+            return int(parts[0])
+
+    raise Exception("Did not find DISTRIB_CODENAME in /etc/lsb-release")
+
+
 @section_ubuntu(enabled=allow_installing_stuff, quick=True)
 def ubuntu_swap_caps_escape():
     if not yesno('ubuntu_swap_caps_escape', 'Ubuntu: Swap caps/escape using dconf-editor?'):
@@ -317,6 +331,21 @@ def ubuntu_workspaces_on_all_monitors():
         'org.gnome.mutter',
         'workspaces-only-on-primary',
         'false',
+    ])
+
+
+@section_ubuntu(enabled=allow_installing_stuff and ubuntu_release_major() >= 24, quick=True)
+def ubuntu_disable_tiling_assistant():
+    if not yesno(
+        'ubuntu_disable_tiling_assistant',
+        'Ubuntu: Disable gnome tiling assistant?',
+    ):
+        return
+
+    execute([
+        'gnome-extensions',
+        'disable',
+        'tiling-assistant@ubuntu.com',
     ])
 
 
