@@ -468,3 +468,9 @@ def i3_config():
         i3_config_file.write_text("# set $screen1 HDMI-i\n# set $screen2 DP-0\n")
 
     lineinfile(str(i3_config_file), f'include {HERE}/i3/config', where=WHERE_END)
+
+
+@section_ubuntu(enabled=allow_installing_stuff)
+def ubuntu_default_apps():
+    # sushi is for previewing MP4 files
+    execute(['sudo', 'apt', 'install', 'gnome-sushi'], stdout="TTY")
