@@ -547,11 +547,11 @@ fun! <SID>SmartImportUI() " {{{
       " remove '.py' extension; convert path separators to '.'
       let l:candidate = substitute(fnamemodify(l:candidate, ':r'), '/', '.', 'g')
 
+      " if the name ends with '.__init__', strip it off
       if l:candidate =~ '\.__init__$'
         let l:candidate = strpart(l:candidate, 0, strlen(l:candidate) - 9)
       endif
 
-      " if the name ends with '.__init__', strip it off
       let l:modules[l:candidate] = "tags file"
     endif
   endfor
