@@ -1,0 +1,14 @@
+DOTFILES097 how to do 'git pull' in dotfiles repos safely?
+
+`git pull --ff-only` seems safest, but will die unnecessarily if there are unpushed commits
+
+`git pull --rebase` can result in merge conflicted files due to stash/unstash
+
+What about the following `git pull --rebase` alternative:
+- git diff to generate a patchfile, put it somewhere safe
+- get the name+sha of the upstream branch
+- create a temporary branch based off current branch `b.pullrebase`
+- create a worktree for the `b.pullrebase` branch in /tmp somewhere
+- attempt rebasing onto the upstream (non-interactively), fail loudly if it doesn't work
+- attempt applying the patchfile, fail loudly if it doesn't work
+- we know the rebase and unstash can succeed, proceed with a regular `git pull --rebase`
