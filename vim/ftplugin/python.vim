@@ -491,7 +491,9 @@ fun! <SID>SmartImportUI() " {{{
   endif
 
   " make a list of imports already in the module
-  call extend(l:modules, <SID>GetCurrentImports())
+  if ! get(b:, 'peter_auto_import_ignore_existing_imports', 0)
+    call extend(l:modules, <SID>GetCurrentImports())
+  endif
 
   let l:projectmarkers = ['.hg', '.git', 'pyproject.toml', 'setup.py']
 
