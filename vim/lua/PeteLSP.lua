@@ -226,8 +226,76 @@ exports.init_pylsp = function()
     end
 end
 
+exports.init_pyrefly = function()
+    if not _has_client('pyrefly') then
+        -- NOTE: I don't want to use vim.lsp.config() and vim.lsp.enable()
+        -- because they use lsp config's buffer-targeting mechanisms and can't
+        -- be manually activated per-buffer.
+        vim.lsp.start({
+            name = 'pyrefly',
+            cmd = { '/home/peter/.venv/neovim/bin/pyrefly', 'tsp' },
+            settings = {
+                pyrefly = {
+                },
+            },
+            root_dir = vim.fs.root(0, {
+                'Pipfile',
+                'pyproject.toml',
+                'requirements.txt',
+                'setup.cfg',
+                'setup.py',
+                '.git',
+            }),
+        })
+    end
+end
+
+exports.init_astral_ty = function()
+    if not _has_client('ty') then
+        -- NOTE: I don't want to use vim.lsp.config() and vim.lsp.enable()
+        -- because they use lsp config's buffer-targeting mechanisms and can't
+        -- be manually activated per-buffer.
+        vim.lsp.start({
+            name = 'ty',
+            cmd = { '/home/peter/.venv/neovim/bin/ty', 'server' },
+            settings = {
+                ty = {
+                    diagnosticMode = 'openFilesOnly',
+                    -- TODO: turn this on later and see if its helpful
+                    disableLanguageServices = true,
+                    -- TODO: turn this off if it overlaps with other linters
+                    showSyntaxErrors = true,
+                    inlayHints = {
+                        variableTypes = true,
+                        callArgumentNames = true,
+                    },
+                    completions = {
+                        autoImport = false,
+                    },
+                },
+            },
+            root_dir = vim.fs.root(0, {
+                'Pipfile',
+                'pyproject.toml',
+                'requirements.txt',
+                'setup.cfg',
+                'setup.py',
+                '.git',
+            }),
+        })
+    end
+end
+
 exports.stop_pylsp = function()
     _maybe_stop_client('pylsp')
+end
+
+exports.stop_astral_ty = function()
+    _maybe_stop_client('ty')
+end
+
+exports.stop_pyrefly = function()
+    _maybe_stop_client('pyrefly')
 end
 
 return exports

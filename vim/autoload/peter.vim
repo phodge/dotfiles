@@ -5,6 +5,8 @@ fun! peter#IDEFeaturesPython(flags)
   " Currently PyLSP is only used for jumping to definitions and showing docs
   return peter#LSPKeymapsFallback({
         \ 'activate_pylsp': a:flags.use_pylsp,
+        \ 'activate_ty': get(a:flags, 'use_astral_ty', 0),
+        \ 'activate_pyrefly': get(a:flags, 'use_pyrefly', 0),
         \ })
 endfun
 fun! peter#IDEFeaturesJS(flags)
@@ -99,6 +101,35 @@ fun! peter#LSPKeymapsFallback(flags = v:null)
     let l:lsp_keymaps = 1
   else
       lua require('PeteLSP').stop_pylsp()
+  endif
+
+  if <SID>pop(l:flags, 'activate_pyrefly', 0)
+    " XXX: b:lsp_init_done is required due to a bug in vim-project-config
+    " where it keeps executing the BufEnter function every time we move
+    " between vim windows
+    if ! get(b:, 'lsp_init_done_pyrefly', 0)
+      lua require('PeteLSP').init_pyrefly()
+      let b:lsp_init_done_pyrefly = 1
+    endif
+
+    let l:lsp_keymaps = 1
+  else
+      lua require('PeteLSP').stop_pyrefly()
+  endif
+
+  " do we need to activate any language servers?
+  if <SID>pop(l:flags, 'activate_ty', 0)
+    " XXX: b:lsp_init_done_ty is required due to a bug in vim-project-config
+    " where it keeps executing the BufEnter function every time we move
+    " between vim windows
+    if ! get(b:, 'lsp_init_done_ty', 0)
+      lua require('PeteLSP').init_astral_ty()
+      let b:lsp_init_done_ty = 1
+    endif
+
+    let l:lsp_keymaps = 1
+  else
+      lua require('PeteLSP').stop_astral_ty()
   endif
 
   " TODO: do we always want to disable ALE when js_lsp_eslint_d is active?
