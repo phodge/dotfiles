@@ -423,6 +423,25 @@ shell_then_poweroff() {
     export SHELL_THEN_POWEROFF=1
     shell_then_hibernate "$@"
 }
+git-rename-master() {
+    # accidentally made some commits on 'master' branch. OOPS
+    # rename current branch to new name
+    new_name="$1"
+    shift
+    if [ -z "$new_name" ]; then
+        echo "Usage: git_rename_master NEW_NAME" >&2
+        return 1
+    fi
+
+    git branch -m "$new_name"
+
+    # disable upstream tracking for the branch (so it won't push/fetch from origin/master)
+    git branch --unset-upstream
+
+    # get new latest master
+    git ff $(git-master-name)
+}
+
 
 # these mainly exist for tmux's <F4> + <S-F4> keyboard shortcuts
 repo_todo_list_view() {
