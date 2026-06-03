@@ -307,10 +307,14 @@ def venv_exec(venv_pip, cmd, **kwargs):
     return execute(cmd, env=env, **kwargs)
 
 
-def maintain_virtualenv(path: str, core_packages: List[str]) -> None:
+def maintain_virtualenv(
+    path: str,
+    core_packages: List[str],
+    which_python3: str = 'python3',
+) -> None:
     if not os.path.exists(path):
         # create the virtualenv
-        execute(['python3', '-m', 'venv', path])
+        execute([which_python3, '-m', 'venv', path])
 
     # make sure we also upgrade build tools inside the virtualenv
     upgrade_packages = ['setuptools', 'pip']
