@@ -497,6 +497,11 @@ fun! <SID>SmartImportUI() " {{{
 
   let l:projectmarkers = ['.hg', '.git', 'pyproject.toml', 'setup.py']
 
+  " look for suggestions from local source files
+  if ! get(b:, 'peter_auto_import_ignore_repo_modules', 0)
+    call extend(l:modules, <SID>GetRepoModules(l:word))
+  endif
+
   " also look through tags to see if there is an importable match in another
   " file
   for l:tag in taglist(l:word)
@@ -560,15 +565,22 @@ fun! <SID>SmartImportUI() " {{{
     let l:options = []
     " ask the user if they'd like to import it from one of the existing modules?
     for l:module in sort(keys(l:modules))
-      call add(l:options, printf('from %s import %s', l:module, l:word))
+      if l:module == ''
+        call add(l:options, printf('import %s', l:word))
+      else
+        call add(l:options, printf('from %s import %s', l:module, l:word))
+      endif
       echohl Question
       echon len(l:options).'. '
+      if l:module != ''
+        echohl pyImport
+        echon 'from '
+        echohl None
+        echon l:module
+        echon ' '
+      endif
       echohl pyImport
-      echon 'from '
-      echohl None
-      echon l:module
-      echohl pyImport
-      echon ' import '
+      echon 'import '
       echohl None
       echon l:word
       let l:origin = l:modules[l:module]
@@ -661,6 +673,50 @@ fun! <SID>GetCurrentImports() " {{{
   endfor
   return l:imports
 endfun " }}}
+
+fun! <SID>GetRepoModules(name)
+  " TODO: this is likely to not work correctly if cwd isn't the git repo root
+  let l:modules = {}
+  let g:foo = []
+  for l:pythonfile in systemlist(printf("git ls-files | grep '%s\\(/__init__\\)\\?\\.py$'", a:name))
+    if exists('b:python_packages_dir') && type(b:python_packages_dir) == type([])
+      for l:dir in b:python_packages_dir
+        if stridx(l:pythonfile, l:dir . '/') == 0
+          let l:pythonfile = strpart(l:pythonfile, strlen(l:dir) + 1)
+          break
+        endif
+      endfor
+    endif
+
+    " strip .py off the end
+    let l:pythonfile = fnamemodify(l:pythonfile, ':r')
+
+    " strip /__init__.py off the end
+    let l:pythonfile = substitute(l:pythonfile, '/__init__$', '', '')
+
+    if l:pythonfile =~ '^\.'
+      "continue
+    endif
+
+    if l:pythonfile == a:name
+      let l:modules[''] = 'local module'
+      break
+    endif
+
+    " is it a valid suggestion?
+    if l:pythonfile =~ '^\w\+\(/\w\+\)*'
+      let l:tail = fnamemodify(l:pythonfile, ':t')
+      if l:tail == a:name
+        let l:before = fnamemodify(l:pythonfile, ':h')
+
+        if len(l:before)
+          let l:modules[substitute(l:before, '/', '.', 'g')] = 'local module'
+        endif
+      endif
+    endif
+  endfor
+  return l:modules
+endfun
 
 
 " Always ignore E265 (no space between '#' and comment text) and E116
