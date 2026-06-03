@@ -1509,6 +1509,38 @@ def font_install_macos():
     execute(['brew', 'install'] + fonts)
 
 
+@section_ubuntu(enabled=allow_installing_stuff)
+def font_install_ubuntu():
+    manual_step(
+        "nerd_fonts_inconsolata_install",
+        title="Install Nerd Fonts - Inconsolata",
+        instructions=dedent(
+            '''
+            1. Download https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Inconsolata.zip.
+            2. Extract the archive.
+            3. Move each .ttf file to ~/.local/share/fonts
+            4. Execute fc-cache -f -v
+            '''
+        ),
+        undoable=False,
+    )
+    manual_step(
+        "nerd_fonts_hack_install",
+        title="Install Nerd Fonts - Hack",
+        instructions=dedent(
+            '''
+            1. Download https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip.
+            2. Extract the archive.
+            3. Move HackNerdFontMono*.ttf file to ~/.local/share/fonts
+            4. Execute fc-cache -f -v
+            '''
+        ),
+        undoable=False,
+    )
+
+
+
+
 # install our own copy of astral UV?
 @section(enabled=allow_installing_stuff)
 def install_uv():
