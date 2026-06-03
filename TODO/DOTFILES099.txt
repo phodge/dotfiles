@@ -1,0 +1,7 @@
+DOTFILES099 VALUE create a tool to update dependencies and give LLM-generated summaries of the new features available
+
+Ideally for:
+
+- git submodules (recursively please!)
+- pyproject.toml / requirements.txt
+- package.json
