@@ -72,5 +72,7 @@
 # use_github_ssh_key_hack in my HOMELY.py
 [url "git@phodge.github.com:phodge/"] insteadof = https://github.com/phodge/
 [url "git@phodge.github.com:phodge/"] insteadof = git@github.com:phodge/
+[url "git@phodge.github.com:phodge/"] insteadof = git@github.com/phodge/
+[url "git@phodge.github.com:phodge/"] insteadof = ssh://git@github.com/phodge/
 [url "git@peterhodge.gitlab.com:peterhodge/"] insteadof = https://gitlab.com/peterhodge/
 [url "git@peterhodge.gitlab.com:peterhodge/"] insteadof = git@gitlab.com:peterhodge/
