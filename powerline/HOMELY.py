@@ -134,7 +134,7 @@ def powerline_theme():
     if want_unicode_fix():
         config["segment_data"] = {"time": {"before": ""}}
 
-    dumped = json.dumps(config)
+    dumped = json.dumps(config, indent=2, sort_keys=True)
     mkdir('~/.config')
     mkdir('~/.config/powerline')
     mkdir('~/.config/powerline/themes')
