@@ -337,9 +337,14 @@ def ssh_config_hack():
     mkdir('~/.ssh')
     execute(['chmod', '700', HOME + '/.ssh'])
 
-    config_lines = [
+    config_lines_github = [
         'Host phodge.github.com',
         '\tHostName github.com',
+    ]
+
+    config_lines_gitlab = [
+        'Host peterhodge.gitlab.com',
+        '\tHostName gitlab.com',
     ]
 
     if github_ssh_hack:
@@ -349,9 +354,14 @@ def ssh_config_hack():
             execute(['ssh-keygen', '-t', 'ed25519', '-f', keyfile], stdout="TTY")
             yesno(None, f'You must now upload {keyfile}.pub to github.com and gitlab.com')
 
-        config_lines.append('\tIdentityFile ~/.ssh/id_ed25519_phodge')
+        config_lines_github.append('\tIdentityFile ~/.ssh/id_ed25519_phodge')
+        config_lines_gitlab.append('\tIdentityFile ~/.ssh/id_ed25519_phodge')
 
-    blockinfile('~/.ssh/config', config_lines, WHERE_TOP)
+    blockinfile(
+        '~/.ssh/config',
+        [*config_lines_github, *config_lines_gitlab],
+        WHERE_TOP,
+    )
     execute(['chmod', '600', HOME + '/.ssh/config'])
 
 
