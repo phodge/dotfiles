@@ -371,7 +371,11 @@ def create_powerline_venv():
         # need to install homely for powerline from pypi if not developing
         # locally
         core_packages.append('homely')
-    maintain_virtualenv(POWERLINE_VENV, core_packages)
+    maintain_virtualenv(
+        POWERLINE_VENV,
+        core_packages,
+        which_python3='python3.13',
+    )
 
 
 @section(
