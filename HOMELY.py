@@ -1492,6 +1492,23 @@ def _write_manual_steps_state(all_states: dict[str, dict[str, str | bool]]) -> N
 EXP = ExperimentsManager()
 
 
+@section_macos(enabled=allow_installing_stuff and haveexecutable('brew'))
+def font_install_macos():
+    fonts = [
+        'homebrew/cask/font-inconsolata',
+        # this download doesn't seem to work any more
+        # 'homebrew/cask-fonts/font-anonymous-pro',
+    ]
+    if wantpowerline():
+        fonts.extend([
+            'homebrew/cask/font-inconsolata-for-powerline',
+            # this one seems to require `brew install svn` which I'm maybe not prepared to do
+            # 'homebrew/cask-fonts/font-anonymice-powerline',
+        ])
+    # install some nicer fonts
+    execute(['brew', 'install'] + fonts)
+
+
 # install our own copy of astral UV?
 @section(enabled=allow_installing_stuff)
 def install_uv():
