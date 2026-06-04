@@ -434,7 +434,7 @@ fun! <SID>SmartImportUI() " {{{
         \ 'os sys re collections click simplejson json homely enum pprint itertools functools'
         \ .' tempfile operator glob shutil io argparse subprocess requests base64 pathlib'
         \ .' contextlib tempfile neovim dataclasses typing decimal abc pytest attrs platform'
-        \ .' shlex unittest time_machine tomllib logging asyncio urllib'
+        \ .' shlex unittest time_machine tomllib logging asyncio urllib uuid'
         \ )
 
   " these names are suggested when the identifiers are encountered
