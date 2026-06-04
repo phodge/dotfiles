@@ -1,4 +1,23 @@
-DOTFILES049 figure out vim-python-tools virtualenv with flake8/mypy linters
+DOTFILES049 VALUE PRIORITY figure out vim-python-tools virtualenv with flake8/isort linters
+
+In vimrc.vim:
+for CMD in [isort mypy flake8]:
+- if there is a $VIRTUALENV active and $VIRTUALENV/bin/$CMD exists, set g:ale_python_$CMD_executable = $VIRTUALENV/bin/$CMD
+  else
+  set g:ale_python_$CMD_executable = ~/.venv/neovim/bin/$CMD
+
+Also put a note above this logic to say "If you want to invoke any of these
+tools via 'poetry run ...' or 'uv run ...' then drop this into your vim-project-config: let b:ale_python_xxx_executable = 'poetry'
+
+ALTERNATIVELY
+- ALE might do all the right things if we just set
+  g:ale_python_auto_virtualenv = 1
+  g:ale_python_flake8_auto_uv = 1
+  g:ale_python_flake8_auto_poetry = 1
+
+
+
+--- old content follows ---
 
 Right now we set g:ale_python_flake8_executable to use the virtualenv flake8 ...
 
