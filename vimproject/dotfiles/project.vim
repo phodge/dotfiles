@@ -19,11 +19,22 @@ function projectconfig.BufEnter() dict
     au! DotfilesSaveEffects BufWritePost <buffer> call <SID>RefreshExperiments('on_success')
     nnoremap <buffer> <space>b :call <SID>RefreshExperiments(v:false)<CR>
   endif
+
+  if bufname() =~ 'aerospace.toml'
+    " see DOTFILES067
+    au! DotfilesSaveEffects BufWritePost <buffer> call <SID>RefreshAerospace('on_success')
+    nnoremap <buffer> <space>b :call <SID>RefreshAerospace(v:false)<CR>
+  endif
 endfun
 
 fun! <SID>RefreshExperiments(autoclose)
   let l:cmd = printf('homely update %s --nopull -o refresh_experiments', shellescape(g:pete_dotfiles_root))
   return InAlacrittyWindow(l:cmd, {'autoclose': 'on_success'})
+endfun
+
+fun! <SID>RefreshAerospace(autoclose)
+  " see DOTFILES067
+  return InAlacrittyWindow('aerospace reload-config --no-gui', {'autoclose': a:autoclose})
 endfun
 
 fun! <SID>Retest()
