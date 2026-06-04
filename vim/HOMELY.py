@@ -51,6 +51,11 @@ def get_vim_options() -> Dict[str, Union[bool, str]]:
         'Vim: use builtin php syntax?',
     )
 
+    # TODO: this and jerjerrod_clear_cache_in_shell need to be OFF for Kraken
+    # machines ... is there a way I could do this via dotfiles.kraken.git? Or
+    # otherwise have some clearer question like "Do you deal with really huge
+    # git monorepos on this machine?" so that I remember to turn it off always
+    # since it interferes with git rebase
     ret['g:jerjerrod_cache_clearing'] = HOMELY.wantjerjerrod() and yesno(
         'jerjerrod_clear_cache_in_vim',
         'Jerjerrod: automatic cache clearing in Vim using BufWritePost?',
