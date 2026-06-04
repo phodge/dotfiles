@@ -47,11 +47,12 @@ EXP.define_experiment(
 # Test By:
 # - open ~/src/blog.git/content/posts/real-cpu-cooling/index.md and search for ' _\w'
 # - execute
+#        " XXX: undercurl isn't working on
 #        :hi String gui=undercurl
 #        :hi Identifier gui=strikethrough
 #
 #
-# Confirmed not needed on SPARK_UUID
+# Confirmed not needed on SPARK_UUID (24.04) or DEEPCOOL3_UUID (26.04)
 #
 # Note: on old work-supplied M2 Mac $TERM appears to be set correctly already,
 # however my font (Incosolata for Powerline) doesn't seem to support Italics
