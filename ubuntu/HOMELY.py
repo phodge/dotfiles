@@ -334,8 +334,11 @@ def ubuntu_workspaces_on_all_monitors():
     ])
 
 
-@section_ubuntu(enabled=allow_installing_stuff and ubuntu_release_major() >= 24, quick=True)
+@section_ubuntu(enabled=allow_installing_stuff, quick=True)
 def ubuntu_disable_tiling_assistant():
+    if ubuntu_release_major() < 24:
+        return
+
     if not yesno(
         'ubuntu_disable_tiling_assistant',
         'Ubuntu: Disable gnome tiling assistant?',
