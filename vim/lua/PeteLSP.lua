@@ -194,6 +194,7 @@ exports.init_pylsp = function()
             settings = _get_default_pylsp_settings(),
             root_dir = vim.fs.root(0, {
                 -- copied from the lspconfig plugin I used to use ...
+                -- TODO: can this be improved?
                 'Pipfile',
                 'pyproject.toml',
                 'requirements.txt',
