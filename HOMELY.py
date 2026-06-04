@@ -1120,6 +1120,14 @@ def install_htop_macos():
     execute(['brew', 'install', 'htop'])
 
 
+@section_ubuntu(enabled=allow_installing_stuff)
+def install_htop_ubuntu():
+    if not yesno('install_htop', 'Install htop via apt?'):
+        return
+
+    installpkg('htop', apt='htop')
+
+
 @section(enabled=allow_installing_stuff)
 def install_pyenv():
     if not yesno('want_pyenv', 'Git clone pyenv to ~/.pyenv? (Needed for FudgeMoney dev)', default=None):
