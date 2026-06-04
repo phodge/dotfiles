@@ -1530,6 +1530,12 @@ def install_prek():
     execute(['uv', 'tool', 'install', 'prek'])
 
 
+@section(enabled=False)
+def git_pull_rebase_this_repo():
+    # XXX: this didn't really work, see DOTFILES097
+    execute(['git', 'config', 'pull.rebase', 'merges'], cwd=HERE)
+
+
 # note that these need to be carried out in order of dependency
 include('experiments.py')
 include('jerjerrod/HOMELY.py')
