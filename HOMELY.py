@@ -1093,23 +1093,6 @@ def git_install():
         execute(cmd, stdout="TTY")
 
 
-@section_macos(enabled=allow_installing_stuff and haveexecutable('brew'))
-def font_install():
-    fonts = [
-        'homebrew/cask/font-inconsolata',
-        # this download doesn't seem to work any more
-        # 'homebrew/cask-fonts/font-anonymous-pro',
-    ]
-    if wantpowerline():
-        fonts.extend([
-            'homebrew/cask/font-inconsolata-for-powerline',
-            # this one seems to require `brew install svn` which I'm maybe not prepared to do
-            # 'homebrew/cask-fonts/font-anonymice-powerline',
-        ])
-    # install some nicer fonts
-    execute(['brew', 'install'] + fonts)
-
-
 @section_macos(quick=True)
 def iterm2_prefs():
     if yesno('use_iterm2_prefs', 'Use custom iterm2 prefs?', default=True):
