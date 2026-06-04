@@ -23,7 +23,7 @@ endfun
 
 fun! <SID>RefreshExperiments(autoclose)
   let l:cmd = printf('homely update %s --nopull -o refresh_experiments', shellescape(g:pete_dotfiles_root))
-  return InAlacrittyWindow(l:cmd, {'autoclose': a:autoclose})
+  return InAlacrittyWindow(l:cmd, {'autoclose': 'on_success'})
 endfun
 
 fun! <SID>Retest()
