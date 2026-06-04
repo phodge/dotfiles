@@ -56,7 +56,9 @@ fun! <SID>ShowGitLog(gitcmd)
 
     " set up an autocmd to self-destruct this window when it is the last
     " window left
-    au! gitmagic WinEnter <buffer> if winnr('$') == 1 | close | endif
+    " XXX: this was causing permissions problems in neovim and but also
+    " appears to not be necessary?
+    "au! gitmagic WinEnter <buffer> if winnr('$') == 1 | close | endif
 
     redraw!
   finally
