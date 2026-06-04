@@ -22,7 +22,8 @@ function projectconfig.BufEnter() dict
 endfun
 
 fun! <SID>RefreshExperiments(autoclose)
-  return InAlacrittyWindow('homely update ~/dotfiles --nopull -o refresh_experiments', {'autoclose': a:autoclose})
+  let l:cmd = printf('homely update %s --nopull -o refresh_experiments', shellescape(g:pete_dotfiles_root))
+  return InAlacrittyWindow(l:cmd, {'autoclose': a:autoclose})
 endfun
 
 fun! <SID>Retest()
