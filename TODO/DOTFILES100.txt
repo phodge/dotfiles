@@ -1,0 +1,4 @@
+DOTFILES100 PeteLSP.init_XXX() should call workspace/didChangeConfiguration when server already running
+
+This allows more easily changing the preferences in vim-project-config and have
+them take effect immediately.

@@ -207,6 +207,10 @@ exports.init_pylsp = function()
                 local settings = _get_default_pylsp_settings()
 
                 if signatures then
+                    -- TODO: I'm not sure why we have to send this through
+                    -- didChangeConfiguration instead of the initial settings.
+                    -- The git history didn't state a reason and I suspect it
+                    -- might be because I've not had DOTFILES100 implemented
                     settings.pylsp.plugins.jedi_signature_help.enabled = true
                     client.notify('workspace/didChangeConfiguration', { settings = settings })
                 end
@@ -223,6 +227,8 @@ exports.init_pylsp = function()
                 vim.o.tagfunc = ""
             end,
         })
+    else
+        -- TODO: DOTFILES100 call workspace/didChangeConfiguration here
     end
 end
 
