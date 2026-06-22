@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+"""
+Safe 'git pull --rebase' alternative for dotfiles repos.
+
+The problem with plain `git pull --rebase` (even with rebase.autostash=true)
+is that either the rebase or the subsequent autostash-pop can fail with
+conflicts, leaving the working tree in a messy state.
+
+This script validates the entire operation in a throwaway worktree first:
+  1. Fetch the upstream
+  2. Save the working tree as a patch (no stash yet)
+  3. Create a temp linked worktree at HEAD
+  4. Attempt the rebase and patch-apply in the temp worktree
+  5. Only if both succeed, clean up the temp worktree, stash, and execute for real
+
+This guarantees that when we touch the real working tree, the rebase and
+stash-pop will both succeed without conflicts.
+"""
+
+import argparse
+import datetime
+import subprocess
+import sys
+from os import getpid
+from pathlib import Path
+from types import SimpleNamespace
+
+
+# -- Git subprocess wrappers --------------------------------------------------
+
+def git_output(args):
+    """Run a git command and return stripped stdout. Raises on failure."""
+    return subprocess.check_output(['git'] + args, text=True).strip()
+
+
+def git_call(args):
+    """Run a git command, raising CalledProcessError on non-zero exit."""
+    subprocess.check_call(['git'] + args)
+
+
+def git_try(args):
+    """Run a git command without checking the exit code (best-effort)."""
+    subprocess.run(['git'] + args)
+
+
+# -- Pre-flight checks --------------------------------------------------------
+
+def get_git_dir():
+    """Return the .git directory path for the current repo."""
+    return Path(git_output(['rev-parse', '--git-dir']))
+
+
+def check_no_staged_changes():
+    """Abort if there are staged changes.
+
+    Staged changes represent deliberate, in-progress work that this script
+    must not silently bundle into the stash or interfere with.
+    """
+    staged = git_output(['diff', '--cached', '--name-only'])
+    if staged:
+        print("Error: You have staged changes. Please unstage or commit them first.", file=sys.stderr)
+        sys.exit(1)
+
+
+def check_not_in_progress(git_dir):
+    """Refuse to run if a merge, rebase, or cherry-pick is in progress.
+
+    Git uses sentinel files inside .git/ to indicate in-progress operations.
+    Starting another operation while one is active would corrupt state.
+    """
+    indicators = {
+        'rebase-merge': 'Rebase',
+        'rebase-apply': 'Rebase',
+        'MERGE_HEAD': 'Merge',
+        'CHERRY_PICK_HEAD': 'Cherry Pick',
+    }
+    for file, label in indicators.items():
+        if Path(git_dir, file).exists():
+            print(f"Error: A {label} is already in progress.", file=sys.stderr)
+            sys.exit(1)
+
+
+# -- Branch / upstream resolution ---------------------------------------------
+
+def resolve_branch_and_upstream():
+    """Determine the current branch name and its configured upstream.
+
+    @{upstream} resolves to the tracking branch (e.g. origin/main).
+    We bail early if there's no upstream or we're in detached HEAD.
+    """
+    branch = git_output(['rev-parse', '--abbrev-ref', 'HEAD'])
+    if branch == 'HEAD':
+        print("Not on a named branch. Cannot rebase.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        upstream = git_output(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{upstream}'])
+    except subprocess.CalledProcessError:
+        print(f"Branch '{branch}' has no upstream configured.", file=sys.stderr)
+        sys.exit(1)
+    return branch, upstream, upstream.split('/')[0]
+
+
+# -- Temp path helpers --------------------------------------------------------
+
+def compute_temp_paths(pid, branch):
+    """Build paths for the temporary worktree, branch, and patch file.
+
+    All artifacts include the PID so concurrent invocations don't clash,
+    and the datetime in the stash message makes it easy to identify orphaned
+    stashes if cleanup is interrupted.
+    """
+    datetime_str = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return SimpleNamespace(
+        stash_msg=f'safe-pull-rebase {pid} {datetime_str}',
+        temp_branch=f'{branch}.safe-pull-rebase-dryrun-{pid}',
+        worktree_dir=f'/tmp/git-safe-pull-rebase-{pid}',
+        patch_file=f'/tmp/git-safe-pull-rebase-{pid}.patch',
+    )
+
+
+# -- Working tree snapshot ----------------------------------------------------
+
+def has_working_tree_changes():
+    """Check if there are any uncommitted changes (tracked, staged, or untracked).
+
+    We check all three categories because the subsequent save step needs to
+    capture everything to faithfully reproduce the working tree later.
+    """
+    diff_tracked = git_output(['diff', '--name-only'])
+    diff_cached = git_output(['diff', '--cached', '--name-only'])
+    untracked = git_output(['ls-files', '--others', '--exclude-standard'])
+    return bool(diff_tracked or diff_cached or untracked)
+
+
+def save_patch(paths):
+    """Capture the full working tree as a patch file (without stashing).
+
+    We stage everything with 'git add -A' so that 'git diff --cached --binary'
+    emits a complete diff that includes untracked files as "new file" entries.
+    After writing the patch we restore the index with 'git reset', leaving the
+    working tree unchanged. The actual stash is deferred until after the dry
+    run confirms the rebase will succeed.
+
+    Returns True if a non-empty patch was written, False otherwise.
+    """
+    print("Saving working tree changes as patch...")
+    git_call(['add', '-A', ':/'])
+    with open(paths.patch_file, 'w') as f:
+        subprocess.check_call(['git', 'diff', '--cached', '--binary'], stdout=f)
+    git_call(['reset', 'HEAD', '--', ':/'])
+    if Path(paths.patch_file).stat().st_size == 0:
+        Path(paths.patch_file).unlink()
+        print("Warning: empty patch generated; nothing to save.", file=sys.stderr)
+        return False
+    return True
+
+
+def stash_working_tree(paths):
+    """Stash the working tree after the dry run has validated success.
+
+    The stash message carries the PID + datetime so it can be matched to the
+    temp branch/worktree if something goes wrong and cleanup is needed.
+    """
+    print("Stashing working tree changes...")
+    git_call(['stash', 'push', '--include-untracked', '-m', paths.stash_msg])
+
+
+# -- Dry-run helpers ----------------------------------------------------------
+
+def create_temp_worktree(paths):
+    """Create a linked worktree at HEAD on a throwaway branch.
+
+    This gives us an isolated working tree where we can test the rebase and
+    stash-pop without touching the real working tree or index.
+    """
+    print("Creating temporary worktree for validation...")
+    git_call(['worktree', 'add', '-b', paths.temp_branch, paths.worktree_dir, 'HEAD'])
+
+
+def validate_dry_run(paths, upstream, branch, has_patch):
+    """Attempt the rebase and patch-apply in the temp worktree.
+
+    This is the core safety mechanism: we test whether both operations would
+    succeed *before* modifying the real branch. If either step fails, we abort
+    the temp rebase and raise a clear error.
+
+    The patch-apply simulates what 'git stash pop' will do after the real
+    rebase. If the patch applies cleanly, the stash-pop is guaranteed to
+    succeed (git stash pop uses 3-way merge which is more lenient than apply,
+    so apply succeeding implies pop will succeed).
+    """
+    print("Validating rebase...")
+    try:
+        git_call(['-C', paths.worktree_dir, 'rebase', upstream])
+    except subprocess.CalledProcessError:
+        # Clean up the failed rebase in the temp worktree so we can remove it
+        git_try(['-C', paths.worktree_dir, 'rebase', '--abort'])
+        raise RuntimeError(
+            f"Rebase would fail: {branch} cannot be cleanly rebased onto {upstream}."
+        )
+
+    if has_patch:
+        print("Validating patch application (simulating stash pop)...")
+        try:
+            git_call(['-C', paths.worktree_dir, 'apply', '--binary', paths.patch_file])
+        except subprocess.CalledProcessError:
+            raise RuntimeError(
+                f"Stash pop would fail: working tree changes conflict after rebase.\n"
+                f"  Patch saved at: {paths.patch_file}"
+            )
+
+
+def cleanup_worktree(paths):
+    """Remove the temporary worktree and its throwaway branch.
+
+    The worktree remove uses --force because git may complain about
+    uncommitted changes (the test-apply modified files in the worktree).
+    Branch deletion uses git_try since the branch may not exist if cleanup
+    is being retried.
+    """
+    print("Cleaning up temporary worktree...")
+    git_call(['worktree', 'remove', '--force', paths.worktree_dir])
+    git_try(['branch', '-D', paths.temp_branch])
+
+
+# -- Real execution -----------------------------------------------------------
+
+def execute_real_rebase(upstream, paths, did_stash):
+    """Execute the real rebase and restore the working tree.
+
+    We know both steps will succeed because the dry-run already validated them.
+    Using 'git rebase' directly (not 'git pull') avoids a redundant fetch.
+    """
+    print(f"Rebasing...")
+    git_call(['rebase', upstream])
+
+    if did_stash:
+        print("Restoring working tree changes...")
+        git_call(['stash', 'pop'])
+        if Path(paths.patch_file).exists():
+            Path(paths.patch_file).unlink()
+
+
+# -- Error recovery -----------------------------------------------------------
+
+def cleanup_on_error(created_worktree, paths, did_stash):
+    """Restore the original working tree and remove temp artifacts.
+
+    All steps are best-effort (git_try) because we're already in a failure
+    state and just want to leave things as clean as possible. The patch file
+    survives on disk for manual recovery if the stash-pop was the failing
+    step.
+    """
+    if created_worktree and Path(paths.worktree_dir).exists():
+        git_try(['-C', paths.worktree_dir, 'rebase', '--abort'])
+        git_try(['worktree', 'remove', '--force', paths.worktree_dir])
+        git_try(['branch', '-D', paths.temp_branch])
+    if did_stash:
+        git_try(['stash', 'pop'])
+
+
+# -- Main ---------------------------------------------------------------------
+
+def main():
+    pid = getpid()
+    check_no_staged_changes()
+    check_not_in_progress(get_git_dir())
+
+    # Resolve branch and upstream, bail early if anything is missing
+    branch, upstream, remote = resolve_branch_and_upstream()
+
+    # Fetch and check for upstream changes before doing any work
+    print(f"Fetching {remote}...")
+    git_call(['fetch', remote])
+    if not git_output(['rev-list', 'HEAD..' + upstream]):
+        print("Already up to date.")
+        return
+
+    # Save the working tree as a patch for dry-run validation (no stash yet)
+    paths = compute_temp_paths(pid, branch)
+    has_changes = has_working_tree_changes()
+    has_patch = save_patch(paths) if has_changes else False
+    created_worktree = False
+    did_stash = False
+
+    try:
+        # Phase 1: Dry-run the rebase + stash-pop in a throwaway worktree
+        create_temp_worktree(paths)
+        created_worktree = True
+        validate_dry_run(paths, upstream, branch, has_patch)
+
+        # Phase 2: Clean up temp artifacts now that we've validated success
+        cleanup_worktree(paths)
+        created_worktree = False
+
+        # Phase 3: Stash only now that we know the rebase will succeed
+        if has_changes:
+            stash_working_tree(paths)
+            did_stash = True
+
+        # Phase 4: Execute the real rebase (guaranteed to succeed)
+        execute_real_rebase(upstream, paths, did_stash)
+
+        print("Success.")
+    except (RuntimeError, subprocess.CalledProcessError) as e:
+        cleanup_on_error(created_worktree, paths, did_stash)
+        prefix = "" if isinstance(e, RuntimeError) else "git command failed: "
+        print(f"FAILED: {prefix}{e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Safely rebase the current branch onto its upstream by '
+                    'validating the operation in a temporary worktree first.'
+    )
+    parser.parse_args()
+    main()
