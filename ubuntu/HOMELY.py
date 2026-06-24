@@ -506,3 +506,28 @@ def i3_config():
 def ubuntu_default_apps():
     # sushi is for previewing MP4 files
     execute(['sudo', 'apt', 'install', 'gnome-sushi'], stdout="TTY")
+
+
+SENSORS_DETECT_MARKER = Path.home() / '.config/sensors-detect-done'
+
+
+@section_ubuntu(enabled=allow_installing_stuff)
+def ubuntu_lm_sensors():
+    if not yesno('install_lm_sensors', 'Install lm-sensors (monitor hardware temperatures/fan speeds)?', recommended=True):
+        return
+
+    installpkg('lm-sensors', apt='lm-sensors', brew=None)
+
+    if SENSORS_DETECT_MARKER.exists():
+        return
+
+    if yesno(
+        'run_sensors_detect',
+        'Run sensors-detect to detect hardware sensors? '
+        'WARNING: this will ask to probe I/O ports in unsafe ways'
+        ', and you will be asked to modify /etc/modules at the end.',
+        default=False,
+        recommended=True,
+    ):
+        _sudo(['sensors-detect'])
+        SENSORS_DETECT_MARKER.touch()
