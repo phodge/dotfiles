@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+if ! command -v xdg-settings &>/dev/null; then
+    echo "ERROR: operating system not supported: no xdg-settings" >&2
+    exit 1
+fi
+
+if [ $# -eq 0 ]; then
+    echo "Usage: with_firefox <command> [args...]" >&2
+    exit 1
+fi
+
+previous=$(xdg-settings get default-web-browser)
+if snap list firefox &>/dev/null; then
+    firefox_desktop=firefox_firefox.desktop
+else
+    firefox_desktop=firefox.desktop
+fi
+echo "Saving current default: $previous" >&2
+echo "Setting default to $firefox_desktop" >&2
+xdg-settings set default-web-browser "$firefox_desktop"
+
+restore() {
+    echo "Restoring default to $previous" >&2
+    xdg-settings set default-web-browser "$previous"
+}
+trap restore EXIT
+
+"$@"
+rc=$?
+exit $rc
