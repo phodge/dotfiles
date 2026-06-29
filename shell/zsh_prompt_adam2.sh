@@ -193,7 +193,11 @@ precmd() {
 
     zle_highlight[(r)default:*]="default:fg=$prompt_adam2_color4"
 
-    jerjerrod_clearcache_now &> /dev/null
+    if [ -n "$EXP_JERJERROD_DELAYED_CACHE_CLEARING" ]; then
+        jerjerrod_clearcache_soon &> /dev/null
+    else
+        jerjerrod_clearcache_now &> /dev/null
+    fi
 }
 
 prompt_adam2_choose_prompt () {

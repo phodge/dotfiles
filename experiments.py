@@ -14,6 +14,7 @@ DEEPCOOL2_UUID = "acc4f383-d2f3-411c-a84d-68e7891b9007"
 DEEPCOOL3_UUID = "e2894ae5-1dd2-4db0-abce-e9e4b9286783"
 SPARK_UUID = "e162867b-4d2c-49d7-ab4b-ed0b563e79cc"
 KRAKENMAC25_UUID = "A5F9F70C-509B-4073-BAC6-5D9A31181DAB"
+AIRMAC26_UUID = "6E063168-6426-41F9-9D42-BA8ACB968522"
 
 
 # II. DECLARE FEATURES & EXPERIMENTS
@@ -85,6 +86,20 @@ EXP.define_experiment(
 EXP.define_experiment(
     'EXP_NVIM_COPILOT_CHAT',
     by_uuid=[],
+    active_until=None,
+)
+
+# Use laggy jerjerrod cache clearing
+#
+#   if $EXP_JERJERROD_DELAYED_CACHE_CLEARING == "1"
+#     ...
+#   else
+#     ...
+#   endif
+#
+EXP.define_experiment(
+    'EXP_JERJERROD_DELAYED_CACHE_CLEARING',
+    by_uuid=[AIRMAC26_UUID],
     active_until=None,
 )
 

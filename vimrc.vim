@@ -1666,10 +1666,18 @@ fun! <SID>JerjerrodClearCache()
     return
   endif
 
+  let l:cmd = 'jerjerrod clearcache --local ' . shellescape(expand('%'))
   if has('*jobstart')
-    call jobstart(['jerjerrod', 'clearcache', '--local', expand('%')])
+    if $EXP_JERJERROD_DELAYED_CACHE_CLEARING
+      let l:cmd = 'sleep 3 && ' . l:cmd
+    endif
+    call jobstart(['bash', '-c', shellescape(l:cmd)])
   else
-    silent exe '!jerjerrod clearcache --local '.shellescape(expand('%'))
+    if $EXP_JERJERROD_DELAYED_CACHE_CLEARING
+      silent exe 'bash -c ' . shellescape('sleep 3 && ' . l:cmd)
+    else
+      silent exe l:cmd
+    endif
     redraw!
   endif
 endfunction

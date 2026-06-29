@@ -99,7 +99,11 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
                 __wantclear=1
             fi
         fi
-        jerjerrod_clearcache_now
+        if [ -n "$EXP_JERJERROD_DELAYED_CACHE_CLEARING" ]; then
+            jerjerrod_clearcache_soon
+        else
+            jerjerrod_clearcache_now
+        fi
     }
     add-zsh-hook preexec jerjerrod_clearcache
     add-zsh-hook zshexit jerjerrod_clearcache_now
@@ -116,7 +120,23 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
         fi
     }
 
-    export PS1='`jerjerrod_clearcache_now`'"$PS1"
+    jerjerrod_clearcache_soon() {
+        test -n "$ZSHNOGIT" && return
+
+        if [ -n "$__wantclear" ]; then
+            if [ -n "$JERJERROD_CLEAR_CACHE_IN_SHELL" ]; then
+                echo "jerjerrod: Clearing cache now"
+                bash -c 'sleep 3; jerjerrod clearcache --local "$PWD"' &
+            fi
+            __wantclear=
+        fi
+    }
+
+    if [ -n "$EXP_JERJERROD_DELAYED_CACHE_CLEARING" ]; then
+        export PS1='`jerjerrod_clearcache_soon`'"$PS1"
+    else
+        export PS1='`jerjerrod_clearcache_now`'"$PS1"
+    fi
 fi
 
 
