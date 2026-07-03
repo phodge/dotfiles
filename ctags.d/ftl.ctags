@@ -1,0 +1,11 @@
+# 1. Define the FTL language and map it to the .ftl file extension
+--langdef=ftl
+--map-ftl=+.ftl
+
+# 2. Define the types of tags (kinds) to extract (m = message, t = term)
+--kinddef-ftl=m,message,messages
+--kinddef-ftl=t,term,terms
+
+# 3. Regular expressions to extract standard messages and terms
+--regex-ftl=/^([a-zA-Z][a-zA-Z0-9_-]*)[ \t]*=/\1/m,message/
+--regex-ftl=/^(-[a-zA-Z][a-zA-Z0-9_-]*)[ \t]*=/\1/t,term/
