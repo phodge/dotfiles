@@ -507,6 +507,9 @@ def ubuntu_default_apps():
     # sushi is for previewing MP4 files
     execute(['sudo', 'apt', 'install', 'gnome-sushi'], stdout="TTY")
 
+    # timg can be used to view images in some terminals (Kitty, Ghostty)
+    execute(['sudo', 'apt', 'install', 'timg'], stdout="TTY")
+
 
 SENSORS_DETECT_MARKER = Path.home() / '.config/sensors-detect-done'
 
