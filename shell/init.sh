@@ -63,6 +63,15 @@ if [ -e /etc/lsb-release ]; then
     }
 fi
 
+# show an image directly in the terminal
+icat() {
+    timg -pk "$@"
+}
+# show image(s) directly in the terminal, but scaled down to 5 lines height
+iprev() {
+    timg -pk -gx5 "$@"
+}
+
 # add our SSH key to ssh agent
 # XXX: on ubuntu 22.04 this adds a 'Enter PIN for authenticator' prompt to
 # shell startup so maybe we don't want this?
