@@ -1536,6 +1536,12 @@ def git_pull_rebase_this_repo():
     execute(['git', 'config', 'pull.rebase', 'merges'], cwd=HERE)
 
 
+@section()
+def ghostty_config():
+    mkdir('~/.config/ghostty')
+    symlink('config.ghostty', '~/.config/ghostty/config.ghostty')
+
+
 # note that these need to be carried out in order of dependency
 include('experiments.py')
 include('jerjerrod/HOMELY.py')
