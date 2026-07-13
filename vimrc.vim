@@ -2043,3 +2043,9 @@ nmap <F33> <C-F9>
 nmap <F34> <C-F10>
 nmap <F35> <C-F11>
 nmap <F36> <C-F12>
+
+" automic reload of Ghostty config
+augroup GhosttyConfig
+  autocmd!
+  autocmd BufWritePost config.ghostty silent! !kill -s SIGUSR2 $(pgrep ghostty)
+augroup END
