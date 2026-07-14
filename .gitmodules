@@ -115,3 +115,6 @@
 [submodule "vim-syn-info.git"]
 	path = vim-packages/vim-syn-info.git
 	url = https://github.com/phodge/vim-syn-info.git
+[submodule "vim-gitgutter.git"]
+	path = vim-packages/vim-gitgutter.git
+	url = https://github.com/airblade/vim-gitgutter.git

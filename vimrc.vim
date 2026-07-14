@@ -481,7 +481,7 @@ if filereadable(s:plugpath)
 
   " git-gutter
   if has('signs') && v:version >= 704
-    Plug 'airblade/vim-gitgutter'
+    call <SID>VendoredPlug('airblade/vim-gitgutter')
 
     " make it disabled by default, by toggle-able by space-g
     let g:gitgutter_enabled = 0
