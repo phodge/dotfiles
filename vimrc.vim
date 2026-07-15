@@ -1672,12 +1672,12 @@ fun! <SID>JerjerrodClearCache()
     if $EXP_JERJERROD_DELAYED_CACHE_CLEARING
       let l:cmd = 'sleep 3 && ' . l:cmd
     endif
-    call jobstart(['bash', '-c', shellescape(l:cmd)])
+    call jobstart(['bash', '-c', shellescape(l:cmd)], {"detach": v:true})
   else
     if $EXP_JERJERROD_DELAYED_CACHE_CLEARING
-      silent exe 'bash -c ' . shellescape('sleep 3 && ' . l:cmd)
+      silent exe '!bash -c ' . shellescape('sleep 3 && ' . l:cmd)
     else
-      silent exe l:cmd
+      silent exe '!' . l:cmd
     endif
     redraw!
   endif
