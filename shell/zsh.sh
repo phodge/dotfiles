@@ -126,7 +126,7 @@ if type add-zsh-hook &> /dev/null && which jerjerrod &> /dev/null; then
         if [ -n "$__wantclear" ]; then
             if [ -n "$JERJERROD_CLEAR_CACHE_IN_SHELL" ]; then
                 echo "jerjerrod: Clearing cache now"
-                bash -c 'sleep 3; jerjerrod clearcache --local "$PWD"' &
+                bash -c 'nohup bash -c "sleep 3; jerjerrod clearcache --local $PWD" &' &>/dev/null
             fi
             __wantclear=
         fi
