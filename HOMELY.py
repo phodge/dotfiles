@@ -392,6 +392,7 @@ def create_powerline_venv():
     maintain_virtualenv(
         POWERLINE_VENV,
         core_packages,
+        # TODO: this requires a python3.13 executable which we might not have
         which_python3='python3.13',
     )
 
