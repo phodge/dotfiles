@@ -1,0 +1,13 @@
+DOTFILES101 PRIORITY VALUE git-safe-pull-rebase unit tests and improvements
+
+My main concerns are:
+
+* For untracked files we should just be able to check whether they exist in the
+  target branch, no?
+* If there's a large binary file we might not want to include it in the patch.
+* We really should be stashing the patch file somewhere for safekeeping, at
+  least for a couple of weeks.
+* Markers like `created_worktree` and `did_stash` should really store 0/1/2 for
+  not-done/attempted/succeeded so that the cleanup function can know whether
+  its dealing with an "unsuccessful stash" that might need cleaning up.
+* A refactor might break some of the core logic
