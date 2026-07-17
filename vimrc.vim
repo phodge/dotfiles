@@ -1668,7 +1668,7 @@ fun! <SID>JerjerrodClearCache()
   endif
 
   let l:cmd = 'jerjerrod clearcache --local ' . shellescape(expand('%'))
-  if has('*jobstart')
+  if exists('*jobstart')
     if $EXP_JERJERROD_DELAYED_CACHE_CLEARING
       let l:cmd = 'sleep 3 && ' . l:cmd
     endif
