@@ -1,0 +1,23 @@
+# macos-option-as-alt = true
+
+# XXX: on MacOS my CTRL+ALT+T shortcut seems to spawn a new Ghostty app
+# instance, so if I let it hang around after windows are closed it'll keep the
+# App running in Dock forever :-/
+quit-after-last-window-closed = true
+
+# don't merge >= into a single character
+font-feature = "-calt, -liga, -dlig"
+
+# TODO: these are all macos-specific
+keybind = super+h=text:\x1bh
+keybind = super+j=text:\x1bj
+keybind = super+k=text:\x1bk
+keybind = super+l=text:\x1bl
+keybind = super+n=text:\x1bn
+keybind = super+p=text:\x1bp
+keybind = super+shift+h=text:\x1bH
+keybind = super+shift+j=text:\x1bJ
+keybind = super+shift+K=text:\x1bK
+keybind = super+shift+l=text:\x1bL
+keybind = super+shift+n=text:\x1bN
+keybind = super+shift+p=text:\x1bP
