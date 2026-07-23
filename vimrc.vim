@@ -163,6 +163,52 @@ EOF
 
 endif
 
+if has('nvim') && ! g:git_rebasing " {{{ claudecode.nvim
+  call <SID>VendoredPlug('coder/claudecode.nvim')
+  " snacks.nvim is optional — enables the floating terminal. Without it the
+  " plugin falls back to Neovim's built-in :terminal.
+  " call <SID>VendoredPlug('folke/snacks.nvim')
+
+  lua <<EOF
+    require("claudecode").setup({
+      -- Uncomment if `which claude` shows an alias to ~/.claude/local/claude:
+      -- terminal_cmd = vim.fn.expand("~/.claude/local/claude"),
+      cmd = {
+        "ClaudeCode",
+        "ClaudeCodeFocus",
+        "ClaudeCodeSelectModel",
+        "ClaudeCodeAdd",
+        "ClaudeCodeSend",
+        "ClaudeCodeTreeAdd",
+        "ClaudeCodeStatus",
+        "ClaudeCodeStart",
+        "ClaudeCodeStop",
+        "ClaudeCodeOpen",
+        "ClaudeCodeClose",
+        "ClaudeCodeDiffAccept",
+        "ClaudeCodeDiffDeny",
+        "ClaudeCodeCloseAllDiffs",
+      },
+
+      focus_after_send = true,
+      terminal = {
+        provider = "snacks",
+      },
+    })
+EOF
+
+  nnoremap <silent> <space>ai <cmd>ClaudeCode<cr>
+  nnoremap <silent> <space>af <cmd>ClaudeCodeFocus<cr>
+  nnoremap <silent> <space>ar <cmd>ClaudeCode --resume<cr>
+  nnoremap <silent> <space>aC <cmd>ClaudeCode --continue<cr>
+  nnoremap <silent> <space>am <cmd>ClaudeCodeSelectModel<cr>
+  nnoremap <silent> <space>ab <cmd>ClaudeCodeAdd %<cr>
+  vnoremap <silent> <space>as <cmd>ClaudeCodeSend<cr>
+  nnoremap <silent> <space>aa <cmd>ClaudeCodeDiffAccept<cr>
+  nnoremap <silent> <space>ad <cmd>ClaudeCodeDiffDeny<cr>
+endif " }}}
+
+
 if has('nvim') && g:want_neovim_treesitter " {{{ tree-sitter
 
   if ! g:git_rebasing
