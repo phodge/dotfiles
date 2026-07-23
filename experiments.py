@@ -104,6 +104,28 @@ EXP.define_experiment(
 )
 
 
+# Fix(es) for Wayland wl-copy working in the background and not copying fast
+# enough. Either of these seem to work OK but I'm not sure if the OSC52
+# solution works on Alacritty
+#
+#   if $EXP_NEOVIM_CLIPBOARD_OSC52 == "1"
+#     ...
+#   else
+#     ...
+#   endif
+#
+EXP.define_experiment(
+    'EXP_NEOVIM_CLIPBOARD_OSC52',
+    by_uuid=[DEEPCOOL3_UUID],
+    active_until=None,
+)
+EXP.define_experiment(
+    'EXP_NEOVIM_CLIPBOARD_WLCOPY_CUSTOM',
+    by_uuid=[DEEPCOOL3_UUID],
+    active_until=None,
+)
+
+
 @section(quick=True)
 def refresh_experiments():
     with writefile(HOME + '/.config/experiments.sh') as f:

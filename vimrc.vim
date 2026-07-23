@@ -1618,8 +1618,30 @@ if has('osx')
   " if we're running under OS X, yank into the main clipboard by default
   " NOTE: this is different in vim vs neovim
   set clipboard=unnamed
+elseif $EXP_NEOVIM_CLIPBOARD_OSC52 == "1"
+  " not sure if this will work with Alacritty or on macos, but we want to use
+  " OSC52 for clipboard access in neovim on Wayland
+  set clipboard=
+  let g:clipboard = 'osc52'
+elseif $EXP_NEOVIM_CLIPBOARD_WLCOPY_CUSTOM == "1"
+  " fix for wl-copy defaulting to background clipboard writes, meaning that
+  " sometimes the clipboard isn't ready to paste if I do a quick "xp" to swap
+  " two characters
+  set clipboard=
+  let g:clipboard = {
+        \   "name": "wl-copy",
+        \   "copy": {
+        \       "+": "wl-copy --foreground --paste-once --type text/plain",
+        \       "*": "wl-copy --foreground --paste-once --type text/plain --primary",
+        \   },
+        \   "paste": {
+        \       "+": "wl-paste --no-newline --type text/plain",
+        \       "*": "wl-paste --no-newline --type text/plain --primary",
+        \   },
+        \   "cache": {"enabled": v:false},
+        \ }
 else
-  " for ubuntu we want to use unnamedplus
+  " for linux we normally want to use unnamedplus
   set clipboard=unnamedplus
 endif
 
