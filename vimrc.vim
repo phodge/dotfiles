@@ -153,6 +153,15 @@ if has('nvim') && g:want_copilot
   endif
 endif
 
+if has('nvim')
+  call <SID>VendoredPlug('folke/snacks.nvim')
+
+  lua <<EOF
+    require("snacks").setup({
+    })
+EOF
+
+endif
 
 if has('nvim') && g:want_neovim_treesitter " {{{ tree-sitter
 
