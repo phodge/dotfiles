@@ -66,9 +66,9 @@ hi SignColumn   ctermbg=black guibg=black
 hi! IncSearch     ctermfg=White     ctermbg=Magenta cterm=Bold         guifg=Red   guibg=Yellow gui=Bold
 
 " Diff colors need to be more readable
-hi DiffAdd	  guibg=#333377 guifg=NONE
-hi DiffChange	guibg=#884488 guifg=NONE
-hi DiffText	  guibg=#440000 guifg=NONE
+hi DiffAdd	  guibg=#203020 guifg=NONE
+hi DiffChange	guibg=#302030 guifg=NONE
+hi DiffText	  guibg=#402040 guifg=NONE
 hi DiffDelete	guibg=#000022 guifg=#333377
 
 " for the 'colorcolumn' option
