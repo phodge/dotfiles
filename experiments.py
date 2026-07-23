@@ -126,6 +126,19 @@ EXP.define_experiment(
 )
 
 
+# Use Snacks.nvim file explorer
+#
+#   if $EXP_NEOVIM_SNACKS_EXPLORER == "1"
+#     ...
+#   endif
+#
+EXP.define_experiment(
+    'EXP_NEOVIM_SNACKS_EXPLORER',
+    by_uuid=[DEEPCOOL3_UUID],
+    active_until=None,
+)
+
+
 @section(quick=True)
 def refresh_experiments():
     with writefile(HOME + '/.config/experiments.sh') as f:

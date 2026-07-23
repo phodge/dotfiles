@@ -1404,7 +1404,11 @@ set sidescrolloff=20
   " toggle options quickly
   nnoremap \c :exe 'setlocal colorcolumn='.((&l:colorcolumn=='') ? '+2' : '').' colorcolumn?'<CR>
   nnoremap \d :exe 'setlocal diffopt' . ((&g:diffopt =~ 'iwhite') ? '-' : '+') . '=iwhite diffopt?'<CR>
-  nnoremap \e :Sexplore<CR>:diffoff<CR>
+  if $EXP_NEOVIM_SNACKS_EXPLORER == "1"
+    call nvim_set_keymap('n', '\e', ':lua Snacks.explorer.reveal()<CR>', {"desc": "File Explorer"})
+  else
+    nnoremap \e :Sexplore<CR>:diffoff<CR>
+  endif
   nnoremap \l :set list! list?<CR>
   nnoremap \n :set number! number?<CR>
   nnoremap \p :set paste! paste?<CR>
