@@ -677,7 +677,6 @@ endfun " }}}
 fun! <SID>GetRepoModules(name)
   " TODO: this is likely to not work correctly if cwd isn't the git repo root
   let l:modules = {}
-  let g:foo = []
   for l:pythonfile in systemlist(printf("git ls-files | grep '%s\\(/__init__\\)\\?\\.py$'", a:name))
     if exists('b:python_packages_dir') && type(b:python_packages_dir) == type([])
       for l:dir in b:python_packages_dir
