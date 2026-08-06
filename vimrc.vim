@@ -1451,7 +1451,11 @@ set sidescrolloff=20
   nnoremap \c :exe 'setlocal colorcolumn='.((&l:colorcolumn=='') ? '+2' : '').' colorcolumn?'<CR>
   nnoremap \d :exe 'setlocal diffopt' . ((&g:diffopt =~ 'iwhite') ? '-' : '+') . '=iwhite diffopt?'<CR>
   if $EXP_NEOVIM_SNACKS_EXPLORER == "1"
-    call nvim_set_keymap('n', '\e', ':lua Snacks.explorer.reveal()<CR>', {"desc": "File Explorer"})
+    function! <SID>OpenSnacksExplorer() abort
+      let l:width = get(b:, 'snacks_explorer_width', 100)
+      execute printf('lua Snacks.picker.explorer({ layout = { layout = { width = %g, min_width = %g } } })', l:width, l:width)
+    endfunction
+    nnoremap <silent> \e :call <SID>OpenSnacksExplorer()<CR>
   else
     nnoremap \e :Sexplore<CR>:diffoff<CR>
   endif
