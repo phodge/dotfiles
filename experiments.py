@@ -132,9 +132,11 @@ EXP.define_experiment(
 #     ...
 #   endif
 #
+# WARNING: on DEEPCOOL3 I found that the snacks explorer would consume a lot of
+# CPU as though a background thread was stuck in an endless recursive loop
 EXP.define_experiment(
     'EXP_NEOVIM_SNACKS_EXPLORER',
-    by_uuid=[DEEPCOOL3_UUID],
+    by_uuid=[],
     active_until=None,
 )
 
