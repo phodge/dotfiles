@@ -1,0 +1,3 @@
+DOTFILES102 install golang-go on ubuntu automatically
+
+On Deepcool3 I used "apt install golang-go"
