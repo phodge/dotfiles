@@ -53,7 +53,7 @@ def FTPluginGitCommitInsertPrefix():
       # strip ':' and whitespace off the front of the summary
       summary = summary.lstrip(':').strip()
 
-      flags = ['PRIORITY', 'VALUE', 'EASY', 'MAC', 'CLOSED', 'RESOLVED']
+      flags = ['PRIORITY', 'VALUE', 'EASY', 'MAC', 'CLOSED', 'RESOLVED', 'DONE']
       should_scan = True
       while should_scan:
         should_scan = False
@@ -67,7 +67,7 @@ def FTPluginGitCommitInsertPrefix():
         suggested = f'Add {todoname}: {summary}'
       elif lastindex == 'D':
         suggested = f'Remove {todoname} ({summary})'
-      elif 'RESOLVED' in summary or 'CLOSED' in summary:
+      elif 'RESOLVED' in summary or 'CLOSED' in summary or 'DONE' in summary:
         suggested = f'Resolve {todoname} ({summary})'
       else:
         suggested = None
