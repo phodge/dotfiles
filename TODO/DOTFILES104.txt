@@ -1,0 +1,14 @@
+DOTFILES104 PRIORITY EASY VALUE LINUX chrome current-space launcher
+
+Create a mini utility "browser-launcher" that is able to be set as the "default browser"
+
+When spawned, it will use a command like the following to find out whether Chrome is running on the active space:
+
+    swaymsg -t get_tree | grep -q '"app_id": "google-chrome"'
+
+If chrome IS running, use `google-chrome --new-tab URL` to launch a new chrome tab.
+
+If not, use `google-chrome --new-window URL` to start a new chrome window on the current space.
+
+Note:
+- I'm not sure how well this will work inside a tmux session if it gets moved around
