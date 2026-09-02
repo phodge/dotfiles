@@ -53,7 +53,7 @@ def FTPluginGitCommitInsertPrefix():
       # strip ':' and whitespace off the front of the summary
       summary = summary.lstrip(':').strip()
 
-      flags = ['PRIORITY', 'VALUE', 'EASY', 'MAC', 'CLOSED', 'RESOLVED', 'DONE']
+      flags = ['PRIORITY', 'VALUE', 'EASY', 'MAC', 'LINUX', 'CLOSED', 'RESOLVED', 'DONE']
       should_scan = True
       while should_scan:
         should_scan = False

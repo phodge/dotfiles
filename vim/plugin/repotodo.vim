@@ -104,6 +104,7 @@ fun! <SID>OpenTodosList() abort
 
   syn region todoResolved start=/^.* \(RESOLVED\|CLOSED\|DONE\) / end=/$/ oneline keepend extend
   syn keyword Macro MAC
+  syn keyword String LINUX
   syn keyword Operator PRIORITY
   syn keyword Typedef EASY
   syn keyword Statement VALUE
