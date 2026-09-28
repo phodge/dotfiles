@@ -1,3 +1,4 @@
+import os.path
 from textwrap import dedent
 from homely.ui import yesno
 from homely.general import haveexecutable
@@ -147,7 +148,9 @@ def macos_alt_tab_util():
     ):
         return
 
-    execute(['brew', 'install', '--cask', 'alt-tab'])
+    if not os.path.exists('/Applications/AltTab.app'):
+        # this doesn't work when Alt-Tab is already installed
+        execute(['brew', 'install', '--cask', 'alt-tab'])
 
     # NOTE: the config file for this app is at
     # ~/Library/Preferences/com.lwouis.alt-tab-macos.plist but there doesn't
