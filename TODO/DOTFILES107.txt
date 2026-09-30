@@ -1,0 +1,3 @@
+DOTFILES107 experiement with MagicDuck/grug-far.nvim for search and replace
+
+https://github.com/MagicDuck/grug-far.nvim
