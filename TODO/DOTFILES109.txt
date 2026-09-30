@@ -1,0 +1,4 @@
+DOTFILES109 experiment with alternate Claude/Opencode nvim plugins
+
+https://github.com/folke/sidekick.nvim
+https://github.com/yetone/avante.nvim
