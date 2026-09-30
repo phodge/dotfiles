@@ -85,6 +85,12 @@ zsh_no_git() {
 }
 
 
+#### CTRL+G mapping to edit the current command in vim
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^G' edit-command-line
+
+
 
 # ============================================================================
 # jerjerrod: zsh hook to reset caches on git/hg commands
