@@ -383,7 +383,7 @@ if filereadable(s:plugpath)
 
     " turn off ALE in fugitive:// buffers
     aug NoALEInFugitiveBuffers | aug end
-    au! NoALEInFugitiveBuffers BufRead fugitive://* let b:ale_enabled = 0
+    au! NoALEInFugitiveBuffers BufRead,BufNew,BufNewFile,BufReadPre fugitive://* let b:ale_enabled = 0
 
     " Disable markdownlint by default; To bring it back for a project, add
     "
