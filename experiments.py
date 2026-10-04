@@ -117,12 +117,12 @@ EXP.define_experiment(
 #
 EXP.define_experiment(
     'EXP_NEOVIM_CLIPBOARD_OSC52',
-    by_uuid=[DEEPCOOL3_UUID],
+    by_uuid=[],
     active_until=None,
 )
 EXP.define_experiment(
     'EXP_NEOVIM_CLIPBOARD_WLCOPY_CUSTOM',
-    by_uuid=[DEEPCOOL3_UUID],
+    by_uuid=[],
     active_until=None,
 )
 
@@ -139,6 +139,27 @@ EXP.define_experiment(
     'EXP_NEOVIM_SNACKS_EXPLORER',
     by_uuid=[],
     active_until=None,
+)
+
+
+# Use Ranger for vim file explorer
+# TODO: requires apt-installing 'ranger' package on ubuntu
+EXP.define_experiment(
+    'EXP_NEOVIM_EXPLORER_RANGER',
+    by_uuid=[],
+    active_until='2026-09-30',
+)
+
+# Use nvim-tree for vim file explorer
+#
+# Bugs experienced on DEEPCOOL3:
+# - :NvimTreeOpen opens a zero-width window on the left that needs to be manually resized with `60^W>`
+# - :sp /path/to/folder switches to the active nvim-tree buffer and does an
+#   :lcd in it (not what I want) and doesn't even move cursor to the target folder
+EXP.define_experiment(
+    'EXP_NEOVIM_EXPLORER_NVIM_TREE',
+    by_uuid=[],
+    active_until='2026-09-30',
 )
 
 

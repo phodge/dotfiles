@@ -154,6 +154,40 @@ if has('nvim') && g:want_copilot
 endif
 
 if has('nvim')
+  if $EXP_NEOVIM_EXPLORER_RANGER == "1"
+    " disable Netrw
+    let g:loaded_netrw = 1
+    let g:loaded_netrwPlugin = 1
+
+    " open ranger when vim open a directory
+    let g:ranger_replace_netrw = 1
+
+    call <SID>VendoredPlug('rbgrouleff/bclose.vim')
+    call <SID>VendoredPlug('francoiscabrol/ranger.vim')
+  elseif $EXP_NEOVIM_EXPLORER_NVIM_TREE == "1"
+    " disable Netrw
+    let g:loaded_netrw = 1
+    let g:loaded_netrwPlugin = 1
+
+    call <SID>VendoredPlug('nvim-tree/nvim-tree.lua')
+    lua <<EOF
+      require("nvim-tree").setup({
+        hijack_cursor = true,
+        sort = {
+          sorter = "case_sensitive",
+        },
+        view = {
+          width = 100,
+        },
+        update_focused_file = {
+          enable = true,
+        },
+      })
+EOF
+  endif
+endif
+
+if has('nvim')
   call <SID>VendoredPlug('folke/snacks.nvim')
 
   lua <<EOF

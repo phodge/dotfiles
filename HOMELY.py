@@ -417,6 +417,7 @@ def create_winwin_venv():
     interval='4w' if os.path.exists(NEOVIM_VENV) else None,
 )
 def create_neovim_python_tools_venv():
+    # TODO: this virtualenv needs to be merged with the neovim one?
     core_packages = [
         'flake8',
         'mypy',
@@ -1158,9 +1159,7 @@ def install_alacritty():
     # write an alacritty.yml config that imports the ones from this repo
     imports = [f'{HERE}/alacritty-base.toml']
 
-    if IS_UBUNTU:
-        imports.append(f'{HERE}/alacritty-ubuntu.toml')
-    elif IS_OSX:
+    if IS_OSX:
         imports.append(f'{HERE}/alacritty-macos.toml')
 
         def _export(d: dict):
@@ -1204,6 +1203,12 @@ def install_alacritty():
         # TODO: DOTFILES023: this version of alacritty is too old (needs to be
         # at least 0.13 so that it uses toml files for configuration)
         execute(['sudo', 'snap', 'install', '--classic', 'alacritty'], stdout="TTY")
+
+    if IS_UBUNTU:
+        if os.path.exists(HOME + '/.local/share/fonts/HackNerdFontMono-Regular.ttf'):
+            imports.append(f'{HERE}/alacritty-ubuntu-fonts.toml')
+        else:
+            imports.append(f'{HERE}/alacritty-ubuntu.toml')
 
     blockinfile(
         '~/.config/alacritty.toml',

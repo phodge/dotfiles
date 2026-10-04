@@ -237,6 +237,7 @@ def execute_real_rebase(upstream, paths, did_stash):
     if did_stash:
         print("Restoring working tree changes...")
         git_call(['stash', 'pop'])
+        # TODO: backup the patch file
         if Path(paths.patch_file).exists():
             Path(paths.patch_file).unlink()
 

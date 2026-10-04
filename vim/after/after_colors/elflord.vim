@@ -2,7 +2,7 @@
 if has('nvim')
   hi! Normal guibg=#1A1A1A
 endif
-hi NonText ctermfg=White ctermbg=blue cterm=NONE guifg=#888888 guibg=#1A1A1A
+hi NonText ctermfg=White ctermbg=blue cterm=NONE guifg=#446666 guibg=#222222
 
 " XXX: this seemed to be necessary for neovim 0.8.0 because EndOfBuffer had no
 " hl information whatsoever

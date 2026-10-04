@@ -8,6 +8,21 @@ quit-after-last-window-closed = true
 # don't merge >= into a single character
 font-feature = "-calt, -liga, -dlig"
 
+# fix bug in GTK4 where Ghostty hides the cursor and Wayland doesn't know to
+# bring it back when you start moving it.
+unfocused-split-opacity = 1.0
+
+# XXX: trying to fix broken mouse clicks
+# mouse-reporting = true
+# cursor-click-to-move = true
+
+# bugfix for GTK4/Wayland paste bug where Ghostty pastes from the wrong
+# clipboard (or doesn't seem updated clipboard contents)
+#copy-on-select = clipboard
+clipboard-paste-protection = false
+clipboard-trim-trailing-spaces = false
+
+
 # TODO: these are all macos-specific
 keybind = super+h=text:\x1bh
 keybind = super+j=text:\x1bj
@@ -21,3 +36,4 @@ keybind = super+shift+K=text:\x1bK
 keybind = super+shift+l=text:\x1bL
 keybind = super+shift+n=text:\x1bN
 keybind = super+shift+p=text:\x1bP
+keybind = ctrl+shift+v=paste_from_clipboard

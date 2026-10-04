@@ -1,1 +1,6 @@
-DOTFILES002 configure lspconfig.ts_ls importModuleSpecifierPreference needs to be configured by project somehow
+DOTFILES002 EASY configure lspconfig.ts_ls importModuleSpecifierPreference needs to be configured by project somehow
+
+NOTE: this should by pretty trivial to add a prefereAbsoluteImports arg for
+init_ts_ls and pass that along to _get_ts_ls_config()
+
+See also DOTFILES100
