@@ -1484,7 +1484,11 @@ set sidescrolloff=20
   " toggle options quickly
   nnoremap \c :exe 'setlocal colorcolumn='.((&l:colorcolumn=='') ? '+2' : '').' colorcolumn?'<CR>
   nnoremap \d :exe 'setlocal diffopt' . ((&g:diffopt =~ 'iwhite') ? '-' : '+') . '=iwhite diffopt?'<CR>
-  if $EXP_NEOVIM_SNACKS_EXPLORER == "1"
+  if $EXP_NEOVIM_EXPLORER_NVIM_TREE == "1"
+    nnoremap \e :NvimTreeOpen<CR>80<C-W>>
+  elseif $EXP_NEOVIM_EXPLORER_RANGER == "1"
+    nnoremap \e :Ranger<CR>
+  elseif $EXP_NEOVIM_SNACKS_EXPLORER == "1"
     function! <SID>OpenSnacksExplorer() abort
       let l:width = get(b:, 'snacks_explorer_width', 100)
       execute printf('lua Snacks.picker.explorer({ layout = { layout = { width = %g, min_width = %g } } })', l:width, l:width)
@@ -1724,7 +1728,7 @@ elseif $EXP_NEOVIM_CLIPBOARD_WLCOPY_CUSTOM == "1"
   " fix for wl-copy defaulting to background clipboard writes, meaning that
   " sometimes the clipboard isn't ready to paste if I do a quick "xp" to swap
   " two characters
-  set clipboard=
+  set clipboard=unnamedplus
   let g:clipboard = {
         \   "name": "wl-copy",
         \   "copy": {
@@ -1735,7 +1739,7 @@ elseif $EXP_NEOVIM_CLIPBOARD_WLCOPY_CUSTOM == "1"
         \       "+": "wl-paste --no-newline --type text/plain",
         \       "*": "wl-paste --no-newline --type text/plain --primary",
         \   },
-        \   "cache": {"enabled": v:false},
+        \   "cache": {"enabled": v:true},
         \ }
 else
   " for linux we normally want to use unnamedplus
