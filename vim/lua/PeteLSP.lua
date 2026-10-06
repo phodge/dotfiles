@@ -29,6 +29,9 @@
 --     LspStart
 --   endif
 
+-- get current home dir
+local neovim_venv_dir = os.getenv("HOME") .. "/.venv/neovim"
+
 
 exports = {}
 
@@ -74,7 +77,7 @@ end
 function _get_default_pylsp_settings()
     return {
         pylsp = {
-            -- cmd = "/home/peter/.venv/neovim/bin/pylsp",
+            -- cmd = neovim_venv_dir .. "/bin/pylsp",
             -- See https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
             plugins = {
                 -- disable most plugins
@@ -190,7 +193,7 @@ exports.init_pylsp = function()
         -- be manually activated per-buffer.
         vim.lsp.start({
             name = 'pylsp',
-            cmd = { '/home/peter/.venv/neovim/bin/pylsp' },
+            cmd = { neovim_venv_dir .. '/bin/pylsp' },
             settings = _get_default_pylsp_settings(),
             root_dir = vim.fs.root(0, {
                 -- copied from the lspconfig plugin I used to use ...
@@ -239,7 +242,7 @@ exports.init_pyrefly = function()
         -- be manually activated per-buffer.
         vim.lsp.start({
             name = 'pyrefly',
-            cmd = { '/home/peter/.venv/neovim/bin/pyrefly', 'tsp' },
+            cmd = { neovim_venv_dir .. '/bin/pyrefly', 'tsp' },
             settings = {
                 pyrefly = {
                 },
@@ -263,7 +266,7 @@ exports.init_astral_ty = function()
         -- be manually activated per-buffer.
         vim.lsp.start({
             name = 'ty',
-            cmd = { '/home/peter/.venv/neovim/bin/ty', 'server' },
+            cmd = { neovim_venv_dir .. '/bin/ty', 'server' },
             settings = {
                 ty = {
                     diagnosticMode = 'openFilesOnly',
