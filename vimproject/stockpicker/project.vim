@@ -5,4 +5,5 @@
 " TODO: place your project init commands here
 function projectconfig.BufEnter() dict
   let b:repo_todo_prefix = 'SPTODO'
+  let b:isort_command = 'uv run isort'
 endfun
