@@ -1,0 +1,3 @@
+DOTFILES113 experiment with pylsp-rope for more powerful code actions
+
+https://github.com/python-rope/pylsp-rope
