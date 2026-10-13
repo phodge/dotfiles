@@ -1,0 +1,5 @@
+DOTFILES112 investigate whether nvim-web-devicons provides anything useful
+
+https://github.com/nvim-tree/nvim-web-devicons
+
+See also DOTFILES004 (nerdfonts.com)
