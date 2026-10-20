@@ -1,0 +1,25 @@
+{
+	"session_name": "STOCKPICKERJOBS",
+	"default_cwd": "~",
+	"session_windows": [
+		{
+			"window_name": "PortMap",
+			"window_panes": [
+				{"pane_pretype": "while :; do ssh -L 9000:127.0.0.1:9000 peter@192.168.20.25 || echo ERROR; done\n"}
+			]
+		},
+		{
+			"window_name": "GIFTLESS",
+			"window_panes": [
+				{
+					"pane_cwd": "~/giftless",
+					"pane_pretype": "while sleep 600; do gcloud storage rsync --project g-stockpicker --recursive . gs://bucket-giftless || echo ERROR; done\n"
+				},
+				{
+					"pane_cwd": "~/giftless",
+					"pane_pretype": "docker run --rm -p 9010:9010 -v $PWD:/lfs-storage -e UWSGI_VEC_SIZE=256 -e GIFTLESS_CONFIG_STR='{\"AUTH_PROVIDERS\": [\"giftless.auth.allow_anon:read_write\"]}' datopian/giftless -M -T --threads 2 -p 2 --manage-script-name --callable app --http 0.0.0.0:9010\n"
+                }
+			]
+		}
+	]
+}

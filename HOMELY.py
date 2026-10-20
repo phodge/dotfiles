@@ -879,11 +879,7 @@ def pipfavourites():
 def envup_install():
     symlink('bin/envup', '~/bin/envup')
     mkdir('~/.envup')
-    symlink('envup/loki.json', '~/.envup/loki.json')
-    symlink('envup/p90-bg.json', '~/.envup/p90-bg.json')
-    symlink('envup/p90-code.json', '~/.envup/p90-code.json')
-    symlink('envup/p90-resume.json', '~/.envup/p90-resume.json')
-    symlink('envup/p90-resume-bg.json', '~/.envup/p90-resume-bg.json')
+    symlink('envup/spjobs.json', '~/.envup/spjobs.json')
 
 
 @section(quick=True)
