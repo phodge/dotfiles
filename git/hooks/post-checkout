@@ -4,3 +4,8 @@ repohook="$PWD/.git/hooks/$(basename $0)"
 if [ -x "$repohook" ]; then
     "$repohook" "$@"
 fi
+
+# ask to install git-lfs if it isn't already done
+if test -e .lfsconfig && ! grep git-lfs .git/hooks/* &>/dev/null; then
+    echo ".lfsconfig detected - consider running 'git -c core.hooksPath= lfs install'"
+fi
