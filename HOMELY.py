@@ -875,9 +875,8 @@ def pipfavourites():
             f.write(p + '\n')
 
 
-@section(quick=True, enabled=not_work_machine and yesno('install_envup', 'Install envup?', default=False))
+@section(quick=True, enabled=yesno('install_envup', 'Install envup?'))
 def envup_install():
-    pipinstall('libtmux', trypips=['pip3'])
     symlink('bin/envup', '~/bin/envup')
     mkdir('~/.envup')
     symlink('envup/loki.json', '~/.envup/loki.json')
