@@ -23,7 +23,9 @@ _reload_experiments() {
     if [[ $EXP_GIT_REVISE = 1 ]]; then
         alias rebas='GIT_REBASING=1 git -c core.hooksPath=/no/hooks revise -e -i'
     else
-        alias rebas='GIT_REBASING=1 git -c core.hooksPath=/no/hooks rebase -i'
+        # also diable lfs hooks to prevent rebase hanging when there are
+        # lfs-tracked files in the rebase
+        alias rebas='GIT_REBASING=1 git -c lfs.hooks=false -c core.hooksPath=/no/hooks rebase -i'
     fi
 }
 _reload_experiments
