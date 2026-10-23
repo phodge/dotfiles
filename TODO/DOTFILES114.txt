@@ -1,0 +1,54 @@
+DOTFILES114 how to create a source repo
+
+git clone git@github.com:org/repo.git $HOME/src/org/repo.full.git --single-branch --no-tags
+
+# this step is necessary to support creating worktrees from this source repo
+(cd $HOME/src/org/repo.full.git && git checkout origin/master)
+
+srcpull() {
+  update-reference-repository ~/src/org/repo.full.git
+}
+alias srcpull15='srcpull --older-than=15'
+
+git() {
+    git-wrapper-pull-with-srcpull "$@"
+}
+
+
+# bin/git-wrapper-pull-with-srcpull
+```
+#!/usr/bin/env bash
+set -e
+
+case "$1" in
+    pull|fetch|ff)
+        git-srcpull-if-reference-subordinate-repo
+        ;;
+esac
+
+git "$@"
+```
+
+# bin/git-srcpull-if-reference-subordinate-repo
+```
+#!/usr/bin/env bash
+set -e
+
+if ! [ -e .git/objects/info/alternates ]; then
+    exit 0
+fi
+
+if grep -F org/repo .git/objects/info/alternates 1> /dev/null; then
+    bash -i -c srcpull15
+fi
+```
+
+
+# make a new clone
+```
+srcpull
+export NUM=1
+git clone git@github.com:org/repo.git playground-repo-$NUM.git \
+    --single-branch \
+    [ --reference $HOME/src/org/repo.full.git [ --dissociate ]] \
+```
