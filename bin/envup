@@ -3,7 +3,7 @@
 # requires-python = ">=3.9"
 # dependencies = [
 #   "click>=8.1",
-#   "libtmux>=0.30",
+#   "libtmux>=0.62,<0.63",
 # ]
 # ///
 import json
@@ -14,13 +14,14 @@ from subprocess import run
 
 import click
 import libtmux
+from libtmux.constants import PaneDirection
 
 CONFIG_DIR = Path(os.path.expanduser('~/.envup'))
 END_ZONE_START = 20
 
 
 def pick_a_session(server, session_name):
-    sess = server.find_where({'session_name': session_name})
+    sess = server.sessions.get(default=None, session_name=session_name)
     fresh = False
     if not sess:
         # create the session now
@@ -30,7 +31,9 @@ def pick_a_session(server, session_name):
 
 
 def make_window(session, name, *, panes=[], split_horizontal=False):
-    existing = session.find_where({'window_name': name})
+    # window names aren't unique, so take the first match rather than using
+    # .get() (which raises if more than one window matches)
+    existing = next(iter(session.windows.filter(window_name=name)), None)
 
     assert len(panes) > 0, 'Must have at least 1 pane per window'
 
@@ -51,7 +54,8 @@ def make_window(session, name, *, panes=[], split_horizontal=False):
         else:
             # we need to make a new pane
             pane_cwd = os.path.expanduser(pane_cwd) if pane_cwd else None
-            pane = win.split_window(start_directory=pane_cwd, vertical=not split_horizontal)
+            direction = PaneDirection.Right if split_horizontal else PaneDirection.Below
+            pane = win.split(start_directory=pane_cwd, direction=direction)
 
         if pane_pretype:
             pane.send_keys(pane_pretype, enter=False, suppress_history=False)
@@ -60,17 +64,14 @@ def make_window(session, name, *, panes=[], split_horizontal=False):
 def get_next_vacant(session):
     next_vacant = END_ZONE_START
     for win in session.windows:
-        win_idx = int(win['window_index'])
-
-    for win in session.windows:
-        win_idx = int(win['window_index'])
+        win_idx = int(win.window_index)
         if win_idx >= next_vacant:
             next_vacant = 1 + max([next_vacant, win_idx])
     return next_vacant
 
 
 def move_to_end_zone(window):
-    win_idx = int(window['window_index'])
+    win_idx = int(window.window_index)
     if win_idx >= END_ZONE_START:
         return
     next = get_next_vacant(window.session)
@@ -105,7 +106,7 @@ def main(name):
     session, fresh = pick_a_session(server, data['session_name'])
 
     if fresh:
-        old_win = session.attached_window
+        old_win = session.active_window
 
     # run interactive command first
     startup = data.get('startup_commands', [])
@@ -136,7 +137,7 @@ def main(name):
 
     # finally at the end we can kill the original window
     if fresh:
-        old_win.kill_window()
+        old_win.kill()
 
 
 if __name__ == '__main__':
