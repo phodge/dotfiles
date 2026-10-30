@@ -44,7 +44,9 @@ fun! <SID>OpenNextTODO() abort
     let l:numwidth = strlen(l:check)
     let l:todo_name = b:repo_todo_prefix . repeat('0', 3 - l:numwidth) . l:check
     let l:todo_path = printf('%s/%s.txt', l:todos_dir, l:todo_name)
+    let l:done_path = printf('%s/done/%s.txt', l:todos_dir, l:todo_name)
     if bufexists(l:todo_path) || filereadable(l:todo_path)
+          \ || bufexists(l:done_path) || filereadable(l:done_path)
       let l:stop = l:check + 100
       let l:next_todo_path = v:null
       let l:next_todo_name = v:null
